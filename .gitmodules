@@ -1,0 +1,6 @@
+[submodule "data/project-euler-statements"]
+	path = data/project-euler-statements
+	url = https://github.com/cirosantilli/project-euler-statements
+[submodule "data/projecteuler-solutions"]
+	path = data/projecteuler-solutions
+	url = https://github.com/lucky-bai/projecteuler-solutions
