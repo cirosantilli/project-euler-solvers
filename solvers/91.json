@@ -1,0 +1,7 @@
+{
+  "output_tokens": 3510,
+  "model": "gpt-5.2-2025-12-11",
+  "reasoning_effort": "high",
+  "input_prompt": "TASK\n\nSolve the following problem by coding a Python program that runs on pypy3. Add asserts for the test cases given in the problem statement if any, and a print with the final result at the end. Your code must run in a few minutes at most, usually a few seconds. Don't try to brute force the solution, only use brute forcing if needed to better understand the problem on small instances. Don't use external libraries, only the Python standard library. Don't use multithreading, only a single CPU core. Use typing for function signatures.\n\nOUTPUT FORMAT\n\nmain.py\n\n<Python implementation>\n\nREADME.md\n\n<Markdown summary of the reasoning/insights used (high level; no chain-of-thought)>\n\nPROBLEM\n\n# Right Triangles with Integer Coordinates\n\nThe points $P(x\\_1, y\\_1)$ and $Q(x\\_2, y\\_2)$ are plotted at integer co-ordinates and are joined to the origin, $O(0,0)$, to form $\\triangle OPQ$.\n\n![](resources/images/0091_1.png?1678992052)\n\nThere are exactly fourteen triangles containing a right angle that can be formed when each co-ordinate lies between $0$ and $2$ inclusive; that is, $0 \\le x\\_1, y\\_1, x\\_2, y\\_2 \\le 2$.\n\n![](resources/images/0091_2.png?1678992052)\n\nGiven that $0 \\le x\\_1, y\\_1, x\\_2, y\\_2 \\le 50$, how many right triangles can be formed?\n",
+  "duration_seconds": 68.981
+}

@@ -1,0 +1,7 @@
+{
+  "output_tokens": 1324,
+  "model": "gpt-5.2-2025-12-11",
+  "reasoning_effort": "high",
+  "input_prompt": "TASK\n\nSolve the following problem by coding a Python program that runs on pypy3. Add asserts for the test cases given in the problem statement if any, and a print with the final result at the end. Your code must run in a few minutes at most, usually a few seconds. Don't try to brute force the solution, only use brute forcing if needed to better understand the problem on small instances. Don't use external libraries, only the Python standard library. Don't use multithreading, only a single CPU core. Use typing for function signatures.\n\nOUTPUT FORMAT\n\nmain.py\n\n<Python implementation>\n\nREADME.md\n\n<Markdown summary of the reasoning/insights used (high level; no chain-of-thought)>\n\nPROBLEM\n\n# Goldbach's Other Conjecture\n\nIt was proposed by Christian Goldbach that every odd composite number can be written as the sum of a prime and twice a square.\n\n$$\\begin{align}\n9 = 7 + 2 \\times 1^2\\\\\n15 = 7 + 2 \\times 2^2\\\\\n21 = 3 + 2 \\times 3^2\\\\\n25 = 7 + 2 \\times 3^2\\\\\n27 = 19 + 2 \\times 2^2\\\\\n33 = 31 + 2 \\times 1^2\n\\end{align}$$\n\nIt turns out that the conjecture was false.\n\nWhat is the smallest odd composite that cannot be written as the sum of a prime and twice a square?\n",
+  "duration_seconds": 25.473
+}

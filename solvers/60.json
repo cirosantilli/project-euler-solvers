@@ -1,0 +1,7 @@
+{
+  "output_tokens": 8051,
+  "model": "gpt-5.2-2025-12-11",
+  "reasoning_effort": "high",
+  "input_prompt": "TASK\n\nSolve the following problem by coding a Python program that runs on pypy3. Add asserts for the test cases given in the problem statement if any, and a print with the final result at the end. Your code must run in a few minutes at most, usually a few seconds. Don't try to brute force the solution, only use brute forcing if needed to better understand the problem on small instances. Don't use external libraries, only the Python standard library. Don't use multithreading, only a single CPU core. Use typing for function signatures.\n\nOUTPUT FORMAT\n\nmain.py\n\n<Python implementation>\n\nREADME.md\n\n<Markdown summary of the reasoning/insights used (high level; no chain-of-thought)>\n\nPROBLEM\n\n# Prime Pair Sets\n\nThe primes $3$, $7$, $109$, and $673$, are quite remarkable. By taking any two primes and concatenating them in any order the result will always be prime. For example, taking $7$ and $109$, both $7109$ and $1097$ are prime. The sum of these four primes, $792$, represents the lowest sum for a set of four primes with this property.\n\nFind the lowest sum for a set of five primes for which any two primes concatenate to produce another prime.\n",
+  "duration_seconds": 152.242
+}

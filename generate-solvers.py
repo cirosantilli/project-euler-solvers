@@ -2,7 +2,6 @@
 import argparse
 import asyncio
 import json
-import os
 import re
 import time
 from datetime import datetime
@@ -96,7 +95,7 @@ def statement_files(statements_dir: Path) -> list[Path]:
 def build_prompt(statement: str) -> str:
     return f'''TASK
 
-Solve the following problem by coding a Python program that runs on pypy3. Add asserts for the test cases given in the problem statement if any, and a print with the final result at the end. Your code must run in a few minutes at most, usually a few seconds. Don't try to brute force the solution, only use brute forcing if needed to better understand the problem on small instances. Don't use external libraries, only the Python standard library. Don't use multithreading, only a single CPU core. Use typing for function signatures.
+Solve the following problem by coding a Python program that runs on pypy3. Add asserts for the test cases given in the problem statement if any, and a print with the final result at the end. Your code must run in a few minutes at most, usually a few seconds. Don't try to brute force the solution, only use brute forcing if needed to better understand the problem on small instances. Don't use external libraries, only the Python standard library. Don't use multithreading, only a single CPU core. Don't take input from stdin nor CLI arguments. If an external file is required sa input for the program, use the basename of the problem statement for it. Use typing for function signatures.
 
 OUTPUT FORMAT
 

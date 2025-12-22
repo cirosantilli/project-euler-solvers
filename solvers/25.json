@@ -1,0 +1,7 @@
+{
+  "output_tokens": 676,
+  "model": "gpt-5.2-2025-12-11",
+  "reasoning_effort": "high",
+  "input_prompt": "TASK\n\nSolve the following problem by coding a Python program that runs on pypy3. Add asserts for the test cases given in the problem statement if any, and a print with the final result at the end. Your code must run in a few minutes at most, usually a few seconds. Don't try to brute force the solution, only use brute forcing if needed to better understand the problem on small instances. Don't use external libraries, only the Python standard library. Don't use multithreading, only a single CPU core. Use typing for function signatures.\n\nOUTPUT FORMAT\n\nmain.py\n\n<Python implementation>\n\nREADME.md\n\n<Markdown summary of the reasoning/insights used (high level; no chain-of-thought)>\n\nPROBLEM\n\n# $1000$-digit Fibonacci Number\n\nThe Fibonacci sequence is defined by the recurrence relation:\n\n> $F\\_n = F\\_{n - 1} + F\\_{n - 2}$, where $F\\_1 = 1$ and $F\\_2 = 1$.\n\nHence the first $12$ terms will be:\n\n$$\\begin{align}\nF\\_1 &= 1\\\\\nF\\_2 &= 1\\\\\nF\\_3 &= 2\\\\\nF\\_4 &= 3\\\\\nF\\_5 &= 5\\\\\nF\\_6 &= 8\\\\\nF\\_7 &= 13\\\\\nF\\_8 &= 21\\\\\nF\\_9 &= 34\\\\\nF\\_{10} &= 55\\\\\nF\\_{11} &= 89\\\\\nF\\_{12} &= 144\n\\end{align}$$\n\nThe $12$th term, $F\\_{12}$, is the first term to contain three digits.\n\nWhat is the index of the first term in the Fibonacci sequence to contain $1000$ digits?\n",
+  "duration_seconds": 13.715
+}

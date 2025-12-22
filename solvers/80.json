@@ -1,0 +1,7 @@
+{
+  "output_tokens": 1792,
+  "model": "gpt-5.2-2025-12-11",
+  "reasoning_effort": "high",
+  "input_prompt": "TASK\n\nSolve the following problem by coding a Python program that runs on pypy3. Add asserts for the test cases given in the problem statement if any, and a print with the final result at the end. Your code must run in a few minutes at most, usually a few seconds. Don't try to brute force the solution, only use brute forcing if needed to better understand the problem on small instances. Don't use external libraries, only the Python standard library. Don't use multithreading, only a single CPU core. Use typing for function signatures.\n\nOUTPUT FORMAT\n\nmain.py\n\n<Python implementation>\n\nREADME.md\n\n<Markdown summary of the reasoning/insights used (high level; no chain-of-thought)>\n\nPROBLEM\n\n# Square Root Digital Expansion\n\nIt is well known that if the square root of a natural number is not an integer, then it is irrational. The decimal expansion of such square roots is infinite without any repeating pattern at all.\n\nThe square root of two is $1.41421356237309504880\\cdots$, and the digital sum of the first one hundred decimal digits is $475$.\n\nFor the first one hundred natural numbers, find the total of the digital sums of the first one hundred decimal digits for all the irrational square roots.\n",
+  "duration_seconds": 38.59
+}

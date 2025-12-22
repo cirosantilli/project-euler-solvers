@@ -1,0 +1,7 @@
+{
+  "output_tokens": 1087,
+  "model": "gpt-5.2-2025-12-11",
+  "reasoning_effort": "high",
+  "input_prompt": "TASK\n\nSolve the following problem by coding a Python program that runs on pypy3. Add asserts for the test cases given in the problem statement if any, and a print with the final result at the end. Your code must run in a few minutes at most, usually a few seconds. Don't try to brute force the solution, only use brute forcing if needed to better understand the problem on small instances. Don't use external libraries, only the Python standard library. Don't use multithreading, only a single CPU core. Use typing for function signatures.\n\nOUTPUT FORMAT\n\nmain.py\n\n<Python implementation>\n\nREADME.md\n\n<Markdown summary of the reasoning/insights used (high level; no chain-of-thought)>\n\nPROBLEM\n\n# Number Spiral Diagonals\n\nStarting with the number $1$ and moving to the right in a clockwise direction a $5$ by $5$ spiral is formed as follows:\n\n**21** 22 23 24 **25**  \n20 \u00a0**7** \u00a08 \u00a0**9** 10  \n19 \u00a06 \u00a0**1** \u00a02 11  \n18 \u00a0**5** \u00a04 \u00a0**3** 12  \n**17** 16 15 14 **13**\n\nIt can be verified that the sum of the numbers on the diagonals is $101$.\n\nWhat is the sum of the numbers on the diagonals in a $1001$ by $1001$ spiral formed in the same way?\n",
+  "duration_seconds": 17.899
+}

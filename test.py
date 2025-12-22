@@ -12,6 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 SOLUTIONS_PATH = ROOT / "data/projecteuler-solutions/Solutions.md"
 SOLVERS_DIR = ROOT / "solvers"
+STATEMENTS_DOCS_DIR = ROOT / "data" / "project-euler-statements" / "data" / "documents"
 
 LINE_RE = re.compile(r"^(\d+)\.\s+(.*)$")
 
@@ -92,7 +93,7 @@ def run_solver(
             ["pypy3", str(path)],
             capture_output=True,
             text=True,
-            cwd=ROOT,
+            cwd=STATEMENTS_DOCS_DIR,
             timeout=timeout,
         )
         elapsed = time.perf_counter() - start
@@ -163,12 +164,14 @@ def main() -> None:
             continue
 
         if rc != 0:
+            if stderr.strip():
+                print(stderr.rstrip(), file=sys.stderr)
             results.append(
                 Result(
                     pid,
                     correct=False,
                     elapsed=None,
-                    message=f"exit code {rc}: {stderr.strip()}",
+                    message=f"failed (exit {rc})",
                 )
             )
             print(f"[{pid}] failed (exit {rc})", file=sys.stderr)
@@ -181,17 +184,19 @@ def main() -> None:
         else:
             msg = f"expected {expected!r}, got {actual!r}"
             results.append(Result(pid, correct=False, elapsed=None, message=msg))
-            print(f"[{pid}] wrong answer", file=sys.stderr)
+            print(f"[{pid}] wrong answer: {msg}", file=sys.stderr)
 
     total_run = len(results)
     passed = sum(r.correct for r in results)
     print(f"\nPassed {passed}/{total_run} tests.")
 
     print("\n|===")
-    print("| ID | time (s)")
+    print("| ID | time (s) | error")
     for res in sorted(results, key=lambda r: r.puzzle_id):
         time_cell = f"{res.elapsed:.3f}" if res.correct and res.elapsed is not None else ""
-        print(f"| {res.puzzle_id} | {time_cell}")
+        reason_cell = "" if time_cell else res.message
+        link = f"link:solvers/{res.puzzle_id}.py[{res.puzzle_id}]"
+        print(f"| {link} | {time_cell} | {reason_cell}")
     print("|===")
 
 
