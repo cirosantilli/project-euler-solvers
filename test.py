@@ -170,7 +170,7 @@ def main() -> None:
                 Result(
                     pid,
                     correct=False,
-                    elapsed=None,
+                    elapsed=elapsed,
                     message=f"failed (exit {rc})",
                 )
             )
@@ -183,7 +183,7 @@ def main() -> None:
             print(f"[{pid}] ok ({elapsed:.3f}s)")
         else:
             msg = f"expected {expected!r}, got {actual!r}"
-            results.append(Result(pid, correct=False, elapsed=None, message=msg))
+            results.append(Result(pid, correct=False, elapsed=elapsed, message=msg))
             print(f"[{pid}] wrong answer: {msg}", file=sys.stderr)
 
     total_run = len(results)
@@ -193,10 +193,10 @@ def main() -> None:
     print("\n|===")
     print("| ID | time (s) | error")
     for res in sorted(results, key=lambda r: r.puzzle_id):
-        time_cell = f"{res.elapsed:.3f}" if res.correct and res.elapsed is not None else ""
-        reason_cell = "" if time_cell else res.message
+        time_cell = f"{res.elapsed:.3f}" if res.elapsed is not None else ""
+        error_cell = "" if res.correct else res.message
         link = f"link:solvers/{res.puzzle_id}.py[{res.puzzle_id}]"
-        print(f"| {link} | {time_cell} | {reason_cell}")
+        print(f"| {link} | {time_cell} | {error_cell}")
     print("|===")
 
 
