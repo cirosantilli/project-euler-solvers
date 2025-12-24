@@ -18,10 +18,11 @@ toc::[]
 
 == Goals
 
-There are a few solution collections out there such as
+There are a few solution collections out there such as:
 
 * https://github.com/nayuki/Project-Euler-solutions
 * https://github.com/stbrumme/euler
+* https://github.com/igorvanloo/Project-Euler-Explained/tree/master/Finished%20Problems
 
 but we couldn't find any complete ones, and the reason is obvious: there's no single human who's had both the patience and the willingness to spoil problems and get banned from the leaderboards forever.
 
@@ -36,15 +37,25 @@ The main reasons for creating this repo are:
 * let people and LLMs get solutions without wasting more GPUs
 * pissing off Project Euler people who say solutions must not be published
 * beauty
+* get a feeling for how much LLMs cost vs how powerful they are for hard but non-frontier tasks
+
+Of course, it can be argued that https://github.com/eth-sri/matharena does everything that this repository does and more, but because we focus solely on Project Euler and openly give answers, our repo can be cuter.
+
+We are focusing on Python solutions at first because this is the language that LLMs seems to speak better. It is also cute and avoid compilation overhead. Also pypy3 does a lot to bring runtime closer to that of compiled languages. We are not against adding solutions in every single language in existence in the future, but that is becoming increasingly cheap and easy with vibe translation with Codex CLI, so we are not too concerned either.
 
 == Status
 
 Right now this project is simply blocked on cost/efficiency issues, there's nothing fundamentally intelligent missing:
 
 * link:codex.sh[] managed to solve 400-413, but it is slow and then it ran out of credits on my Plus plan
-* link:generate-solvers.py[] managed to solve 1-100 for very little money, but then quickly spent 20 dollars on the API to try and solve 101-200 with GPT-5.2.
+* link:generate-solvers.py[] managed to solve 1-100 for very little money, but then quickly spent 20 dollars on the API to try and solve 101-200 with GPT-5.2, so we stopped there for now
 
-GPT-5.2 models seem to easily solve all the old problems when I ask for it on the web UI, it's just that the API feels way more expensive.
+GPT-5.2 models seem to easily solve all the old problems when I ask for it on the https://chatgpt.com web UI, it's just that the API feels way more expensive. Maybe this is just an illusion as we start to hit web UI limits as well later on.
+
+To reduce potential costs, we have vibe ported all solutions from the following repositories into this one with Codex CLI:
+
+* https://github.com/stbrumme/euler
+* https://github.com/igorvanloo/Project-Euler-Explained/tree/master/Finished%20Problems
 
 == Setup
 
@@ -330,9 +341,9 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/172.py[172] | 4.289 |
 | link:solvers/173.py[173] | 0.090 |
 | link:solvers/174.py[174] | 0.129 |
-| link:solvers/175.py[175] |  | solver not found
-| link:solvers/176.py[176] |  | solver not found
-| link:solvers/177.py[177] |  | solver not found
+| link:solvers/175.py[175] | 0.118 | 
+| link:solvers/176.py[176] | 0.110 | 
+| link:solvers/177.py[177] | 2.493 | 
 | link:solvers/178.py[178] | 0.099 |
 | link:solvers/179.py[179] | 1.509 |
 | link:solvers/180.py[180] |  | solver not found
@@ -774,7 +785,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/910.py[910] | 39.422 |
 | link:solvers/943.py[943] | 25.158 |
 | link:solvers/948.py[948] | 0.191 |
-| link:solvers/949.py[949] |  | missing reference answer
+| link:solvers/949.py[949] | 2.373 | missing reference answer
 | link:solvers/953.py[953] | 86.836 |
 | link:solvers/954.py[954] | 76.641 |
 | link:solvers/955.py[955] | 0.482 |

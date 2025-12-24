@@ -136,19 +136,9 @@ def main() -> None:
             continue
 
         expected = reference.get(pid)
-        if expected is None:
-            results.append(
-                Result(
-                    pid,
-                    correct=False,
-                    elapsed=None,
-                    message="missing reference answer",
-                )
-            )
-            print(f"[{pid}] skipped: missing reference answer", file=sys.stderr)
-            continue
+        missing_reference = expected is None
 
-        print(f"[{pid}] running")
+        print(f"[{pid}] running {solver_path}")
         rc, stdout, stderr, elapsed, timed_out = run_solver(solver_path, args.timeout)
         if timed_out:
             limit = args.timeout if args.timeout is not None else elapsed
@@ -175,6 +165,18 @@ def main() -> None:
                 )
             )
             print(f"[{pid}] failed (exit {rc})", file=sys.stderr)
+            continue
+
+        if missing_reference:
+            results.append(
+                Result(
+                    pid,
+                    correct=False,
+                    elapsed=elapsed,
+                    message="missing reference answer",
+                )
+            )
+            print(f"[{pid}] missing reference answer", file=sys.stderr)
             continue
 
         actual = extract_answer(stdout)
