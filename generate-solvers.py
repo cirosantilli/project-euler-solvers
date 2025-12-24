@@ -99,6 +99,9 @@ Solve the following problem by coding a Python program that runs on pypy3. Add a
 
 OUTPUT FORMAT
 
+Produce the following output format within the triple quotes. Do not surround the Python implementation with triple quotes or any other delimiter.
+
+```
 main.py
 
 <Python implementation>
@@ -108,6 +111,7 @@ README.md
 <Markdown summary of the reasoning/insights used (high level; no chain-of-thought)>
 
 PROBLEM
+```
 
 {statement.strip()}
 '''
@@ -373,20 +377,125 @@ async def _fetch_response(
 
 
 async def submit_requests_async(
-    requests: list[dict], timeout: float | None
-) -> list[dict]:
+    requests: list[dict],
+    timeout: float | None,
+    solvers_dir: Path,
+    force: bool,
+) -> None:
     client = AsyncOpenAI()
     try:
         tasks = [
-            _fetch_response(client, request, timeout) for request in requests
+            asyncio.create_task(_fetch_response(client, request, timeout))
+            for request in requests
         ]
-        return await asyncio.gather(*tasks)
+        total = len(tasks)
+        completed = 0
+        for task in asyncio.as_completed(tasks):
+            result = await task
+            completed += 1
+            handle_result(result, solvers_dir, force, completed, total)
     finally:
         close = getattr(client, "close", None)
         if close:
             result = close()
             if asyncio.iscoroutine(result):
                 await result
+
+
+def handle_result(
+    result: dict,
+    solvers_dir: Path,
+    force: bool,
+    completed: int,
+    total: int,
+) -> None:
+    problem_id = result.get("problem_id")
+    request = result.get("request")
+    if problem_id is None or request is None:
+        custom_id = None
+        if isinstance(request, dict):
+            custom_id = request.get("custom_id")
+        if not custom_id:
+            custom_id = "unknown"
+        print(f"Skipping unexpected custom_id: {custom_id}")
+        return
+    elapsed = result.get("elapsed", 0.0)
+    error = result.get("error")
+    if error is not None:
+        print(f"OpenAI request failed for problem {problem_id}: {error}")
+        print(
+            f"Request for problem {problem_id} completed in {elapsed:.2f}s "
+            f"({completed}/{total})"
+        )
+        return
+    response = result.get("response")
+    error_message = response_error_message(response)
+    status, incomplete_reason = response_status_info(response)
+    if error_message:
+        print(f"OpenAI error for problem {problem_id}: {error_message}")
+        print(
+            f"Request for problem {problem_id} completed in {elapsed:.2f}s "
+            f"({completed}/{total})"
+        )
+        return
+    if status and status != "completed":
+        if incomplete_reason:
+            print(
+                f"OpenAI response {status} for problem {problem_id}: "
+                f"{incomplete_reason}"
+            )
+        else:
+            print(f"OpenAI response {status} for problem {problem_id}")
+        print(
+            f"Request for problem {problem_id} completed in {elapsed:.2f}s "
+            f"({completed}/{total})"
+        )
+        return
+    text = extract_response_text(response)
+    main_text, readme_text = parse_sections(text)
+    if not main_text or not readme_text:
+        print(
+            f"Failed to parse output for problem {problem_id}. Response: \n\n{text}\n"
+        )
+        print(
+            f"Request for problem {problem_id} completed in {elapsed:.2f}s "
+            f"({completed}/{total})"
+        )
+        return
+    stem = solver_stem(solvers_dir, problem_id, force)
+    if stem is None:
+        print(
+            f"Request for problem {problem_id} completed in {elapsed:.2f}s "
+            f"({completed}/{total})"
+        )
+        return
+    write_solver_files(solvers_dir, stem, main_text, readme_text)
+    output_tokens = response_output_tokens(response)
+    model = getattr(response, "model", None)
+    if model is None and isinstance(response, dict):
+        model = response.get("model")
+    request_body = request.get("body", {})
+    reasoning_effort = None
+    if isinstance(request_body, dict):
+        reasoning = request_body.get("reasoning")
+        if isinstance(reasoning, dict):
+            reasoning_effort = reasoning.get("effort")
+    input_prompt = ""
+    if isinstance(request_body, dict):
+        input_prompt = request_body.get("input", "")
+    write_solver_metadata(
+        solvers_dir,
+        stem,
+        output_tokens,
+        model,
+        reasoning_effort,
+        input_prompt,
+        round(elapsed, 3),
+    )
+    print(
+        f"Request for problem {problem_id} completed in {elapsed:.2f}s "
+        f"({completed}/{total})"
+    )
 
 
 def main() -> None:
@@ -451,75 +560,9 @@ def main() -> None:
         f" Problems: {format_problem_ids(problem_ids)}"
     )
     print_requests(requests)
-    results = asyncio.run(submit_requests_async(requests, args.timeout))
-    for result in results:
-        problem_id = result.get("problem_id")
-        request = result.get("request")
-        if problem_id is None or request is None:
-            custom_id = None
-            if isinstance(request, dict):
-                custom_id = request.get("custom_id")
-            if not custom_id:
-                custom_id = "unknown"
-            print(f"Skipping unexpected custom_id: {custom_id}")
-            continue
-        elapsed = result.get("elapsed", 0.0)
-        error = result.get("error")
-        if error is not None:
-            print(f"OpenAI request failed for problem {problem_id}: {error}")
-            print(f"Request for problem {problem_id} completed in {elapsed:.2f}s")
-            continue
-        response = result.get("response")
-        error_message = response_error_message(response)
-        status, incomplete_reason = response_status_info(response)
-        if error_message:
-            print(f"OpenAI error for problem {problem_id}: {error_message}")
-            print(f"Request for problem {problem_id} completed in {elapsed:.2f}s")
-            continue
-        if status and status != "completed":
-            if incomplete_reason:
-                print(
-                    f"OpenAI response {status} for problem {problem_id}: "
-                    f"{incomplete_reason}"
-                )
-            else:
-                print(f"OpenAI response {status} for problem {problem_id}")
-            print(f"Request for problem {problem_id} completed in {elapsed:.2f}s")
-            continue
-        text = extract_response_text(response)
-        main_text, readme_text = parse_sections(text)
-        if not main_text or not readme_text:
-            print(f"Failed to parse output for problem {problem_id}. Response: \n\n{text}\n")
-            print(f"Request for problem {problem_id} completed in {elapsed:.2f}s")
-            continue
-        stem = solver_stem(solvers_dir, problem_id, args.force)
-        if stem is None:
-            print(f"Request for problem {problem_id} completed in {elapsed:.2f}s")
-            continue
-        write_solver_files(solvers_dir, stem, main_text, readme_text)
-        output_tokens = response_output_tokens(response)
-        model = getattr(response, "model", None)
-        if model is None and isinstance(response, dict):
-            model = response.get("model")
-        request_body = request.get("body", {})
-        reasoning_effort = None
-        if isinstance(request_body, dict):
-            reasoning = request_body.get("reasoning")
-            if isinstance(reasoning, dict):
-                reasoning_effort = reasoning.get("effort")
-        input_prompt = ""
-        if isinstance(request_body, dict):
-            input_prompt = request_body.get("input", "")
-        write_solver_metadata(
-            solvers_dir,
-            stem,
-            output_tokens,
-            model,
-            reasoning_effort,
-            input_prompt,
-            round(elapsed, 3),
-        )
-        print(f"Request for problem {problem_id} completed in {elapsed:.2f}s")
+    asyncio.run(
+        submit_requests_async(requests, args.timeout, solvers_dir, args.force)
+    )
 
 
 if __name__ == "__main__":

@@ -37,6 +37,15 @@ The main reasons for creating this repo are:
 * pissing off Project Euler people who say solutions must not be published
 * beauty
 
+== Status
+
+Right now this project is simply blocked on cost/efficiency issues, there's nothing fundamentally intelligent missing:
+
+* link:codex.sh[] managed to solve 400-413, but it is slow and then it ran out of credits on my Plus plan
+* link:generate-solvers.py[] managed to solve 1-100 for very little money, but then quickly spent 20 dollars on the API to try and solve 101-200 with GPT-5.2.
+
+GPT-5.2 models can easily solve all the old problems I think when I ask for it on the web UI, it's just that the API feels way more expensive.
+
 == Setup
 
 [source,shell]
@@ -47,27 +56,29 @@ virtualenv -p python3 .venv
 
 == Generating solvers
 
-Try to generate solvers for problems 420 with the OpenAI API:
+Try to generate solvers for problem 420 with the OpenAI API:
 
 [source,shell]
 ----
 ./generate-solvers.py 420
 ----
 
+The program hangs until all tasks are done. This may take a while, 10-15 mins is common. If successful, solvers are stored under link:solvers[]
+
 Same but for problems 420 - 430:
 
 [source,shell]
 ----
-./generate-solvers.py 420 430
+./generate-solvers.py --max-output-tokens 10000 420 430
 ----
 
-The program hangs until all tasks are done. This may take a while, 10-15 mins is common. If successful, solvers are stored under link:solvers[]
+`--max-output-tokens` and smaller batches are highly recommended, otherwise it is easy to run out of API credits.
 
-Same but in batch mode, which is much cheaper but may take up to 24 hours to complete:
+Same but in batch mode, which is about 2x cheaper but may take up to 24 hours to complete:
 
 [source,shell]
 ----
-./generate-solvers.py --batch 420 430
+./generate-solvers.py --max-output-tokens 10000 --batch 420 430
 ----
 
 == Testing
@@ -91,7 +102,7 @@ Each solver should print the final solution to stdout and nothing else.
 
 They should also assert any other given test values to increase the probability that the solver is actually correct.
 
-Run all solvers and check for correctness against https://github.com/lucky-bai/projecteuler-solutions[projecteuler-solutions]:
+Run all solvers and check for correctness against the numerical solutions published at https://github.com/lucky-bai/projecteuler-solutions[lucky-bai/projecteuler-solutions]:
 
 [source,shell]
 ----
@@ -232,7 +243,16 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/97.py[97] | 0.074 |
 | link:solvers/98.py[98] | 0.148 |
 | link:solvers/99.py[99] | 0.079 |
-| link:solvers/100.py[100] | 0.076 |
+| link:solvers/101.py[101] | 0.144 |
+| link:solvers/102.py[102] | 0.110 |
+| link:solvers/103.py[103] | 1.463 | 
+| link:solvers/104.py[104] | 0.204 |
+| link:solvers/105.py[105] | 0.096 |
+| link:solvers/106.py[106] | 0.078 |
+| link:solvers/107.py[107] | 0.075 |
+| link:solvers/108.py[108] | 0.075 |
+| link:solvers/109.py[109] | 0.096 |
+| link:solvers/110.py[110] | 0.130 |
 | link:solvers/400.py[400] | 0.342 |
 | link:solvers/401.py[401] | 2.009 |
 | link:solvers/402.py[402] | 0.127 |
