@@ -1,44 +1,77 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0523.cpp'''
-import itertools
-from decimal import Decimal, getcontext
+'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00523%20-%20First%20Sort%20I.py'''
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Jul  6 17:41:32 2023
 
+@author: igorvanloo
+"""
+'''
+Project Euler Problem 523
 
-def evaluate(size):
-    data = list(range(1, size + 1))
+Generate all possible permutations of [1, 2, ..., n] get values
 
-    moves = 0
-    permutations = 0
-    for perm in itertools.permutations(data):
-        current = list(perm)
-        permutations += 1
-        pos = 1
-        while pos < size:
-            if current[pos] < current[pos - 1]:
-                current[: pos + 1] = current[pos : pos + 1] + current[:pos]
-                moves += 1
-                pos = 1
-            else:
-                pos += 1
+E(2) = 0.5 | steps = 1 | perms = 2
+E(3) = 1.5 | steps = 9 | perms = 6
+E(4) = 3.25 | steps = 78 | perms = 24
+E(5) = 6.25 | steps = 750 | perms = 120
+E(6) = 11.416666666666666 | steps = 8220 | perms = 720
+E(7) = 20.416666666666668 | steps = 102900 | perms = 5040
+E(8) = 36.291666666666664 | steps = 1463280 | perms = 40320
+E(9) = 64.625 | steps = 23451120 | perms = 362880
 
-    print(f"E({size})={moves / float(permutations)} ={moves}/{permutations}")
-    return moves / float(permutations)
+Simplifying the fractions we have:
+E(2) = 1/2
+E(3) = 3/2
+E(4) = 13/4
+E(5) = 25/4
+E(6) = 137/12
+E(7) = 245/12
+E(8) = 871/24
+E(9) = 517/8
+E(10) = 4629/40
 
+I tried searching numerator in oeis and somehow it existed: https://oeis.org/A330718 
+and the denominator is https://oeis.org/A330719
 
-def solve(limit=30):
-    getcontext().prec = 50
-    result = Decimal(0)
-    for i in range(1, limit + 1):
-        numerator = (Decimal(2) ** (i - 1)) - 1
-        result += numerator / Decimal(i)
-    return result
+This directly gave us a solution
 
+E(n) = sum_{k = 1 to n} (2^(k - 1) - 1)/k
 
-def main():
-    assert solve(4).quantize(Decimal(\"0.001\")) == Decimal(\"3.250\")
-    assert solve(10).quantize(Decimal(\"0.001\")) == Decimal(\"115.725\")
-    print(f\"{solve().quantize(Decimal('0.01')):.2f}\")
+See website for the actual proof of why
 
+Anwser:
+    37125450.44
+'''
+from itertools import permutations
+
+def first_sort(L):
+    steps = 0
+    l = len(L)
+    S = sorted(L)
+    while True:
+        if L == S:
+            break
+        for x in range(l - 1):
+            if L[x] > L[x + 1]:
+                v = L.pop(x + 1)
+                L = [v] + L
+                steps += 1
+                break
+    return steps
+            
+def brute_E(n):
+    perms = [list(x) for x in permutations([x for x in range(1, n + 1)])]
+    total = 0
+    for x in perms:
+        total += first_sort(x)
+    return total/len(perms), total, len(perms)
+        
+def E(n):
+    return sum((pow(2, k - 1) - 1)/k for k in range(1, n + 1))
 
 if __name__ == "__main__":
-    main()
+    assert first_sort([4, 1, 3, 2]) == 5
+    assert E(4) == 3.25
+    assert round(E(10), 3) == 115.725
+    print(round(E(30), 2))

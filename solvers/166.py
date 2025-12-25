@@ -1,65 +1,82 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0166.cpp'''
-def solve(max_digit: int) -> int:
-    even = (max_digit + 1) % 2 == 0
-    max_a = (max_digit - 1) // 2 if even else max_digit
+'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00166%20-%20Criss%20Cross.py'''
+# -*- coding: utf-8 -*-
+"""
+Created on Mon May  9 10:41:26 2022
 
-    result = 0
-    for a in range(max_a + 1):
-        for b in range(max_digit + 1):
-            for c in range(max_digit + 1):
-                for d in range(max_digit + 1):
-                    total = a + b + c + d
+@author: igorvanloo
+"""
+'''
+Project Euler Problem 166
 
-                    for e in range(b, max_digit + 1):
-                        for f in range(max_digit + 1):
-                            for g in range(max_digit + 1):
-                                h = total - e - f - g
-                                if h > max_digit:
-                                    continue
+a b c d
+e f g h
+i j k l
+m n o p
 
-                                for i in range(max_digit + 1):
-                                    m = total - a - e - i
-                                    if m > max_digit:
-                                        continue
+We have 16 variables therefore 10^16 possibilities we want to minimise this
 
-                                    j = total - d - g - m
-                                    if j > max_digit:
-                                        continue
+Let a + b + c + d = s, 
+now we want to minimize number of variables used
 
-                                    n = total - b - f - j
-                                    if n > max_digit:
-                                        continue
+simple way is to notice
+s - a - e - i = m 
+s - b - f - j = n 
+s - c - g - k = o 
 
-                                    for k in range(max_digit + 1):
-                                        o = total - c - g - k
-                                        if o > max_digit:
-                                            continue
+s - e - f - g = h 
+s - i - j - k = l 
+s - a - f - k = p 
 
-                                        l = total - i - j - k
-                                        if l > max_digit:
-                                            continue
+and we can notice g = s - d - j - m
 
-                                        p = total - m - n - o
-                                        if p > max_digit:
-                                            continue
+Using this we only need 9 variables (a, b, c, d, e, f, i, j, k)
 
-                                        if total != a + f + k + p:
-                                            continue
+Anwser:
+    7130034
+'''
 
-                                        result += 1
-                                        if b < e:
-                                            result += 1
+def valid(n):
+    if n < 0 or n > 9:
+        return False
+    return True
 
-    if even:
-        result *= 2
-
-    return result
-
-
-def main() -> None:
-    print(solve(9))
-
-
+def compute():
+    total = 0
+    for a in range(0, 10):
+        print(a)
+        for b in range(0, 10):
+            for c in range(0, 10):
+                for d in range(0, 10):
+                    s = a + b + c + d
+                    for e in range(0, 10):
+                        for i in range(0, 10):
+                            m = s - a - e - i
+                            if valid(m):
+                                for j in range(0, 10):
+                                    g = s - d - j - m
+                                    if valid(g):
+                                        for f in range(0, 10):
+                                            n = s - b - f - j
+                                            if valid(n):
+                                                for k in range(0, 10):
+                                                    o = s - c - g - k
+                                                    if valid(o):
+                                                        h = s - e - f - g
+                                                        if valid(h):
+                                                            l = s - i - j - k
+                                                            if valid(l):
+                                                                p = s - a - f - k
+                                                                if valid(p):
+                                                                    if m + n + o + p == s and d + h + l + p == s:
+                                                                        '''print(total)
+                                                                        print(a, b, c, d)
+                                                                        print(e, f, g, h)
+                                                                        print(i, j, k, l)
+                                                                        print(m, n, o, p)'''
+                                                                        total += 1
+    
+    return total
+                                
 if __name__ == "__main__":
-    main()
+    print(compute())

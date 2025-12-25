@@ -1,75 +1,125 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0351.cpp'''
-sieve = []
+'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00351%20-%20Hexagonal%20Orchards.py'''
+# -*- coding: utf-8 -*-
+"""
+Created on Fri May 26 13:16:34 2023
 
+@author: igorvanloo
+"""
+'''
+Project Euler Problem 351
 
-def fill_sieve(size):
-    global sieve
-    half = (size >> 1) + 1
-    sieve = [True] * half
-    if half > 0:
-        sieve[0] = False
+Clearly we only need to look at one section (triangle) of the hexagon and then we multiply by 6
 
-    i = 1
-    while 2 * i * i < half:
-        if sieve[i]:
-            current = 3 * i + 1
-            step = 2 * i + 1
-            while current < half:
-                sieve[current] = False
-                current += step
-        i += 1
+Now from the center of the hexagon we draw a line to each of the next 2 points
 
+Lets say the the center to the point to the right (if we look at the top right triangle) this is clearly
+at an angle of 0, then from the center to the next of the 2 points lets denote this as angle 1
 
-def is_prime(x):
-    if (x & 1) == 0:
-        return x == 2
-    return sieve[x >> 1]
+Now we draw to the next 3 points
+The first point clearly still has angle 0, last point has angle 1 hence they are in the shadow
+What about the second point? well it is clearly right in the center of first and third point, hence
+it has angle 1/2
 
+The pattern is clear:
+    first layer has angles 0/1, 1/1
+    second layer has angles 0/2, 1/2, 2/2
+    third layer has angles 0/3, 1/3, 2/3, 3/3
+    fourth layer has angles 0/4, 1/4, 2/4, 3/4, 4/4 
+    etc
 
-def sum_phi_sliced(limit, segment_size=1000000):
-    result = 1
-    fill_sieve(limit)
+we can see the fourth layer has 2/4 = 1/2 hence it is in the shadow of 1/2
 
-    primes = [2]
-    primes.reserve = None
-    for i in range(3, limit + 1, 2):
-        if is_prime(i):
-            primes.append(i)
+Hence the problem is reduced to the following:
+    given an order n hexagonal orchard, we must find the numbers of fractions that are not in reduced form
+    that is find all x/n such that gcd(x, n) > 1
+    
+    excluding the 0/n case, on layer n there are n fractions, finding all 1 <= 1 <= n such that gcd(x, n) > 1
+    is the same as n - sum_{x, gcd(x, n) = 1} 1 = n - φ(n)
+    
+    Therefore for an order n hexagonal orchard we have
+    answer = 6 * sum_{i = 1}^n (i - φ(i))
+           = 6 * (sum_{i = 1}^n i - sum_{i = 1}^n φ(i))
+           = 3*n(n+1) - 6*sum_{i = 1}^n φ(i)
+           
+https://en.wikipedia.org/wiki/Totient_summatory_function = sum_{i = 1}^n φ(i) 
 
-    phi = [0] * segment_size
-    for start in range(2, limit + 1, segment_size):
-        end = min(start + segment_size, limit + 1)
-        size = end - start
-        for i in range(size):
-            phi[i] = start + i
+Anwser:
+    11762187201804552
 
-        for p in primes:
-            if p >= end:
-                break
-            first = (start + p - 1) // p * p
-            if first < start:
-                first += p
-            for j in range(first, end, p):
-                phi[j - start] = (phi[j - start] // p) * (p - 1)
+After optimization
+    11762187201804552
+'''
+import math
+    
+def mobius_k_sieve(n, k = 2):
+    '''
+    I redefined the the Mobius function:
+                    1 if n is k-free positive integer with even number of prime factors
+        μ_{k}(n) = -1 if n is k-free positive integer with odd number of prime factors
+                    0 if n has a k power factor
+    '''
+    prime = [1]*(n + 1)
+    prime[0] = prime[1] = 0
+    mob = [0] + [1]*(n)
+    for p in range(2, n + 1):
+        if prime[p]:
+            mob[p] *= -1
+            for i in range(2*p, n + 1, p):
+                prime[i] = 0
+                mob[i] *= -1
+            sq = pow(p, k)
+            if sq <= n:
+                for j in range(sq, n + 1, sq):
+                    mob[j] = 0
+    return mob
 
-        for i in range(size):
-            result += phi[i]
+def totient_sum_slow(n):
+    mob = mobius_k_sieve(n)
+    tot = 0
+    for k in range(1, n + 1):
+        t = n//k
+        tot += mob[k]*t*(t + 1)
+    return tot//2
 
-    return result
+def totient_sum(n):
+    L = int(math.sqrt(n))
+    v = [0]*(L + 1)
+    bigV = [0]*(n//L + 1)
+    
+    for x in range(1, L + 1):
+        res = (x*(x + 1))//2
+        for g in range(2, int(math.sqrt(x)) + 1):
+            res -= v[x//g]
+        
+        for z in range(1, int(math.sqrt(x)) + 1):
+            if x//z != z:
+                res -= (x//z - x//(z + 1))*v[z]
+        
+        v[x] = res
+    
+    for x in range(n//L, 0, -1):
+        k = n//x
+        res = (k*(k + 1))//2
+        
+        for g in range(2, int(math.sqrt(k)) + 1):
+            if k//g <= L:
+                res -= v[k//g]
+            else:
+                res -= bigV[x*g]
+        
+        for z in range(1, int(math.sqrt(k)) + 1):
+            if z != k//z:
+                res -= (k//z - k//(z + 1))*v[z]
+        bigV[x] = res
+        
+    return bigV[1]
 
-
-def solve(limit=100000000):
-    sum_phi = sum_phi_sliced(limit)
-    return 6 * (limit * (limit + 1) // 2 - sum_phi)
-
-
-def main():
-    assert solve(5) == 30
-    assert solve(10) == 138
-    assert solve(1000) == 1177848
-    print(solve())
-
+def H(n):
+    return 3*n*(n + 1) - 6*totient_sum(n)
 
 if __name__ == "__main__":
-    main()
+    assert H(5) == 30
+    assert H(10) == 138
+    assert H(1000) == 1177848
+    print(H(10**8))

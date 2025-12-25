@@ -1,118 +1,121 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0473.cpp'''
-from decimal import Decimal, getcontext
+'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00473%20-%20Phigital%20number%20base.py'''
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Mar 27 15:01:40 2022
 
-getcontext().prec = 80
+@author: igorvanloo
+"""
+'''
+Project Euler Problem 473
 
-EPSILON = Decimal("1e-15")
-
-precomputed = [
-    "1",
-    "1.618033988749894848204586834365638117720309179805762862135",
-    "2.618033988749894848204586834365638117720309179805762862135",
-    "4.236067977499789696409173668731276235440618359611525724270",
-    "6.854101966249684544613760503096914353160927539417288586406",
-    "11.09016994374947424102293417182819058860154589902881431067",
-    "17.94427190999915878563669467492510494176247343844610289708",
-    "29.03444185374863302665962884675329553036401933747491720776",
-    "46.97871376374779181229632352167840047212649277592102010484",
-    "76.01315561749642483895595236843169600249051211339593731260",
-    "122.9918693812442166512522758901100964746170048893169574174",
-    "199.0050249987406414902082282585417924771075170027128947300",
-    "321.9968943799848581414605041486518889517245218920298521475",
-    "521.0019193787254996316687324071936814288320388947427468775",
-    "842.9988137587103577731292365558455703805565607867725990250",
-    "1364.000733137435857404797968963039251809388599681515345902",
-    "2206.999546896146215177927205518884822189945160468287944927",
-    "3571.000280033582072582725174481924073999333760149803290830",
-    "5777.999826929728287760652380000808896189278920618091235757",
-    "9349.000106963310360343377554482732970188612680767894526588",
-    "15126.99993389303864810402993448354186637789160138598576234",
-    "24476.00004085634900844740748896627483656650428215388028893",
-    "39602.99997474938765655143742344981670294439588353986605128",
-    "64079.00001560573666499884491241609153951090016569374634021",
-    "103681.9999903551243215502823358659082424552960492336123914",
-    "167761.0000059608609865491272482819997819661962149273587317",
-    "271442.9999963159853080994095841479080244214922641609711232",
-    "439204.0000022768462946485368324299078063876884790883298549",
-    "710646.9999985928316027479464165778158308091807432493009781",
-    "1149851.00000086967789739648324900772363719686922233763",
-    "1860497.99999946250950014442966558553946800604996558693",
-    "3010349.00000033218739754091291459326310520291918792456",
-    "4870846.99999979469689768534258017880257320896915351149",
-    "7881196.00000012688429522625549477206567841188834143605",
-    "12752042.9999999215811929115980749508682516208574949475",
-    "20633239.0000000484654881378535697229339300327458363836",
-    "33385281.9999999700466810494516446738021816536033313311",
-    "54018521.0000000185121691873052143967361116863491677147",
-    "87403802.9999999885588502367568590705382933399524990459",
-    "141422324.000000007071019424062073467274405026301666760",
-    "228826126.999999995629869660818932537812698366254165806",
-    "370248451.000000002700889084881006005087103392555832567",
-    "599074577.999999998330758745699938542899801758809998373",
-    "969323029.000000001031647830580944547986905151365830941",
-    "1568397606.99999999936240657628088309088670691017582931",
-    "2537720636.00000000039405440686182763887361206154166025",
-    "4106118242.99999999975646098314271072976031897171748957",
-    "6643838879.00000000015051539000453836863393103325914982",
-    "10749957121.999999999906976373147249098394250004976639",
-]
-
-precomputed_decimals = [Decimal(value) for value in precomputed]
-
-max_exponent = 48
+1) f(n) = (φ^n - (-φ)^-n)/√(5)
+    1.1) φ^n + (φ)^-n = √(5)f(n) if n is odd
+    1.2) φ^n + (φ)^-n = √(5)f(n) - 2(φ)^-n
+2) φ^n = f(n)φ + f(n-1))
+3) φ^(-n) = (-1)^(n+1) (f(n)φ - f(n + 1)))
+4) (φ)^n + (φ)^(-n - 1) = (f(n) + f(n + 1))φ + (f(n - 1) - f(n + 2)), when n is even
+5) (φ)^n + (φ)^(-n - 1) = (f(n) - f(n + 1))φ + (f(n - 1) + f(n + 2)), when n is odd
 
 
-def phipow(exponent):
-    if exponent >= 0:
-        return precomputed_decimals[exponent]
-    return Decimal(1) / precomputed_decimals[-exponent]
+Anwser:
+    10^5 - 3517491
+    10^6 - 51883315
+    10^7 - 2218435383
+    10^8 - 43116488159
+    10^9 - 634787225557 - for some reason this one is slow so I added a stopper
+    10^10 - 35856681704365
+    35856681704365
+'''
+import math
+from decimal import *
 
+def fibonnaci(n): #Finds the nth fibonnaci number
+    v1, v2, v3 = 1, 1, 0    # initialise a matrix [[1,1],[1,0]]
+    for rec in bin(n)[3:]:  # perform fast exponentiation of the matrix (quickly raise it to the nth power)
+        calc = v2*v2
+        v1, v2, v3 = v1*v1+calc, (v1+v3)*v2, calc+v3*v3
+        if rec=='1':
+            v1, v2, v3 = v1+v2, v1, v2  
+    return v2
 
-def phipow_both(pos):
-    if not hasattr(phipow_both, "cache"):
-        cache = [phipow(0)]
-        for i in range(1, 49):
-            cache.append(phipow(i) + phipow(-(i + 1)))
-        phipow_both.cache = cache
-    return phipow_both.cache[pos]
+def Fibtill(x):
+    fibnumbers = [0]
+    n = 1
+    while len(fibnumbers) != x:
+        fibnumbers.append(fibonnaci(n))
+        n += 1
+    return fibnumbers
 
+def values(limit):
+    g_r = (1 + math.sqrt(5))/2
+    x = math.ceil(math.log(limit, g_r))
+    v = [g_r**n for n in range(0, - x - 1, -1)]
+    return v, x
 
-def search(limit, exponent=0, current=Decimal(0)):
-    if current > limit:
-        return 0
-
-    result = 0
-    rounded = current.to_integral_value()
-    diff = current - rounded
-    if diff.copy_abs() <= EPSILON:
-        result += int(rounded)
-
-    if exponent == 0:
-        exponent += 1
-    else:
-        exponent += 2
-
-    while exponent <= max_exponent:
-        result += search(limit, exponent + 1, current + phipow_both(exponent))
-        exponent += 1
-
-    return result
-
-
-def solve(limit=10000000000):
-    global max_exponent
-    max_exponent = 0
-    while phipow(max_exponent) <= Decimal(limit):
-        max_exponent += 1
-
-    return 1 + search(Decimal(limit))
-
-
-def main():
-    assert solve(1000) == 4345
-    print(solve())
-
-
+def compute(limit):
+    getcontext().prec = 20
+    g_r = Decimal(1 + Decimal(5).sqrt())/Decimal(2)
+    pow_lim = math.ceil(math.log(limit, g_r))
+    f = Fibtill(pow_lim + 50)
+    
+    possib = []
+    for n in range(1, pow_lim + 1):
+        if n % 2 == 0:
+            t = Decimal(f[n] + f[n + 1])*Decimal(g_r) + (f[n - 1] - f[n + 2])
+        else:
+            t = Decimal(f[n] - f[n + 1])*Decimal(g_r) + (f[n - 1] + f[n + 2])
+        
+        if t < limit:
+            possib.append(t)
+            
+    print("possib are done")
+    print(possib)
+    principal = [1, 2]
+    derived = set()
+    
+    main = [[2, [1, 0]]]
+    sub = [[2, [1, 0]]]
+    for x in range(1, len(possib) - 2):
+        for y in range(x + 2, len(possib)):
+            t = Decimal(possib[x]) + Decimal(possib[y])
+            if t < limit:
+                if round(t, 1) == t:
+                    principal.append(t)
+                    main.append([t, [x, y]])
+                    sub.append([t, [x, y]])  
+    
+    print("main and sub are done")
+    sub = sorted(sub)
+    count = 0
+    prev_sum_1 = 0
+    prev_sum_2 = 1
+    
+    while len(sub)!= 0:
+        curr_sum = sum(principal) + sum(derived)
+        if round(curr_sum, 1) == round(prev_sum_2, 1) and round(prev_sum_2, 1) == round(prev_sum_1, 1):
+            return int(curr_sum)
+        else:
+            prev_sum_1 = prev_sum_2
+            prev_sum_2 = curr_sum
+        count += 1
+        a, b = sub.pop(0)
+        if a > limit/2:
+            break
+        
+        for x in range(count, len(main)):
+            c, d = main[x]
+            
+            if a + c < limit:
+                test = min([abs(i - j) for i in b for j in d])
+                
+                if test >= 2:
+                    if a + c < limit:
+                        sub.append([a + c, b + d])
+                        main.append([a + c, b + d])
+                        derived.add(int(a + c))
+            
+    return int(sum(principal) + sum(derived))
+            
 if __name__ == "__main__":
-    main()
+    print(compute(10**10))

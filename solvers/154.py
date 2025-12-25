@@ -1,62 +1,60 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0154.cpp'''
-def choose(sums: list[int], n: int, k: int) -> int:
-    return sums[n] - (sums[n - k] + sums[k])
+'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00154%20-%20Exploring%20Pascal's%20Pyramid.py'''
+# -*- coding: utf-8 -*-
+#!/usr/bin/env pypy
+"""
+Created on Wed Feb  5 13:05:25 2025
 
+@author: Igor Van Loo
+"""
+'''
+Project Euler Problem 154
 
-def solve(layer: int, prime1: int, exponent1: int, prime2: int, exponent2: int) -> int:
-    mul_prime1 = [0]
-    mul_prime2 = [0]
-    for x in range(1, layer + 1):
-        current = x
-        count = 0
-        while current % prime1 == 0:
-            current //= prime1
-            count += 1
-        mul_prime1.append(count)
+https://en.wikipedia.org/wiki/Pascal%27s_pyramid#Relationship_with_Pascal's_triangle
+We get C(n, i, j) = C(i, j) * C(n, i)
 
-        current = x
-        count = 0
-        while current % prime2 == 0:
-            current //= prime2
-            count += 1
-        mul_prime2.append(count)
+Note that we want to find all coefficients with 2^(12) * 5^(12) = 10^(12) in their prime factorization
+Recursively build up a prime factorization of all binomial coefficients, only caring about the 2's, and 5's
 
-    sum1 = []
-    count = 0
-    for x in mul_prime1:
-        count += x
-        sum1.append(count)
+Answer:
+    479742450
+'''
 
-    sum2 = []
-    count = 0
-    for x in mul_prime2:
-        count += x
-        sum2.append(count)
+def fac(n, d):
+    c = 0
+    while n % d == 0:
+        n //= d
+        c += 1
+    return c
 
-    result = 0
-    for i in range(layer + 1):
-        found1 = choose(sum1, layer, i)
-        found2 = choose(sum2, layer, i)
-
-        if found1 >= exponent1 and found2 >= exponent2:
-            result += i + 1
-            continue
-
-        for j in range((i + 1) // 2 + 1):
-            if found1 + choose(sum1, i, j) >= exponent1 and found2 + choose(
-                sum2, i, j
-            ) >= exponent2:
-                result += 1
-                if j < i / 2:
-                    result += 1
-
-    return result
-
-
-def main() -> None:
-    print(solve(200000, 2, 12, 5, 12))
-
-
+def compute(N, a, ae, b, be):
+    pfa = [0]*(N + 1) 
+    pfb = [0]*(N + 1)
+    
+    for n in range(a, N + 1, a):
+        pfa[n] = fac(n, a)
+        
+    for n in range(b, N + 1, b):
+        pfb[n] = fac(n, b)
+        
+    for n in range(1, N + 1):
+        pfa[n] += pfa[n - 1]
+        pfb[n] += pfb[n - 1]
+    
+    total = 0
+    for i in range(N//3 + 1):
+        for j in range(i, (N - i)//2 + 1):
+            k = N - i - j
+            #i <= j <= k
+            if pfb[N] - pfb[i] - pfb[j] - pfb[k] >= be:
+                if pfa[N] - pfa[i] - pfa[j] - pfa[k] >= ae:
+                    if i == j and j == k:
+                        total += 1
+                    elif i == j or j == k:
+                        total += 3
+                    else:
+                        total += 6
+    return total
+            
 if __name__ == "__main__":
-    main()
+    print(compute(200000, 2, 12, 5, 12))
