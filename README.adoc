@@ -318,12 +318,12 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/149.py[149] | 0.269 |
 | link:solvers/150.py[150] | 2.311 |
 | link:solvers/151.py[151] | 0.090 |
-| link:solvers/152.py[152] |  | timed out after 300.000s
+| link:solvers/152.py[152] | 1.394 |
 | link:solvers/153.py[153] | 2.939 |
 | link:solvers/154.py[154] | 22.716 |
 | link:solvers/155.py[155] | 43.988 |
 | link:solvers/156.py[156] | 0.135 |
-| link:solvers/157.py[157] |  | solver not found
+| link:solvers/157.py[157] | 0.242 |
 | link:solvers/158.py[158] | 0.070 |
 | link:solvers/159.py[159] | 0.194 |
 | link:solvers/160.py[160] | 0.076 |
@@ -341,16 +341,16 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/172.py[172] | 4.289 |
 | link:solvers/173.py[173] | 0.090 |
 | link:solvers/174.py[174] | 0.129 |
-| link:solvers/175.py[175] | 0.118 | 
-| link:solvers/176.py[176] | 0.110 | 
-| link:solvers/177.py[177] | 2.493 | 
+| link:solvers/175.py[175] | 0.118 |
+| link:solvers/176.py[176] | 0.110 |
+| link:solvers/177.py[177] | 2.493 |
 | link:solvers/178.py[178] | 0.099 |
 | link:solvers/179.py[179] | 1.509 |
-| link:solvers/180.py[180] |  | solver not found
+| link:solvers/180.py[180] | 0.935 |
 | link:solvers/181.py[181] | 0.165 |
 | link:solvers/182.py[182] | 0.424 |
 | link:solvers/183.py[183] | 0.070 |
-| link:solvers/184.py[184] |  | solver not found
+| link:solvers/184.py[184] | 0.352 |
 | link:solvers/185.py[185] | 3.162 |
 | link:solvers/186.py[186] | 3.848 |
 | link:solvers/187.py[187] | 0.488 |
@@ -358,16 +358,16 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/189.py[189] | 0.272 |
 | link:solvers/190.py[190] | 0.057 |
 | link:solvers/191.py[191] | 0.059 |
-| link:solvers/192.py[192] |  | solver not found
+| link:solvers/192.py[192] | 0.354 |
 | link:solvers/193.py[193] | 1.964 |
-| link:solvers/194.py[194] |  | solver not found
+| link:solvers/194.py[194] | 0.145 |
 | link:solvers/195.py[195] |  | solver not found
 | link:solvers/196.py[196] | 3.559 |
 | link:solvers/197.py[197] | 0.056 |
 | link:solvers/198.py[198] |  | solver not found
 | link:solvers/199.py[199] | 0.070 |
 | link:solvers/200.py[200] | 2.044 |
-| link:solvers/201.py[201] |  | failed (exit 1)
+| link:solvers/201.py[201] | 10.043 |
 | link:solvers/202.py[202] |  | solver not found
 | link:solvers/203.py[203] | 0.058 |
 | link:solvers/204.py[204] | 0.190 |

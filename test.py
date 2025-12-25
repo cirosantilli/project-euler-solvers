@@ -42,6 +42,12 @@ def parse_args() -> argparse.Namespace:
         default=None,
         help="Per-solver timeout in seconds.",
     )
+    parser.add_argument(
+        "-A",
+        "--autoupdate",
+        action="store_true",
+        help="Update README.adoc results table with the latest run.",
+    )
     return parser.parse_args()
 
 def expand_ids(values: list[str]) -> list[int]:
@@ -106,6 +112,53 @@ def run_solver(
 def extract_answer(raw_output: str) -> str:
     lines = [line.strip() for line in raw_output.splitlines() if line.strip()]
     return lines[-1] if lines else ""
+
+def format_row(res: Result) -> str:
+    time_cell = f"{res.elapsed:.3f}" if res.elapsed is not None else ""
+    error_cell = "" if res.correct else res.message
+    link = f"link:solvers/{res.puzzle_id}.py[{res.puzzle_id}]"
+    return f"| {link} | {time_cell} | {error_cell}".rstrip()
+
+def update_readme(results: list[Result]) -> None:
+    readme_path = ROOT / "README.adoc"
+    lines = readme_path.read_text().splitlines()
+    try:
+        results_idx = next(i for i, line in enumerate(lines) if line.strip() == "== Results")
+    except StopIteration:
+        raise RuntimeError("Could not find Results section in README.adoc")
+
+    start = None
+    end = None
+    for i in range(results_idx + 1, len(lines)):
+        if lines[i].strip() == "|===":
+            if start is None:
+                start = i
+            else:
+                end = i
+                break
+    if start is None or end is None:
+        raise RuntimeError("Could not find results table in README.adoc")
+
+    row_re = re.compile(r"^\|\s+link:solvers/(\d+)\.py\[\d+\]\s+\|")
+    result_map = {res.puzzle_id: format_row(res) for res in results}
+    missing_ids = set(result_map)
+
+    for i in range(start + 1, end):
+        match = row_re.match(lines[i])
+        if not match:
+            continue
+        pid = int(match.group(1))
+        if pid in result_map:
+            lines[i] = result_map[pid]
+            missing_ids.discard(pid)
+
+    if missing_ids:
+        insert_at = end
+        for pid in sorted(missing_ids):
+            lines.insert(insert_at, result_map[pid])
+            insert_at += 1
+
+    readme_path.write_text("\n".join(lines) + "\n")
 
 
 def main() -> None:
@@ -195,11 +248,11 @@ def main() -> None:
     print("\n|===")
     print("| ID | time (s) | error")
     for res in sorted(results, key=lambda r: r.puzzle_id):
-        time_cell = f"{res.elapsed:.3f}" if res.elapsed is not None else ""
-        error_cell = "" if res.correct else res.message
-        link = f"link:solvers/{res.puzzle_id}.py[{res.puzzle_id}]"
-        print(f"| {link} | {time_cell} | {error_cell}")
+        print(format_row(res))
     print("|===")
+
+    if args.autoupdate:
+        update_readme(results)
 
 
 if __name__ == "__main__":

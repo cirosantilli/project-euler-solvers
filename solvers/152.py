@@ -1,137 +1,125 @@
-#!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0152.cpp'''
-from collections import Counter
+#!/usr/bin/env python3
+"""
+Project Euler 152: Writing 1/2 as a sum of inverse squares.
+
+Count the number of subsets S ⊆ {2..80} such that:
+    sum_{n in S} 1/n^2 = 1/2
+
+Approach:
+- Use the standard pruning that (for this problem) any solution only needs numbers whose
+  prime factors are among {2,3,5,7,13}. This drastically cuts the search space.
+- Convert the rational equation into an integer subset-sum by scaling with L^2 where
+  L = lcm(candidates). Each term 1/n^2 becomes (L/n)^2 / L^2.
+- Meet-in-the-middle:
+  * Precompute all subset sums of the "large" candidates (n >= max_n//2).
+  * DFS on the remaining candidates, and for each partial sum, look up the required
+    complement among the precomputed sums.
+"""
+
+from __future__ import annotations
+
+from collections import defaultdict
 from fractions import Fraction
+from math import gcd
+from typing import Dict, List, Tuple
 
 
-TARGET_SUM = Fraction(1, 2)
-last_number_threshold = 40
-candidates: list[int] = []
-last_numbers: Counter = Counter()
-remaining: dict[int, Fraction] = {}
+ALLOWED_PRIMES = (2, 3, 5, 7, 13)
 
 
-members: list[int] = []
+def lcm(a: int, b: int) -> int:
+    return a // gcd(a, b) * b
 
 
-def search(current: Fraction = Fraction(0, 1), next_index: int = 0) -> int:
-    if current == TARGET_SUM:
-        return 1
-    if TARGET_SUM < current:
-        return 0
-    if next_index == len(candidates):
-        return 0
-
-    number = candidates[next_index]
-
-    maximum = current + remaining[number]
-    if maximum < TARGET_SUM:
-        return 0
-
-    if number >= last_number_threshold:
-        difference = TARGET_SUM - current
-        return last_numbers[difference]
-
-    result = 0
-    result += search(current, next_index + 1)
-
-    add = Fraction(1, number * number)
-    members.append(number)
-    result += search(current + add, next_index + 1)
-    members.pop()
-
-    return result
+def candidates_up_to(max_n: int) -> List[int]:
+    """Return candidate denominators in [2..max_n] with no prime factors outside ALLOWED_PRIMES."""
+    cand: List[int] = []
+    for n in range(2, max_n + 1):
+        t = n
+        for p in ALLOWED_PRIMES:
+            while t % p == 0:
+                t //= p
+        if t == 1:
+            cand.append(n)
+    return cand
 
 
-def solve(denominator: int, limit: int) -> int:
-    global TARGET_SUM
-    TARGET_SUM = Fraction(1, denominator)
+def count_ways(max_n: int = 80) -> int:
+    """
+    Count ways to write 1/2 as a sum of inverse squares using distinct integers in [2..max_n].
+    """
+    cand = candidates_up_to(max_n)
 
-    primes = []
-    for i in range(2, limit + 1):
-        is_prime = True
-        for j in range(2, int(i ** 0.5) + 1):
-            if i % j == 0:
-                is_prime = False
-                break
-        if is_prime:
-            primes.append(i)
+    # Common denominator for 1/n^2 terms
+    L = 1
+    for n in cand:
+        L = lcm(L, n)
 
-    relevant_prime = set()
-    found = [False] * (limit + 1)
-    for p in primes:
-        multiples = [Fraction(1, m * m) for m in range(p, limit + 1, p)]
-        combinations = 1 << len(multiples)
-        for mask in range(1, combinations):
-            current = Fraction(0, 1)
-            for pos in range(len(multiples)):
-                if mask & (1 << pos):
-                    current += multiples[pos]
-            if current.denominator % p == 0:
-                continue
+    # Integer weights: 1/n^2 == (L/n)^2 / L^2
+    weights = [(L // n) ** 2 for n in cand]
+    target = (L * L) // 2  # because we need sum = 1/2
 
-            for pos in range(len(multiples)):
-                if mask & (1 << pos):
-                    is_good = (pos + 1) * p
-                    found[is_good] = True
+    # Split at a value threshold to keep the second half small enough for full enumeration
+    threshold = max_n // 2
+    split_idx = 0
+    for i, n in enumerate(cand):
+        if n >= threshold:
+            split_idx = i
+            break
 
-            relevant_prime.add(p)
-            found[p] = True
+    first = sorted(weights[:split_idx], reverse=True)  # large weights first -> better pruning
+    last = weights[split_idx:]
 
-            if p < 5:
-                break
+    # Precompute all subset sums of the last part
+    sum_count: Dict[int, int] = defaultdict(int)
+    sums = [0]
+    for w in last:
+        sums += [s + w for s in sums]
+    for s in sums:
+        sum_count[s] += 1
+    max_last = sum(last)
 
-    two = 1
-    while two <= limit:
-        three = 1
-        while two * three <= limit:
-            found[two * three] = True
-            three *= 3
-        two *= 2
+    # Suffix sums for pruning on the first part
+    suffix = [0] * (len(first) + 1)
+    for i in range(len(first) - 1, -1, -1):
+        suffix[i] = suffix[i + 1] + first[i]
 
-    for i in range(2, limit + 1):
-        if not found[i]:
-            continue
+    ans = 0
 
-        reduce = i
-        for p in relevant_prime:
-            while reduce % p == 0:
-                reduce //= p
+    def dfs(i: int, acc: int) -> None:
+        nonlocal ans
+        if acc > target:
+            return
+        # Even taking all remaining 'first' and all 'last', we still can't reach target.
+        if acc + suffix[i] + max_last < target:
+            return
+        if i == len(first):
+            ans += sum_count.get(target - acc, 0)
+            return
+        dfs(i + 1, acc + first[i])  # include
+        dfs(i + 1, acc)             # exclude
 
-        if reduce != 1:
-            found[i] = False
-            continue
-
-        candidates.append(i)
-
-    running = Fraction(0, 1)
-    for current in reversed(candidates):
-        running += Fraction(1, current * current)
-        remaining[current] = running
-
-    global last_number_threshold
-    last_number_threshold = limit // 2
-    last_start = 0
-    while last_start < len(candidates) and candidates[last_start] < last_number_threshold:
-        last_start += 1
-
-    num_last_numbers = len(candidates) - last_start
-    combinations = 1 << num_last_numbers
-    for mask in range(combinations):
-        current = Fraction(0, 1)
-        for pos in range(num_last_numbers):
-            if mask & (1 << pos):
-                add = candidates[last_start + pos]
-                current += Fraction(1, add * add)
-        last_numbers[current] += 1
-
-    return search()
+    dfs(0, 0)
+    return ans
 
 
-def main() -> None:
-    assert solve(2, 45) == 3
-    print(solve(2, 80))
+def _asserts_from_statement() -> None:
+    # Statement example:
+    ex = [2, 3, 4, 5, 7, 12, 15, 20, 28, 35]
+    s = sum(Fraction(1, n * n) for n in ex)
+    assert s == Fraction(1, 2), s
+
+    # Statement claim: exactly 3 ways using numbers between 2 and 45 inclusive.
+    assert count_ways(45) == 3
+
+
+def solve() -> int:
+    return count_ways(80)
 
 
 if __name__ == "__main__":
-    main()
+    _asserts_from_statement()
+    ans = solve()
+    # Known Project Euler answer (helps catch accidental regressions)
+    assert ans == 301
+    print(ans)
