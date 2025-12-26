@@ -17,23 +17,18 @@ Anwser:
     157055.80999
 '''
 import math
-from scipy.integrate import quad
     
 def compute(limit):
-    
-    def f_upper1(x):
-        return (math.sqrt((1.5)*(1.5) - (x + 1)*(x + 1)) - 1)
-    
-    total = quad(f_upper1, 0, f_upper1(0))[0]
-    
+    def area_under_circle(k, r):
+        u_max = math.sqrt(r * r - 1.0)
+        def primitive(u):
+            return 0.5 * (u * math.sqrt(r * r - u * u) + r * r * math.asin(u / r))
+        return (primitive(u_max) - primitive(1.0) - (u_max - 1.0)) / (k * k)
+    total = area_under_circle(1, 1.5)
     for k in range(2, limit + 1):
-        f_lower = lambda x: (math.sqrt((k - 0.5)*(k - 0.5) - (k*x + 1)*(k*x + 1)) - 1)/k
-        f_upper = lambda x: (math.sqrt((k + 0.5)*(k + 0.5) - (k*x + 1)*(k*x + 1)) - 1)/k
-        
-        area_under_upper_circle = quad(f_upper, 0, f_upper(0))[0]
-        area_under_lower_circle = quad(f_lower, 0, f_lower(0))[0]
-        
-        total += k*(area_under_upper_circle - area_under_lower_circle)
+        area_under_upper_circle = area_under_circle(k, k + 0.5)
+        area_under_lower_circle = area_under_circle(k, k - 0.5)
+        total += k * (area_under_upper_circle - area_under_lower_circle)
     return round(total, 5)
 
 if __name__ == "__main__":

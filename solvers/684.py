@@ -56,28 +56,14 @@ def finals(k):
     
     return (6*(pow(10,q,1000000007) - 1) - (9*q % 1000000007) + (r/2)*(r*pow(10,q,1000000007) + 3*pow(10,q,1000000007) - 2)) % 1000000007
 
-def compute():
-    total = 0
-    temp_list = fibonnaci(92)
-    for x in range(2,91):
-        total += S(temp_list[x])
-    return total % 1000000007
-
 def compute1():
     total = 0
     temp_list = fibonnaci(92)
     for x in range(2,91):
         total += finals(temp_list[x])
-    return total % 1000000007
-
-def tempcompute():
-    for x in range(1,100):
-        if S(x, x) == 0:
-            print(x)
+    return int(total % 1000000007)
 
 if __name__ == "__main__":
     assert s(10) == 19
     assert S(20, 10**18) == 1074
-    print(tempcompute())
     print(compute1())
-    print(compute())

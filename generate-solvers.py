@@ -317,6 +317,7 @@ def write_solver_metadata(
     reasoning_effort: str | None,
     input_prompt: str,
     duration_seconds: float | None,
+    created_at: str,
 ) -> None:
     json_path = solvers_dir / f"{stem}.json"
     payload = {
@@ -325,6 +326,7 @@ def write_solver_metadata(
         "reasoning_effort": reasoning_effort,
         "input_prompt": input_prompt,
         "duration_seconds": duration_seconds,
+        "created_at": created_at,
     }
     json_path.write_text(
         json.dumps(payload, ensure_ascii=True, indent=2) + "\n",
@@ -492,6 +494,7 @@ def handle_result(
     input_prompt = ""
     if isinstance(request_body, dict):
         input_prompt = request_body.get("input", "")
+    created_at = datetime.utcnow().replace(microsecond=0).isoformat() + "Z"
     write_solver_metadata(
         solvers_dir,
         stem,
@@ -500,6 +503,7 @@ def handle_result(
         reasoning_effort,
         input_prompt,
         round(elapsed, 3),
+        created_at,
     )
     print(
         f"Request for problem {problem_id} completed in {elapsed:.2f}s "

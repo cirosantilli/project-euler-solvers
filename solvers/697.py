@@ -36,11 +36,14 @@ Anwser:
     4343871.06
 '''
     
-from scipy.stats import gamma
-from math import log
+from math import log, sqrt
 
 def compute(n):
-    return round(gamma(n).ppf(0.75)/log(10),2)
+    # Wilson-Hilferty approximation for chi-square; Gamma(n,1) => 2*X ~ chi2(2n)
+    z = 0.6744897501960817  # Normal(0,1) 75th percentile
+    df = 2.0 * n
+    chi2_ppf = df * (1.0 - 2.0 / (9.0 * df) + z * sqrt(2.0 / (9.0 * df))) ** 3
+    return round((0.5 * chi2_ppf) / log(10), 2)
 
 if __name__ == "__main__":
     assert compute(100) == 46.27

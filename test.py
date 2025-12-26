@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import re
 import subprocess
 import sys
@@ -22,6 +23,8 @@ class Result:
     puzzle_id: int
     correct: bool
     elapsed: float | None
+    model: str | None
+    output_tokens: int | None
     message: str
 
 
@@ -90,6 +93,21 @@ def collect_solvers() -> dict[int, Path]:
     return {int(path.stem): path for path in SOLVERS_DIR.glob("*.py")}
 
 
+def load_solver_metadata(puzzle_id: int) -> tuple[str | None, int | None]:
+    meta_path = SOLVERS_DIR / f"{puzzle_id}.json"
+    if not meta_path.exists():
+        return None, None
+    try:
+        payload = json.loads(meta_path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return None, None
+    output_tokens = payload.get("output_tokens")
+    model = payload.get("model")
+    model_value = model if isinstance(model, str) else None
+    tokens_value = output_tokens if isinstance(output_tokens, int) else None
+    return model_value, tokens_value
+
+
 def run_solver(
     path: Path, timeout: float | None
 ) -> tuple[int | None, str, str, float, bool]:
@@ -115,9 +133,13 @@ def extract_answer(raw_output: str) -> str:
 
 def format_row(res: Result) -> str:
     time_cell = f"{res.elapsed:.3f}" if res.elapsed is not None else ""
+    model_cell = res.model or ""
+    tokens_cell = str(res.output_tokens) if res.output_tokens is not None else ""
     error_cell = "" if res.correct else res.message
     link = f"link:solvers/{res.puzzle_id}.py[{res.puzzle_id}]"
-    return f"| {link} | {time_cell} | {error_cell}".rstrip()
+    return (
+        f"| {link} | {time_cell} | {model_cell} | {tokens_cell} | {error_cell}"
+    ).rstrip()
 
 def update_readme(results: list[Result]) -> None:
     readme_path = ROOT / "README.adoc"
@@ -139,24 +161,24 @@ def update_readme(results: list[Result]) -> None:
     if start is None or end is None:
         raise RuntimeError("Could not find results table in README.adoc")
 
+    header_line = "| ID | Runtime (s) | Model | Out Tokens | Error"
     row_re = re.compile(r"^\|\s+link:solvers/(\d+)\.py\[\d+\]\s+\|")
     result_map = {res.puzzle_id: format_row(res) for res in results}
-    missing_ids = set(result_map)
+    row_map: dict[int, str] = {}
 
     for i in range(start + 1, end):
         match = row_re.match(lines[i])
         if not match:
             continue
         pid = int(match.group(1))
-        if pid in result_map:
-            lines[i] = result_map[pid]
-            missing_ids.discard(pid)
+        row_map[pid] = lines[i]
 
-    if missing_ids:
-        insert_at = end
-        for pid in sorted(missing_ids):
-            lines.insert(insert_at, result_map[pid])
-            insert_at += 1
+    for pid, row in result_map.items():
+        row_map[pid] = row
+
+    sorted_rows = [row_map[pid] for pid in sorted(row_map)]
+    new_block = [header_line, *sorted_rows]
+    lines[start + 1 : end] = new_block
 
     readme_path.write_text("\n".join(lines) + "\n")
 
@@ -183,13 +205,21 @@ def main() -> None:
         solver_path = solvers.get(pid)
         if solver_path is None:
             results.append(
-                Result(pid, correct=False, elapsed=None, message="solver not found")
+                Result(
+                    pid,
+                    correct=False,
+                    elapsed=None,
+                    model=None,
+                    output_tokens=None,
+                    message="solver not found",
+                )
             )
             print(f"[{pid}] skipped: solver not found", file=sys.stderr)
             continue
 
         expected = reference.get(pid)
         missing_reference = expected is None
+        model, output_tokens = load_solver_metadata(pid)
 
         print(f"[{pid}] running {solver_path}")
         rc, stdout, stderr, elapsed, timed_out = run_solver(solver_path, args.timeout)
@@ -200,6 +230,8 @@ def main() -> None:
                     pid,
                     correct=False,
                     elapsed=None,
+                    model=model,
+                    output_tokens=output_tokens,
                     message=f"timed out after {limit:.3f}s",
                 )
             )
@@ -214,6 +246,8 @@ def main() -> None:
                     pid,
                     correct=False,
                     elapsed=elapsed,
+                    model=model,
+                    output_tokens=output_tokens,
                     message=f"failed (exit {rc})",
                 )
             )
@@ -226,6 +260,8 @@ def main() -> None:
                     pid,
                     correct=False,
                     elapsed=elapsed,
+                    model=model,
+                    output_tokens=output_tokens,
                     message="missing reference answer",
                 )
             )
@@ -234,11 +270,29 @@ def main() -> None:
 
         actual = extract_answer(stdout)
         if actual == expected:
-            results.append(Result(pid, correct=True, elapsed=elapsed, message="ok"))
+            results.append(
+                Result(
+                    pid,
+                    correct=True,
+                    elapsed=elapsed,
+                    model=model,
+                    output_tokens=output_tokens,
+                    message="ok",
+                )
+            )
             print(f"[{pid}] ok ({elapsed:.3f}s)")
         else:
             msg = f"expected {expected!r}, got {actual!r}"
-            results.append(Result(pid, correct=False, elapsed=elapsed, message=msg))
+            results.append(
+                Result(
+                    pid,
+                    correct=False,
+                    elapsed=elapsed,
+                    model=model,
+                    output_tokens=output_tokens,
+                    message=msg,
+                )
+            )
             print(f"[{pid}] wrong answer: {msg}", file=sys.stderr)
 
     total_run = len(results)
@@ -246,7 +300,7 @@ def main() -> None:
     print(f"\nPassed {passed}/{total_run} tests.")
 
     print("\n|===")
-    print("| ID | time (s) | error")
+    print("| ID | time (s) | model | Out Tokens | error")
     for res in sorted(results, key=lambda r: r.puzzle_id):
         print(format_row(res))
     print("|===")

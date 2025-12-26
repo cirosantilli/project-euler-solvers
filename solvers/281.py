@@ -58,4 +58,4 @@ if __name__ == "__main__":
     assert f(2, 2) == 2
     assert f(3, 1) == 2
     assert f(3, 2) == 16
-    print(compute(10**16))
+    print(compute(10**15))
