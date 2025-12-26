@@ -17,7 +17,7 @@ I learnt this in galois theory, Dummit and Foote pg 589
 Anwser:
     124136381
 '''
-import math, galois
+import math
 from functools import cache
 
 
@@ -45,26 +45,6 @@ def Divisors_of(x):  # Find the divisors of a number
             divisors.add(int(x//i))
     return divisors
 
-@cache
-def recGenIrredPoly(n):
-    #Function will find all irreducibles polynomials of deg(d) such that d|n
-    #Using galois theory we know that x^(p^n) - x is the product of all irreducible polynomials
-    #of degree d where d|n
-    #For example x^(2^2) - x = x(x-1)(x^2 + x + 1) where x, x - 1 are irred poly of degree 1, x^2 + x + 1
-    #is irred poly of degree 2
-    
-    GF = galois.GF(2)
-    f = galois.Poly.Degrees([pow(2, n), 1], coeffs = [1, 1], field = GF)
-                        
-    if n == 1:
-        return [galois.Poly([1, 1], field = GF), galois.Poly([1, 0], field = GF)]
-    
-    div = Divisors_of(n)
-    for d in div:
-        t = recGenIrredPoly(d)
-        for g in t:
-            f = f//g
-    return f.factors()[0]
 
 def mobius_k_sieve(n, k = 2):
     '''
@@ -97,27 +77,6 @@ def numOfIrred(n):
         tot += mob[d]*pow(2, n//d)
     return tot//n
 
-def compute(g):
-    tot = 0
-    d = 1
-    while True:
-        t = numOfIrred(d)
-        if tot + t > g:
-            break
-        tot += t
-        d += 1
-    index = g - tot
-    #Once we cross this we know our g-th prime is a degree d polynomial
-    print(d, t, index)
-    for x in range(pow(2, d) + 1, pow(2, d + 1), 2):
-        polyBin = bin(x)
-        if polyBin.count("1") % 2 == 1:
-            poly = galois.Poly.Int(int(polyBin, 2), field = galois.GF(2))
-            if poly.is_irreducible():
-                index -= 1
-        if index == 0:
-            return int(polyBin, 2)
-    
 def sieve(lim):
     tot = 0
     d = 1

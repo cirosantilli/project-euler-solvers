@@ -73,6 +73,6 @@ def solve(max_set: int, choose: int) -> int:
 
 if __name__ == "__main__":
     example_values = [1, 3, 6, 8, 10, 11]
-    # TODO
+    # TODO extra assert
     #assert unique_sum_from_list(example_values, 3) == 156
     print(solve(100, 50))

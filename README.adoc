@@ -43,6 +43,8 @@ Of course, it can be argued that https://github.com/eth-sri/matharena does every
 
 We are focusing on Python solutions at first because this is the language that LLMs seems to speak better. It is also cute and avoid compilation overhead. Also pypy3 does a lot to bring runtime closer to that of compiled languages. We are not against adding solutions in every single language in existence in the future, but that is becoming increasingly cheap and easy with vibe translation with Codex CLI, so we are not too concerned either.
 
+Each solution file should be completely self contained and have no dependencies outside of the Python standard library.
+
 == Status
 
 Right now this project is simply blocked on cost/efficiency issues, there's nothing fundamentally intelligent missing:
@@ -361,10 +363,10 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/192.py[192] | 0.354 |
 | link:solvers/193.py[193] | 1.964 |
 | link:solvers/194.py[194] | 0.145 |
-| link:solvers/195.py[195] |  | solver not found
+| link:solvers/195.py[195] | 3.335 |
 | link:solvers/196.py[196] | 3.559 |
 | link:solvers/197.py[197] | 0.056 |
-| link:solvers/198.py[198] |  | solver not found
+| link:solvers/198.py[198] | 0.255 |
 | link:solvers/199.py[199] | 0.070 |
 | link:solvers/200.py[200] | 2.044 |
 | link:solvers/201.py[201] | 10.043 |
@@ -417,7 +419,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/248.py[248] | 1.402 |
 | link:solvers/249.py[249] | 0.791 |
 | link:solvers/250.py[250] | 0.405 |
-| link:solvers/251.py[251] | 0.057 | failed (exit 1)
+| link:solvers/251.py[251] | 161.694 |
 | link:solvers/252.py[252] |  | solver not found
 | link:solvers/253.py[253] |  | solver not found
 | link:solvers/254.py[254] |  | solver not found
@@ -429,7 +431,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/260.py[260] | 0.965 |
 | link:solvers/261.py[261] |  | solver not found
 | link:solvers/262.py[262] |  | solver not found
-| link:solvers/263.py[263] |  | timed out after 60.000s
+| link:solvers/263.py[263] |  | timed out after 300.000s
 | link:solvers/264.py[264] |  | solver not found
 | link:solvers/265.py[265] | 0.106 |
 | link:solvers/266.py[266] | 9.873 |
@@ -451,7 +453,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/282.py[282] |  | solver not found
 | link:solvers/283.py[283] |  | solver not found
 | link:solvers/284.py[284] | 2.351 |
-| link:solvers/285.py[285] | 0.075 | failed (exit 1)
+| link:solvers/285.py[285] | 0.221 | failed (exit 1)
 | link:solvers/286.py[286] | 0.080 |
 | link:solvers/287.py[287] | 0.059 | failed (exit 1)
 | link:solvers/288.py[288] | 0.895 |
@@ -462,7 +464,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/293.py[293] | 0.173 |
 | link:solvers/294.py[294] |  | solver not found
 | link:solvers/295.py[295] |  | solver not found
-| link:solvers/296.py[296] |  | timed out after 60.000s
+| link:solvers/296.py[296] | 80.048 |
 | link:solvers/297.py[297] | 0.065 |
 | link:solvers/298.py[298] |  | solver not found
 | link:solvers/299.py[299] |  | solver not found
@@ -617,7 +619,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/448.py[448] |  | solver not found
 | link:solvers/449.py[449] |  | solver not found
 | link:solvers/450.py[450] |  | solver not found
-| link:solvers/451.py[451] |  | timed out after 60.000s
+| link:solvers/451.py[451] | 74.218 |
 | link:solvers/452.py[452] |  | solver not found
 | link:solvers/453.py[453] |  | solver not found
 | link:solvers/454.py[454] |  | solver not found
@@ -627,7 +629,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/458.py[458] | 0.067 |
 | link:solvers/459.py[459] |  | solver not found
 | link:solvers/460.py[460] |  | solver not found
-| link:solvers/461.py[461] |  | timed out after 60.000s
+| link:solvers/461.py[461] | 258.082 | expected '159820276', got '((8357, 10421, 8357, 10421), 356873380)'
 | link:solvers/462.py[462] |  | solver not found
 | link:solvers/463.py[463] | 0.065 |
 | link:solvers/464.py[464] |  | solver not found
@@ -706,7 +708,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/537.py[537] | 23.167 |
 | link:solvers/538.py[538] |  | solver not found
 | link:solvers/539.py[539] |  | timed out after 60.000s
-| link:solvers/540.py[540] | 0.073 | failed (exit 1)
+| link:solvers/540.py[540] | 11.134 |
 | link:solvers/541.py[541] |  | solver not found
 | link:solvers/542.py[542] |  | solver not found
 | link:solvers/543.py[543] | 0.706 |
@@ -805,4 +807,21 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/972.py[972] | 50.921 |
 | link:solvers/973.py[973] | 0.423 |
 | link:solvers/974.py[974] | 0.320 |
+| link:solvers/634.py[634] | 0.842 | expected '4019680944', got '4019680946'
+| link:solvers/684.py[684] | 0.185 | failed (exit 1)
+| link:solvers/697.py[697] | 0.221 | failed (exit 1)
+| link:solvers/810.py[810] | 51.788 |
+| link:solvers/932.py[932] | 4.977 |
+| link:solvers/641.py[641] |  | timed out after 300.000s
+| link:solvers/642.py[642] | 47.987 |
+| link:solvers/655.py[655] |  | timed out after 300.000s
+| link:solvers/712.py[712] | 95.006 |
+| link:solvers/714.py[714] | 72.413 | expected '2.452767775565e20', got '245276777556527592946'
+| link:solvers/719.py[719] |  | timed out after 300.000s
+| link:solvers/722.py[722] |  | timed out after 300.000s
+| link:solvers/743.py[743] |  | timed out after 300.000s
+| link:solvers/754.py[754] | 105.190 |
+| link:solvers/795.py[795] | 49.345 | expected '955892601606483', got '955892601606483.0'
+| link:solvers/885.py[885] | 234.998 |
+| link:solvers/933.py[933] |  | timed out after 300.000s
 |===
