@@ -27,6 +27,12 @@ def parse_args() -> argparse.Namespace:
         help="Optional end problem ID (inclusive).",
     )
     parser.add_argument(
+        "-n",
+        "--count",
+        type=int,
+        help="Run a total of N solvers starting from start, skipping existing.",
+    )
+    parser.add_argument(
         "-m",
         "--model",
         default="gpt-5.2",
@@ -126,8 +132,9 @@ def build_requests(
     start: int | None,
     end: int | None,
     force: bool,
+    limit_count: int | None,
 ) -> list[dict]:
-    existing = solver_ids(solvers_dir) if not force else set()
+    existing = solver_ids(solvers_dir) if (not force or limit_count) else set()
     requests: list[dict] = []
     for path in statement_files(statements_dir):
         problem_id = int(path.stem)
@@ -153,6 +160,8 @@ def build_requests(
         )
         if max_output_tokens is not None:
             requests[-1]["body"]["max_output_tokens"] = max_output_tokens
+        if limit_count is not None and len(requests) >= limit_count:
+            break
     return requests
 
 
@@ -500,12 +509,20 @@ def handle_result(
 
 def main() -> None:
     args = parse_args()
-    if args.start is not None and args.end is None:
-        args.end = args.start
-    if args.start is None and args.end is not None:
-        raise SystemExit("Provide both start and end, or neither.")
-    if args.start is not None and args.start > args.end:
-        raise SystemExit("Start must be less than or equal to end.")
+    if args.count is not None:
+        if args.end is not None:
+            raise SystemExit("Provide only a start when using -n/--count.")
+        if args.start is None:
+            raise SystemExit("Provide a start when using -n/--count.")
+        if args.count <= 0:
+            raise SystemExit("Count must be a positive integer.")
+    else:
+        if args.start is not None and args.end is None:
+            args.end = args.start
+        if args.start is None and args.end is not None:
+            raise SystemExit("Provide both start and end, or neither.")
+        if args.start is not None and args.start > args.end:
+            raise SystemExit("Start must be less than or equal to end.")
     root = Path(__file__).resolve().parent
     statements_dir = root / "data" / "project-euler-statements" / "data" / "md"
     solvers_dir = root / "solvers"
@@ -518,6 +535,7 @@ def main() -> None:
         args.start,
         args.end,
         args.force,
+        args.count,
     )
     if not requests:
         print("No unsolved statements found. Nothing to submit.")
