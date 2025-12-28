@@ -51,6 +51,12 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Update README.adoc results table with the latest run.",
     )
+    parser.add_argument(
+        "-u",
+        "--uncommitted",
+        action="store_true",
+        help="Run only solvers modified or added since the last git commit.",
+    )
     return parser.parse_args()
 
 def expand_ids(values: list[str]) -> list[int]:
@@ -91,6 +97,38 @@ def load_reference_answers() -> dict[int, str]:
 
 def collect_solvers() -> dict[int, Path]:
     return {int(path.stem): path for path in SOLVERS_DIR.glob("*.py")}
+
+
+def collect_uncommitted_solvers() -> list[int]:
+    try:
+        proc = subprocess.run(
+            ["git", "status", "--porcelain", "--", str(SOLVERS_DIR / "*.py")],
+            capture_output=True,
+            text=True,
+            cwd=ROOT,
+            check=False,
+        )
+    except OSError as exc:
+        raise RuntimeError("Failed to run git to find uncommitted solvers.") from exc
+    if proc.returncode != 0:
+        raise RuntimeError(proc.stderr.strip() or "git status failed.")
+    ids: list[int] = []
+    for line in proc.stdout.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        parts = line.split()
+        if not parts:
+            continue
+        path_str = parts[-1]
+        path = Path(path_str)
+        if path.suffix != ".py":
+            continue
+        if path.parent.name != "solvers":
+            continue
+        if path.stem.isdigit():
+            ids.append(int(path.stem))
+    return sorted(set(ids))
 
 
 def load_solver_metadata(puzzle_id: int) -> tuple[str | None, int | None]:
@@ -188,7 +226,13 @@ def main() -> None:
     reference = load_reference_answers()
     solvers = collect_solvers()
 
-    if args.ids:
+    if args.uncommitted:
+        try:
+            target_ids = collect_uncommitted_solvers()
+        except RuntimeError as exc:
+            print(str(exc), file=sys.stderr)
+            sys.exit(2)
+    elif args.ids:
         try:
             target_ids = sorted(set(expand_ids(args.ids)))
         except ValueError as exc:
