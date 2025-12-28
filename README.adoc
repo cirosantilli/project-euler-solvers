@@ -393,7 +393,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/199.py[199] | 0.071 |  |  |
 | link:solvers/200.py[200] | 2.155 |  |  |
 | link:solvers/201.py[201] | 10.043 |  |  |
-| link:solvers/202.py[202] |  |  |  | solver not found
+| link:solvers/202.py[202] | 0.112 |  |  |
 | link:solvers/203.py[203] | 0.058 |  |  |
 | link:solvers/204.py[204] | 0.190 |  |  |
 | link:solvers/205.py[205] | 0.158 |  |  |
@@ -401,9 +401,9 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/207.py[207] | 0.078 |  |  |
 | link:solvers/208.py[208] | 0.433 |  |  |
 | link:solvers/209.py[209] | 0.078 |  |  |
-| link:solvers/210.py[210] |  |  |  | solver not found
+| link:solvers/210.py[210] | 4.232 |  |  |
 | link:solvers/211.py[211] | 18.066 |  |  |
-| link:solvers/212.py[212] |  |  |  | solver not found
+| link:solvers/212.py[212] | 1.761 |  |  |
 | link:solvers/213.py[213] | 0.186 |  |  |
 | link:solvers/214.py[214] | 2.658 |  |  |
 | link:solvers/215.py[215] | 0.212 |  |  |
