@@ -8,7 +8,8 @@ indir="$PWD"
 cd "$(mktemp -d)"
 pwd
 (
-  cat "$indir/prompt.txt"
+  cat "$indir/codex.txt"
   cat "$md"
-) | codex exec --skip-git-repo-check -C . -s workspace-write
-mv main.py "$indir/data/solutions/$num.py"
+) | time codex exec --skip-git-repo-check -C . -s workspace-write
+mv main.py "$indir/solvers/$num.py"
+mv README.md "$indir/solvers/$num.md"

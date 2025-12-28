@@ -84,6 +84,10 @@ virtualenv -p python3 .venv
 
 == Generating solvers
 
+=== generate-solvers.py
+
+link:generate-solvers.py[] attempts to generate solvers via OpenAI API.
+
 Try to generate solvers for problem 420 with the OpenAI API:
 
 [source,shell]
@@ -116,6 +120,25 @@ Same but in batch mode, which is about 2x cheaper but may take up to 24 hours to
 [source,shell]
 ----
 ./generate-solvers.py --max-output-tokens 10000 --batch 420 430
+----
+
+=== codex.sh
+
+link:codex.sh[] attempts to generate solvers by running Codex. Sample usage:
+
+[source,shell]
+----
+./codex.sh data/project-euler-statements/data/md/245.md
+----
+
+TODO: this was our initial quick and dirty hand-coded attempt. Rather it should be merged into link:generate-solvers.py[]. Also it should be patched to automatically generate JSON metadata files.
+
+=== Manual prompt on web UI
+
+This is a decent prompt tempalte:
+
+----
+Solve project euler 245 in file main.py. Add asserts to any test values given in the problem statement. Also produce a markdown summary of the main techniques used as README.md.
 ----
 
 == Testing
@@ -190,7 +213,7 @@ Solvers that fail to terminated under that time fail with something like:
   "generation_time_seconds": 9.143
 }
 ....
-*** link:solvers/976.json[] is how it should look like for Codex runs:
+*** link:solvers/976.json[] is how it should look like for Codex runs (TODO not currently automated):
 +
 ....
 {
@@ -437,12 +460,12 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/219.py[219] | 0.057 |  |  |
 | link:solvers/220.py[220] | 0.088 |  |  |
 | link:solvers/221.py[221] | 8.239 |  |  |
-| link:solvers/222.py[222] | 0.530 |  |  |
+| link:solvers/222.py[222] | 0.558 |  |  |
 | link:solvers/223.py[223] | 1.447 |  |  |
 | link:solvers/224.py[224] | 0.245 |  |  |
 | link:solvers/225.py[225] | 0.074 |  |  |
 | link:solvers/226.py[226] | 0.080 |  |  |
-| link:solvers/227.py[227] | 0.579 |  |  |
+| link:solvers/227.py[227] | 0.380 |  |  |
 | link:solvers/228.py[228] | 0.075 |  |  |
 | link:solvers/229.py[229] | 14.078 |  |  |
 | link:solvers/230.py[230] | 0.053 |  |  |
@@ -468,9 +491,9 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/250.py[250] | 0.405 |  |  |
 | link:solvers/251.py[251] | 161.694 |  |  |
 | link:solvers/252.py[252] |  |  |  | solver not found
-| link:solvers/253.py[253] |  |  |  | solver not found
-| link:solvers/254.py[254] | 0.679 |  |  |
-| link:solvers/255.py[255] | 0.091 |  |  |
+| link:solvers/253.py[253] | 23.854 |  |  |
+| link:solvers/254.py[254] | 0.642 |  |  |
+| link:solvers/255.py[255] | 0.080 |  |  |
 | link:solvers/256.py[256] |  |  |  | solver not found
 | link:solvers/257.py[257] |  |  |  | solver not found
 | link:solvers/258.py[258] | 1.565 |  |  |
