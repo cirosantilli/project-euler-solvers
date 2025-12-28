@@ -408,18 +408,18 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/214.py[214] | 2.658 |  |  |
 | link:solvers/215.py[215] | 0.212 |  |  |
 | link:solvers/216.py[216] | 82.069 |  |  |
-| link:solvers/217.py[217] |  |  |  | solver not found
+| link:solvers/217.py[217] | 0.123 |  |  |
 | link:solvers/218.py[218] | 0.058 |  |  |
 | link:solvers/219.py[219] | 0.057 |  |  |
-| link:solvers/220.py[220] |  |  |  | solver not found
+| link:solvers/220.py[220] | 0.123 |  |  |
 | link:solvers/221.py[221] | 8.239 |  |  |
 | link:solvers/222.py[222] | 0.361 |  |  | expected '1590933', got '1794381'
-| link:solvers/223.py[223] |  |  |  | solver not found
-| link:solvers/224.py[224] |  |  |  | solver not found
+| link:solvers/223.py[223] | 1.507 |  |  |
+| link:solvers/224.py[224] | 0.361 |  |  |
 | link:solvers/225.py[225] | 0.074 |  |  |
 | link:solvers/226.py[226] | 0.080 |  |  |
 | link:solvers/227.py[227] | 0.096 |  |  | expected '3780.618622', got '0.836486'
-| link:solvers/228.py[228] |  |  |  | solver not found
+| link:solvers/228.py[228] | 0.080 |  |  |
 | link:solvers/229.py[229] | 14.078 |  |  |
 | link:solvers/230.py[230] | 0.053 |  |  |
 | link:solvers/231.py[231] | 0.176 |  |  |
@@ -429,15 +429,15 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/235.py[235] | 0.068 |  |  |
 | link:solvers/236.py[236] |  |  |  | solver not found
 | link:solvers/237.py[237] | 0.080 |  |  |
-| link:solvers/238.py[238] |  |  |  | solver not found
+| link:solvers/238.py[238] | 2.636 |  |  |
 | link:solvers/239.py[239] | 0.082 |  |  |
 | link:solvers/240.py[240] | 0.465 |  |  |
 | link:solvers/241.py[241] |  |  |  | solver not found
-| link:solvers/242.py[242] |  |  |  | solver not found
+| link:solvers/242.py[242] | 0.072 |  |  |
 | link:solvers/243.py[243] | 0.057 |  |  |
 | link:solvers/244.py[244] | 0.201 |  |  |
 | link:solvers/245.py[245] |  |  |  | solver not found
-| link:solvers/246.py[246] |  |  |  | solver not found
+| link:solvers/246.py[246] | 0.122 |  |  |
 | link:solvers/247.py[247] | 1.026 |  |  |
 | link:solvers/248.py[248] | 1.402 |  |  |
 | link:solvers/249.py[249] | 0.791 |  |  |
