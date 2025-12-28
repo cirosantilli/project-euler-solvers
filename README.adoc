@@ -63,6 +63,15 @@ To reduce potential costs, we have vibe ported all solutions from the following 
 
 My current mood is 10\$ / 100 problems.
 
+The last thing I tried was to load up 10\$ and see if I could solve any unsolved problems above 200 on API with:
+
+[source,shell]
+----
+./generate-solvers.py --max-output-tokens 50000 --model gpt-5.2 202 210 212
+----
+
+but that ate up 7\$ and ended up in three timeouts. So I give up, I'm never trying to use this shitty API again. Plus Web UI solved all three.
+
 == Setup
 
 [source,shell]
@@ -90,6 +99,15 @@ Same but for problems 420to 430:
 ----
 
 `--max-output-tokens` and smaller batches are highly recommended to gage how much you are likely to spend per solution on average, otherwise it is easy to run out of API credits.
+
+Another thing you can try is to pick a cheaper model to see if it also solves some given problems for way less money:
+
+[source,shell]
+----
+./generate-solvers.py --max-output-tokens 10000 --model gpt-5-mini 200
+----
+
+202, 210 and 212 failed to solve however with this.
 
 Same but in batch mode, which is about 2x cheaper but may take up to 24 hours to complete:
 
