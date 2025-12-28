@@ -3,5 +3,5 @@
   "model": "gpt-5.2-2025-12-11",
   "reasoning_effort": "high",
   "input_prompt": "TASK\n\nSolve the following problem by coding a Python program that runs on pypy3. Add asserts for the test cases given in the problem statement if any, and a print with the final result at the end. Your code must run in a few minutes at most, usually a few seconds. Don't try to brute force the solution, only use brute forcing if needed to better understand the problem on small instances. Don't use external libraries, only the Python standard library. Don't use multithreading, only a single CPU core. Use typing for function signatures.\n\nOUTPUT FORMAT\n\nmain.py\n\n<Python implementation>\n\nREADME.md\n\n<Markdown summary of the reasoning/insights used (high level; no chain-of-thought)>\n\nPROBLEM\n\n# Counting Rectangles\n\nBy counting carefully it can be seen that a rectangular grid measuring $3$ by $2$ contains eighteen rectangles:\n\n![](resources/images/0085.png?1678992052)\n\nAlthough there exists no rectangular grid that contains exactly two million rectangles, find the area of the grid with the nearest solution.\n",
-  "duration_seconds": 59.769
+  "generation_time_seconds": 59.769
 }

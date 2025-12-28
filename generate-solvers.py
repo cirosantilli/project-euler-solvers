@@ -316,7 +316,7 @@ def write_solver_metadata(
     model: str | None,
     reasoning_effort: str | None,
     input_prompt: str,
-    duration_seconds: float | None,
+    generation_time_seconds: float | None,
     created_at: str,
 ) -> None:
     json_path = solvers_dir / f"{stem}.json"
@@ -325,7 +325,7 @@ def write_solver_metadata(
         "model": model,
         "reasoning_effort": reasoning_effort,
         "input_prompt": input_prompt,
-        "duration_seconds": duration_seconds,
+        "generation_time_seconds": generation_time_seconds,
         "created_at": created_at,
     }
     json_path.write_text(

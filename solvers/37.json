@@ -3,5 +3,5 @@
   "model": "gpt-5.2-2025-12-11",
   "reasoning_effort": "high",
   "input_prompt": "TASK\n\nSolve the following problem by coding a Python program that runs on pypy3. Add asserts for the test cases given in the problem statement if any, and a print with the final result at the end. Your code must run in a few minutes at most, usually a few seconds. Don't try to brute force the solution, only use brute forcing if needed to better understand the problem on small instances. Don't use external libraries, only the Python standard library. Don't use multithreading, only a single CPU core. Use typing for function signatures.\n\nOUTPUT FORMAT\n\nmain.py\n\n<Python implementation>\n\nREADME.md\n\n<Markdown summary of the reasoning/insights used (high level; no chain-of-thought)>\n\nPROBLEM\n\n# Truncatable Primes\n\nThe number $3797$ has an interesting property. Being prime itself, it is possible to continuously remove digits from left to right, and remain prime at each stage: $3797$, $797$, $97$, and $7$. Similarly we can work from right to left: $3797$, $379$, $37$, and $3$.\n\nFind the sum of the only eleven primes that are both truncatable from left to right and right to left.\n\nNOTE: $2$, $3$, $5$, and $7$ are not considered to be truncatable primes.\n",
-  "duration_seconds": 34.077
+  "generation_time_seconds": 34.077
 }

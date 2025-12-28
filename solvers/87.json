@@ -3,5 +3,5 @@
   "model": "gpt-5.2-2025-12-11",
   "reasoning_effort": "high",
   "input_prompt": "TASK\n\nSolve the following problem by coding a Python program that runs on pypy3. Add asserts for the test cases given in the problem statement if any, and a print with the final result at the end. Your code must run in a few minutes at most, usually a few seconds. Don't try to brute force the solution, only use brute forcing if needed to better understand the problem on small instances. Don't use external libraries, only the Python standard library. Don't use multithreading, only a single CPU core. Use typing for function signatures.\n\nOUTPUT FORMAT\n\nmain.py\n\n<Python implementation>\n\nREADME.md\n\n<Markdown summary of the reasoning/insights used (high level; no chain-of-thought)>\n\nPROBLEM\n\n# Prime Power Triples\n\nThe smallest number expressible as the sum of a prime square, prime cube, and prime fourth power is $28$. In fact, there are exactly four numbers below fifty that can be expressed in such a way:\n\n$$\\begin{align}\n28 &= 2^2 + 2^3 + 2^4\\\\\n33 &= 3^2 + 2^3 + 2^4\\\\\n49 &= 5^2 + 2^3 + 2^4\\\\\n47 &= 2^2 + 3^3 + 2^4\n\\end{align}$$\n\nHow many numbers below fifty million can be expressed as the sum of a prime square, prime cube, and prime fourth power?\n",
-  "duration_seconds": 26.588
+  "generation_time_seconds": 26.588
 }
