@@ -47,7 +47,7 @@ Each solution file should be completely self contained and have no dependencies 
 
 == Status
 
-We've gone all the way up to problem 200.
+We've gone all the way up to problem 250.
 
 Right now this project is simply blocked on cost/efficiency issues, there's nothing fundamentally intelligent missing:
 
@@ -483,7 +483,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/242.py[242] | 0.072 |  |  |
 | link:solvers/243.py[243] | 0.057 |  |  |
 | link:solvers/244.py[244] | 0.201 |  |  |
-| link:solvers/245.py[245] | 20.676 |  |  | expected '288084712410001', got '287158823933175'
+| link:solvers/245.py[245] | 1.612 |  |  |
 | link:solvers/246.py[246] | 0.106 |  |  |
 | link:solvers/247.py[247] | 1.026 |  |  |
 | link:solvers/248.py[248] | 1.402 |  |  |

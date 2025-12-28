@@ -1,83 +1,45 @@
-#!/usr/bin/env python3
-"""
-Project Euler 245 - Coresilience
-
-We need:
-  Sum of all composite n <= 2*10^11 such that C(n)=(n-phi(n))/(n-1) is a unit fraction 1/k.
-
-Key fact:
-  If k*phi(n) - (k-1)*n = 1, then gcd(phi(n), n)=1, which implies n is squarefree.
-So we only consider squarefree n = Π p_i.
-
-Then C(n)=1/k  <=>  (n-1) divisible by (n-phi(n)).
-
-We split into:
-  - Semiprimes (2 primes): tractable for all k up to sqrt(N)
-  - >=3 primes: only possible when k <= cbrt(N) (~5848), rare; solved with DFS.
-"""
-
 from __future__ import annotations
 
-import bisect
 import math
-from collections import Counter
+import random
+from typing import Dict, List
 
 
-N = 2 * 10**11
+LIMIT = 2 * 10**11
 
 
-# ------------------------- Totient for small asserts -------------------------
-
-def totient_small(n: int) -> int:
-    """Euler totient via trial division (only used for tiny assert checks)."""
-    result = n
-    x = n
-    p = 2
-    while p * p <= x:
-        if x % p == 0:
-            while x % p == 0:
-                x //= p
-            result -= result // p
-        p += 1
-    if x > 1:
-        result -= result // x
-    return result
+def sieve(n: int) -> List[int]:
+    bs = bytearray(b"\x01") * (n + 1)
+    bs[0:2] = b"\x00\x00"
+    primes: List[int] = []
+    for i in range(2, n + 1):
+        if bs[i]:
+            primes.append(i)
+            if i * i <= n:
+                bs[i * i : n + 1 : i] = b"\x00" * (((n - i * i) // i) + 1)
+    return primes
 
 
-# Asserts from problem statement:
-# "for example, R(12) = 4/11"
-assert totient_small(12) == 4
-assert totient_small(12) / (12 - 1) == 4 / 11
-
-
-# ------------------------- Miller-Rabin primality ----------------------------
-
-_SMALL_PRIMES = (2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37)
-
-def is_prime(n: int) -> bool:
-    """Deterministic Miller-Rabin valid for n < 3.4e14 (covers this problem)."""
+def is_probable_prime(n: int) -> bool:
     if n < 2:
         return False
-    for p in _SMALL_PRIMES:
+    small_primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37]
+    for p in small_primes:
         if n % p == 0:
             return n == p
-
-    # write n-1 = d * 2^s
     d = n - 1
     s = 0
     while d % 2 == 0:
-        d //= 2
         s += 1
-
-    # Deterministic bases for n < 341,550,071,728,321:
-    for a in (2, 3, 5, 7, 11, 13, 17):
-        if a % n == 0:
+        d //= 2
+    for a in [2, 3, 5, 7, 11, 13]:
+        if a >= n:
             continue
         x = pow(a, d, n)
         if x == 1 or x == n - 1:
             continue
         for _ in range(s - 1):
-            x = (x * x) % n
+            x = pow(x, 2, n)
             if x == n - 1:
                 break
         else:
@@ -85,219 +47,153 @@ def is_prime(n: int) -> bool:
     return True
 
 
-# ------------------------- Prime sieve ---------------------------------------
-
-def sieve_primes(limit: int) -> list[int]:
-    """Simple sieve of Eratosthenes."""
-    sieve = bytearray(b"\x01") * (limit + 1)
-    sieve[0:2] = b"\x00\x00"
-    root = int(limit ** 0.5)
-    for i in range(2, root + 1):
-        if sieve[i]:
-            step = i
-            start = i * i
-            sieve[start:limit + 1:step] = b"\x00" * (((limit - start) // step) + 1)
-    return [i for i, ok in enumerate(sieve) if ok]
-
-
-# ------------------------- Semiprime enumeration -----------------------------
-
-def roots_phi6_prime(p: int) -> list[int]:
-    """
-    Roots of k^2 - k + 1 ≡ 0 (mod p).
-    For primes p>3, roots exist iff p ≡ 1 mod 6.
-    We find roots via a non-trivial cube root of unity.
-    """
-    if p == 3:
-        return [2]  # double root mod 3
-    if p % 6 != 1:
-        return []
-
-    exp = (p - 1) // 3
-    w = 1
-    for a in (2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37):
-        w = pow(a, exp, p)
-        if w != 1:
-            break
-    if w == 1:
-        a = 2
-        while True:
-            a += 1
-            w = pow(a, exp, p)
-            if w != 1:
-                break
-
-    r1 = (-w) % p
-    r2 = (-pow(w, 2, p)) % p
-    return [r1] if r1 == r2 else [r1, r2]
+def pollard_rho(n: int) -> int:
+    if n % 2 == 0:
+        return 2
+    if n % 3 == 0:
+        return 3
+    while True:
+        c = random.randrange(1, n - 1)
+        x = random.randrange(2, n - 1)
+        y = x
+        d = 1
+        while d == 1:
+            x = (pow(x, 2, n) + c) % n
+            y = (pow(y, 2, n) + c) % n
+            y = (pow(y, 2, n) + c) % n
+            d = math.gcd(abs(x - y), n)
+        if d != n:
+            return d
 
 
-def factor_phi6_all_even(max_k: int, primes_list: list[int]) -> list[list[int] | None]:
-    """
-    For each even k, factor S(k)=k^2-k+1 by sieving primes p where p divides S(k).
-    Store prime factors with multiplicity.
-    """
-    rem = [0] * (max_k + 1)
-    for k in range(0, max_k + 1, 2):
-        rem[k] = k * k - k + 1
-
-    factors: list[list[int] | None] = [None] * (max_k + 1)
-
-    for p in primes_list:
-        if p == 2:
-            continue
-        roots = roots_phi6_prime(p)
-        if not roots:
-            continue
-
-        step = 2 * p  # only even k
-        for r in roots:
-            start = r
-            if start % 2 == 1:
-                start += p
-            for k in range(start, max_k + 1, step):
-                if k < 2:
-                    continue
-                x = rem[k]
-                if x % p != 0:
-                    continue
-                if factors[k] is None:
-                    factors[k] = []
-                while x % p == 0:
-                    factors[k].append(p)
-                    x //= p
-                rem[k] = x
-
-    for k in range(2, max_k + 1, 2):
-        if rem[k] > 1:
-            if factors[k] is None:
-                factors[k] = [rem[k]]
-            else:
-                factors[k].append(rem[k])
-            rem[k] = 1
-
-    return factors
+def factor(n: int, res: List[int]) -> None:
+    if n == 1:
+        return
+    if is_probable_prime(n):
+        res.append(n)
+        return
+    d = pollard_rho(n)
+    factor(d, res)
+    factor(n // d, res)
 
 
-def divisors_from_factor_list(flst: list[int]) -> list[int]:
-    """Generate all divisors from a multiplicity list of primes."""
-    c = Counter(flst)
+def divisors_from_factors(factors: List[int]) -> List[int]:
+    counts: Dict[int, int] = {}
+    for p in factors:
+        counts[p] = counts.get(p, 0) + 1
     divs = [1]
-    for p, exp in c.items():
-        base = list(divs)
-        pe = 1
+    for p, exp in counts.items():
+        cur = list(divs)
+        mult = 1
         for _ in range(exp):
-            pe *= p
-            for d in base:
-                divs.append(d * pe)
+            mult *= p
+            for d in divs:
+                cur.append(d * mult)
+        divs = cur
     return divs
 
 
-def compute_semiprimes() -> tuple[set[int], set[int]]:
-    """Return (set of all semiprime solutions n, set of k values encountered)."""
-    max_k = int(math.isqrt(N))
-    primes = sieve_primes(max_k)
-    factors = factor_phi6_all_even(max_k, primes)
+def int_root(n: int, k: int) -> int:
+    if k == 1:
+        return n
+    if k == 2:
+        return int(math.isqrt(n))
+    x = int(n ** (1.0 / k))
+    while (x + 1) ** k <= n:
+        x += 1
+    while x**k > n:
+        x -= 1
+    return x
 
-    sols: set[int] = set()
-    ks: set[int] = set()
 
-    for k in range(2, max_k + 1, 2):
-        S = k * k - k + 1
-        flst = factors[k]
-        if flst is None:
-            continue
-        divs = divisors_from_factor_list(flst)
+def main() -> None:
+    random.seed(0)
+    max_p = int(math.isqrt(LIMIT)) + 1
+    primes = [p for p in sieve(max_p) if p >= 3]
+    solutions = set()
+
+    # k = 2 (semiprime) case via divisors of p^2 - p + 1
+    for p in primes:
+        s = p * p - p + 1
+        fac: List[int] = []
+        factor(s, fac)
+        divs = divisors_from_factors(fac)
         for d in divs:
-            e = S // d
-            if d > e:
+            if d < 2 * p - 1:
                 continue
-            p = k + d
-            q = k + e
-            if p == q:
+            q = d - p + 1
+            if q <= p:
                 continue
-            n = p * q
-            if n > N:
+            if p * q > LIMIT:
                 continue
-            if is_prime(p) and is_prime(q):
-                sols.add(n)
-                if k <= 5847:  # useful for multiprime search
-                    ks.add(k)
+            if is_probable_prime(q):
+                solutions.add(p * q)
 
-    return sols, ks, primes
+    # compute max possible number of prime factors
+    prod = 1
+    max_k = 0
+    for p in primes:
+        if prod * p > LIMIT:
+            break
+        prod *= p
+        max_k += 1
 
-
-# ------------------------- Multiprime search (>=3 primes) --------------------
-
-def multiprime_solutions(ks: set[int], primes: list[int]) -> set[int]:
-    """
-    DFS over prime products for each small k.
-    Only needed for k <= 5847 (cuberoot bound).
-    """
-    k_limit = 5847
-    max_first = int(round(N ** (1/3)))  # about 5848
-    primes_small = [p for p in primes if p <= max_first]
-
-    sols: set[int] = set()
-
-    def dfs(k: int, P: int, A: int, last_p: int, depth: int) -> None:
-        den = k * A - (k - 1) * P
-        if den <= 0:
+    def try_last_prime(A: int, B: int, last_p: int) -> None:
+        D = A - B
+        if D <= 0:
             return
-
-        # Try closing (adding final prime r)
-        if depth >= 2:
-            num = k * A + 1
-            if num % den == 0:
-                r = num // den
-                if r > last_p and P * r <= N and is_prime(r):
-                    sols.add(P * r)
-
-        # Extend by choosing another intermediate prime p
-        p_max = int(math.isqrt(N // P))
-        start = max(last_p + 2, k + 1)
-        # require next den positive: den_new = p*den - k*A > 0
-        lb = (k * A) // den + 1
-        if lb > start:
-            start = lb
-
-        idx = bisect.bisect_left(primes, start)
-        while idx < len(primes):
-            p = primes[idx]
-            if p > p_max:
+        r_max = LIMIT // A
+        if r_max <= last_p:
+            return
+        num_min = B * (last_p - 1) - 1
+        den_min = B + last_p * D
+        u_min = num_min // den_min + 1
+        if u_min < 1:
+            u_min = 1
+        num_max = B * (r_max - 1) - 1
+        den_max = B + r_max * D
+        if num_max < 0:
+            return
+        u_max = num_max // den_max
+        u_max = min(u_max, (B - 1) // D)
+        if u_max < u_min:
+            return
+        for u in range(u_min, u_max + 1):
+            denom = B - u * D
+            if denom <= 0:
                 break
-            P1 = P * p
-            A1 = A * (p - 1)
-            den1 = p * den - k * A
-            if den1 > 0:
-                dfs(k, P1, A1, p, depth + 1)
-            idx += 1
+            numer = B * (u + 1) + 1
+            if numer % denom != 0:
+                continue
+            r = numer // denom
+            if r <= last_p or A * r > LIMIT:
+                continue
+            if is_probable_prime(r):
+                n = A * r
+                phi = B * (r - 1)
+                if (n - 1) % (n - phi) == 0:
+                    solutions.add(n)
 
-    # run only for k that showed up among semiprimes (empirically sufficient and very fast)
-    for k in sorted(ks):
-        if k > k_limit:
+    def dfs(idx: int, remaining: int, A: int, B: int, last_p: int) -> None:
+        if remaining == 0:
+            try_last_prime(A, B, last_p)
+            return
+        max_p_local = int_root(LIMIT // A, remaining + 1)
+        for i in range(idx, len(primes)):
+            p = primes[i]
+            if p > max_p_local:
+                break
+            dfs(i + 1, remaining - 1, A * p, B * (p - 1), p)
+
+    for k in range(3, max_k + 1):
+        m = k - 1
+        if m < 2:
             continue
-        # first prime must be > k and <= cube root bound
-        idx = bisect.bisect_left(primes_small, k + 1)
-        while idx < len(primes_small):
-            p1 = primes_small[idx]
-            if p1 * p1 * p1 > N:
-                break
-            dfs(k, p1, p1 - 1, p1, 1)
-            idx += 1
+        dfs(0, m, 1, 1, 2)
 
-    return sols
-
-
-# ------------------------- Main solve ----------------------------------------
-
-def solve() -> int:
-    semis, ks, primes = compute_semiprimes()
-    multis = multiprime_solutions(ks, primes)
-    all_solutions = semis | multis
-    return sum(all_solutions)
+    result = sum(solutions)
+    print(result)
 
 
 if __name__ == "__main__":
-    print(solve())
-
+    main()
