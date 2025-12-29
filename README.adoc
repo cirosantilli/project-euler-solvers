@@ -135,10 +135,10 @@ TODO: this was our initial quick and dirty hand-coded attempt. Rather it should 
 
 === Manual prompt on web UI
 
-This is a decent prompt tempalte:
+This is a decent prompt template:
 
 ----
-Solve project euler 245 in file main.py. Add asserts to any test values given in the problem statement. Also produce a markdown summary of the main techniques used as README.md.
+Solve project euler 245 in file main.py. Add asserts to any test values given in the problem statement. Also produce a markdown summary of the main techniques used as README.md. Provide download links for both files.
 ----
 
 == Testing
@@ -490,44 +490,44 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/249.py[249] | 0.791 |  |  |
 | link:solvers/250.py[250] | 0.405 |  |  |
 | link:solvers/251.py[251] | 161.694 |  |  |
-| link:solvers/252.py[252] |  |  |  | solver not found
+| link:solvers/252.py[252] | 8.775 |  |  |
 | link:solvers/253.py[253] | 23.854 |  |  |
 | link:solvers/254.py[254] | 0.642 |  |  |
 | link:solvers/255.py[255] | 0.080 |  |  |
-| link:solvers/256.py[256] |  |  |  | solver not found
-| link:solvers/257.py[257] |  |  |  | solver not found
+| link:solvers/256.py[256] | 1.786 |  |  |
+| link:solvers/257.py[257] | 2.900 |  |  |
 | link:solvers/258.py[258] | 1.565 |  |  |
 | link:solvers/259.py[259] | 115.037 |  |  |
 | link:solvers/260.py[260] | 0.965 |  |  |
-| link:solvers/261.py[261] |  |  |  | solver not found
-| link:solvers/262.py[262] |  |  |  | solver not found
-| link:solvers/263.py[263] |  |  |  | timed out after 600.000s
-| link:solvers/264.py[264] |  |  |  | solver not found
+| link:solvers/261.py[261] | 0.162 |  |  |
+| link:solvers/262.py[262] | 0.554 |  |  |
+| link:solvers/263.py[263] | 6.522 |  |  |
+| link:solvers/264.py[264] | 1.089 |  |  |
 | link:solvers/265.py[265] | 0.106 |  |  |
 | link:solvers/266.py[266] | 9.873 |  |  |
 | link:solvers/267.py[267] | 0.151 |  |  |
 | link:solvers/268.py[268] | 1.479 |  |  |
-| link:solvers/269.py[269] |  |  |  | solver not found
-| link:solvers/270.py[270] |  |  |  | solver not found
+| link:solvers/269.py[269] | 0.356 |  |  |
+| link:solvers/270.py[270] | 0.278 |  |  |
 | link:solvers/271.py[271] | 0.068 |  |  |
-| link:solvers/272.py[272] |  |  |  | solver not found
+| link:solvers/272.py[272] | 0.652 |  |  |
 | link:solvers/273.py[273] | 0.326 |  |  |
 | link:solvers/274.py[274] | 0.254 |  |  |
 | link:solvers/275.py[275] |  |  |  | solver not found
-| link:solvers/276.py[276] |  |  |  | solver not found
+| link:solvers/276.py[276] | 0.466 |  |  |
 | link:solvers/277.py[277] | 0.056 |  |  |
 | link:solvers/278.py[278] | 0.209 |  |  |
 | link:solvers/279.py[279] | 4.793 |  |  |
 | link:solvers/280.py[280] | 0.782 |  |  |
 | link:solvers/281.py[281] | 0.125 |  |  |
-| link:solvers/282.py[282] |  |  |  | solver not found
-| link:solvers/283.py[283] |  |  |  | solver not found
+| link:solvers/282.py[282] | 0.076 |  |  |
+| link:solvers/283.py[283] | 10.757 |  |  |
 | link:solvers/284.py[284] | 2.351 |  |  |
 | link:solvers/285.py[285] | 0.125 |  |  |
 | link:solvers/286.py[286] | 0.080 |  |  |
 | link:solvers/287.py[287] | 4.865 |  |  |
 | link:solvers/288.py[288] | 0.895 |  |  |
-| link:solvers/289.py[289] |  |  |  | solver not found
+| link:solvers/289.py[289] | 0.176 |  |  |
 | link:solvers/290.py[290] | 0.135 |  |  |
 | link:solvers/291.py[291] | 22.839 |  |  |
 | link:solvers/292.py[292] |  |  |  | solver not found
@@ -536,8 +536,8 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/295.py[295] |  |  |  | solver not found
 | link:solvers/296.py[296] | 80.048 |  |  |
 | link:solvers/297.py[297] | 0.065 |  |  |
-| link:solvers/298.py[298] |  |  |  | solver not found
-| link:solvers/299.py[299] |  |  |  | solver not found
+| link:solvers/298.py[298] | 0.538 |  |  |
+| link:solvers/299.py[299] | 1.066 |  |  |
 | link:solvers/300.py[300] | 15.581 |  |  | expected '8.0540771484375', got '8.05407714843750'
 | link:solvers/301.py[301] | 0.062 |  |  |
 | link:solvers/302.py[302] |  |  |  | solver not found
@@ -871,7 +871,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/885.py[885] | 234.998 |  |  |
 | link:solvers/910.py[910] | 39.422 |  |  |
 | link:solvers/932.py[932] | 4.977 |  |  |
-| link:solvers/933.py[933] |  |  |  | timed out after 300.000s
+| link:solvers/933.py[933] |  |  |  | solver not found
 | link:solvers/943.py[943] | 25.158 |  |  |
 | link:solvers/948.py[948] | 0.191 |  |  |
 | link:solvers/949.py[949] | 2.373 |  |  | missing reference answer
