@@ -1,4 +1,4 @@
-= Project Euler Solvers
+.py= Project Euler Solvers
 :docinfo:
 :idprefix:
 :idseparator: -
@@ -51,28 +51,25 @@ We've gone all the way up to problem 250.
 
 Right now this project is simply blocked on cost/efficiency issues, there's nothing fundamentally intelligent missing as far as we know:
 
-* link:codex.sh[] managed to solve 400-413, but it is slow and then it ran out of credits on my Plus plan
-* link:generate-solvers.py[] managed to solve 1-100 for very little money, but then quickly spent 20 dollars on the API to try and solve 101-200 with GPT-5.2, so we stopped there for now. We didn't limit output tokens per prompt however, so it is possible that a small number of tasks took up all the tokens.
+* link:generate-solvers.py[] managed to solve 1-100 for very little money, but then quickly spent 20 dollars on the API to try and solve 101-200 with GPT-5.2. We didn't limit output tokens per prompt however, so it is possible that a small number of tasks took up all the tokens.
++
+We then tried to load up 10$ and see if I could solve any unsolved problems above 200 on API with:
++
+[source,shell]
+----
+./generate-solvers.py --max-output-tokens 50000 --model gpt-5.2 202 210 212
+----
++
+but that ate up 7$ and ended up in three timeouts thus wasting most of my money. So I'm never trying to use this shitty API again. Plus plan Web UI solved all three immediately after.
+* link:generate-solvers.py[] `--codex` managed to solve 400-413, but it is slow and then it hit the 5 hour usage limit on my Plus plan.
+* https://chatgpt.com web UI: GPT-5.2 models seem to easily solve all the old problems when I ask for it on the , it's just that the API feels way more expensive. Maybe this is just an illusion as we start to hit web UI limits as well later on. But if those are not hit, worse case we could solve all problems by manually copy pasting on web UI, it's then just a matter of kicking it repeatedly until it gives the results.
 
-GPT-5.2 models seem to easily solve all the old problems when I ask for it on the https://chatgpt.com web UI, it's just that the API feels way more expensive. Maybe this is just an illusion as we start to hit web UI limits as well later on. But if those are not hit, worse case we could solve all problems by manually copy pasting on web UI, it's then just a matter of kicking it repeatedly until it gives the results.
+My current mood is 10$ / 100 problems.
 
 To reduce potential costs, we have vibe ported all solutions from the following repositories into this one with Codex CLI:
 
 * https://github.com/stbrumme/euler
 * https://github.com/igorvanloo/Project-Euler-Explained/tree/master/Finished%20Problems
-
-My current mood is 10$ / 100 problems.
-
-The last thing I tried was to load up 10$ and see if I could solve any unsolved problems above 200 on API with:
-
-[source,shell]
-----
-./generate-solvers.py --max-output-tokens 50000 --model gpt-5.2 202 210 212
-----
-
-but that ate up 7$ and ended up in three timeouts thus wasting most of my money. So I give up, I'm never trying to use this shitty API again. Plus plan Web UI solved all three immediately after.
-
-We haven't found an old problem that web UI couldn't solve yet, though starting towards the mid of 250 it was starting to bog down exactly and ask for multi-step continues.
 
 == Setup
 
@@ -122,16 +119,16 @@ Same but in batch mode, which is about 2x cheaper but may take up to 24 hours to
 ./generate-solvers.py --max-output-tokens 10000 --batch 420 430
 ----
 
-=== codex.sh
+=== generate-solvers.py --codex
 
-link:codex.sh[] attempts to generate solvers by running Codex. Sample usage:
+With `--codex`, link:generate-solvers.py[] attempts to generate solvers by running Codex on your local machine + its API calls. Sample usage:
 
 [source,shell]
 ----
-./codex.sh data/project-euler-statements/data/md/245.md
+./generate-solvers.py --codex 245
 ----
 
-TODO: this was our initial quick and dirty hand-coded attempt. Rather it should be merged into link:generate-solvers.py[]. Also it should be patched to automatically generate JSON metadata files.
+TODO: output_tokens not showing up correctly in the JSON.
 
 === Manual prompt on web UI
 
