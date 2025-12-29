@@ -3,6 +3,10 @@ import argparse
 import asyncio
 import json
 import re
+import subprocess
+import sys
+import tempfile
+import threading
 import time
 from datetime import datetime
 from pathlib import Path
@@ -75,6 +79,12 @@ def parse_args() -> argparse.Namespace:
         "--batch",
         action="store_true",
         help="Submit as a batch job (default: off).",
+    )
+    parser.add_argument(
+        "-c",
+        "--codex",
+        action="store_true",
+        help="Generate solvers using Codex CLI instead of the API.",
     )
     parser.add_argument(
         "-D",
@@ -163,6 +173,30 @@ def build_requests(
         if limit_count is not None and len(requests) >= limit_count:
             break
     return requests
+
+
+def build_problem_list(
+    statements_dir: Path,
+    solvers_dir: Path,
+    start: int | None,
+    end: int | None,
+    force: bool,
+    limit_count: int | None,
+) -> list[Path]:
+    existing = solver_ids(solvers_dir) if (not force or limit_count) else set()
+    selected: list[Path] = []
+    for path in statement_files(statements_dir):
+        problem_id = int(path.stem)
+        if start is not None and problem_id < start:
+            continue
+        if end is not None and problem_id > end:
+            continue
+        if problem_id in existing:
+            continue
+        selected.append(path)
+        if limit_count is not None and len(selected) >= limit_count:
+            break
+    return selected
 
 
 def problem_id_from_custom_id(custom_id: str) -> int | None:
@@ -314,6 +348,7 @@ def write_solver_metadata(
     stem: str,
     output_tokens: int | None,
     model: str | None,
+    interface: str | None,
     reasoning_effort: str | None,
     input_prompt: str,
     generation_time_seconds: float | None,
@@ -323,11 +358,13 @@ def write_solver_metadata(
     payload = {
         "output_tokens": output_tokens,
         "model": model,
-        "reasoning_effort": reasoning_effort,
+        "interface": interface,
         "input_prompt": input_prompt,
         "generation_time_seconds": generation_time_seconds,
         "created_at": created_at,
     }
+    if reasoning_effort is not None:
+        payload["reasoning_effort"] = reasoning_effort
     json_path.write_text(
         json.dumps(payload, ensure_ascii=True, indent=2) + "\n",
         encoding="utf-8",
@@ -357,6 +394,157 @@ def format_problem_ids(problem_ids: list[int]) -> str:
     if not problem_ids:
         return "none"
     return ", ".join(str(problem_id) for problem_id in problem_ids)
+
+
+def codex_version() -> str | None:
+    try:
+        proc = subprocess.run(
+            ["codex", "--version"],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+    except OSError:
+        return None
+    if proc.returncode != 0:
+        return None
+    output = (proc.stdout or proc.stderr).strip()
+    match = re.search(r"(\d+\.\d+\.\d+)", output)
+    if match:
+        return match.group(1)
+    return None
+
+
+def parse_codex_output(output: str) -> tuple[str | None, int | None]:
+    model = None
+    output_tokens = None
+    lines = output.splitlines()
+    for line in lines:
+        if "model:" in line.lower():
+            _, _, value = line.partition(":")
+            candidate = value.strip()
+            if candidate and candidate != "-":
+                model = candidate
+                break
+    tokens_match = re.search(
+        r"\boutput[_\\s-]*tokens\b[^\\d]*(\\d[\\d,]*)",
+        output,
+        re.IGNORECASE,
+    )
+    if tokens_match:
+        output_tokens = int(tokens_match.group(1).replace(",", ""))
+        return model, output_tokens
+    tokens_match = re.search(
+        r"\btokens\\s+used\\b\\s*(?:\\r?\\n\\s*)+([\\d,]+)",
+        output,
+        re.IGNORECASE,
+    )
+    if tokens_match:
+        output_tokens = int(tokens_match.group(1).replace(",", ""))
+        return model, output_tokens
+    for idx, line in enumerate(lines):
+        if "tokens used" in line.lower():
+            for next_line in lines[idx + 1 : idx + 4]:
+                stripped = next_line.strip()
+                if not stripped:
+                    continue
+                number_match = re.search(r"(\\d[\\d,]*)", stripped)
+                if number_match:
+                    output_tokens = int(number_match.group(1).replace(",", ""))
+                break
+            break
+    if output_tokens is None:
+        for line in lines:
+            if "tokens" in line.lower():
+                number_match = re.search(r"(\\d[\\d,]*)", line)
+                if number_match:
+                    output_tokens = int(number_match.group(1).replace(",", ""))
+        if output_tokens is not None:
+            return model, output_tokens
+    return model, output_tokens
+
+
+def codex_prompt_text(instructions_path: Path, statement_path: Path) -> str:
+    instructions = instructions_path.read_text(encoding="utf-8")
+    statement = statement_path.read_text(encoding="utf-8")
+    return f"{instructions}{statement}"
+
+
+def run_codex_solver(
+    prompt: str,
+    timeout: float | None,
+) -> tuple[str | None, str | None, str, float, int]:
+    started_at = time.monotonic()
+    with tempfile.TemporaryDirectory() as temp_dir:
+        try:
+            proc = subprocess.Popen(
+                [
+                    "codex",
+                    "exec",
+                    "--skip-git-repo-check",
+                    "-C",
+                    ".",
+                    "-s",
+                    "workspace-write",
+                ],
+                stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+                cwd=temp_dir,
+            )
+        except OSError:
+            elapsed = time.monotonic() - started_at
+            return None, None, "", elapsed, 127
+
+        stdout_parts: list[str] = []
+        stderr_parts: list[str] = []
+
+        def _read_stream(stream, sink, buffer):
+            for line in iter(stream.readline, ""):
+                buffer.append(line)
+                sink.write(line)
+                sink.flush()
+            stream.close()
+
+        stdout_thread = threading.Thread(
+            target=_read_stream,
+            args=(proc.stdout, sys.stdout, stdout_parts),
+            daemon=True,
+        )
+        stderr_thread = threading.Thread(
+            target=_read_stream,
+            args=(proc.stderr, sys.stderr, stderr_parts),
+            daemon=True,
+        )
+        stdout_thread.start()
+        stderr_thread.start()
+
+        if proc.stdin:
+            proc.stdin.write(prompt)
+            proc.stdin.close()
+
+        try:
+            proc.wait(timeout=timeout)
+        except subprocess.TimeoutExpired:
+            proc.kill()
+            proc.wait()
+        elapsed = time.monotonic() - started_at
+        stdout_thread.join(timeout=1)
+        stderr_thread.join(timeout=1)
+        stdout = "".join(stdout_parts)
+        stderr = "".join(stderr_parts)
+        main_path = Path(temp_dir) / "main.py"
+        readme_path = Path(temp_dir) / "README.md"
+        main_text = (
+            main_path.read_text(encoding="utf-8") if main_path.exists() else None
+        )
+        readme_text = (
+            readme_path.read_text(encoding="utf-8")
+            if readme_path.exists()
+            else None
+        )
+        return main_text, readme_text, stdout + stderr, elapsed, proc.returncode
 
 async def _fetch_response(
     client: AsyncOpenAI,
@@ -500,6 +688,7 @@ def handle_result(
         stem,
         output_tokens,
         model,
+        "api",
         reasoning_effort,
         input_prompt,
         round(elapsed, 3),
@@ -513,6 +702,8 @@ def handle_result(
 
 def main() -> None:
     args = parse_args()
+    if args.codex and args.batch:
+        raise SystemExit("--batch is only supported for API runs.")
     if args.count is not None:
         if args.end is not None:
             raise SystemExit("Provide only a start when using -n/--count.")
@@ -530,6 +721,82 @@ def main() -> None:
     root = Path(__file__).resolve().parent
     statements_dir = root / "data" / "project-euler-statements" / "data" / "md"
     solvers_dir = root / "solvers"
+    if args.codex:
+        instructions_path = root / "codex.txt"
+        model_override = "-m" in sys.argv or "--model" in sys.argv
+        paths = build_problem_list(
+            statements_dir,
+            solvers_dir,
+            args.start,
+            args.end,
+            args.force,
+            args.count,
+        )
+        if not paths:
+            print("No unsolved statements found. Nothing to submit.")
+            return
+        if args.dry_run:
+            for path in paths:
+                print(f"Would solve problem {path.stem} via Codex")
+            return
+        version = codex_version()
+        interface = f"codex-{version}" if version else "codex"
+        total = len(paths)
+        completed = 0
+        for path in paths:
+            problem_id = int(path.stem)
+            stem = solver_stem(solvers_dir, problem_id, args.force)
+            if stem is None:
+                completed += 1
+                continue
+            prompt = codex_prompt_text(instructions_path, path)
+            main_text, readme_text, output, elapsed, returncode = run_codex_solver(
+                prompt, args.timeout
+            )
+            completed += 1
+            if returncode != 0:
+                print(
+                    f"Codex failed for problem {problem_id} "
+                    f"(exit {returncode})"
+                )
+                print(
+                    f"Request for problem {problem_id} completed in "
+                    f"{elapsed:.2f}s ({completed}/{total})"
+                )
+                continue
+            if not main_text or not readme_text:
+                print(
+                    f"Failed to parse Codex output for problem {problem_id}."
+                )
+                print(
+                    f"Request for problem {problem_id} completed in "
+                    f"{elapsed:.2f}s ({completed}/{total})"
+                )
+                continue
+            write_solver_files(solvers_dir, stem, main_text, readme_text)
+            parsed_model, parsed_tokens = parse_codex_output(output)
+            if model_override:
+                model = args.model
+            else:
+                model = parsed_model or "gpt-5.2-codex"
+            created_at = datetime.utcnow().replace(microsecond=0).isoformat() + "Z"
+            write_solver_metadata(
+                solvers_dir,
+                stem,
+                parsed_tokens,
+                model,
+                interface,
+                None,
+                prompt,
+                round(elapsed, 3),
+                created_at,
+            )
+            print(
+                f"Request for problem {problem_id} completed in "
+                f"{elapsed:.2f}s ({completed}/{total})"
+            )
+        return
+
     requests = build_requests(
         statements_dir,
         solvers_dir,

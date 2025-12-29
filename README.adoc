@@ -49,12 +49,12 @@ Each solution file should be completely self contained and have no dependencies 
 
 We've gone all the way up to problem 250.
 
-Right now this project is simply blocked on cost/efficiency issues, there's nothing fundamentally intelligent missing:
+Right now this project is simply blocked on cost/efficiency issues, there's nothing fundamentally intelligent missing as far as we know:
 
 * link:codex.sh[] managed to solve 400-413, but it is slow and then it ran out of credits on my Plus plan
 * link:generate-solvers.py[] managed to solve 1-100 for very little money, but then quickly spent 20 dollars on the API to try and solve 101-200 with GPT-5.2, so we stopped there for now. We didn't limit output tokens per prompt however, so it is possible that a small number of tasks took up all the tokens.
 
-GPT-5.2 models seem to easily solve all the old problems when I ask for it on the https://chatgpt.com web UI, it's just that the API feels way more expensive. Maybe this is just an illusion as we start to hit web UI limits as well later on.
+GPT-5.2 models seem to easily solve all the old problems when I ask for it on the https://chatgpt.com web UI, it's just that the API feels way more expensive. Maybe this is just an illusion as we start to hit web UI limits as well later on. But if those are not hit, worse case we could solve all problems by manually copy pasting on web UI, it's then just a matter of kicking it repeatedly until it gives the results.
 
 To reduce potential costs, we have vibe ported all solutions from the following repositories into this one with Codex CLI:
 
@@ -140,6 +140,8 @@ This is a decent prompt template:
 ----
 Solve project euler 245 in file main.py. Add asserts to any test values given in the problem statement. Also produce a markdown summary of the main techniques used as README.md. Provide download links for both files.
 ----
+
+If you are running a few of those you can more easily
 
 == Testing
 
@@ -513,7 +515,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/272.py[272] | 0.652 |  |  |
 | link:solvers/273.py[273] | 0.326 |  |  |
 | link:solvers/274.py[274] | 0.254 |  |  |
-| link:solvers/275.py[275] |  |  |  | solver not found
+| link:solvers/275.py[275] | 43.817 |  |  |
 | link:solvers/276.py[276] | 0.466 |  |  |
 | link:solvers/277.py[277] | 0.056 |  |  |
 | link:solvers/278.py[278] | 0.209 |  |  |
@@ -530,15 +532,15 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/289.py[289] | 0.176 |  |  |
 | link:solvers/290.py[290] | 0.135 |  |  |
 | link:solvers/291.py[291] | 22.839 |  |  |
-| link:solvers/292.py[292] |  |  |  | solver not found
+| link:solvers/292.py[292] | 1.841 |  |  |
 | link:solvers/293.py[293] | 0.173 |  |  |
-| link:solvers/294.py[294] |  |  |  | solver not found
+| link:solvers/294.py[294] | 0.204 |  |  |
 | link:solvers/295.py[295] |  |  |  | solver not found
 | link:solvers/296.py[296] | 80.048 |  |  |
 | link:solvers/297.py[297] | 0.065 |  |  |
 | link:solvers/298.py[298] | 0.538 |  |  |
 | link:solvers/299.py[299] | 1.066 |  |  |
-| link:solvers/300.py[300] | 15.581 |  |  | expected '8.0540771484375', got '8.05407714843750'
+| link:solvers/300.py[300] | 1.036 |  |  |
 | link:solvers/301.py[301] | 0.062 |  |  |
 | link:solvers/302.py[302] |  |  |  | solver not found
 | link:solvers/303.py[303] | 0.619 |  |  |

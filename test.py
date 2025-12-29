@@ -59,9 +59,30 @@ def parse_args() -> argparse.Namespace:
     )
     return parser.parse_args()
 
-def expand_ids(values: list[str]) -> list[int]:
+def expand_ids(values: list[str]) -> tuple[list[int], dict[int, Path]]:
     ids: list[int] = []
+    overrides: dict[int, Path] = {}
     for value in values:
+        if "_" in value and not value.endswith(".py") and "/" not in value:
+            candidate = SOLVERS_DIR / f"{value}.py"
+            if not candidate.exists():
+                raise ValueError(f"solver not found: {candidate}")
+            pid = parse_solver_id(candidate)
+            if pid is None:
+                raise ValueError(f"invalid solver path: {candidate}")
+            ids.append(pid)
+            overrides[pid] = candidate
+            continue
+        if value.endswith(".py") or "/" in value:
+            path = Path(value)
+            if not path.exists():
+                raise ValueError(f"solver not found: {value}")
+            pid = parse_solver_id(path)
+            if pid is None:
+                raise ValueError(f"invalid solver path: {value}")
+            ids.append(pid)
+            overrides[pid] = path
+            continue
         if "-" in value:
             start_str, sep, end_str = value.partition("-")
             if not sep:
@@ -79,7 +100,7 @@ def expand_ids(values: list[str]) -> list[int]:
                 ids.append(int(value))
             except ValueError as exc:
                 raise ValueError(f"invalid id: {value}") from exc
-    return ids
+    return ids, overrides
 
 
 def load_reference_answers() -> dict[int, str]:
@@ -96,7 +117,15 @@ def load_reference_answers() -> dict[int, str]:
 
 
 def collect_solvers() -> dict[int, Path]:
-    return {int(path.stem): path for path in SOLVERS_DIR.glob("*.py")}
+    solvers: dict[int, Path] = {}
+    for path in SOLVERS_DIR.glob("*.py"):
+        pid = parse_solver_id(path)
+        if pid is None:
+            continue
+        if pid in solvers and solvers[pid].stem.isdigit():
+            continue
+        solvers[pid] = path
+    return solvers
 
 
 def collect_uncommitted_solvers() -> list[int]:
@@ -126,9 +155,21 @@ def collect_uncommitted_solvers() -> list[int]:
             continue
         if path.parent.name != "solvers":
             continue
-        if path.stem.isdigit():
-            ids.append(int(path.stem))
+        pid = parse_solver_id(path)
+        if pid is not None:
+            ids.append(pid)
     return sorted(set(ids))
+
+
+def parse_solver_id(path: Path) -> int | None:
+    stem = path.stem
+    if stem.isdigit():
+        return int(stem)
+    if "_" in stem:
+        prefix = stem.split("_", 1)[0]
+        if prefix.isdigit():
+            return int(prefix)
+    return None
 
 
 def load_solver_metadata(puzzle_id: int) -> tuple[str | None, int | None]:
@@ -149,10 +190,11 @@ def load_solver_metadata(puzzle_id: int) -> tuple[str | None, int | None]:
 def run_solver(
     path: Path, timeout: float | None
 ) -> tuple[int | None, str, str, float, bool]:
+    solver_path = path.resolve()
     start = time.perf_counter()
     try:
         proc = subprocess.run(
-            ["pypy3", str(path)],
+            ["pypy3", str(solver_path)],
             capture_output=True,
             text=True,
             cwd=STATEMENTS_DOCS_DIR,
@@ -226,6 +268,7 @@ def main() -> None:
     reference = load_reference_answers()
     solvers = collect_solvers()
 
+    path_overrides: dict[int, Path] = {}
     if args.uncommitted:
         try:
             target_ids = collect_uncommitted_solvers()
@@ -234,7 +277,8 @@ def main() -> None:
             sys.exit(2)
     elif args.ids:
         try:
-            target_ids = sorted(set(expand_ids(args.ids)))
+            target_ids, path_overrides = expand_ids(args.ids)
+            target_ids = sorted(set(target_ids))
         except ValueError as exc:
             print(str(exc), file=sys.stderr)
             sys.exit(2)
@@ -246,7 +290,7 @@ def main() -> None:
 
     results: list[Result] = []
     for pid in target_ids:
-        solver_path = solvers.get(pid)
+        solver_path = path_overrides.get(pid) or solvers.get(pid)
         if solver_path is None:
             results.append(
                 Result(
