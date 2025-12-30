@@ -323,7 +323,7 @@ def update_readme(results: list[Result]) -> None:
         raise RuntimeError("Could not find results table in README.adoc")
 
     header_line = "| ID | Runtime (s) | Model | Out Tokens | Error"
-    row_re = re.compile(r"^\|\s+link:([^\\[]+)\\[")
+    row_re = re.compile(r"^\|\s+link:([^\[]+)\[")
     result_map: dict[tuple[int, str], str] = {}
     row_map: dict[tuple[int, str], str] = {}
 
@@ -552,8 +552,7 @@ def main() -> None:
     print("|===")
 
     if args.autoupdate:
-        update_candidates = [res for res in results if res.language == "py"]
-        update_readme(update_candidates or results)
+        update_readme(results)
 
 
 if __name__ == "__main__":

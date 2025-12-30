@@ -195,6 +195,39 @@ Solvers that fail to terminated under that time fail with something like:
 | link:solvers/141.py[141] |  |  |  | timed out after 60.000s
 ....
 
+=== Multilanguage support
+
+We have basic support for solvers written in multiple languages.
+
+While the main goal of the repository is to have Python solutions, we couldn't resist generalizing things a bit for Lean. But it is also interesting to have multilanguage support to compare implementation speed across different languages.
+
+For compiled languages such as C and C++, you first have to compile the examples. From inside link:solvers/[]:
+
+----
+cd solvers
+----
+
+you can build example with commands such as:
+
+* `make`: build all compiled examples
+* `make c`: build all compiled C examples
+* `make 1_c.out`: build just example 1 in language C
+
+By default running:
+
+[source,shell]
+----
+./test.py 1
+----
+
+runs all solvers found for that given problem. If any compiled solvers have not been compiled, they are simply skipped.
+
+Run only the selected languages with the `-l` flag:
+
+----
+./test.py -l c -l py 1
+----
+
 == Folders
 
 * link:solvers/[]: the solver programs
@@ -238,8 +271,11 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 
 |===
 | ID | Runtime (s) | Model | Out Tokens | Error
-| link:solvers/1.py[1.py] | 0.111 |  |  |
-| link:solvers/2.py[2.py] | 0.103 | gpt-5.2-2025-12-11 | 432 |
+| link:solvers/1.c[1.c] | 0.002 |  |  |
+| link:solvers/1.cpp[1.cpp] | 0.003 |  |  |
+| link:solvers/1.lean[1.lean] | 0.004 |  |  |
+| link:solvers/1.py[1.py] | 0.087 |  |  |
+| link:solvers/2.py[2.py] | 0.120 | gpt-5.2-2025-12-11 | 432 |
 | link:solvers/3.py[3.py] | 0.106 | gpt-5.2-2025-12-11 | 585 |
 | link:solvers/4.py[4.py] | 0.094 | gpt-5.2-2025-12-11 | 992 |
 | link:solvers/5.py[5.py] | 0.080 | gpt-5.2-2025-12-11 | 458 |
@@ -539,7 +575,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/299.py[299.py] | 1.066 |  |  |
 | link:solvers/300.py[300.py] | 1.036 |  |  |
 | link:solvers/301.py[301.py] | 0.062 |  |  |
-| link:solvers/302.py[302.py] |  |  |  | solver not found
+| link:solvers/302.py[302.py] | 591.483 |  |  |
 | link:solvers/303.py[303.py] | 0.619 |  |  |
 | link:solvers/304.py[304.py] | 0.571 |  |  |
 | link:solvers/305.py[305.py] |  |  |  | solver not found
