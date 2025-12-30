@@ -26,6 +26,15 @@ class Result:
     model: str | None
     output_tokens: int | None
     message: str
+    language: str | None
+    source_path: Path | None
+
+
+@dataclass
+class SolverTarget:
+    puzzle_id: int
+    path: Path
+    language: str
 
 
 def parse_args() -> argparse.Namespace:
@@ -52,6 +61,13 @@ def parse_args() -> argparse.Namespace:
         help="Update README.adoc results table with the latest run.",
     )
     parser.add_argument(
+        "-l",
+        "--lang",
+        action="append",
+        default=None,
+        help="Limit to one or more languages (py,c,cpp,lean). Repeatable.",
+    )
+    parser.add_argument(
         "-u",
         "--uncommitted",
         action="store_true",
@@ -59,11 +75,16 @@ def parse_args() -> argparse.Namespace:
     )
     return parser.parse_args()
 
-def expand_ids(values: list[str]) -> tuple[list[int], dict[int, Path]]:
+def expand_ids(values: list[str]) -> tuple[list[int], dict[int, list[Path]]]:
     ids: list[int] = []
-    overrides: dict[int, Path] = {}
+    overrides: dict[int, list[Path]] = {}
     for value in values:
-        if "_" in value and not value.endswith(".py") and "/" not in value:
+        if (
+            "_" in value
+            and not value.endswith(".py")
+            and not value.endswith(".out")
+            and "/" not in value
+        ):
             candidate = SOLVERS_DIR / f"{value}.py"
             if not candidate.exists():
                 raise ValueError(f"solver not found: {candidate}")
@@ -71,9 +92,9 @@ def expand_ids(values: list[str]) -> tuple[list[int], dict[int, Path]]:
             if pid is None:
                 raise ValueError(f"invalid solver path: {candidate}")
             ids.append(pid)
-            overrides[pid] = candidate
+            overrides.setdefault(pid, []).append(candidate)
             continue
-        if value.endswith(".py") or "/" in value:
+        if value.endswith(".py") or value.endswith(".out") or "/" in value:
             path = Path(value)
             if not path.exists():
                 raise ValueError(f"solver not found: {value}")
@@ -81,7 +102,7 @@ def expand_ids(values: list[str]) -> tuple[list[int], dict[int, Path]]:
             if pid is None:
                 raise ValueError(f"invalid solver path: {value}")
             ids.append(pid)
-            overrides[pid] = path
+            overrides.setdefault(pid, []).append(path)
             continue
         if "-" in value:
             start_str, sep, end_str = value.partition("-")
@@ -116,22 +137,36 @@ def load_reference_answers() -> dict[int, str]:
     return solutions
 
 
-def collect_solvers() -> dict[int, Path]:
-    solvers: dict[int, Path] = {}
+def collect_solver_targets(
+    lang_filter: set[str] | None,
+) -> dict[int, list[SolverTarget]]:
+    targets: dict[int, list[SolverTarget]] = {}
     for path in SOLVERS_DIR.glob("*.py"):
+        lang = detect_language(path)
+        if lang is None or (lang_filter and lang not in lang_filter):
+            continue
         pid = parse_solver_id(path)
         if pid is None:
             continue
-        if pid in solvers and solvers[pid].stem.isdigit():
+        targets.setdefault(pid, []).append(SolverTarget(pid, path, lang))
+    for path in SOLVERS_DIR.glob("*.out"):
+        lang = detect_language(path)
+        if lang is None or (lang_filter and lang not in lang_filter):
             continue
-        solvers[pid] = path
-    return solvers
+        pid = parse_solver_id(path)
+        if pid is None:
+            continue
+        targets.setdefault(pid, []).append(SolverTarget(pid, path, lang))
+    order = {"py": 0, "c": 1, "cpp": 2, "lean": 3}
+    for entries in targets.values():
+        entries.sort(key=lambda item: order.get(item.language, 99))
+    return targets
 
 
 def collect_uncommitted_solvers() -> list[int]:
     try:
         proc = subprocess.run(
-            ["git", "status", "--porcelain", "--", str(SOLVERS_DIR / "*.py")],
+            ["git", "status", "--porcelain", "--", str(SOLVERS_DIR)],
             capture_output=True,
             text=True,
             cwd=ROOT,
@@ -151,8 +186,6 @@ def collect_uncommitted_solvers() -> list[int]:
             continue
         path_str = parts[-1]
         path = Path(path_str)
-        if path.suffix != ".py":
-            continue
         if path.parent.name != "solvers":
             continue
         pid = parse_solver_id(path)
@@ -172,6 +205,40 @@ def parse_solver_id(path: Path) -> int | None:
     return None
 
 
+def detect_language(path: Path) -> str | None:
+    if path.suffix == ".py":
+        return "py"
+    if path.suffix == ".c":
+        return "c"
+    if path.suffix == ".cpp":
+        return "cpp"
+    if path.suffix == ".lean":
+        return "lean"
+    if path.suffix == ".out":
+        if path.stem.endswith("_c"):
+            return "c"
+        if path.stem.endswith("_cpp"):
+            return "cpp"
+        if path.stem.endswith("_lean"):
+            return "lean"
+    return None
+
+
+def source_from_target(path: Path, language: str) -> Path:
+    if language == "py":
+        return path
+    if language == "c":
+        stem = path.stem.removesuffix("_c")
+        return path.with_name(f"{stem}.c")
+    if language == "cpp":
+        stem = path.stem.removesuffix("_cpp")
+        return path.with_name(f"{stem}.cpp")
+    if language == "lean":
+        stem = path.stem.removesuffix("_lean")
+        return path.with_name(f"{stem}.lean")
+    return path
+
+
 def load_solver_metadata(puzzle_id: int) -> tuple[str | None, int | None]:
     meta_path = SOLVERS_DIR / f"{puzzle_id}.json"
     if not meta_path.exists():
@@ -188,13 +255,17 @@ def load_solver_metadata(puzzle_id: int) -> tuple[str | None, int | None]:
 
 
 def run_solver(
-    path: Path, timeout: float | None
+    path: Path, timeout: float | None, language: str
 ) -> tuple[int | None, str, str, float, bool]:
     solver_path = path.resolve()
     start = time.perf_counter()
     try:
+        if language == "py":
+            command = ["pypy3", str(solver_path)]
+        else:
+            command = [str(solver_path)]
         proc = subprocess.run(
-            ["pypy3", str(solver_path)],
+            command,
             capture_output=True,
             text=True,
             cwd=STATEMENTS_DOCS_DIR,
@@ -216,9 +287,19 @@ def format_row(res: Result) -> str:
     model_cell = res.model or ""
     tokens_cell = str(res.output_tokens) if res.output_tokens is not None else ""
     error_cell = "" if res.correct else res.message
-    link = f"link:solvers/{res.puzzle_id}.py[{res.puzzle_id}]"
+    link_path = (
+        res.source_path
+        if res.source_path is not None
+        else SOLVERS_DIR / f"{res.puzzle_id}.py"
+    )
+    try:
+        rel_path = link_path.resolve().relative_to(ROOT)
+    except ValueError:
+        rel_path = link_path
+    link = f"link:{rel_path.as_posix()}[{rel_path.name}]"
     return (
-        f"| {link} | {time_cell} | {model_cell} | {tokens_cell} | {error_cell}"
+        f"| {link} | {time_cell} | {model_cell} | "
+        f"{tokens_cell} | {error_cell}"
     ).rstrip()
 
 def update_readme(results: list[Result]) -> None:
@@ -242,33 +323,68 @@ def update_readme(results: list[Result]) -> None:
         raise RuntimeError("Could not find results table in README.adoc")
 
     header_line = "| ID | Runtime (s) | Model | Out Tokens | Error"
-    row_re = re.compile(r"^\|\s+link:solvers/(\d+)\.py\[\d+\]\s+\|")
-    result_map = {res.puzzle_id: format_row(res) for res in results}
-    row_map: dict[int, str] = {}
+    row_re = re.compile(r"^\|\s+link:([^\\[]+)\\[")
+    result_map: dict[tuple[int, str], str] = {}
+    row_map: dict[tuple[int, str], str] = {}
+
+    for res in results:
+        language = res.language or ""
+        result_map[(res.puzzle_id, language)] = format_row(res)
 
     for i in range(start + 1, end):
         match = row_re.match(lines[i])
         if not match:
             continue
-        pid = int(match.group(1))
-        row_map[pid] = lines[i]
+        link_target = match.group(1)
+        pid = parse_solver_id(Path(link_target))
+        if pid is None:
+            id_match = re.search(r"\\[(\\d+)\\]", lines[i])
+            if not id_match:
+                continue
+            pid = int(id_match.group(1))
+        language = detect_language(Path(link_target)) or ""
+        row_map[(pid, language)] = lines[i]
 
-    for pid, row in result_map.items():
-        row_map[pid] = row
+    for key, row in result_map.items():
+        row_map[key] = row
 
-    sorted_rows = [row_map[pid] for pid in sorted(row_map)]
+    sorted_rows = [
+        row_map[key]
+        for key in sorted(row_map, key=lambda k: (k[0], k[1]))
+    ]
     new_block = [header_line, *sorted_rows]
     lines[start + 1 : end] = new_block
 
     readme_path.write_text("\n".join(lines) + "\n")
 
 
+def parse_lang_filter(values: list[str] | None) -> set[str] | None:
+    if not values:
+        return None
+    allowed = {"py", "c", "cpp", "lean"}
+    selected: set[str] = set()
+    for value in values:
+        for token in value.split(","):
+            token = token.strip().lower()
+            if not token:
+                continue
+            if token not in allowed:
+                raise ValueError(f"invalid language: {token}")
+            selected.add(token)
+    return selected
+
+
 def main() -> None:
     args = parse_args()
     reference = load_reference_answers()
-    solvers = collect_solvers()
+    try:
+        lang_filter = parse_lang_filter(args.lang)
+    except ValueError as exc:
+        print(str(exc), file=sys.stderr)
+        sys.exit(2)
+    solver_targets = collect_solver_targets(lang_filter)
 
-    path_overrides: dict[int, Path] = {}
+    path_overrides: dict[int, list[Path]] = {}
     if args.uncommitted:
         try:
             target_ids = collect_uncommitted_solvers()
@@ -283,15 +399,31 @@ def main() -> None:
             print(str(exc), file=sys.stderr)
             sys.exit(2)
     else:
-        target_ids = sorted(solvers)
+        target_ids = sorted(solver_targets)
     if not target_ids:
         print("No solvers found.", file=sys.stderr)
         sys.exit(1)
 
     results: list[Result] = []
     for pid in target_ids:
-        solver_path = path_overrides.get(pid) or solvers.get(pid)
-        if solver_path is None:
+        override_paths = path_overrides.get(pid)
+        targets: list[SolverTarget] = []
+        if override_paths:
+            for path in override_paths:
+                language = detect_language(path)
+                if language is None:
+                    print(f"invalid solver path: {path}", file=sys.stderr)
+                    sys.exit(2)
+                if lang_filter and language not in lang_filter:
+                    print(
+                        f"solver path {path} does not match --lang filter",
+                        file=sys.stderr,
+                    )
+                    sys.exit(2)
+                targets.append(SolverTarget(pid, path, language))
+        else:
+            targets = solver_targets.get(pid, [])
+        if not targets:
             results.append(
                 Result(
                     pid,
@@ -300,6 +432,8 @@ def main() -> None:
                     model=None,
                     output_tokens=None,
                     message="solver not found",
+                    language=None,
+                    source_path=None,
                 )
             )
             print(f"[{pid}] skipped: solver not found", file=sys.stderr)
@@ -309,92 +443,117 @@ def main() -> None:
         missing_reference = expected is None
         model, output_tokens = load_solver_metadata(pid)
 
-        print(f"[{pid}] running {solver_path}")
-        rc, stdout, stderr, elapsed, timed_out = run_solver(solver_path, args.timeout)
-        if timed_out:
-            limit = args.timeout if args.timeout is not None else elapsed
-            results.append(
-                Result(
-                    pid,
-                    correct=False,
-                    elapsed=None,
-                    model=model,
-                    output_tokens=output_tokens,
-                    message=f"timed out after {limit:.3f}s",
-                )
+        for target in targets:
+            label = f"{target.language}" if target.language else "unknown"
+            print(f"[{pid}] running {target.path} ({label})")
+            rc, stdout, stderr, elapsed, timed_out = run_solver(
+                target.path, args.timeout, target.language
             )
-            print(f"[{pid}] timed out after {limit:.3f}s", file=sys.stderr)
-            continue
+            if timed_out:
+                limit = args.timeout if args.timeout is not None else elapsed
+                results.append(
+                    Result(
+                        pid,
+                        correct=False,
+                        elapsed=None,
+                        model=model,
+                        output_tokens=output_tokens,
+                        message=f"timed out after {limit:.3f}s",
+                        language=target.language,
+                        source_path=source_from_target(
+                            target.path, target.language
+                        ),
+                    )
+                )
+                print(f"[{pid}] timed out after {limit:.3f}s", file=sys.stderr)
+                continue
 
-        if rc != 0:
-            if stderr.strip():
-                print(stderr.rstrip(), file=sys.stderr)
-            results.append(
-                Result(
-                    pid,
-                    correct=False,
-                    elapsed=elapsed,
-                    model=model,
-                    output_tokens=output_tokens,
-                    message=f"failed (exit {rc})",
+            if rc != 0:
+                if stderr.strip():
+                    print(stderr.rstrip(), file=sys.stderr)
+                results.append(
+                    Result(
+                        pid,
+                        correct=False,
+                        elapsed=elapsed,
+                        model=model,
+                        output_tokens=output_tokens,
+                        message=f"failed (exit {rc})",
+                        language=target.language,
+                        source_path=source_from_target(
+                            target.path, target.language
+                        ),
+                    )
                 )
-            )
-            print(f"[{pid}] failed (exit {rc})", file=sys.stderr)
-            continue
+                print(f"[{pid}] failed (exit {rc})", file=sys.stderr)
+                continue
 
-        if missing_reference:
-            results.append(
-                Result(
-                    pid,
-                    correct=False,
-                    elapsed=elapsed,
-                    model=model,
-                    output_tokens=output_tokens,
-                    message="missing reference answer",
+            if missing_reference:
+                results.append(
+                    Result(
+                        pid,
+                        correct=False,
+                        elapsed=elapsed,
+                        model=model,
+                        output_tokens=output_tokens,
+                        message="missing reference answer",
+                        language=target.language,
+                        source_path=source_from_target(
+                            target.path, target.language
+                        ),
+                    )
                 )
-            )
-            print(f"[{pid}] missing reference answer", file=sys.stderr)
-            continue
+                print(f"[{pid}] missing reference answer", file=sys.stderr)
+                continue
 
-        actual = extract_answer(stdout)
-        if actual == expected:
-            results.append(
-                Result(
-                    pid,
-                    correct=True,
-                    elapsed=elapsed,
-                    model=model,
-                    output_tokens=output_tokens,
-                    message="ok",
+            actual = extract_answer(stdout)
+            if actual == expected:
+                results.append(
+                    Result(
+                        pid,
+                        correct=True,
+                        elapsed=elapsed,
+                        model=model,
+                        output_tokens=output_tokens,
+                        message="ok",
+                        language=target.language,
+                        source_path=source_from_target(
+                            target.path, target.language
+                        ),
+                    )
                 )
-            )
-            print(f"[{pid}] ok ({elapsed:.3f}s)")
-        else:
-            msg = f"expected {expected!r}, got {actual!r}"
-            results.append(
-                Result(
-                    pid,
-                    correct=False,
-                    elapsed=elapsed,
-                    model=model,
-                    output_tokens=output_tokens,
-                    message=msg,
+                print(f"[{pid}] ok ({elapsed:.3f}s)")
+            else:
+                msg = f"expected {expected!r}, got {actual!r}"
+                results.append(
+                    Result(
+                        pid,
+                        correct=False,
+                        elapsed=elapsed,
+                        model=model,
+                        output_tokens=output_tokens,
+                        message=msg,
+                        language=target.language,
+                        source_path=source_from_target(
+                            target.path, target.language
+                        ),
+                    )
                 )
-            )
-            print(f"[{pid}] wrong answer: {msg}", file=sys.stderr)
+                print(f"[{pid}] wrong answer: {msg}", file=sys.stderr)
 
     total_run = len(results)
     passed = sum(r.correct for r in results)
     print(f"\nPassed {passed}/{total_run} tests.")
 
     print("\n|===")
-    print("| ID | time (s) | model | Out Tokens | error")
-    for res in sorted(results, key=lambda r: r.puzzle_id):
+    print("| ID | Runtime (s) | Model | Out Tokens | Error")
+    for res in sorted(results, key=lambda r: (r.puzzle_id, r.language or "")):
         print(format_row(res))
     print("|===")
 
     if args.autoupdate:
-        update_readme(results)
+        update_candidates = [res for res in results if res.language == "py"]
+        update_readme(update_candidates or results)
 
 
 if __name__ == "__main__":

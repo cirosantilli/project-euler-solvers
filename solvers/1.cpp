@@ -1,0 +1,19 @@
+#include <cassert>
+#include <iostream>
+
+static long long sum_of_multiples(long long m, long long n) {
+    long long max_range = n / m;
+    return m * max_range * (max_range + 1) / 2;
+}
+
+static long long sum_of_multiples_of_either_3_or_5(long long n) {
+    n -= 1;
+    return sum_of_multiples(3, n) + sum_of_multiples(5, n)
+           - sum_of_multiples(15, n);
+}
+
+int main() {
+    assert(sum_of_multiples_of_either_3_or_5(10) == 23);
+    std::cout << sum_of_multiples_of_either_3_or_5(1000) << "\n";
+    return 0;
+}
