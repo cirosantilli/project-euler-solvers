@@ -233,7 +233,7 @@ Run only the selected languages with the `-l` flag:
 * link:solvers/[]: the solver programs
 ** link:solvers/400.py[]: a solver program
 ** link:solvers/400.md[]: optional high level Markdown description of the solution
-** link:solvers/2.json[]: optional LLM metadata describing the generation process. This one was done on API:
+** link:solvers/2.py.json[]: optional LLM metadata describing the generation process. This one was done on API:
 +
 ....
 {
@@ -245,7 +245,7 @@ Run only the selected languages with the `-l` flag:
   "generation_time_seconds": 9.143
 }
 ....
-*** link:solvers/976.json[] is how it should look like for Codex runs (TODO not currently automated):
+*** link:solvers/976.py.json[] is how it should look like for Codex runs (TODO not currently automated):
 +
 ....
 {
@@ -275,7 +275,8 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/1.cpp[1.cpp] | 0.003 |  |  |
 | link:solvers/1.lean[1.lean] | 0.004 |  |  |
 | link:solvers/1.py[1.py] | 0.087 |  |  |
-| link:solvers/2.py[2.py] | 0.120 | gpt-5.2-2025-12-11 | 432 |
+| link:solvers/2.lean[2.lean] | 0.005 |  |  |
+| link:solvers/2.py[2.py] | 0.098 | gpt-5.2-2025-12-11 | 432 |
 | link:solvers/3.py[3.py] | 0.106 | gpt-5.2-2025-12-11 | 585 |
 | link:solvers/4.py[4.py] | 0.094 | gpt-5.2-2025-12-11 | 992 |
 | link:solvers/5.py[5.py] | 0.080 | gpt-5.2-2025-12-11 | 458 |
@@ -578,9 +579,9 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/302.py[302.py] | 591.483 |  |  |
 | link:solvers/303.py[303.py] | 0.619 |  |  |
 | link:solvers/304.py[304.py] | 0.571 |  |  |
-| link:solvers/305.py[305.py] |  |  |  | solver not found
+| link:solvers/305.py[305.py] | 0.229 |  |  |
 | link:solvers/306.py[306.py] | 0.058 |  |  |
-| link:solvers/307.py[307.py] | 0.154 |  |  | expected '0.7311720251', got '0.7311720254'
+| link:solvers/307.py[307.py] | 0.112 |  |  |
 | link:solvers/308.py[308.py] |  |  |  | timed out after 60.000s
 | link:solvers/309.py[309.py] | 1.503 |  |  |
 | link:solvers/310.py[310.py] | 6.476 |  |  |

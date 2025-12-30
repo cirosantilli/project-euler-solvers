@@ -312,7 +312,7 @@ def solver_stem(
         return (
             (solvers_dir / f"{stem}.py").exists()
             or (solvers_dir / f"{stem}.md").exists()
-            or (solvers_dir / f"{stem}.json").exists()
+            or (solvers_dir / f"{stem}.py.json").exists()
         )
 
     base_stem = str(problem_id)
@@ -346,6 +346,7 @@ def write_solver_files(
 def write_solver_metadata(
     solvers_dir: Path,
     stem: str,
+    language: str,
     output_tokens: int | None,
     model: str | None,
     interface: str | None,
@@ -354,7 +355,7 @@ def write_solver_metadata(
     generation_time_seconds: float | None,
     created_at: str,
 ) -> None:
-    json_path = solvers_dir / f"{stem}.json"
+    json_path = solvers_dir / f"{stem}.{language}.json"
     payload = {
         "output_tokens": output_tokens,
         "model": model,
@@ -686,6 +687,7 @@ def handle_result(
     write_solver_metadata(
         solvers_dir,
         stem,
+        "py",
         output_tokens,
         model,
         "api",
@@ -783,6 +785,7 @@ def main() -> None:
             write_solver_metadata(
                 solvers_dir,
                 stem,
+                "py",
                 parsed_tokens,
                 model,
                 interface,

@@ -239,8 +239,12 @@ def source_from_target(path: Path, language: str) -> Path:
     return path
 
 
-def load_solver_metadata(puzzle_id: int) -> tuple[str | None, int | None]:
-    meta_path = SOLVERS_DIR / f"{puzzle_id}.json"
+def load_solver_metadata(
+    puzzle_id: int, language: str | None
+) -> tuple[str | None, int | None]:
+    if not language:
+        return None, None
+    meta_path = SOLVERS_DIR / f"{puzzle_id}.{language}.json"
     if not meta_path.exists():
         return None, None
     try:
@@ -441,9 +445,8 @@ def main() -> None:
 
         expected = reference.get(pid)
         missing_reference = expected is None
-        model, output_tokens = load_solver_metadata(pid)
-
         for target in targets:
+            model, output_tokens = load_solver_metadata(pid, target.language)
             label = f"{target.language}" if target.language else "unknown"
             print(f"[{pid}] running {target.path} ({label})")
             rc, stdout, stderr, elapsed, timed_out = run_solver(
