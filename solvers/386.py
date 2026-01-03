@@ -1,265 +1,242 @@
 #!/usr/bin/env python3
 """
-Project Euler 386: Maximum length of an antichain
-https://projecteuler.net/problem=386
+Project Euler 386: Maximum Length of an Antichain
 
-Optimized Python (no external libraries):
-- Uses an odd-only sieve up to 'limit' to get all primes and allow O(log n) pi(x) via bisect.
-- Enumerates feasible exponent sequences and counts how many n<=limit realize each pattern.
-- Computes N(n) as a middle coefficient of Π (1+x+...+x^{a_i}).
+Let n be a positive integer and S(n) be the set of divisors of n.
+N(n) is the maximum size of an antichain in the divisibility poset of S(n).
+Compute sum_{1 <= n <= 1e8} N(n).
 
-If run with no input, uses limit=10^8 and asserts the known Project Euler answer.
+Key facts:
+- If n = Π p_i^{a_i}, then divisors correspond to exponent vectors (e_i) with 0<=e_i<=a_i.
+- The poset is a product of chains, ranked by sum(e_i).
+- N(n) equals the maximum coefficient of Π (1 + x + ... + x^{a_i}).
+
+We avoid iterating n up to 1e8 by:
+- Enumerating feasible ordered exponent sequences (a_1, ..., a_k) for the prime factorization
+  (ordered by increasing primes).
+- Counting, for each exponent sequence, how many k-tuples of increasing primes satisfy
+  Π p_i^{a_i} <= limit.
+- Using a fast prime counting function π(x) (Lehmer) so we never need primes up to 1e8.
 """
 
 from __future__ import annotations
 
-import sys
 import math
-import bisect
+from bisect import bisect_right
 from functools import lru_cache
-from array import array
+from typing import List, Tuple
 
 
-# ----------------------------
-# Problem statement examples
-# ----------------------------
-
-def is_antichain(n: int, subset: list[int]) -> bool:
-    """True iff subset is an antichain in S(n) under divisibility."""
-    for x in subset:
-        if x <= 0 or n % x != 0:
-            return False
-    m = len(subset)
-    for i in range(m):
-        a = subset[i]
-        for j in range(i + 1, m):
-            b = subset[j]
-            if a % b == 0 or b % a == 0:
-                return False
-    return True
-
-
-# Examples from the statement:
-assert is_antichain(30, [2, 5, 6]) is False
-assert is_antichain(30, [2, 3, 5]) is True
-
-
-# ----------------------------
-# Prime sieve up to limit (odd-only)
-# ----------------------------
-
-def sieve_primes_upto(n: int) -> array:
-    """Return array('I') of all primes <= n. (Odd-only bytearray sieve.)"""
-    if n < 2:
-        return array("I")
-    if n == 2:
-        return array("I", [2])
-
-    # Represent odd number (2*i+1) by index i. Size includes n if n is odd.
-    size = (n // 2) + 1
-    sieve = bytearray(b"\x01") * size
-    sieve[0] = 0  # 1 is not prime
-
-    r = int(math.isqrt(n))
-    # i corresponds to p = 2*i+1, so p<=r => i<=r//2
-    max_i = r // 2
-    for i in range(1, max_i + 1):
-        if sieve[i]:
-            p = 2 * i + 1
-            start = (p * p) // 2
-            sieve[start::p] = b"\x00" * (((size - 1 - start) // p) + 1)
-
-    primes = array("I", [2])
-    append = primes.append
-    find = sieve.find
-
-    idx = find(1, 1)
-    while idx != -1:
-        append(2 * idx + 1)
-        idx = find(1, idx + 1)
-
-    return primes
-
-
-# ----------------------------
-# Integer k-th root
-# ----------------------------
-
-def iroot(x: int, k: int) -> int:
-    """floor(x ** (1/k)) with safe adjustment (k>=1)."""
-    if k <= 1 or x < 2:
-        return x
+def _iroot(n: int, k: int) -> int:
+    """Floor of the k-th root of n (k>=1)."""
+    if k <= 1:
+        return n
     if k == 2:
-        return int(math.isqrt(x))
-    # float seed + fix-up
-    r = int(x ** (1.0 / k))
-    if r < 1:
-        r = 1
-    while (r + 1) ** k <= x:
-        r += 1
-    while r ** k > x:
-        r -= 1
-    return r
+        return math.isqrt(n)
+    # Float-based estimate + correction (safe for n up to ~1e12+ with small k)
+    x = int(n ** (1.0 / k))
+    while (x + 1) ** k <= n:
+        x += 1
+    while x**k > n:
+        x -= 1
+    return x
 
 
-# ----------------------------
-# N(n) from exponent multiset
-# ----------------------------
+def _sieve_with_pi(n: int) -> Tuple[List[int], List[int]]:
+    """Return (primes <= n, pi[0..n] where pi[x]=#primes<=x)."""
+    if n < 2:
+        return [], [0] * (n + 1)
+    sieve = bytearray(b"\x01") * (n + 1)
+    sieve[0:2] = b"\x00\x00"
+    r = int(math.isqrt(n))
+    for p in range(2, r + 1):
+        if sieve[p]:
+            start = p * p
+            step = p
+            sieve[start : n + 1 : step] = b"\x00" * (((n - start) // step) + 1)
 
-@lru_cache(maxsize=None)
-def N_from_exponents(exps_sorted: tuple[int, ...]) -> int:
+    primes = [i for i in range(2, n + 1) if sieve[i]]
+    pi = [0] * (n + 1)
+    c = 0
+    for i in range(n + 1):
+        if sieve[i]:
+            c += 1
+        pi[i] = c
+    return primes, pi
+
+
+def _make_lehmer_pi(limit: int):
     """
-    For n = Π p_i^{a_i}, N(n) is the maximum size of a rank layer in the divisor poset.
-    Rank is Ω(d)=sum exponents in divisor, and the rank generating polynomial is:
-        Π (1 + x + ... + x^{a_i})
-    This polynomial is palindromic, so the maximum occurs at:
-        half = floor(sum a_i / 2)
-    Therefore N(n) is coefficient of x^half.
+    Build a Lehmer prime-counting function pi(x) valid for x up to 'limit'.
+
+    For limit=1e8, we sieve only up to limit^(2/3) ~ 2.2e5.
     """
-    exps = exps_sorted
-    half = sum(exps) // 2
-    dp = [0] * (half + 1)
-    dp[0] = 1
-
-    # Convolution with (1 + x + ... + x^a) via sliding window sum
-    for a in exps:
-        new = [0] * (half + 1)
-        window = 0
-        for t in range(half + 1):
-            window += dp[t]
-            drop = t - (a + 1)
-            if drop >= 0:
-                window -= dp[drop]
-            new[t] = window
-        dp = new
-
-    return dp[half]
-
-
-# ----------------------------
-# Count numbers with a fixed exponent pattern
-# ----------------------------
-
-def count_sequence(limit: int, primes: array, iter_end: int, exps: tuple[int, ...]) -> int:
-    """
-    Count integers <= limit with factorization:
-        n = p1^e1 * p2^e2 * ... * pk^ek, with p1 < p2 < ... < pk
-    where exps = (e1,...,ek) is in increasing-prime order.
-
-    For k>=2, all non-last recursion levels only iterate primes <= sqrt(limit),
-    so we restrict iteration to primes[0:iter_end].
-    """
-    k = len(exps)
-    if k == 0:
-        return 1
-
-    suffix = [0] * (k + 1)
-    for i in range(k - 1, -1, -1):
-        suffix[i] = suffix[i + 1] + exps[i]
-
-    bisr = bisect.bisect_right
+    sieve_n = int(round(limit ** (2.0 / 3.0))) + 20
+    primes, pi_small = _sieve_with_pi(sieve_n)
+    P = primes  # 0-based primes list
 
     @lru_cache(maxsize=None)
-    def rec(pos: int, prev_idx: int, rem: int) -> int:
-        # prev_idx is index in primes of last chosen prime; -1 means "previous prime = 1"
-        if pos == k:
-            return 1
+    def phi(x: int, a: int) -> int:
+        # Count integers <= x not divisible by first a primes.
+        if a == 0:
+            return x
+        if a == 1:
+            return x - x // 2
+        if a == 2:
+            # Inclusion-exclusion for primes 2 and 3
+            return x - x // 2 - x // 3 + x // 6
+        return phi(x, a - 1) - phi(x // P[a - 1], a - 1)
 
-        e = exps[pos]
+    @lru_cache(maxsize=None)
+    def lehmer_pi(x: int) -> int:
+        if x < len(pi_small):
+            return pi_small[x]
 
-        if pos == k - 1:
-            p_max = iroot(rem, e)
-            hi = bisr(primes, p_max)
-            start = prev_idx + 1
-            return hi - start if hi > start else 0
+        x13 = _iroot(x, 3)
+        x12 = math.isqrt(x)
+        x14 = _iroot(x, 4)
 
-        # Strong bound: remaining primes are all >= next prime p,
-        # so remaining product >= p^(sum of remaining exponents).
-        p_max = iroot(rem, suffix[pos])
-        end = bisr(primes, p_max, 0, iter_end)
-        start = prev_idx + 1
-        if start >= end:
-            return 0
+        a = lehmer_pi(x14)
+        b = lehmer_pi(x12)
+        c = lehmer_pi(x13)
 
-        total = 0
-        # Iterate candidate primes for this position (all are within primes[:iter_end])
-        for idx in range(start, end):
-            p = primes[idx]
-            p_pow = p if e == 1 else pow(p, e)
-            if p_pow > rem:
-                break
-            total += rec(pos + 1, idx, rem // p_pow)
-        return total
+        # Main Lehmer formula (0-based indices adaptation)
+        res = phi(x, a) + ((b + a - 2) * (b - a + 1)) // 2
 
-    return rec(0, -1, limit)
+        for i in range(a, b):
+            p = P[i]
+            w = x // p
+            res -= lehmer_pi(w)
+
+            if i < c:
+                lim = lehmer_pi(math.isqrt(w))
+                for j in range(i, lim):
+                    res -= lehmer_pi(w // P[j]) - j
+        return res
+
+    return lehmer_pi, primes
 
 
-# ----------------------------
-# Main solve
-# ----------------------------
-
-def solve(limit: int = 10**8) -> int:
+def _max_antichain_from_exponents(exps: Tuple[int, ...], cache: dict) -> int:
     """
-    Compute sum_{1<=n<=limit} N(n).
+    Given the prime exponents of n (order irrelevant), compute N(n) as the
+    maximum coefficient of Π (1 + x + ... + x^{a_i}).
     """
-    if limit < 1:
-        return 0
+    key = tuple(sorted(exps))
+    if key in cache:
+        return cache[key]
 
-    primes = sieve_primes_upto(limit)
-    # For k>=2 recursion levels, primes never exceed sqrt(limit)
-    iter_end = bisect.bisect_right(primes, int(math.isqrt(limit)))
+    # DP over small total degree (<=26 for n<=1e8)
+    coeffs = [1]
+    for a in key:
+        nxt = [0] * (len(coeffs) + a)
+        for i, v in enumerate(coeffs):
+            for s in range(a + 1):
+                nxt[i + s] += v
+        coeffs = nxt
 
-    # Bound on number of distinct prime factors for limit<=1e8 is 8 (2*...*19 < 1e8; *23 > 1e8)
-    min_primes = [2, 3, 5, 7, 11, 13, 17, 19]
+    ans = max(coeffs) if key else 1
+    cache[key] = ans
+    return ans
 
-    sequences: list[tuple[int, ...]] = []
 
-    # Enumerate feasible exponent sequences using minimal consecutive primes for pruning
-    def gen(pos: int, prod: int, seq: list[int]) -> None:
+def solve(limit: int = 100_000_000) -> int:
+    lehmer_pi, primes_all = _make_lehmer_pi(limit)
+
+    # We only ever iterate primes up to sqrt(limit), due to a tight bound in the DFS.
+    max_iter = math.isqrt(limit)
+    primes_iter = [p for p in primes_all if p <= max_iter]
+    upper_idx = lambda x: bisect_right(primes_iter, x)
+
+    # Enumerate all feasible ordered exponent sequences (a_1,...,a_k) for primes p_1<...<p_k.
+    # Feasibility check: smallest primes 2,3,5,... with those exponents must fit in 'limit'.
+    min_primes = (2, 3, 5, 7, 11, 13, 17, 19)  # enough for n<=1e8 (max distinct primes is 8)
+    exponent_seqs: List[Tuple[int, ...]] = []
+
+    def gen(pos: int, prod: int, seq: List[int]) -> None:
         if seq:
-            sequences.append(tuple(seq))
+            exponent_seqs.append(tuple(seq))
         if pos == len(min_primes):
             return
         p = min_primes[pos]
         e = 1
-        pe = p
-        while True:
-            new_prod = prod * pe
-            if new_prod > limit:
-                break
+        p_pow = p
+        while prod * p_pow <= limit:
             seq.append(e)
-            gen(pos + 1, new_prod, seq)
+            gen(pos + 1, prod * p_pow, seq)
             seq.pop()
             e += 1
-            pe *= p
+            p_pow *= p
 
     gen(0, 1, [])
 
-    # Cache counts per exponent sequence (many repeats are unlikely, but cheap)
-    count_cache: dict[tuple[int, ...], int] = {}
+    # Cache for N(n) by multiset of exponents
+    n_cache: dict = {}
 
-    total = 1  # N(1) = 1
-    for exps in sequences:
-        cnt = count_cache.get(exps)
-        if cnt is None:
-            cnt = count_sequence(limit, primes, iter_end, exps)
-            count_cache[exps] = cnt
-        if cnt:
-            total += cnt * N_from_exponents(tuple(sorted(exps)))
+    total = 1  # n=1 -> N(1)=1
+
+    for exps in exponent_seqs:
+        k = len(exps)
+
+        # Tight pruning bound:
+        # At position 'pos', remaining primes are >= current prime, so
+        # p_pos^(sum(exps[pos:])) <= rem is necessary.
+        suffix_sum = [0] * (k + 1)
+        for i in range(k - 1, -1, -1):
+            suffix_sum[i] = suffix_sum[i + 1] + exps[i]
+
+        @lru_cache(maxsize=None)
+        def dfs(pos: int, prev_idx: int, rem: int) -> int:
+            if pos == k:
+                return 1
+            e = exps[pos]
+
+            if pos == k - 1:
+                # last prime: count with π()
+                max_p = _iroot(rem, e)
+                prev_p = primes_iter[prev_idx] if prev_idx >= 0 else 0
+                return lehmer_pi(max_p) - lehmer_pi(prev_p)
+
+            max_p = _iroot(rem, suffix_sum[pos])  # crucial tightening
+            end = upper_idx(max_p)
+            start = prev_idx + 1
+            if start >= end:
+                return 0
+
+            acc = 0
+            for idx in range(start, end):
+                p = primes_iter[idx]
+                if e == 1:
+                    p_pow = p
+                elif e == 2:
+                    p_pow = p * p
+                elif e == 3:
+                    p_pow = p * p * p
+                else:
+                    p_pow = pow(p, e)
+                acc += dfs(pos + 1, idx, rem // p_pow)
+            return acc
+
+        count_numbers = dfs(0, -1, limit)
+        total += count_numbers * _max_antichain_from_exponents(exps, n_cache)
+
     return total
 
 
-def _read_limit() -> int:
-    data = sys.stdin.read().strip().split()
-    if not data:
-        return 10**8
-    return int(data[0])
+def _self_test() -> None:
+    # Problem statement has no numeric test cases; these are small brute-force spot checks.
+    assert solve(1) == 1
+    assert solve(10) == 12
+    assert solve(30) == 44
+    assert solve(100) == 178
+    assert solve(1000) == 2385
 
 
 if __name__ == "__main__":
-    lim = _read_limit()
-    ans = solve(lim)
-    # Sanity check for the original Project Euler target
-    if lim == 10**8:
-        assert ans == 528755790
-    print(ans)
+    _self_test()
+    # Optional input: a different upper bound (same format as other Euler scripts)
+    import sys
+
+    data = sys.stdin.read().strip()
+    n = int(data) if data else 100_000_000
+    print(solve(n))
