@@ -47,7 +47,7 @@ Each solution file should be completely self contained and have no dependencies 
 
 == Status
 
-We've gone all the way up to problem 300.
+We've gone all the way up to problem 350.
 
 Right now this project is simply blocked on cost/efficiency issues, there's nothing fundamentally intelligent missing as far as we know:
 
@@ -627,7 +627,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/350.py[350.py] | 0.192 | gpt-5.2-thinking |  |
 | link:solvers/351.py[351.py] | 0.095 |  |  |
 | link:solvers/352.py[352.py] | 0.658 |  |  |
-| link:solvers/353.py[353.py] |  |  |  | timed out after 600.000s
+| link:solvers/353.py[353.py] | 22.821 |  |  | expected '1.2759860331', got '1.2761219354'
 | link:solvers/354.py[354.py] | 1.617 |  |  |
 | link:solvers/355.py[355.py] | 0.720 |  |  |
 | link:solvers/356.py[356.py] | 0.110 |  |  |
@@ -691,26 +691,26 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/414.py[414.py] | 13.126 |  |  |
 | link:solvers/415.py[415.py] | 100.317 |  |  |
 | link:solvers/416.py[416.py] |  |  |  | solver not found
-| link:solvers/417.py[417.py] |  |  |  | solver not found
+| link:solvers/417.py[417.py] | 11.211 |  |  |
 | link:solvers/418.py[418.py] | 0.058 |  |  | failed (exit 1)
-| link:solvers/419.py[419.py] |  |  |  | solver not found
+| link:solvers/419.py[419.py] | 0.960 |  |  |
 | link:solvers/420.py[420.py] | 0.982 |  |  |
 | link:solvers/421.py[421.py] | 2.073 | gpt-5.2-thinking |  |
 | link:solvers/422.py[422.py] | 0.109 |  |  |
 | link:solvers/423.py[423.py] | 2.134 |  |  |
 | link:solvers/424.py[424.py] | 0.844 | gpt-5.2-thinking |  |
 | link:solvers/425.py[425.py] | 4.366 |  |  |
-| link:solvers/426.py[426.py] | 0.629 | gpt-5.2-thinking |  | expected '31591886008', got '28975830138'
-| link:solvers/427.py[427.py] |  |  |  | solver not found
+| link:solvers/426.py[426.py] | 0.639 | gpt-5.2-thinking |  | expected '31591886008', got '28975830138'
+| link:solvers/427.py[427.py] | 3.178 |  |  |
 | link:solvers/428.py[428.py] |  |  |  | solver not found
 | link:solvers/429.py[429.py] | 1.636 |  |  |
 | link:solvers/430.py[430.py] | 0.108 |  |  |
-| link:solvers/431.py[431.py] |  |  |  | solver not found
-| link:solvers/432.py[432.py] |  |  |  | solver not found
-| link:solvers/433.py[433.py] |  |  |  | solver not found
-| link:solvers/434.py[434.py] |  |  |  | solver not found
+| link:solvers/431.py[431.py] | 0.146 |  |  |
+| link:solvers/432.py[432.py] | 1.240 | gpt-5.2-thinking |  |
+| link:solvers/433.py[433.py] | 0.105 |  |  |
+| link:solvers/434.py[434.py] | 0.739 | gpt-5.2-thinking |  |
 | link:solvers/435.py[435.py] | 0.068 |  |  |
-| link:solvers/436.py[436.py] |  |  |  | solver not found
+| link:solvers/436.py[436.py] | 0.115 |  |  |
 | link:solvers/437.py[437.py] | 6.854 |  |  |
 | link:solvers/438.py[438.py] |  |  |  | solver not found
 | link:solvers/439.py[439.py] |  |  |  | solver not found

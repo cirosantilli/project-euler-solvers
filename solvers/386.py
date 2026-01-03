@@ -3,7 +3,12 @@
 Project Euler 386: Maximum length of an antichain
 https://projecteuler.net/problem=386
 
-No external libraries are used.
+Optimized Python (no external libraries):
+- Uses an odd-only sieve up to 'limit' to get all primes and allow O(log n) pi(x) via bisect.
+- Enumerates feasible exponent sequences and counts how many n<=limit realize each pattern.
+- Computes N(n) as a middle coefficient of Π (1+x+...+x^{a_i}).
+
+If run with no input, uses limit=10^8 and asserts the known Project Euler answer.
 """
 
 from __future__ import annotations
@@ -16,126 +21,11 @@ from array import array
 
 
 # ----------------------------
-# Helpers: primes + pi(x)
-# ----------------------------
-
-def sieve_primes(n: int) -> tuple[list[int], bytearray]:
-    """Return (primes <= n, is_prime bytearray of length n+1)."""
-    is_prime = bytearray(b"\x01") * (n + 1)
-    if n >= 0:
-        is_prime[0:1] = b"\x00"
-    if n >= 1:
-        is_prime[1:2] = b"\x00"
-
-    # clear even numbers > 2
-    for i in range(4, n + 1, 2):
-        is_prime[i] = 0
-
-    limit = int(n ** 0.5)
-    for p in range(3, limit + 1, 2):
-        if is_prime[p]:
-            step = p * 2
-            start = p * p
-            is_prime[start:n + 1:step] = b"\x00" * (((n - start) // step) + 1)
-
-    primes = [2] + [i for i in range(3, n + 1, 2) if is_prime[i]]
-    return primes, is_prime
-
-
-def build_pi_prefix(is_prime: bytearray) -> array:
-    """pi_prefix[x] = number of primes <= x, for all 0<=x<=len(is_prime)-1."""
-    n = len(is_prime) - 1
-    pi = array("I", [0]) * (n + 1)
-    c = 0
-    for i in range(n + 1):
-        if is_prime[i]:
-            c += 1
-        pi[i] = c
-    return pi
-
-
-def iroot(x: int, k: int) -> int:
-    """floor(x ** (1/k)) with safe adjustment."""
-    if x < 2:
-        return x
-    r = int(round(x ** (1.0 / k)))
-    if r < 1:
-        r = 1
-    while (r + 1) ** k <= x:
-        r += 1
-    while r ** k > x:
-        r -= 1
-    return r
-
-
-# Precompute for Lehmer prime counting
-MAXN = 2_000_000
-PRIMES, IS_PRIME = sieve_primes(MAXN)
-PI_PREFIX = build_pi_prefix(IS_PRIME)
-
-# Small wheel for fast phi(x, s)
-WHEEL_M = 6  # primes: 2,3,5,7,11,13
-WHEEL_P = 1
-for i in range(WHEEL_M):
-    WHEEL_P *= PRIMES[i]
-
-# phi_mod[s][r] = phi(r, s) for 0<=r<WHEEL_P and 0<=s<=WHEEL_M
-PHI_MOD = [array("I", [0]) * WHEEL_P for _ in range(WHEEL_M + 1)]
-for r in range(WHEEL_P):
-    PHI_MOD[0][r] = r
-for s in range(1, WHEEL_M + 1):
-    p = PRIMES[s - 1]
-    prev = PHI_MOD[s - 1]
-    cur = PHI_MOD[s]
-    for r in range(WHEEL_P):
-        cur[r] = prev[r] - prev[r // p]
-
-PHI_BLOCK = [PHI_MOD[s][WHEEL_P - 1] for s in range(WHEEL_M + 1)]
-
-
-@lru_cache(maxsize=None)
-def phi(x: int, s: int) -> int:
-    """
-    phi(x, s) = count of integers n <= x that are not divisible by any of the first s primes.
-    """
-    if s == 0:
-        return x
-    if s <= WHEEL_M:
-        return (x // WHEEL_P) * PHI_BLOCK[s] + PHI_MOD[s][x % WHEEL_P]
-    return phi(x, s - 1) - phi(x // PRIMES[s - 1], s - 1)
-
-
-@lru_cache(maxsize=None)
-def prime_pi(x: int) -> int:
-    """Lehmer prime counting: number of primes <= x."""
-    x = int(x)
-    if x < MAXN:
-        return PI_PREFIX[x]
-    if x < 2:
-        return 0
-
-    a = prime_pi(iroot(x, 4))
-    b = prime_pi(int(math.isqrt(x)))
-    c = prime_pi(iroot(x, 3))
-
-    res = phi(x, a) + ((b + a - 2) * (b - a + 1)) // 2
-
-    for i in range(a, b):
-        w = x // PRIMES[i]
-        res -= prime_pi(w)
-        if i < c:
-            lim = prime_pi(int(math.isqrt(w)))
-            for j in range(i, lim):
-                res -= prime_pi(w // PRIMES[j]) - j
-    return res
-
-
-# ----------------------------
-# Antichains for n
+# Problem statement examples
 # ----------------------------
 
 def is_antichain(n: int, subset: list[int]) -> bool:
-    """Return True iff subset is an antichain in S(n) under divisibility."""
+    """True iff subset is an antichain in S(n) under divisibility."""
     for x in subset:
         if x <= 0 or n % x != 0:
             return False
@@ -149,31 +39,89 @@ def is_antichain(n: int, subset: list[int]) -> bool:
     return True
 
 
-# Asserts for the examples given in the problem statement:
+# Examples from the statement:
 assert is_antichain(30, [2, 5, 6]) is False
 assert is_antichain(30, [2, 3, 5]) is True
 
 
 # ----------------------------
-# N(n) from prime exponents
+# Prime sieve up to limit (odd-only)
+# ----------------------------
+
+def sieve_primes_upto(n: int) -> array:
+    """Return array('I') of all primes <= n. (Odd-only bytearray sieve.)"""
+    if n < 2:
+        return array("I")
+    if n == 2:
+        return array("I", [2])
+
+    # Represent odd number (2*i+1) by index i. Size includes n if n is odd.
+    size = (n // 2) + 1
+    sieve = bytearray(b"\x01") * size
+    sieve[0] = 0  # 1 is not prime
+
+    r = int(math.isqrt(n))
+    # i corresponds to p = 2*i+1, so p<=r => i<=r//2
+    max_i = r // 2
+    for i in range(1, max_i + 1):
+        if sieve[i]:
+            p = 2 * i + 1
+            start = (p * p) // 2
+            sieve[start::p] = b"\x00" * (((size - 1 - start) // p) + 1)
+
+    primes = array("I", [2])
+    append = primes.append
+    find = sieve.find
+
+    idx = find(1, 1)
+    while idx != -1:
+        append(2 * idx + 1)
+        idx = find(1, idx + 1)
+
+    return primes
+
+
+# ----------------------------
+# Integer k-th root
+# ----------------------------
+
+def iroot(x: int, k: int) -> int:
+    """floor(x ** (1/k)) with safe adjustment (k>=1)."""
+    if k <= 1 or x < 2:
+        return x
+    if k == 2:
+        return int(math.isqrt(x))
+    # float seed + fix-up
+    r = int(x ** (1.0 / k))
+    if r < 1:
+        r = 1
+    while (r + 1) ** k <= x:
+        r += 1
+    while r ** k > x:
+        r -= 1
+    return r
+
+
+# ----------------------------
+# N(n) from exponent multiset
 # ----------------------------
 
 @lru_cache(maxsize=None)
 def N_from_exponents(exps_sorted: tuple[int, ...]) -> int:
     """
-    For n = Π p_i^{a_i}, N(n) equals the maximum number of divisors on any rank.
-    Because Π (1+x+...+x^{a_i}) is palindromic, the maximum occurs at half the degree:
-        half = floor( (sum a_i) / 2 )
-    Thus N(n) is the coefficient of x^half in that polynomial.
+    For n = Π p_i^{a_i}, N(n) is the maximum size of a rank layer in the divisor poset.
+    Rank is Ω(d)=sum exponents in divisor, and the rank generating polynomial is:
+        Π (1 + x + ... + x^{a_i})
+    This polynomial is palindromic, so the maximum occurs at:
+        half = floor(sum a_i / 2)
+    Therefore N(n) is coefficient of x^half.
     """
-    exps = list(exps_sorted)
+    exps = exps_sorted
     half = sum(exps) // 2
-
-    # dp[t] = coefficient of x^t so far (only keep up to 'half')
     dp = [0] * (half + 1)
     dp[0] = 1
 
-    # Convolution with (1 + x + ... + x^a) using a sliding window prefix sum
+    # Convolution with (1 + x + ... + x^a) via sliding window sum
     for a in exps:
         new = [0] * (half + 1)
         window = 0
@@ -188,50 +136,67 @@ def N_from_exponents(exps_sorted: tuple[int, ...]) -> int:
     return dp[half]
 
 
-def count_sequence(limit: int, exps: tuple[int, ...]) -> int:
+# ----------------------------
+# Count numbers with a fixed exponent pattern
+# ----------------------------
+
+def count_sequence(limit: int, primes: array, iter_end: int, exps: tuple[int, ...]) -> int:
     """
-    Count integers <= limit whose prime factorization has exponents exactly `exps`
-    in increasing-prime order:
-        n = p1^e1 * p2^e2 * ... * pk^ek, with p1 < p2 < ... < pk.
+    Count integers <= limit with factorization:
+        n = p1^e1 * p2^e2 * ... * pk^ek, with p1 < p2 < ... < pk
+    where exps = (e1,...,ek) is in increasing-prime order.
+
+    For k>=2, all non-last recursion levels only iterate primes <= sqrt(limit),
+    so we restrict iteration to primes[0:iter_end].
     """
     k = len(exps)
+    if k == 0:
+        return 1
+
     suffix = [0] * (k + 1)
     for i in range(k - 1, -1, -1):
         suffix[i] = suffix[i + 1] + exps[i]
 
+    bisr = bisect.bisect_right
+
     @lru_cache(maxsize=None)
-    def rec(pos: int, prev_prime: int, rem: int) -> int:
+    def rec(pos: int, prev_idx: int, rem: int) -> int:
+        # prev_idx is index in primes of last chosen prime; -1 means "previous prime = 1"
         if pos == k:
             return 1
 
-        if pos == k - 1:
-            p_max = iroot(rem, exps[pos])
-            if p_max <= prev_prime:
-                return 0
-            # primes in (prev_prime, p_max]
-            return prime_pi(p_max) - prime_pi(prev_prime)
+        e = exps[pos]
 
-        # Strong bound: remaining primes are all >= current prime p,
-        # so product >= p^(sum remaining exponents).
-        sum_rem = suffix[pos]
-        p_max = iroot(rem, sum_rem)
-        if p_max <= prev_prime:
+        if pos == k - 1:
+            p_max = iroot(rem, e)
+            hi = bisr(primes, p_max)
+            start = prev_idx + 1
+            return hi - start if hi > start else 0
+
+        # Strong bound: remaining primes are all >= next prime p,
+        # so remaining product >= p^(sum of remaining exponents).
+        p_max = iroot(rem, suffix[pos])
+        end = bisr(primes, p_max, 0, iter_end)
+        start = prev_idx + 1
+        if start >= end:
             return 0
 
-        start = bisect.bisect_right(PRIMES, prev_prime)
-        end = bisect.bisect_right(PRIMES, p_max)
         total = 0
-        e = exps[pos]
+        # Iterate candidate primes for this position (all are within primes[:iter_end])
         for idx in range(start, end):
-            p = PRIMES[idx]
-            p_pow = p ** e
+            p = primes[idx]
+            p_pow = p if e == 1 else pow(p, e)
             if p_pow > rem:
                 break
-            total += rec(pos + 1, p, rem // p_pow)
+            total += rec(pos + 1, idx, rem // p_pow)
         return total
 
-    return rec(0, 1, limit)
+    return rec(0, -1, limit)
 
+
+# ----------------------------
+# Main solve
+# ----------------------------
 
 def solve(limit: int = 10**8) -> int:
     """
@@ -240,12 +205,16 @@ def solve(limit: int = 10**8) -> int:
     if limit < 1:
         return 0
 
-    # For limit <= 1e8 we always have at most 8 distinct prime factors
-    # (since 2*3*5*7*11*13*17*19 < 1e8 but multiplying by 23 exceeds it).
+    primes = sieve_primes_upto(limit)
+    # For k>=2 recursion levels, primes never exceed sqrt(limit)
+    iter_end = bisect.bisect_right(primes, int(math.isqrt(limit)))
+
+    # Bound on number of distinct prime factors for limit<=1e8 is 8 (2*...*19 < 1e8; *23 > 1e8)
     min_primes = [2, 3, 5, 7, 11, 13, 17, 19]
 
     sequences: list[tuple[int, ...]] = []
 
+    # Enumerate feasible exponent sequences using minimal consecutive primes for pruning
     def gen(pos: int, prod: int, seq: list[int]) -> None:
         if seq:
             sequences.append(tuple(seq))
@@ -253,20 +222,28 @@ def solve(limit: int = 10**8) -> int:
             return
         p = min_primes[pos]
         e = 1
+        pe = p
         while True:
-            new_prod = prod * (p ** e)
+            new_prod = prod * pe
             if new_prod > limit:
                 break
             seq.append(e)
             gen(pos + 1, new_prod, seq)
             seq.pop()
             e += 1
+            pe *= p
 
     gen(0, 1, [])
 
+    # Cache counts per exponent sequence (many repeats are unlikely, but cheap)
+    count_cache: dict[tuple[int, ...], int] = {}
+
     total = 1  # N(1) = 1
     for exps in sequences:
-        cnt = count_sequence(limit, exps)
+        cnt = count_cache.get(exps)
+        if cnt is None:
+            cnt = count_sequence(limit, primes, iter_end, exps)
+            count_cache[exps] = cnt
         if cnt:
             total += cnt * N_from_exponents(tuple(sorted(exps)))
     return total
@@ -282,7 +259,7 @@ def _read_limit() -> int:
 if __name__ == "__main__":
     lim = _read_limit()
     ans = solve(lim)
-    # (Optional sanity check for the original problem)
+    # Sanity check for the original Project Euler target
     if lim == 10**8:
         assert ans == 528755790
     print(ans)
