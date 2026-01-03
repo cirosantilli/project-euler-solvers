@@ -1,231 +1,262 @@
-#!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0324.cpp'''
-MODULO = 100000007
+#!/usr/bin/env python3
+"""Project Euler 324: Building a Tower
 
-UP = 'U'
-DOWN = 'D'
-HORIZONTAL = '-'
-VERTICAL = '|'
-EMPTY = ' '
+Let f(n) be the number of ways to fill a 3×3×n tower with 2×1×1 blocks.
+Blocks may be rotated arbitrarily; symmetries of the *tower* are counted as
+*distinct*.
 
-NUM_BORDERS = 1 << 9
+We need:
+    f(10^10000) mod 100000007
 
-layers = set()
-borders = [[0 for _ in range(NUM_BORDERS)] for _ in range(NUM_BORDERS)]
+Solution strategy
+-----------------
+1) Profile DP over slices of thickness 1 along the tower axis.
+   Each slice has 9 cells, so the "boundary" state is a 9-bit mask describing
+   which cells in the current slice are already occupied by dominoes that
+   started in the previous slice (i.e., oriented along the axis).
 
+   For each input mask (0..511), we recursively enumerate all ways to fill the
+   remaining cells using:
+     - dominoes inside the slice (x/y directions), or
+     - dominoes pointing forward (z direction), which set bits in the *next*
+       slice's mask.
 
-def create_layers(current):
-    pos = None
-    for i, value in enumerate(current):
-        if value == EMPTY:
-            pos = i
-            break
-    if pos is None:
-        layers.add(tuple(current))
-        return
+   This yields a transition list mask -> [(next_mask, count), ...].
 
-    layer_up = current[:]
-    layer_up[pos] = UP
-    create_layers(layer_up)
+2) Only even n are tileable (3×3×n has 9n cells; must be even), so we define:
+       a(m) = f(2m)
+   We generate a moderate number of initial a(m) values modulo MOD via the DP.
 
-    layer_down = current[:]
-    layer_down[pos] = DOWN
-    create_layers(layer_down)
+3) Berlekamp–Massey over the prime field MOD finds the shortest linear
+   recurrence for a(m) modulo MOD.
 
-    if pos % 3 != 2 and current[pos + 1] == EMPTY:
-        layer_h = current[:]
-        layer_h[pos] = HORIZONTAL
-        layer_h[pos + 1] = HORIZONTAL
-        create_layers(layer_h)
+4) Kitamasa (polynomial exponentiation) evaluates the recurrence at
+   m = (10^10000)/2 = 5·10^9999 in O(k^2 log m) time (k = recurrence order).
 
-    if pos < 6 and current[pos + 3] == EMPTY:
-        layer_v = current[:]
-        layer_v[pos] = VERTICAL
-        layer_v[pos + 3] = VERTICAL
-        create_layers(layer_v)
+The code also asserts the example values from the problem statement.
+"""
 
+from __future__ import annotations
 
-def add_borders(layer):
-    top = 0
-    bottom = 0
-    for i, value in enumerate(layer):
-        if value == UP:
-            top |= 1 << i
-        if value == DOWN:
-            bottom |= 1 << i
-    borders[bottom][top] += 1
+from collections import defaultdict
+from typing import DefaultDict, Dict, List, Sequence, Tuple
+
+MOD = 100000007
+FULL = (1 << 9) - 1  # 9 bits for a 3x3 slice
+BIT_TO_INDEX = {1 << i: i for i in range(9)}
 
 
-def brute_force(mask_bottom, mask_top, height, cache):
-    if height == 0:
-        return 0
-    if height == 1:
-        return borders[mask_bottom][mask_top]
+def build_transitions() -> List[List[Tuple[int, int]]]:
+    """Build transitions for all 512 masks.
 
-    key = (mask_bottom, mask_top, height)
-    if key in cache:
-        return cache[key]
+    For each mask (occupied cells in current slice), enumerate all completions
+    of the slice with dominoes, returning counts for resulting next_mask.
+    """
 
-    power_of_two = 1
-    while power_of_two * 2 < height:
-        power_of_two *= 2
+    def transitions_for_mask(mask: int) -> List[Tuple[int, int]]:
+        out: DefaultDict[int, int] = defaultdict(int)
 
-    height_top = power_of_two
-    height_bottom = height - height_top
+        def dfs(occ: int, next_mask: int) -> None:
+            if occ == FULL:
+                out[next_mask] += 1
+                return
 
-    result = 0
-    for middle in range(NUM_BORDERS):
-        result += brute_force(mask_bottom, middle, height_bottom, cache) * brute_force(
-            middle, mask_top, height_top, cache
-        )
-        result %= MODULO
+            empty = FULL ^ occ
+            lowbit = empty & -empty
+            i = BIT_TO_INDEX[lowbit]
+            bit = lowbit
 
-    cache[key] = result
-    return result
+            # Place a domino forward (along the tower axis): occupy this cell now
+            # and the same cell in the next slice.
+            dfs(occ | bit, next_mask | bit)
 
+            # Place a domino to the right (within slice)
+            if i % 3 != 2:
+                bitx = bit << 1
+                if not (occ & bitx):
+                    dfs(occ | bit | bitx, next_mask)
 
-class Matrix:
-    def __init__(self, size=1):
-        self.size_ = size
-        self.data = [[0 for _ in range(size)] for _ in range(size)]
+            # Place a domino downward (within slice)
+            if i < 6:
+                bity = bit << 3
+                if not (occ & bity):
+                    dfs(occ | bit | bity, next_mask)
 
-    def size(self):
-        return self.size_
+        dfs(mask, 0)
+        return list(out.items())
 
-    def get(self, column, row):
-        return self.data[column][row]
-
-    def set(self, column, row, value):
-        self.data[column][row] = value
-
-    def multiply_symmetric(self, other, modulo):
-        size = self.size_
-        result = Matrix(size)
-        for i in range(size):
-            for j in range(size):
-                if other.get(i, j) == 0:
-                    continue
-                for k in range(i, size):
-                    result.data[i][k] += self.data[j][k] * other.data[i][j]
-
-        for i in range(size):
-            result.data[i][i] %= modulo
-            for j in range(i + 1, size):
-                value = result.data[i][j] % modulo
-                result.data[i][j] = value
-                result.data[j][i] = value
-
-        return result
-
-    def powmod(self, exponent, modulo):
-        if exponent == 1:
-            return self
-
-        size = self.size_
-        result = Matrix(size)
-        for i in range(size):
-            result.data[i][i] = 1
-        is_identity = True
-
-        base = self
-        while exponent > 0:
-            if exponent & 1:
-                if is_identity:
-                    result = base
-                    is_identity = False
-                else:
-                    result = result.multiply_symmetric(base, modulo)
-
-            if exponent > 1:
-                base = base.multiply_symmetric(base, modulo)
-
-            exponent >>= 1
-
-        return result
+    return [transitions_for_mask(m) for m in range(1 << 9)]
 
 
-def remove_unreachable(matrix):
-    reachable = set()
-    todo = {0}
-    while todo:
-        current = todo.pop()
-        reachable.add(current)
-        for i in range(matrix.size()):
-            if matrix.get(current, i) > 0 and i not in reachable:
-                todo.add(i)
+def compute_a_terms(num_terms: int, trans: List[List[Tuple[int, int]]]) -> List[int]:
+    """Compute a(m) = f(2m) for m=0..num_terms-1 (mod MOD) using the slice DP."""
 
-    matrix_size = len(reachable)
-    if matrix_size == matrix.size():
-        return matrix
+    if num_terms <= 0:
+        return []
 
-    smaller = Matrix(matrix_size)
-    x = 0
-    for i in range(NUM_BORDERS):
-        if i not in reachable:
-            continue
-        y = 0
-        for j in range(NUM_BORDERS):
-            if j not in reachable:
+    max_slices = 2 * (num_terms - 1)
+    dp = [0] * (1 << 9)
+    dp[0] = 1
+
+    a = [1]  # a(0) = f(0) = 1
+
+    for n in range(1, max_slices + 1):
+        nxt = [0] * (1 << 9)
+        for mask, val in enumerate(dp):
+            if not val:
                 continue
-            smaller.data[x][y] = matrix.get(i, j)
-            y += 1
-        x += 1
+            for next_mask, count in trans[mask]:
+                nxt[next_mask] = (nxt[next_mask] + val * count) % MOD
+        dp = nxt
+        if n % 2 == 0:
+            a.append(dp[0])
 
-    return smaller
-
-
-def build_base_matrix():
-    global layers, borders
-    layers = set()
-    borders = [[0 for _ in range(NUM_BORDERS)] for _ in range(NUM_BORDERS)]
-
-    empty_layer = [EMPTY] * 9
-    create_layers(empty_layer)
-
-    for layer in layers:
-        add_borders(layer)
-
-    matrix = Matrix(NUM_BORDERS)
-    for i in range(NUM_BORDERS):
-        for j in range(NUM_BORDERS):
-            matrix.data[i][j] = borders[i][j]
-
-    return remove_unreachable(matrix)
+    return a
 
 
-def solve(n):
-    matrix = build_base_matrix()
-    matrix = matrix.powmod(n, MODULO)
-    return matrix.get(0, 0)
+def modinv(x: int, mod: int = MOD) -> int:
+    # MOD is prime, so x^(MOD-2) is the inverse.
+    return pow(x, mod - 2, mod)
 
 
-def solve_power10(power):
-    matrix = build_base_matrix()
-    matrix = matrix.powmod(10, MODULO)
-    matrix = remove_unreachable(matrix)
+def berlekamp_massey(seq: Sequence[int], mod: int = MOD) -> List[int]:
+    """Berlekamp–Massey over a prime modulus.
 
-    remaining = power - 1
-    at_once = 19
-    while remaining > 0:
-        power10 = 1
-        i = 1
-        while i < at_once and remaining > 0:
-            power10 *= 10
-            remaining -= 1
-            i += 1
+    Returns recurrence coefficients rec of length L such that for all n >= L:
+        seq[n] = sum_{i=1..L} rec[i-1] * seq[n-i]  (mod mod)
+    """
 
-        matrix = matrix.powmod(power10, MODULO)
+    C = [1]
+    B = [1]
+    L = 0
+    m = 1
+    b = 1
 
-    return matrix.get(0, 0)
+    for n in range(len(seq)):
+        # discrepancy d = sum_{i=0..L} C[i] * seq[n-i]
+        d = 0
+        for i in range(L + 1):
+            d = (d + C[i] * seq[n - i]) % mod
+
+        if d == 0:
+            m += 1
+            continue
+
+        T = C.copy()
+        coef = d * modinv(b, mod) % mod
+
+        needed = len(B) + m
+        if len(C) < needed:
+            C += [0] * (needed - len(C))
+
+        for i in range(len(B)):
+            C[i + m] = (C[i + m] - coef * B[i]) % mod
+
+        if 2 * L <= n:
+            L = n + 1 - L
+            B = T
+            b = d
+            m = 1
+        else:
+            m += 1
+
+    # Convert connection polynomial to forward recurrence coefficients
+    return [(-C[i]) % mod for i in range(1, L + 1)]
 
 
-def main():
-    assert solve(2) == 229
-    assert solve(4) == 117805
-    assert solve(10) % MODULO == 96149360
-    assert solve_power10(3) == 24806056
-    assert solve_power10(6) == 30808124
-    print(solve_power10(10000))
+def kitamasa_nth(init: Sequence[int], rec: Sequence[int], n: int, mod: int = MOD) -> int:
+    """Compute the n-th term of a linear recurrence in O(k^2 log n).
+
+    rec length k defines:
+        a(t) = rec[0]*a(t-1) + ... + rec[k-1]*a(t-k)
+    init must contain at least k initial terms a(0..k-1).
+    """
+
+    k = len(rec)
+    if n < k:
+        return init[n] % mod
+
+    def mul(p: List[int], q: List[int]) -> List[int]:
+        # Multiply polynomials p and q (both degree<k), then reduce using
+        # x^k = rec[0]x^(k-1)+...+rec[k-1].
+        tmp = [0] * (2 * k - 1)
+        for i in range(k):
+            pi = p[i]
+            if not pi:
+                continue
+            for j in range(k):
+                qj = q[j]
+                if qj:
+                    tmp[i + j] = (tmp[i + j] + pi * qj) % mod
+
+        for d in range(2 * k - 2, k - 1, -1):
+            val = tmp[d]
+            if not val:
+                continue
+            # x^d = val * x^(d-k) * x^k
+            #     = val * sum_{i=1..k} rec[i-1] * x^(d-i)
+            for i in range(1, k + 1):
+                tmp[d - i] = (tmp[d - i] + val * rec[i - 1]) % mod
+
+        return tmp[:k]
+
+    # Exponentiate the polynomial x (mod characteristic) to power n.
+    res = [1] + [0] * (k - 1)  # x^0
+    if k == 1:
+        base = [rec[0] % mod]  # x ≡ rec[0]
+    else:
+        base = [0] * k
+        base[1] = 1  # x
+
+    e = n
+    while e:
+        if e & 1:
+            res = mul(res, base)
+        e >>= 1
+        if e:
+            base = mul(base, base)
+
+    ans = 0
+    for coeff, v in zip(res, init[:k]):
+        ans = (ans + coeff * v) % mod
+    return ans
+
+
+def f_mod(n: int, init: Sequence[int], rec: Sequence[int]) -> int:
+    """Compute f(n) mod MOD."""
+
+    if n & 1:
+        return 0
+    return kitamasa_nth(init, rec, n // 2, MOD)
+
+
+def main() -> None:
+    trans = build_transitions()
+
+    # Generate enough even terms a(m)=f(2m) to infer a short recurrence.
+    a_terms = compute_a_terms(120, trans)
+    rec = berlekamp_massey(a_terms, MOD)
+    k = len(rec)
+    init = a_terms[:k]
+
+    # Sanity-check the inferred recurrence against the computed prefix.
+    for i in range(k, len(a_terms)):
+        pred = 0
+        for j, c in enumerate(rec, start=1):
+            pred = (pred + c * a_terms[i - j]) % MOD
+        assert pred == a_terms[i]
+
+    # Asserts from the problem statement (q = 100000007)
+    assert f_mod(2, init, rec) == 229
+    assert f_mod(4, init, rec) == 117805
+    assert f_mod(10, init, rec) == 96149360
+    assert f_mod(10**3, init, rec) == 24806056
+    assert f_mod(10**6, init, rec) == 30808124
+
+    # Target: f(10^10000) mod 100000007.
+    # Only even n are tileable, so f(10^10000) = a((10^10000)/2) = a(5*10^9999).
+    index = 5 * (10 ** 9999)
+    print(kitamasa_nth(init, rec, index, MOD))
 
 
 if __name__ == "__main__":

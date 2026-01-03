@@ -135,7 +135,7 @@ TODO: output_tokens not showing up correctly in the JSON.
 This is a decent prompt template:
 
 ----
-Solve project euler 245 in file main.py. Add asserts to any test values given in the problem statement. Also produce a markdown summary of the main techniques used as README.md. Provide download links for both files.
+Solve project euler 245 in file main.py. Don't use any external libraries. Add asserts to any test values given in the problem statement. Also produce a markdown summary of the main techniques used as README.md. Provide the two files both inline here and with download links.
 ----
 
 If you are running a few of those you can more easily
@@ -588,7 +588,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/311.py[311.py] | 0.293 |  |  |
 | link:solvers/312.py[312.py] | 0.409 |  |  |
 | link:solvers/313.py[313.py] | 0.071 |  |  |
-| link:solvers/314.py[314.py] |  |  |  | solver not found
+| link:solvers/314.py[314.py] | 1.835 |  |  |
 | link:solvers/315.py[315.py] | 0.244 |  |  |
 | link:solvers/316.py[316.py] | 11.613 |  |  |
 | link:solvers/317.py[317.py] | 0.057 |  |  |
@@ -596,24 +596,24 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/319.py[319.py] | 0.715 |  |  |
 | link:solvers/320.py[320.py] | 28.163 |  |  |
 | link:solvers/321.py[321.py] | 0.060 |  |  |
-| link:solvers/322.py[322.py] |  |  |  | solver not found
+| link:solvers/322.py[322.py] | 0.118 |  |  |
 | link:solvers/323.py[323.py] | 0.055 |  |  |
-| link:solvers/324.py[324.py] |  |  |  | timed out after 60.000s
-| link:solvers/325.py[325.py] |  |  |  | solver not found
-| link:solvers/326.py[326.py] |  |  |  | solver not found
+| link:solvers/324.py[324.py] | 0.381 |  |  |
+| link:solvers/325.py[325.py] | 0.137 |  |  |
+| link:solvers/326.py[326.py] | 0.682 |  |  |
 | link:solvers/327.py[327.py] | 0.077 |  |  |
-| link:solvers/328.py[328.py] |  |  |  | solver not found
+| link:solvers/328.py[328.py] | 0.208 |  |  |
 | link:solvers/329.py[329.py] | 0.098 |  |  |
-| link:solvers/330.py[330.py] |  |  |  | solver not found
-| link:solvers/331.py[331.py] |  |  |  | solver not found
-| link:solvers/332.py[332.py] |  |  |  | solver not found
+| link:solvers/330.py[330.py] | 0.103 |  |  |
+| link:solvers/331.py[331.py] | 0.112 |  |  |
+| link:solvers/332.py[332.py] | 0.406 |  |  |
 | link:solvers/333.py[333.py] | 2.909 |  |  |
-| link:solvers/334.py[334.py] |  |  |  | solver not found
+| link:solvers/334.py[334.py] | 0.640 |  |  |
 | link:solvers/335.py[335.py] | 0.072 |  |  |
 | link:solvers/336.py[336.py] | 0.252 |  |  |
-| link:solvers/337.py[337.py] |  |  |  | solver not found
+| link:solvers/337.py[337.py] | 11.549 |  |  |
 | link:solvers/338.py[338.py] |  |  |  | solver not found
-| link:solvers/339.py[339.py] |  |  |  | solver not found
+| link:solvers/339.py[339.py] | 0.113 |  |  |
 | link:solvers/340.py[340.py] | 0.062 |  |  |
 | link:solvers/341.py[341.py] | 0.702 |  |  |
 | link:solvers/342.py[342.py] |  |  |  | solver not found
