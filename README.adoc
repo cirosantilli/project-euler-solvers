@@ -1,4 +1,4 @@
-.py= Project Euler Solvers
+= Project Euler Solvers
 :docinfo:
 :idprefix:
 :idseparator: -
@@ -11,6 +11,8 @@
 :toc-title:
 
 This repo aims to solve ALL https://projecteuler.net[Project Euler] problems in openly licensed Python code, mostly using LLMs to generate the bulk of the solutions.
+
+Status: **ALL SOLVED UP TO 350**.
 
 Tested on Python 3.13.7, PyPy 7.3.20, Ubuntu 25.10.
 
@@ -46,8 +48,6 @@ We are focusing on Python solutions at first because this is the language that L
 Each solution file should be completely self contained and have no dependencies outside of the Python standard library.
 
 == Status
-
-We've gone all the way up to problem 350.
 
 Right now this project is simply blocked on cost/efficiency issues, there's nothing fundamentally intelligent missing as far as we know:
 
