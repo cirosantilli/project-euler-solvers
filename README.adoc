@@ -616,7 +616,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/339.py[339.py] | 0.113 |  |  |
 | link:solvers/340.py[340.py] | 0.062 |  |  |
 | link:solvers/341.py[341.py] | 0.702 |  |  |
-| link:solvers/342.py[342.py] |  |  |  | solver not found
+| link:solvers/342.py[342.py] | 11.835 |  |  |
 | link:solvers/343.py[343.py] | 27.787 |  |  |
 | link:solvers/344.py[344.py] |  |  |  | solver not found
 | link:solvers/345.py[345.py] | 0.095 |  |  |
@@ -624,33 +624,33 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/347.py[347.py] | 0.199 |  |  |
 | link:solvers/348.py[348.py] | 59.633 |  |  |
 | link:solvers/349.py[349.py] | 0.057 |  |  |
-| link:solvers/350.py[350.py] |  |  |  | solver not found
+| link:solvers/350.py[350.py] | 0.192 | gpt-5.2-thinking |  |
 | link:solvers/351.py[351.py] | 0.095 |  |  |
-| link:solvers/352.py[352.py] |  |  |  | solver not found
+| link:solvers/352.py[352.py] | 0.658 |  |  |
 | link:solvers/353.py[353.py] |  |  |  | solver not found
-| link:solvers/354.py[354.py] |  |  |  | solver not found
-| link:solvers/355.py[355.py] |  |  |  | solver not found
-| link:solvers/356.py[356.py] |  |  |  | solver not found
+| link:solvers/354.py[354.py] | 1.617 |  |  |
+| link:solvers/355.py[355.py] | 0.720 |  |  |
+| link:solvers/356.py[356.py] | 0.110 |  |  |
 | link:solvers/357.py[357.py] | 5.254 |  |  |
 | link:solvers/358.py[358.py] | 13.951 |  |  |
 | link:solvers/359.py[359.py] | 0.055 |  |  |
-| link:solvers/360.py[360.py] |  |  |  | solver not found
+| link:solvers/360.py[360.py] | 0.112 |  |  |
 | link:solvers/361.py[361.py] |  |  |  | solver not found
-| link:solvers/362.py[362.py] |  |  |  | solver not found
+| link:solvers/362.py[362.py] | 2.600 |  |  |
 | link:solvers/363.py[363.py] | 0.131 |  |  |
-| link:solvers/364.py[364.py] |  |  |  | solver not found
-| link:solvers/365.py[365.py] |  |  |  | solver not found
-| link:solvers/366.py[366.py] |  |  |  | solver not found
-| link:solvers/367.py[367.py] |  |  |  | solver not found
-| link:solvers/368.py[368.py] |  |  |  | solver not found
-| link:solvers/369.py[369.py] |  |  |  | solver not found
-| link:solvers/370.py[370.py] |  |  |  | solver not found
+| link:solvers/364.py[364.py] | 0.169 |  |  |
+| link:solvers/365.py[365.py] | 0.420 |  |  |
+| link:solvers/366.py[366.py] | 0.106 |  |  |
+| link:solvers/367.py[367.py] | 0.276 | gpt-5.2-thinking |  |
+| link:solvers/368.py[368.py] | 0.691 | gpt-5.2-thinking |  |
+| link:solvers/369.py[369.py] | 0.127 |  |  |
+| link:solvers/370.py[370.py] | 0.133 |  |  |
 | link:solvers/371.py[371.py] | 0.053 |  |  |
-| link:solvers/372.py[372.py] |  |  |  | solver not found
+| link:solvers/372.py[372.py] | 1.705 |  |  |
 | link:solvers/373.py[373.py] |  |  |  | solver not found
 | link:solvers/374.py[374.py] |  |  |  | solver not found
 | link:solvers/375.py[375.py] |  |  |  | timed out after 60.000s
-| link:solvers/376.py[376.py] |  |  |  | solver not found
+| link:solvers/376.py[376.py] | 4.841 |  |  |
 | link:solvers/377.py[377.py] |  |  |  | solver not found
 | link:solvers/378.py[378.py] |  |  |  | solver not found
 | link:solvers/379.py[379.py] |  |  |  | solver not found
@@ -659,7 +659,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/382.py[382.py] |  |  |  | solver not found
 | link:solvers/383.py[383.py] |  |  |  | solver not found
 | link:solvers/384.py[384.py] |  |  |  | solver not found
-| link:solvers/385.py[385.py] |  |  |  | solver not found
+| link:solvers/385.py[385.py] | 0.134 |  |  |
 | link:solvers/386.py[386.py] | 30.177 |  |  | expected '528755790', got '535374875'
 | link:solvers/387.py[387.py] | 0.122 |  |  |
 | link:solvers/388.py[388.py] |  |  |  | solver not found
@@ -673,7 +673,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/396.py[396.py] |  |  |  | solver not found
 | link:solvers/397.py[397.py] |  |  |  | solver not found
 | link:solvers/398.py[398.py] |  |  |  | solver not found
-| link:solvers/399.py[399.py] |  |  |  | solver not found
+| link:solvers/399.py[399.py] | 4.903 |  |  |
 | link:solvers/400.py[400.py] | 0.342 |  |  |
 | link:solvers/401.py[401.py] | 2.009 |  |  |
 | link:solvers/402.py[402.py] | 0.127 |  |  |
