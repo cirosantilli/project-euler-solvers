@@ -1,7 +1,4 @@
-from __future__ import annotations
-
-from typing import Tuple
-
+#!/usr/bin/env python
 
 def sum_even_fibonacci(limit: int) -> int:
     """
@@ -17,13 +14,5 @@ def sum_even_fibonacci(limit: int) -> int:
     return total
 
 
-def main() -> None:
-    # Known Project Euler #2 result for limit = 4_000_000
-    assert sum_even_fibonacci(4_000_000) == 4_613_732
-
-    result = sum_even_fibonacci(4_000_000)
-    print(result)
-
-
 if __name__ == "__main__":
-    main()
+    print(sum_even_fibonacci(4_000_000))

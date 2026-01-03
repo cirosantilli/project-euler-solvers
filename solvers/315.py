@@ -1,428 +1,235 @@
-#!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00315%20-%20Digital%20Root%20Clocks.py'''
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
+"""Project Euler 315: Digital Root Clocks.
+
+We compare two 7-segment display strategies while repeatedly summing digits
+until a single digit (digital root process):
+
+- Sam: Shows each intermediate value, then turns the entire panel off before
+  showing the next value.
+- Max: Keeps segments on when possible, only toggling segments that differ
+  between consecutive displayed values.
+
+Task
+----
+Feed both clocks all prime numbers p with 10^7 <= p <= 2*10^7 and compute:
+
+    (total transitions used by Sam) - (total transitions used by Max)
+
+A "transition" is turning one segment on or off.
+
+This program prints the required difference.
 """
-Created on Wed Jun  2 17:02:54 2021
 
-@author: igorvanloo
-"""
+from __future__ import annotations
 
-'''
-Project Euler Problem 315
-
-Sam and Max are asked to transform two digital clocks into two "digital root" clocks.
-A digital root clock is a digital clock that calculates digital roots step by step.
-
-When a clock is fed a number, it will show it and then it will start the calculation, showing all the intermediate values 
-until it gets to the result.
-For example, if the clock is fed the number 137, it will show: "137" → "11" → "2" and then it will go black, waiting for 
-the next number.
-
-Every digital number consists of some light segments: three horizontal (top, middle, bottom) and four vertical 
-(top-left, top-right, bottom-left, bottom-right).
-Number "1" is made of vertical top-right and bottom-right, number "4" is made by middle horizontal and vertical 
-top-left, top-right and bottom-right. Number "8" lights them all.
-
-The clocks consume energy only when segments are turned on/off.
-To turn on a "2" will cost 5 transitions, while a "7" will cost only 4 transitions.
-
-Sam and Max built two different clocks.
-
-Sam's clock is fed e.g. number 137: the clock shows "137", then the panel is turned off, then the next number ("11") 
-is turned on, then the panel is turned off again and finally the last number ("2") is turned on and, after some time, off.
-For the example, with number 137, Sam's clock requires:
-
-"137"	:	(2 + 5 + 4) × 2 = 22 transitions ("137" on/off).
-"11"	:	(2 + 2) × 2 = 8 transitions ("11" on/off).
-"2"	:	(5) × 2 = 10 transitions ("2" on/off).
-For a grand total of 40 transitions.
-Max's clock works differently. Instead of turning off the whole panel, it is smart enough to turn off only those segments 
-that won't be needed for the next number.
-For number 137, Max's clock requires:
-
-"137"
-
-:
-
-2 + 5 + 4 = 11 transitions ("137" on)
-7 transitions (to turn off the segments that are not needed for number "11").
-"11"
-
-
-:
-
-
-0 transitions (number "11" is already turned on correctly)
-3 transitions (to turn off the first "1" and the bottom part of the second "1";
-the top part is common with number "2").
-"2"
-
-:
-
-4 transitions (to turn on the remaining segments in order to get a "2")
-5 transitions (to turn off number "2").
-For a grand total of 30 transitions.
-Of course, Max's clock consumes less power than Sam's one.
-The two clocks are fed all the prime numbers between A = 107 and B = 2×107.
-Find the difference between the total number of transitions needed by Sam's clock and that needed by Max's one.
-
-Anwser:
-    13625242
-    
-'''
-
+import argparse
 import math
-
-def list_primality(n):
-    result = [True] * (n + 1)
-    result[0] = result[1] = False
-    for i in range(2, int(n**0.5) + 1):
-        if result[i]:
-            step = i
-            start = i * i
-            result[start : n + 1 : step] = [False] * (((n - start) // step) + 1)
-    return result
-
-def list_primes(n):
-    return [i for i, isprime in enumerate(list_primality(n)) if isprime]
-
-def sum_digits(x):
-    totalsum = 0
-    while x != 0:
-        totalsum += x % 10
-        x = x // 10
-    return totalsum
-
-def LinesNeededSam(number):
-    if number == 0:
-        return 6
-    elif number == 1:
-        return 2
-    elif number == 2:
-        return 5
-    elif number == 3:
-        return 5
-    elif number == 4:
-        return 4
-    elif number == 5:
-        return 5
-    elif number == 6:
-        return 6
-    elif number == 7:
-        return 4
-    elif number == 8:
-        return 7
-    elif number == 9:
-        return 6
-    
-def SamClock(startnumber):
-    curr = startnumber
-    linesum = 0
-    while curr >= 10:
-        curr = str(curr)
-        currlinesum = 0
-        for x in curr:
-            currlinesum += LinesNeededSam(int(x))
-        currlinesum *= 2
-        linesum += currlinesum
-        curr = sum_digits(int(curr))
-    linesum += 2*LinesNeededSam(curr)
-    return linesum
-
-def LinesNeededMax(start, end):
-    
-    start = int(start)
-    
-    try:
-        end = int(end)
-    except ValueError:
-        pass
-    
-    #print("test", start, end)
-    
-    if start == 0:
-        if end == 0:
-            return 0
-        elif end == 1:
-            return 4
-        elif end == 2:
-            return 3
-        elif end == 3:
-            return 3
-        elif end == 4:
-            return 4
-        elif end == 5:
-            return 3
-        elif end == 6:
-            return 2
-        elif end == 7:
-            return 2
-        elif end == 8:
-            return 1
-        elif end == 9:
-            return 2
-        elif end == "o":
-            return 6
-        
-    elif start == 1:
-        if end == 0:
-            return 4
-        elif end == 1:
-            return 0
-        elif end == 2:
-            return 5
-        elif end == 3:
-            return 3
-        elif end == 4:
-            return 2
-        elif end == 5:
-            return 5
-        elif end == 6:
-            return 6
-        elif end == 7:
-            return 2
-        elif end == 8:
-            return 5
-        elif end == 9:
-            return 4
-        elif end == "o":
-            return 2 
-    
-    elif start == 2:
-        if end == 0:
-            return 3
-        elif end == 1:
-            return 5
-        elif end == 2:
-            return 0
-        elif end == 3:
-            return 2
-        elif end == 4:
-            return 5
-        elif end == 5:
-            return 4
-        elif end == 6:
-            return 3
-        elif end == 7:
-            return 5
-        elif end == 8:
-            return 2
-        elif end == 9:
-            return 3
-        elif end == "o":
-            return 5
-    
-    elif start == 3:
-        if end == 0:
-            return 3
-        elif end == 1:
-            return 3
-        elif end == 2:
-            return 2
-        elif end == 3:
-            return 0
-        elif end == 4:
-            return 3
-        elif end == 5:
-            return 2
-        elif end == 6:
-            return 3
-        elif end == 7:
-            return 3
-        elif end == 8:
-            return 2
-        elif end == 9:
-            return 1
-        elif end == "o":
-            return 5
-        
-    elif start == 4:
-        if end == 0:
-            return 4
-        elif end == 1:
-            return 2
-        elif end == 2:
-            return 5
-        elif end == 3:
-            return 3
-        elif end == 4:
-            return 0
-        elif end == 5:
-            return 3
-        elif end == 6:
-            return 4
-        elif end == 7:
-            return 2
-        elif end == 8:
-            return 3
-        elif end == 9:
-            return 2
-        elif end == "o":
-            return 4
-        
-    elif start == 5:
-        if end == 0:
-            return 3
-        elif end == 1:
-            return 5
-        elif end == 2:
-            return 4
-        elif end == 3:
-            return 2
-        elif end == 4:
-            return 3
-        elif end == 5:
-            return 0
-        elif end == 6:
-            return 1
-        elif end == 7:
-            return 3
-        elif end == 8:
-            return 2
-        elif end == 9:
-            return 1
-        elif end == "o":
-            return 5
-        
-    elif start == 6:
-        if end == 0:
-            return 2
-        elif end == 1:
-            return 6
-        elif end == 2:
-            return 3
-        elif end == 3:
-            return 3
-        elif end == 4:
-            return 4
-        elif end == 5:
-            return 1
-        elif end == 6:
-            return 0
-        elif end == 7:
-            return 4
-        elif end == 8:
-            return 1
-        elif end == 9:
-            return 2
-        elif end == "o":
-            return 6
-        
-    elif start == 7:
-        if end == 0:
-            return 2
-        elif end == 1:
-            return 2
-        elif end == 2:
-            return 5
-        elif end == 3:
-            return 3
-        elif end == 4:
-            return 2
-        elif end == 5:
-            return 3
-        elif end == 6:
-            return 4
-        elif end == 7:
-            return 0
-        elif end == 8:
-            return 3
-        elif end == 9:
-            return 2
-        elif end == "o":
-            return 4
-        
-    elif start == 8:
-        if end == 0:
-            return 1
-        elif end == 1:
-            return 5
-        elif end == 2:
-            return 2
-        elif end == 3:
-            return 2
-        elif end == 4:
-            return 3
-        elif end == 5:
-            return 2
-        elif end == 6:
-            return 1
-        elif end == 7:
-            return 3
-        elif end == 8:
-            return 0
-        elif end == 9:
-            return 1
-        elif end == "o":
-            return 7
-        
-    elif start == 9:
-        if end == 0:
-            return 2
-        elif end == 1:
-            return 4
-        elif end == 2:
-            return 3
-        elif end == 3:
-            return 1
-        elif end == 4:
-            return 2
-        elif end == 5:
-            return 1
-        elif end == 6:
-            return 2
-        elif end == 7:
-            return 2
-        elif end == 8:
-            return 1
-        elif end == 9:
-            return 0
-        elif end == "o":
-            return 6
+from typing import List, Tuple
 
 
-def MaxClock(startnumber):
-    curr = str(startnumber)
-    linesum = 0
-    
-    for x in curr:
-        linesum += LinesNeededSam(int(x))
-    
-    #print(linesum)
-            
-    while True:
-        curr = str(curr)
-        nextnum = str(sum_digits(int(curr)))
+# 7-segment digit encoding as bitmasks, where bit i means segment i is lit.
+# Segment numbering scheme:
+#
+#  000
+# 1   2
+# 1   2
+#  333
+# 4   5
+# 4   5
+#  666
+#
+# This encoding matches the Euler problem statement's example, notably:
+# digit '7' uses 4 segments.
+DIGIT_MASKS: List[int] = [
+    0x77,  # 0
+    0x24,  # 1
+    0x5D,  # 2
+    0x6D,  # 3
+    0x2E,  # 4
+    0x6B,  # 5
+    0x7B,  # 6
+    0x27,  # 7
+    0x7F,  # 8
+    0x6F,  # 9
+]
 
-        
-        value = len(curr) - len(nextnum)
-        temp = value*'o' + (nextnum)
-        #print(curr, temp)
-        
-        for y in range(len(curr)):
-            #print((curr[y]), (temp[y]))
-            linesum += LinesNeededMax((curr[y]), (temp[y]))
-            #print(linesum)
-            
-        curr = nextnum
-        
-        if int(curr) < 10:
-            linesum += LinesNeededSam(int(curr))
-            break
-    return linesum
-    
-def compute(start, end):
-    finalprimes = [x for x in list_primes(end) if x > start]
-    
-    print("done with primes")
+
+def digit_sum(n: int) -> int:
+    """Return the sum of decimal digits of n (n >= 0)."""
+    s = 0
+    while n:
+        s += n % 10
+        n //= 10
+    return s
+
+
+def segments_of_number(n: int) -> int:
+    """Return a bitmask representing all lit segments for the whole number.
+
+    Digits are right-aligned: the least significant digit occupies the lowest byte,
+    the next digit the next byte, etc. Each byte stores a 7-bit digit mask.
+    """
+    if n == 0:
+        return DIGIT_MASKS[0]
+
+    out = 0
+    shift = 0
+    while n:
+        out |= DIGIT_MASKS[n % 10] << shift
+        n //= 10
+        shift += 8
+    return out
+
+
+def sam_total(n: int) -> int:
+    """Total transitions for Sam's clock when fed n."""
     total = 0
-    for y in finalprimes:
-        total += SamClock(y) - MaxClock(y)
-        
-    return total
-        
+    while True:
+        seg = segments_of_number(n)
+        total += 2 * seg.bit_count()  # on + off
+        if n < 10:
+            return total
+        n = digit_sum(n)
+
+
+def max_total(n: int) -> int:
+    """Total transitions for Max's clock when fed n."""
+    total = 0
+    prev = 0
+    while True:
+        seg = segments_of_number(n)
+        total += (seg ^ prev).bit_count()
+        if n < 10:
+            total += seg.bit_count()  # fade to black
+            return total
+        prev = seg
+        n = digit_sum(n)
+
+
+def _precompute_small(max_digit_sum: int = 72) -> Tuple[List[int], List[int], List[int]]:
+    """Precompute helpers for numbers up to max_digit_sum.
+
+    Returns:
+      seg_small[v]         : segments_of_number(v)
+      sam_from_blank[v]    : Sam total transitions when fed v (starting from blank)
+      max_from_displayed[v]: Max transitions from state 'v is already displayed' until black
+    """
+    seg_small = [segments_of_number(v) for v in range(max_digit_sum + 1)]
+    dsum_small = [digit_sum(v) for v in range(max_digit_sum + 1)]
+
+    # Sam totals starting from blank.
+    sam_from_blank = [-1] * (max_digit_sum + 1)
+
+    def sam_rec(v: int) -> int:
+        if sam_from_blank[v] != -1:
+            return sam_from_blank[v]
+        res = 2 * seg_small[v].bit_count()
+        if v >= 10:
+            res += sam_rec(dsum_small[v])
+        sam_from_blank[v] = res
+        return res
+
+    for v in range(max_digit_sum + 1):
+        sam_rec(v)
+
+    # Max transitions assuming v is already displayed correctly.
+    max_from_displayed = [-1] * (max_digit_sum + 1)
+
+    def max_rec(v: int) -> int:
+        if max_from_displayed[v] != -1:
+            return max_from_displayed[v]
+        if v < 10:
+            res = seg_small[v].bit_count()  # just turn it off
+        else:
+            nxt = dsum_small[v]
+            res = (seg_small[v] ^ seg_small[nxt]).bit_count() + max_rec(nxt)
+        max_from_displayed[v] = res
+        return res
+
+    for v in range(max_digit_sum + 1):
+        max_rec(v)
+
+    return seg_small, sam_from_blank, max_from_displayed
+
+
+def prime_sieve_odd(limit: int) -> bytearray:
+    """Odd-only sieve of Eratosthenes up to 'limit' (inclusive).
+
+    The returned bytearray 'is_prime' is indexed by i = n//2 for odd n.
+    is_prime[i] == 1 means (2*i+1) is prime.
+
+    Memory: O(limit/2).
+    """
+    size = limit // 2 + 1
+    is_prime = bytearray(b"\x01") * size
+    is_prime[0] = 0  # 1 is not prime
+
+    max_i = (math.isqrt(limit) - 1) // 2
+    for i in range(1, max_i + 1):
+        if is_prime[i]:
+            p = 2 * i + 1
+            start = (p * p) // 2
+            step = p
+            count = (size - start - 1) // step + 1
+            is_prime[start::step] = b"\x00" * count
+    return is_prime
+
+
+def solve(a: int = 10_000_000, b: int = 20_000_000) -> int:
+    """Return the required transition difference for primes in [a, b]."""
+    if a > b:
+        a, b = b, a
+
+    # For 8-digit numbers, max digit sum is 8*9=72.
+    seg_small, sam_small, max_small_displayed = _precompute_small(72)
+
+    is_prime = prime_sieve_odd(b)
+
+    total_diff = 0
+
+    # Iterate over odd primes in range.
+    n = a | 1
+    if n < 3:
+        n = 3
+
+    for p in range(n, b + 1, 2):
+        if not is_prime[p // 2]:
+            continue
+
+        seg_p = segments_of_number(p)
+        pop_p = seg_p.bit_count()
+        sd = digit_sum(p)  # 1..72
+
+        # Sam: 2*pop_p + sam_small[sd]
+        # Max: pop_p + popcount(seg_p ^ seg_small[sd]) + max_small_displayed[sd]
+        total_diff += pop_p + sam_small[sd] - (seg_p ^ seg_small[sd]).bit_count() - max_small_displayed[sd]
+
+    return total_diff
+
+
+def _run_tests() -> None:
+    # Facts explicitly given in the problem statement.
+    assert DIGIT_MASKS[1].bit_count() == 2  # digit "1" uses two segments
+    assert DIGIT_MASKS[4].bit_count() == 4  # digit "4" uses four segments
+    assert DIGIT_MASKS[8].bit_count() == 7  # digit "8" uses all segments
+    assert DIGIT_MASKS[2].bit_count() == 5  # "To turn on a '2' will cost 5 transitions"
+    assert DIGIT_MASKS[7].bit_count() == 4  # "...while a '7' will cost only 4 transitions"
+
+    # Example with number 137.
+    assert sam_total(137) == 40
+    assert max_total(137) == 30
+    assert sam_total(137) - max_total(137) == 10
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Solve Project Euler 315")
+    parser.add_argument("--a", type=int, default=10_000_000, help="Range start (inclusive)")
+    parser.add_argument("--b", type=int, default=20_000_000, help="Range end (inclusive)")
+    args = parser.parse_args()
+
+    _run_tests()
+    print(solve(args.a, args.b))
+
+
 if __name__ == "__main__":
-    assert SamClock(137) == 40
-    assert MaxClock(137) == 30
-    #print(compute(59800, 100000))
-    print(compute(1000, 100000))
+    main()

@@ -582,18 +582,18 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/305.py[305.py] | 0.229 |  |  |
 | link:solvers/306.py[306.py] | 0.058 |  |  |
 | link:solvers/307.py[307.py] | 0.112 |  |  |
-| link:solvers/308.py[308.py] |  |  |  | timed out after 60.000s
+| link:solvers/308.py[308.py] | 0.217 |  |  |
 | link:solvers/309.py[309.py] | 1.503 |  |  |
 | link:solvers/310.py[310.py] | 6.476 |  |  |
-| link:solvers/311.py[311.py] |  |  |  | solver not found
+| link:solvers/311.py[311.py] | 0.293 |  |  |
 | link:solvers/312.py[312.py] | 0.409 |  |  |
 | link:solvers/313.py[313.py] | 0.071 |  |  |
 | link:solvers/314.py[314.py] |  |  |  | solver not found
-| link:solvers/315.py[315.py] | 0.426 |  |  | expected '13625242', got '200712'
+| link:solvers/315.py[315.py] | 0.244 |  |  |
 | link:solvers/316.py[316.py] | 11.613 |  |  |
 | link:solvers/317.py[317.py] | 0.057 |  |  |
 | link:solvers/318.py[318.py] | 0.074 |  |  |
-| link:solvers/319.py[319.py] |  |  |  | solver not found
+| link:solvers/319.py[319.py] | 0.715 |  |  |
 | link:solvers/320.py[320.py] | 28.163 |  |  |
 | link:solvers/321.py[321.py] | 0.060 |  |  |
 | link:solvers/322.py[322.py] |  |  |  | solver not found
