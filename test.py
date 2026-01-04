@@ -338,7 +338,7 @@ def format_row(res: Result) -> str:
     time_cell = f"{res.elapsed:.3f}" if res.elapsed is not None else ""
     model_cell = res.model or ""
     tokens_cell = str(res.output_tokens) if res.output_tokens is not None else ""
-    error_cell = "" if res.correct else res.message
+    error_cell = "" if res.correct else normalize_error_cell(res.message)
     if res.message == "solver not found":
         link = f"{res.puzzle_id}.py"
     else:
@@ -416,7 +416,15 @@ def normalize_row_fields(
         return None
     if not statement_cell:
         statement_cell = explanation_link(pid)
+    error_cell = normalize_error_cell(error_cell)
     return id_cell, statement_cell, time_cell, model_cell, tokens_cell, error_cell
+
+def normalize_error_cell(value: str) -> str:
+    if not value:
+        return ""
+    if value.startswith("error: "):
+        return value
+    return f"error: {value}"
 
 def format_row_fields(
     id_cell: str,
