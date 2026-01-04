@@ -309,10 +309,10 @@ def format_row(res: Result) -> str:
         except ValueError:
             rel_path = link_path
         link = f"link:{rel_path.as_posix()}[{rel_path.name}]"
-    return (
-        f"| {link} | {time_cell} | {model_cell} | "
-        f"{tokens_cell} | {error_cell}"
-    ).rstrip()
+    explanation_cell = explanation_link(res.puzzle_id)
+    return format_row_fields(
+        link, explanation_cell, time_cell, model_cell, tokens_cell, error_cell
+    )
 
 def result_key(res: Result) -> tuple[int, str]:
     if res.source_path is not None:
@@ -321,6 +321,29 @@ def result_key(res: Result) -> tuple[int, str]:
         link_path = SOLVERS_DIR / f"{res.puzzle_id}.py"
     language = res.language or detect_language(link_path) or ""
     return res.puzzle_id, language
+
+def explanation_link(puzzle_id: int) -> str:
+    md_path = SOLVERS_DIR / f"{puzzle_id}.md"
+    if not md_path.exists():
+        return ""
+    try:
+        rel_path = md_path.resolve().relative_to(ROOT)
+    except ValueError:
+        rel_path = md_path
+    return f"link:{rel_path.as_posix()}[{md_path.name}]"
+
+def format_row_fields(
+    id_cell: str,
+    statement_cell: str,
+    time_cell: str,
+    model_cell: str,
+    tokens_cell: str,
+    error_cell: str,
+) -> str:
+    return (
+        f"| {id_cell} | {statement_cell} | {time_cell} | "
+        f"{model_cell} | {tokens_cell} | {error_cell}"
+    ).rstrip()
 
 def update_readme(results: list[Result]) -> None:
     readme_path = ROOT / "README.adoc"
@@ -342,7 +365,7 @@ def update_readme(results: list[Result]) -> None:
     if start is None or end is None:
         raise RuntimeError("Could not find results table in README.adoc")
 
-    header_line = "| ID | Runtime (s) | Model | Out Tokens | Error"
+    header_line = "| ID | Explanation | Runtime (s) | Model | Out Tokens | Error"
     row_re = re.compile(r"^\|\s+link:([^\[]+)\[")
     plain_re = re.compile(r"^\|\s+(\d+)\.py\s+\|")
     result_map: dict[tuple[int, str], str] = {}
@@ -363,7 +386,26 @@ def update_readme(results: list[Result]) -> None:
                     continue
                 pid = int(id_match.group(1))
             language = detect_language(Path(link_target)) or ""
-            row_map[(pid, language)] = line
+            cells = [cell.strip() for cell in line.split("|")[1:]]
+            if cells and cells[-1] == "":
+                cells = cells[:-1]
+            if len(cells) < 5:
+                continue
+            if len(cells) >= 6:
+                id_cell, statement_cell, time_cell, model_cell, tokens_cell, error_cell = cells[:6]
+                if not statement_cell:
+                    statement_cell = explanation_link(pid)
+            else:
+                id_cell, time_cell, model_cell, tokens_cell, error_cell = cells
+                statement_cell = explanation_link(pid)
+            row_map[(pid, language)] = format_row_fields(
+                id_cell,
+                statement_cell,
+                time_cell,
+                model_cell,
+                tokens_cell,
+                error_cell,
+            )
             continue
         plain_match = plain_re.match(line)
         if not plain_match:
@@ -372,7 +414,26 @@ def update_readme(results: list[Result]) -> None:
         if not pid_text:
             continue
         pid = int(pid_text)
-        row_map[(pid, "py")] = line
+        cells = [cell.strip() for cell in line.split("|")[1:]]
+        if cells and cells[-1] == "":
+            cells = cells[:-1]
+        if len(cells) < 5:
+            continue
+        if len(cells) >= 6:
+            id_cell, statement_cell, time_cell, model_cell, tokens_cell, error_cell = cells[:6]
+            if not statement_cell:
+                statement_cell = explanation_link(pid)
+        else:
+            id_cell, time_cell, model_cell, tokens_cell, error_cell = cells
+            statement_cell = explanation_link(pid)
+        row_map[(pid, "py")] = format_row_fields(
+            id_cell,
+            statement_cell,
+            time_cell,
+            model_cell,
+            tokens_cell,
+            error_cell,
+        )
 
     for key, row in result_map.items():
         row_map[key] = row
@@ -438,7 +499,26 @@ def update_readme_not_found() -> None:
             language = "py"
 
         seen_ids.add(pid)
-        row_map[(pid, language)] = line
+        cells = [cell.strip() for cell in line.split("|")[1:]]
+        if cells and cells[-1] == "":
+            cells = cells[:-1]
+        if len(cells) < 5:
+            continue
+        if len(cells) >= 6:
+            id_cell, statement_cell, time_cell, model_cell, tokens_cell, error_cell = cells[:6]
+            if not statement_cell:
+                statement_cell = explanation_link(pid)
+        else:
+            id_cell, time_cell, model_cell, tokens_cell, error_cell = cells
+            statement_cell = explanation_link(pid)
+        row_map[(pid, language)] = format_row_fields(
+            id_cell,
+            statement_cell,
+            time_cell,
+            model_cell,
+            tokens_cell,
+            error_cell,
+        )
         if link_target:
             path = ROOT / link_target
         else:
@@ -479,7 +559,10 @@ def update_readme_not_found() -> None:
         row_map[key]
         for key in sorted(row_map, key=lambda k: (k[0], k[1]))
     ]
-    lines[start + 1 : end] = ["| ID | Runtime (s) | Model | Out Tokens | Error", *sorted_rows]
+    lines[start + 1 : end] = [
+        "| ID | Explanation | Runtime (s) | Model | Out Tokens | Error",
+        *sorted_rows,
+    ]
 
     readme_path.write_text("\n".join(lines) + "\n")
 
@@ -674,7 +757,7 @@ def main() -> None:
     print(f"\nPassed {passed}/{total_run} tests.")
 
     print("\n|===")
-    print("| ID | Runtime (s) | Model | Out Tokens | Error")
+    print("| ID | Explanation | Runtime (s) | Model | Out Tokens | Error")
     for res in sorted(results, key=lambda r: (r.puzzle_id, r.language or "")):
         print(format_row(res))
     print("|===")
