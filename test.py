@@ -306,6 +306,14 @@ def format_row(res: Result) -> str:
         f"{tokens_cell} | {error_cell}"
     ).rstrip()
 
+def result_key(res: Result) -> tuple[int, str]:
+    if res.source_path is not None:
+        link_path = res.source_path
+    else:
+        link_path = SOLVERS_DIR / f"{res.puzzle_id}.py"
+    language = res.language or detect_language(link_path) or ""
+    return res.puzzle_id, language
+
 def update_readme(results: list[Result]) -> None:
     readme_path = ROOT / "README.adoc"
     lines = readme_path.read_text().splitlines()
@@ -332,8 +340,7 @@ def update_readme(results: list[Result]) -> None:
     row_map: dict[tuple[int, str], str] = {}
 
     for res in results:
-        language = res.language or ""
-        result_map[(res.puzzle_id, language)] = format_row(res)
+        result_map[result_key(res)] = format_row(res)
 
     for i in range(start + 1, end):
         match = row_re.match(lines[i])
