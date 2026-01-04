@@ -61,6 +61,11 @@ def parse_args() -> argparse.Namespace:
         help="Update README.adoc results table with the latest run.",
     )
     parser.add_argument(
+        "--autoupdate-not-found",
+        action="store_true",
+        help="Update README.adoc to mark only missing solvers (no runs).",
+    )
+    parser.add_argument(
         "-l",
         "--lang",
         action="append",
@@ -372,6 +377,103 @@ def update_readme(results: list[Result]) -> None:
     readme_path.write_text("\n".join(lines) + "\n")
 
 
+def update_readme_not_found() -> None:
+    reference_ids = set(load_reference_answers())
+    existing_solver_ids: set[int] = set()
+    for path in SOLVERS_DIR.glob("*"):
+        pid = parse_solver_id(path)
+        if pid is not None:
+            existing_solver_ids.add(pid)
+    readme_path = ROOT / "README.adoc"
+    lines = readme_path.read_text().splitlines()
+    try:
+        results_idx = next(i for i, line in enumerate(lines) if line.strip() == "== Results")
+    except StopIteration:
+        raise RuntimeError("Could not find Results section in README.adoc")
+
+    start = None
+    end = None
+    for i in range(results_idx + 1, len(lines)):
+        if lines[i].strip() == "|===":
+            if start is None:
+                start = i
+            else:
+                end = i
+                break
+    if start is None or end is None:
+        raise RuntimeError("Could not find results table in README.adoc")
+
+    row_re = re.compile(r"^\|\s+link:([^\[]+)\[")
+    plain_re = re.compile(r"^\|\s+(\d+)\.py\s+\|")
+    row_map: dict[tuple[int, str], str] = {}
+    result_map: dict[tuple[int, str], str] = {}
+    seen_ids: set[int] = set()
+
+    for i in range(start + 1, end):
+        line = lines[i]
+        match = row_re.match(line)
+        link_target = None
+        if match:
+            link_target = match.group(1)
+            pid = parse_solver_id(Path(link_target))
+            language = detect_language(Path(link_target)) or ""
+        else:
+            plain_match = plain_re.match(line)
+            if not plain_match:
+                continue
+            pid_text = plain_match.group(1)
+            if not pid_text:
+                continue
+            pid = int(pid_text)
+            language = "py"
+
+        seen_ids.add(pid)
+        row_map[(pid, language)] = line
+        if link_target:
+            path = ROOT / link_target
+        else:
+            path = SOLVERS_DIR / f"{pid}.py"
+        if path.exists():
+            continue
+        res = Result(
+            puzzle_id=pid,
+            correct=False,
+            elapsed=None,
+            model=None,
+            output_tokens=None,
+            message="solver not found",
+            language=language,
+            source_path=None,
+        )
+        result_map[result_key(res)] = format_row(res)
+
+    for pid in sorted(reference_ids):
+        if pid in seen_ids or pid in existing_solver_ids:
+            continue
+        res = Result(
+            puzzle_id=pid,
+            correct=False,
+            elapsed=None,
+            model=None,
+            output_tokens=None,
+            message="solver not found",
+            language="py",
+            source_path=None,
+        )
+        result_map[result_key(res)] = format_row(res)
+
+    for key, row in result_map.items():
+        row_map[key] = row
+
+    sorted_rows = [
+        row_map[key]
+        for key in sorted(row_map, key=lambda k: (k[0], k[1]))
+    ]
+    lines[start + 1 : end] = ["| ID | Runtime (s) | Model | Out Tokens | Error", *sorted_rows]
+
+    readme_path.write_text("\n".join(lines) + "\n")
+
+
 def parse_lang_filter(values: list[str] | None) -> set[str] | None:
     if not values:
         return None
@@ -390,6 +492,9 @@ def parse_lang_filter(values: list[str] | None) -> set[str] | None:
 
 def main() -> None:
     args = parse_args()
+    if args.autoupdate_not_found:
+        update_readme_not_found()
+        return
     reference = load_reference_answers()
     try:
         lang_filter = parse_lang_filter(args.lang)

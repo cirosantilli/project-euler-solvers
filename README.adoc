@@ -690,7 +690,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/413.py[413.py] | 18.845 |  |  |
 | link:solvers/414.py[414.py] | 13.126 |  |  |
 | link:solvers/415.py[415.py] | 100.317 |  |  |
-| link:solvers/416.py[416.py] |  |  |  | solver not found
+| 416.py |  |  |  | solver not found
 | link:solvers/417.py[417.py] | 11.211 |  |  |
 | link:solvers/418.py[418.py] | 0.058 |  |  | failed (exit 1)
 | link:solvers/419.py[419.py] | 0.960 |  |  |
@@ -702,7 +702,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/425.py[425.py] | 4.366 |  |  |
 | link:solvers/426.py[426.py] | 0.496 | gpt-5.2-thinking |  |
 | link:solvers/427.py[427.py] | 3.178 |  |  |
-| link:solvers/428.py[428.py] |  |  |  | solver not found
+| 428.py |  |  |  | solver not found
 | link:solvers/429.py[429.py] | 1.636 |  |  |
 | link:solvers/430.py[430.py] | 0.108 |  |  |
 | link:solvers/431.py[431.py] | 0.146 |  |  |
@@ -712,7 +712,6 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/435.py[435.py] | 0.068 |  |  |
 | link:solvers/436.py[436.py] | 0.115 |  |  |
 | link:solvers/437.py[437.py] | 6.854 |  |  |
-| link:solvers/438.py[438.py] |  | gpt-5.2-thinking |  | timed out after 600.000s
 | link:solvers/439.py[439.py] | 12.590 | gpt-5.2-thinking |  |
 | link:solvers/440.py[440.py] | 0.993 |  |  |
 | link:solvers/441.py[441.py] | 0.675 | gpt-5.2-thinking |  |
@@ -724,7 +723,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/447.py[447.py] | 0.545 |  |  |
 | link:solvers/448.py[448.py] | 2.785 |  |  |
 | link:solvers/449.py[449.py] | 0.100 | gpt-5.2-thinking |  |
-| link:solvers/450.py[450.py] |  |  |  | solver not found
+| 450.py |  |  |  | solver not found
 | link:solvers/451.py[451.py] | 74.218 |  |  |
 | link:solvers/452.py[452.py] | 163.850 |  |  |
 | link:solvers/453.py[453.py] | 0.229 | gpt-5.2-thinking |  |
@@ -733,8 +732,8 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/456.py[456.py] | 7.393 | gpt-5.2-thinking |  |
 | link:solvers/457.py[457.py] | 1.024 |  |  |
 | link:solvers/458.py[458.py] | 0.067 |  |  |
-| link:solvers/459.py[459.py] |  |  |  | solver not found
-| link:solvers/460.py[460.py] |  |  |  | solver not found
+| 459.py |  |  |  | solver not found
+| 460.py |  |  |  | solver not found
 | link:solvers/461.py[461.py] | 0.162 | gpt-5.2-thinking |  |
 | link:solvers/462.py[462.py] | 0.099 | gpt-5.2-thinking |  |
 | link:solvers/463.py[463.py] | 0.127 | gpt-5.2-thinking |  |
@@ -746,11 +745,11 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/469.py[469.py] | 0.145 | gpt-5.2-thinking |  |
 | link:solvers/470.py[470.py] | 1.820 |  |  |
 | link:solvers/471.py[471.py] | 0.156 | gpt-5.2-thinking |  |
-| link:solvers/472.py[472.py] |  |  |  | solver not found
+| 472.py |  |  |  | solver not found
 | link:solvers/473.py[473.py] | 0.585 |  |  |
-| link:solvers/474.py[474.py] |  |  |  | solver not found
+| 474.py |  |  |  | solver not found
 | link:solvers/475.py[475.py] | 0.168 | gpt-5.2-thinking |  |
-| link:solvers/476.py[476.py] |  |  |  | solver not found
+| 476.py |  |  |  | solver not found
 | link:solvers/477.py[477.py] | 0.465 | gpt-5.2-thinking |  |
 | link:solvers/478.py[478.py] | 0.107 | gpt-5.2-thinking |  | expected '59510340', got '57612281'
 | link:solvers/479.py[479.py] | 0.515 |  |  |
@@ -761,14 +760,14 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/484.py[484.py] | 1.523 | gpt-5.2-thinking |  |
 | link:solvers/485.py[485.py] | 2.056 |  |  |
 | link:solvers/486.py[486.py] | 0.296 | gpt-5.2-thinking |  |
-| link:solvers/487.py[487.py] |  |  |  | solver not found
+| 487.py |  |  |  | solver not found
 | link:solvers/488.py[488.py] | 0.125 | gpt-5.2-thinking |  |
 | link:solvers/489.py[489.py] | 0.893 | gpt-5.2-thinking |  |
-| link:solvers/490.py[490.py] |  |  |  | solver not found
+| 490.py |  |  |  | solver not found
 | link:solvers/491.py[491.py] | 0.066 |  |  |
 | link:solvers/492.py[492.py] | 1.367 | gpt-5.2-thinking |  |
 | link:solvers/493.py[493.py] | 0.097 | gpt-5.2-thinking |  |
-| link:solvers/494.py[494.py] |  |  |  | solver not found
+| 494.py |  |  |  | solver not found
 | link:solvers/495.py[495.py] | 1.424 | gpt-5.2-thinking |  |
 | link:solvers/496.py[496.py] | 0.370 | gpt-5.2-thinking |  |
 | link:solvers/497.py[497.py] | 0.243 | gpt-5.2-thinking |  |
@@ -776,152 +775,428 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/499.py[499.py] | 0.116 | gpt-5.2-thinking |  |
 | link:solvers/500.py[500.py] | 1.463 |  |  |
 | link:solvers/501.py[501.py] |  |  |  | timed out after 60.000s
-| link:solvers/502.py[502.py] |  |  |  | solver not found
-| link:solvers/503.py[503.py] |  |  |  | solver not found
+| 502.py |  |  |  | solver not found
+| 503.py |  |  |  | solver not found
 | link:solvers/504.py[504.py] | 0.645 |  |  |
-| link:solvers/505.py[505.py] |  |  |  | solver not found
-| link:solvers/506.py[506.py] |  |  |  | solver not found
-| link:solvers/507.py[507.py] |  |  |  | solver not found
-| link:solvers/508.py[508.py] |  |  |  | solver not found
-| link:solvers/509.py[509.py] |  |  |  | solver not found
+| 505.py |  |  |  | solver not found
+| 506.py |  |  |  | solver not found
+| 507.py |  |  |  | solver not found
+| 508.py |  |  |  | solver not found
+| 509.py |  |  |  | solver not found
 | link:solvers/510.py[510.py] | 1.384 |  |  |
-| link:solvers/511.py[511.py] |  |  |  | solver not found
+| 511.py |  |  |  | solver not found
 | link:solvers/512.py[512.py] | 18.230 |  |  |
-| link:solvers/513.py[513.py] |  |  |  | solver not found
-| link:solvers/514.py[514.py] |  |  |  | solver not found
-| link:solvers/515.py[515.py] |  |  |  | solver not found
+| 513.py |  |  |  | solver not found
+| 514.py |  |  |  | solver not found
+| 515.py |  |  |  | solver not found
 | link:solvers/516.py[516.py] | 0.941 |  |  |
-| link:solvers/517.py[517.py] |  |  |  | solver not found
+| 517.py |  |  |  | solver not found
 | link:solvers/518.py[518.py] | 4.163 |  |  |
-| link:solvers/519.py[519.py] |  |  |  | solver not found
-| link:solvers/520.py[520.py] |  |  |  | solver not found
-| link:solvers/521.py[521.py] |  |  |  | solver not found
-| link:solvers/522.py[522.py] |  |  |  | solver not found
+| 519.py |  |  |  | solver not found
+| 520.py |  |  |  | solver not found
+| 521.py |  |  |  | solver not found
+| 522.py |  |  |  | solver not found
 | link:solvers/523.py[523.py] | 0.060 |  |  |
-| link:solvers/524.py[524.py] |  |  |  | solver not found
-| link:solvers/525.py[525.py] |  |  |  | solver not found
-| link:solvers/526.py[526.py] |  |  |  | solver not found
-| link:solvers/527.py[527.py] |  |  |  | solver not found
-| link:solvers/528.py[528.py] |  |  |  | solver not found
-| link:solvers/529.py[529.py] |  |  |  | solver not found
-| link:solvers/530.py[530.py] |  |  |  | solver not found
+| 524.py |  |  |  | solver not found
+| 525.py |  |  |  | solver not found
+| 526.py |  |  |  | solver not found
+| 527.py |  |  |  | solver not found
+| 528.py |  |  |  | solver not found
+| 529.py |  |  |  | solver not found
+| 530.py |  |  |  | solver not found
 | link:solvers/531.py[531.py] | 1.608 |  |  |
-| link:solvers/532.py[532.py] |  |  |  | solver not found
-| link:solvers/533.py[533.py] |  |  |  | solver not found
-| link:solvers/534.py[534.py] |  |  |  | solver not found
-| link:solvers/535.py[535.py] |  |  |  | solver not found
-| link:solvers/536.py[536.py] |  |  |  | solver not found
+| 532.py |  |  |  | solver not found
+| 533.py |  |  |  | solver not found
+| 534.py |  |  |  | solver not found
+| 535.py |  |  |  | solver not found
+| 536.py |  |  |  | solver not found
 | link:solvers/537.py[537.py] | 23.167 |  |  |
-| link:solvers/538.py[538.py] |  |  |  | solver not found
+| 538.py |  |  |  | solver not found
 | link:solvers/539.py[539.py] |  |  |  | timed out after 60.000s
 | link:solvers/540.py[540.py] | 9.710 |  |  |
-| link:solvers/541.py[541.py] |  |  |  | solver not found
-| link:solvers/542.py[542.py] |  |  |  | solver not found
+| 541.py |  |  |  | solver not found
+| 542.py |  |  |  | solver not found
 | link:solvers/543.py[543.py] | 0.706 |  |  |
-| link:solvers/544.py[544.py] |  |  |  | solver not found
-| link:solvers/545.py[545.py] |  |  |  | solver not found
-| link:solvers/546.py[546.py] |  |  |  | solver not found
-| link:solvers/547.py[547.py] |  |  |  | solver not found
-| link:solvers/548.py[548.py] |  |  |  | solver not found
+| 544.py |  |  |  | solver not found
+| 545.py |  |  |  | solver not found
+| 546.py |  |  |  | solver not found
+| 547.py |  |  |  | solver not found
+| 548.py |  |  |  | solver not found
 | link:solvers/549.py[549.py] | 31.523 |  |  |
-| link:solvers/550.py[550.py] |  |  |  | solver not found
-| link:solvers/551.py[551.py] |  |  |  | solver not found
-| link:solvers/552.py[552.py] |  |  |  | solver not found
-| link:solvers/553.py[553.py] |  |  |  | solver not found
-| link:solvers/554.py[554.py] |  |  |  | solver not found
+| 550.py |  |  |  | solver not found
+| 551.py |  |  |  | solver not found
+| 552.py |  |  |  | solver not found
+| 553.py |  |  |  | solver not found
+| 554.py |  |  |  | solver not found
 | link:solvers/555.py[555.py] | 0.273 |  |  |
-| link:solvers/556.py[556.py] |  |  |  | solver not found
-| link:solvers/557.py[557.py] |  |  |  | solver not found
-| link:solvers/558.py[558.py] |  |  |  | solver not found
-| link:solvers/559.py[559.py] |  |  |  | solver not found
-| link:solvers/560.py[560.py] |  |  |  | solver not found
+| 556.py |  |  |  | solver not found
+| 557.py |  |  |  | solver not found
+| 558.py |  |  |  | solver not found
+| 559.py |  |  |  | solver not found
+| 560.py |  |  |  | solver not found
 | link:solvers/561.py[561.py] | 0.065 |  |  |
-| link:solvers/562.py[562.py] |  |  |  | solver not found
+| 562.py |  |  |  | solver not found
 | link:solvers/563.py[563.py] | 4.428 |  |  |
-| link:solvers/564.py[564.py] |  |  |  | solver not found
+| 564.py |  |  |  | solver not found
 | link:solvers/565.py[565.py] | 16.009 |  |  |
-| link:solvers/566.py[566.py] |  |  |  | solver not found
-| link:solvers/567.py[567.py] |  |  |  | solver not found
-| link:solvers/568.py[568.py] |  |  |  | solver not found
-| link:solvers/569.py[569.py] |  |  |  | solver not found
-| link:solvers/570.py[570.py] |  |  |  | solver not found
+| 566.py |  |  |  | solver not found
+| 567.py |  |  |  | solver not found
+| 568.py |  |  |  | solver not found
+| 569.py |  |  |  | solver not found
+| 570.py |  |  |  | solver not found
 | link:solvers/571.py[571.py] | 37.492 |  |  |
-| link:solvers/572.py[572.py] |  |  |  | solver not found
-| link:solvers/573.py[573.py] |  |  |  | solver not found
-| link:solvers/574.py[574.py] |  |  |  | solver not found
-| link:solvers/575.py[575.py] |  |  |  | solver not found
-| link:solvers/576.py[576.py] |  |  |  | solver not found
+| 572.py |  |  |  | solver not found
+| 573.py |  |  |  | solver not found
+| 574.py |  |  |  | solver not found
+| 575.py |  |  |  | solver not found
+| 576.py |  |  |  | solver not found
 | link:solvers/577.py[577.py] | 0.105 |  |  |
-| link:solvers/578.py[578.py] |  |  |  | solver not found
-| link:solvers/579.py[579.py] |  |  |  | solver not found
-| link:solvers/580.py[580.py] |  |  |  | solver not found
+| 578.py |  |  |  | solver not found
+| 579.py |  |  |  | solver not found
+| 580.py |  |  |  | solver not found
 | link:solvers/581.py[581.py] | 0.167 |  |  | expected '2227616372734', got '2886773027'
-| link:solvers/582.py[582.py] |  |  |  | solver not found
-| link:solvers/583.py[583.py] |  |  |  | solver not found
-| link:solvers/584.py[584.py] |  |  |  | solver not found
-| link:solvers/585.py[585.py] |  |  |  | solver not found
-| link:solvers/586.py[586.py] |  |  |  | solver not found
+| 582.py |  |  |  | solver not found
+| 583.py |  |  |  | solver not found
+| 584.py |  |  |  | solver not found
+| 585.py |  |  |  | solver not found
+| 586.py |  |  |  | solver not found
 | link:solvers/587.py[587.py] | 0.075 |  |  |
-| link:solvers/588.py[588.py] |  |  |  | solver not found
-| link:solvers/589.py[589.py] |  |  |  | solver not found
-| link:solvers/590.py[590.py] |  |  |  | solver not found
-| link:solvers/591.py[591.py] |  |  |  | solver not found
-| link:solvers/592.py[592.py] |  |  |  | solver not found
-| link:solvers/593.py[593.py] |  |  |  | solver not found
-| link:solvers/594.py[594.py] |  |  |  | solver not found
-| link:solvers/595.py[595.py] |  |  |  | solver not found
-| link:solvers/596.py[596.py] |  |  |  | solver not found
-| link:solvers/597.py[597.py] |  |  |  | solver not found
-| link:solvers/598.py[598.py] |  |  |  | solver not found
-| link:solvers/599.py[599.py] |  |  |  | solver not found
-| link:solvers/600.py[600.py] |  |  |  | solver not found
+| 588.py |  |  |  | solver not found
+| 589.py |  |  |  | solver not found
+| 590.py |  |  |  | solver not found
+| 591.py |  |  |  | solver not found
+| 592.py |  |  |  | solver not found
+| 593.py |  |  |  | solver not found
+| 594.py |  |  |  | solver not found
+| 595.py |  |  |  | solver not found
+| 596.py |  |  |  | solver not found
+| 597.py |  |  |  | solver not found
+| 598.py |  |  |  | solver not found
+| 599.py |  |  |  | solver not found
+| 600.py |  |  |  | solver not found
 | link:solvers/601.py[601.py] | 0.056 |  |  |
-| link:solvers/602.py[602.py] |  |  |  | solver not found
-| link:solvers/603.py[603.py] |  |  |  | solver not found
-| link:solvers/604.py[604.py] |  |  |  | solver not found
-| link:solvers/605.py[605.py] |  |  |  | solver not found
-| link:solvers/606.py[606.py] |  |  |  | solver not found
+| 602.py |  |  |  | solver not found
+| 603.py |  |  |  | solver not found
+| 604.py |  |  |  | solver not found
+| 605.py |  |  |  | solver not found
+| 606.py |  |  |  | solver not found
 | link:solvers/607.py[607.py] | 0.088 |  |  |
-| link:solvers/608.py[608.py] |  |  |  | solver not found
+| 608.py |  |  |  | solver not found
 | link:solvers/609.py[609.py] | 13.965 |  |  |
 | link:solvers/610.py[610.py] |  |  |  | timed out after 60.000s
 | link:solvers/611.py[611.py] |  |  |  | timed out after 60.000s
 | link:solvers/612.py[612.py] | 3.677 |  |  | expected '819963842', got '730342616'
 | link:solvers/613.py[613.py] | 0.061 |  |  |
-| link:solvers/614.py[614.py] |  |  |  | solver not found
+| 614.py |  |  |  | solver not found
 | link:solvers/615.py[615.py] | 0.098 |  |  | failed (exit 1)
+| 616.py |  |  |  | solver not found
+| 617.py |  |  |  | solver not found
+| 619.py |  |  |  | solver not found
+| 620.py |  |  |  | solver not found
+| 621.py |  |  |  | solver not found
+| 623.py |  |  |  | solver not found
+| 624.py |  |  |  | solver not found
+| 625.py |  |  |  | solver not found
+| 626.py |  |  |  | solver not found
+| 627.py |  |  |  | solver not found
+| 628.py |  |  |  | solver not found
+| 629.py |  |  |  | solver not found
+| 631.py |  |  |  | solver not found
+| 633.py |  |  |  | solver not found
 | link:solvers/634.py[634.py] | 0.842 |  |  | expected '4019680944', got '4019680946'
+| 635.py |  |  |  | solver not found
+| 636.py |  |  |  | solver not found
+| 637.py |  |  |  | solver not found
+| 638.py |  |  |  | solver not found
+| 639.py |  |  |  | solver not found
+| 640.py |  |  |  | solver not found
 | link:solvers/641.py[641.py] |  |  |  | timed out after 300.000s
 | link:solvers/642.py[642.py] | 47.987 |  |  |
+| 643.py |  |  |  | solver not found
+| 644.py |  |  |  | solver not found
+| 645.py |  |  |  | solver not found
+| 646.py |  |  |  | solver not found
+| 648.py |  |  |  | solver not found
+| 649.py |  |  |  | solver not found
+| 651.py |  |  |  | solver not found
+| 652.py |  |  |  | solver not found
+| 653.py |  |  |  | solver not found
+| 654.py |  |  |  | solver not found
 | link:solvers/655.py[655.py] |  |  |  | timed out after 300.000s
+| 656.py |  |  |  | solver not found
+| 657.py |  |  |  | solver not found
+| 658.py |  |  |  | solver not found
+| 660.py |  |  |  | solver not found
+| 661.py |  |  |  | solver not found
+| 662.py |  |  |  | solver not found
+| 663.py |  |  |  | solver not found
+| 664.py |  |  |  | solver not found
+| 665.py |  |  |  | solver not found
+| 666.py |  |  |  | solver not found
+| 667.py |  |  |  | solver not found
+| 670.py |  |  |  | solver not found
+| 671.py |  |  |  | solver not found
+| 672.py |  |  |  | solver not found
+| 673.py |  |  |  | solver not found
+| 674.py |  |  |  | solver not found
+| 676.py |  |  |  | solver not found
+| 677.py |  |  |  | solver not found
+| 678.py |  |  |  | solver not found
+| 679.py |  |  |  | solver not found
+| 680.py |  |  |  | solver not found
+| 681.py |  |  |  | solver not found
+| 682.py |  |  |  | solver not found
+| 683.py |  |  |  | solver not found
 | link:solvers/684.py[684.py] | 0.100 |  |  |
+| 685.py |  |  |  | solver not found
+| 687.py |  |  |  | solver not found
+| 688.py |  |  |  | solver not found
+| 689.py |  |  |  | solver not found
+| 690.py |  |  |  | solver not found
+| 691.py |  |  |  | solver not found
+| 693.py |  |  |  | solver not found
+| 695.py |  |  |  | solver not found
+| 696.py |  |  |  | solver not found
 | link:solvers/697.py[697.py] | 0.113 |  |  |
+| 698.py |  |  |  | solver not found
+| 699.py |  |  |  | solver not found
+| 701.py |  |  |  | solver not found
+| 702.py |  |  |  | solver not found
+| 703.py |  |  |  | solver not found
+| 705.py |  |  |  | solver not found
+| 706.py |  |  |  | solver not found
+| 707.py |  |  |  | solver not found
+| 708.py |  |  |  | solver not found
+| 711.py |  |  |  | solver not found
 | link:solvers/712.py[712.py] | 95.006 |  |  |
+| 713.py |  |  |  | solver not found
 | link:solvers/714.py[714.py] | 72.413 |  |  | expected '2.452767775565e20', got '245276777556527592946'
+| 715.py |  |  |  | solver not found
+| 716.py |  |  |  | solver not found
+| 718.py |  |  |  | solver not found
 | link:solvers/719.py[719.py] |  |  |  | timed out after 300.000s
+| 720.py |  |  |  | solver not found
 | link:solvers/722.py[722.py] |  |  |  | timed out after 300.000s
+| 723.py |  |  |  | solver not found
+| 724.py |  |  |  | solver not found
+| 726.py |  |  |  | solver not found
+| 727.py |  |  |  | solver not found
+| 728.py |  |  |  | solver not found
+| 729.py |  |  |  | solver not found
+| 730.py |  |  |  | solver not found
+| 732.py |  |  |  | solver not found
+| 733.py |  |  |  | solver not found
+| 734.py |  |  |  | solver not found
+| 735.py |  |  |  | solver not found
+| 736.py |  |  |  | solver not found
+| 737.py |  |  |  | solver not found
+| 738.py |  |  |  | solver not found
+| 739.py |  |  |  | solver not found
+| 740.py |  |  |  | solver not found
+| 741.py |  |  |  | solver not found
+| 742.py |  |  |  | solver not found
 | link:solvers/743.py[743.py] |  |  |  | timed out after 300.000s
+| 744.py |  |  |  | solver not found
+| 746.py |  |  |  | solver not found
+| 747.py |  |  |  | solver not found
+| 748.py |  |  |  | solver not found
+| 749.py |  |  |  | solver not found
+| 750.py |  |  |  | solver not found
+| 753.py |  |  |  | solver not found
 | link:solvers/754.py[754.py] | 105.190 |  |  |
+| 755.py |  |  |  | solver not found
+| 756.py |  |  |  | solver not found
+| 758.py |  |  |  | solver not found
+| 759.py |  |  |  | solver not found
+| 760.py |  |  |  | solver not found
+| 762.py |  |  |  | solver not found
+| 763.py |  |  |  | solver not found
+| 764.py |  |  |  | solver not found
+| 765.py |  |  |  | solver not found
+| 766.py |  |  |  | solver not found
+| 767.py |  |  |  | solver not found
+| 768.py |  |  |  | solver not found
+| 769.py |  |  |  | solver not found
+| 770.py |  |  |  | solver not found
+| 771.py |  |  |  | solver not found
+| 772.py |  |  |  | solver not found
+| 773.py |  |  |  | solver not found
+| 774.py |  |  |  | solver not found
+| 775.py |  |  |  | solver not found
+| 776.py |  |  |  | solver not found
+| 777.py |  |  |  | solver not found
+| 778.py |  |  |  | solver not found
+| 780.py |  |  |  | solver not found
+| 781.py |  |  |  | solver not found
+| 782.py |  |  |  | solver not found
+| 783.py |  |  |  | solver not found
+| 784.py |  |  |  | solver not found
+| 785.py |  |  |  | solver not found
+| 786.py |  |  |  | solver not found
+| 787.py |  |  |  | solver not found
+| 789.py |  |  |  | solver not found
+| 790.py |  |  |  | solver not found
+| 791.py |  |  |  | solver not found
+| 792.py |  |  |  | solver not found
+| 794.py |  |  |  | solver not found
 | link:solvers/795.py[795.py] | 49.345 |  |  | expected '955892601606483', got '955892601606483.0'
+| 796.py |  |  |  | solver not found
+| 797.py |  |  |  | solver not found
+| 798.py |  |  |  | solver not found
+| 799.py |  |  |  | solver not found
+| 801.py |  |  |  | solver not found
+| 802.py |  |  |  | solver not found
+| 803.py |  |  |  | solver not found
+| 804.py |  |  |  | solver not found
+| 805.py |  |  |  | solver not found
+| 806.py |  |  |  | solver not found
+| 807.py |  |  |  | solver not found
+| 809.py |  |  |  | solver not found
 | link:solvers/810.py[810.py] | 51.788 |  |  |
+| 811.py |  |  |  | solver not found
+| 812.py |  |  |  | solver not found
+| 813.py |  |  |  | solver not found
+| 814.py |  |  |  | solver not found
+| 815.py |  |  |  | solver not found
+| 817.py |  |  |  | solver not found
+| 818.py |  |  |  | solver not found
+| 819.py |  |  |  | solver not found
+| 821.py |  |  |  | solver not found
+| 823.py |  |  |  | solver not found
+| 824.py |  |  |  | solver not found
+| 825.py |  |  |  | solver not found
+| 827.py |  |  |  | solver not found
+| 829.py |  |  |  | solver not found
+| 830.py |  |  |  | solver not found
+| 831.py |  |  |  | solver not found
+| 833.py |  |  |  | solver not found
+| 834.py |  |  |  | solver not found
+| 835.py |  |  |  | solver not found
+| 837.py |  |  |  | solver not found
+| 838.py |  |  |  | solver not found
+| 839.py |  |  |  | solver not found
+| 840.py |  |  |  | solver not found
+| 841.py |  |  |  | solver not found
+| 842.py |  |  |  | solver not found
+| 843.py |  |  |  | solver not found
+| 844.py |  |  |  | solver not found
+| 845.py |  |  |  | solver not found
+| 846.py |  |  |  | solver not found
+| 847.py |  |  |  | solver not found
+| 848.py |  |  |  | solver not found
+| 849.py |  |  |  | solver not found
+| 850.py |  |  |  | solver not found
+| 851.py |  |  |  | solver not found
+| 852.py |  |  |  | solver not found
+| 854.py |  |  |  | solver not found
+| 855.py |  |  |  | solver not found
+| 856.py |  |  |  | solver not found
+| 857.py |  |  |  | solver not found
+| 858.py |  |  |  | solver not found
+| 859.py |  |  |  | solver not found
+| 860.py |  |  |  | solver not found
+| 861.py |  |  |  | solver not found
+| 863.py |  |  |  | solver not found
+| 864.py |  |  |  | solver not found
+| 865.py |  |  |  | solver not found
+| 866.py |  |  |  | solver not found
+| 867.py |  |  |  | solver not found
+| 868.py |  |  |  | solver not found
+| 870.py |  |  |  | solver not found
+| 871.py |  |  |  | solver not found
+| 873.py |  |  |  | solver not found
+| 874.py |  |  |  | solver not found
+| 875.py |  |  |  | solver not found
+| 876.py |  |  |  | solver not found
+| 877.py |  |  |  | solver not found
+| 878.py |  |  |  | solver not found
+| 879.py |  |  |  | solver not found
+| 880.py |  |  |  | solver not found
+| 881.py |  |  |  | solver not found
+| 882.py |  |  |  | solver not found
+| 883.py |  |  |  | solver not found
+| 884.py |  |  |  | solver not found
 | link:solvers/885.py[885.py] | 234.998 |  |  |
+| 886.py |  |  |  | solver not found
+| 887.py |  |  |  | solver not found
+| 888.py |  |  |  | solver not found
+| 889.py |  |  |  | solver not found
+| 890.py |  |  |  | solver not found
+| 891.py |  |  |  | solver not found
+| 892.py |  |  |  | solver not found
+| 893.py |  |  |  | solver not found
+| 894.py |  |  |  | solver not found
+| 895.py |  |  |  | solver not found
+| 896.py |  |  |  | solver not found
+| 897.py |  |  |  | solver not found
+| 898.py |  |  |  | solver not found
+| 899.py |  |  |  | solver not found
+| 900.py |  |  |  | solver not found
+| 901.py |  |  |  | solver not found
+| 902.py |  |  |  | solver not found
+| 903.py |  |  |  | solver not found
+| 904.py |  |  |  | solver not found
+| 905.py |  |  |  | solver not found
+| 906.py |  |  |  | solver not found
+| 907.py |  |  |  | solver not found
+| 908.py |  |  |  | solver not found
+| 909.py |  |  |  | solver not found
 | link:solvers/910.py[910.py] | 39.422 |  |  |
+| 911.py |  |  |  | solver not found
+| 912.py |  |  |  | solver not found
+| 913.py |  |  |  | solver not found
+| 914.py |  |  |  | solver not found
+| 915.py |  |  |  | solver not found
+| 916.py |  |  |  | solver not found
+| 917.py |  |  |  | solver not found
+| 919.py |  |  |  | solver not found
+| 920.py |  |  |  | solver not found
+| 921.py |  |  |  | solver not found
+| 922.py |  |  |  | solver not found
+| 923.py |  |  |  | solver not found
+| 924.py |  |  |  | solver not found
+| 925.py |  |  |  | solver not found
+| 926.py |  |  |  | solver not found
+| 927.py |  |  |  | solver not found
+| 928.py |  |  |  | solver not found
+| 929.py |  |  |  | solver not found
+| 930.py |  |  |  | solver not found
+| 931.py |  |  |  | solver not found
 | link:solvers/932.py[932.py] | 4.977 |  |  |
-| link:solvers/933.py[933.py] |  |  |  | solver not found
+| 933.py |  |  |  | solver not found
+| 934.py |  |  |  | solver not found
+| 935.py |  |  |  | solver not found
+| 936.py |  |  |  | solver not found
+| 937.py |  |  |  | solver not found
+| 938.py |  |  |  | solver not found
+| 939.py |  |  |  | solver not found
+| 940.py |  |  |  | solver not found
+| 941.py |  |  |  | solver not found
+| 942.py |  |  |  | solver not found
 | link:solvers/943.py[943.py] | 25.158 |  |  |
+| 944.py |  |  |  | solver not found
+| 945.py |  |  |  | solver not found
+| 946.py |  |  |  | solver not found
+| 947.py |  |  |  | solver not found
 | link:solvers/948.py[948.py] | 0.191 |  |  |
 | link:solvers/949.py[949.py] | 2.373 |  |  | missing reference answer
+| 950.py |  |  |  | solver not found
+| 951.py |  |  |  | solver not found
+| 952.py |  |  |  | solver not found
 | link:solvers/953.py[953.py] | 86.836 |  |  |
 | link:solvers/954.py[954.py] | 76.641 |  |  |
 | link:solvers/955.py[955.py] | 0.482 |  |  |
 | link:solvers/956.py[956.py] | 0.151 |  |  |
+| 957.py |  |  |  | solver not found
 | link:solvers/958.py[958.py] | 276.748 |  |  |
+| 959.py |  |  |  | solver not found
 | link:solvers/960.py[960.py] | 0.061 |  |  |
 | link:solvers/961.py[961.py] | 1.306 |  |  |
 | link:solvers/962.py[962.py] | 27.947 |  |  |
 | link:solvers/963.py[963.py] | 15.752 |  |  |
 | link:solvers/964.py[964.py] | 0.114 |  |  |
 | link:solvers/965.py[965.py] |  |  |  | expected '0.0003452201133', got '0.0441113840109'
+| 966.py |  |  |  | solver not found
 | link:solvers/967.py[967.py] | 1.591 |  |  |
 | link:solvers/968.py[968.py] | 0.932 |  |  |
 | link:solvers/969.py[969.py] | 0.065 |  |  |
@@ -930,5 +1205,6 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/972.py[972.py] | 50.921 |  |  |
 | link:solvers/973.py[973.py] | 0.423 |  |  |
 | link:solvers/974.py[974.py] | 0.320 |  |  |
+| link:solvers/975.py[975.py] | 17.709 |  |  | missing reference answer
 | link:solvers/976.py[976.py] | 0.721 | gpt-5.2-codex | 131264 | missing reference answer
 |===
