@@ -14,8 +14,12 @@ ROOT = Path(__file__).resolve().parent
 SOLUTIONS_PATH = ROOT / "data/projecteuler-solutions/Solutions.md"
 SOLVERS_DIR = ROOT / "solvers"
 STATEMENTS_DOCS_DIR = ROOT / "data" / "project-euler-statements" / "data" / "documents"
+STATEMENTS_PROBLEM_DIR = (
+    ROOT / "data" / "project-euler-statements" / "data" / "problem"
+)
 
 LINE_RE = re.compile(r"^(\d+)\.\s+(.*)$")
+NUMERIC_RE = re.compile(r"^\d+(?:\.\d+)?$")
 
 
 @dataclass
@@ -140,6 +144,16 @@ def load_reference_answers() -> dict[int, str]:
             idx = int(match.group(1))
             solutions[idx] = match.group(2).strip()
     return solutions
+
+
+def load_statement_ids() -> set[int]:
+    ids: set[int] = set()
+    for path in STATEMENTS_PROBLEM_DIR.glob("*.html"):
+        try:
+            ids.add(int(path.stem))
+        except ValueError:
+            continue
+    return ids
 
 
 def collect_solver_targets(
@@ -332,6 +346,44 @@ def explanation_link(puzzle_id: int) -> str:
         rel_path = md_path
     return f"link:{rel_path.as_posix()}[{md_path.name}]"
 
+def looks_numeric(value: str) -> bool:
+    return bool(NUMERIC_RE.match(value))
+
+def row_has_statement(cells: list[str]) -> bool:
+    if len(cells) < 2:
+        return False
+    if cells[1].startswith("link:"):
+        return True
+    if looks_numeric(cells[1]):
+        return False
+    if len(cells) >= 3 and (looks_numeric(cells[2]) or cells[2] == ""):
+        return True
+    return False
+
+def normalize_row_fields(
+    pid: int, cells: list[str]
+) -> tuple[str, str, str, str, str, str] | None:
+    if len(cells) >= 6 and cells[1].startswith("link:") and cells[2].startswith("link:"):
+        cells = [cells[0], cells[1], *cells[3:]]
+    if len(cells) >= 6:
+        id_cell, statement_cell, time_cell, model_cell, tokens_cell, error_cell = cells[:6]
+    elif len(cells) == 5:
+        if row_has_statement(cells):
+            id_cell, statement_cell, time_cell, model_cell, tokens_cell = cells
+            error_cell = ""
+        else:
+            id_cell, time_cell, model_cell, tokens_cell, error_cell = cells
+            statement_cell = explanation_link(pid)
+    elif len(cells) == 4:
+        id_cell, time_cell, model_cell, tokens_cell = cells
+        statement_cell = explanation_link(pid)
+        error_cell = ""
+    else:
+        return None
+    if not statement_cell:
+        statement_cell = explanation_link(pid)
+    return id_cell, statement_cell, time_cell, model_cell, tokens_cell, error_cell
+
 def format_row_fields(
     id_cell: str,
     statement_cell: str,
@@ -389,15 +441,10 @@ def update_readme(results: list[Result]) -> None:
             cells = [cell.strip() for cell in line.split("|")[1:]]
             if cells and cells[-1] == "":
                 cells = cells[:-1]
-            if len(cells) < 5:
+            normalized = normalize_row_fields(pid, cells)
+            if normalized is None:
                 continue
-            if len(cells) >= 6:
-                id_cell, statement_cell, time_cell, model_cell, tokens_cell, error_cell = cells[:6]
-                if not statement_cell:
-                    statement_cell = explanation_link(pid)
-            else:
-                id_cell, time_cell, model_cell, tokens_cell, error_cell = cells
-                statement_cell = explanation_link(pid)
+            id_cell, statement_cell, time_cell, model_cell, tokens_cell, error_cell = normalized
             row_map[(pid, language)] = format_row_fields(
                 id_cell,
                 statement_cell,
@@ -417,15 +464,10 @@ def update_readme(results: list[Result]) -> None:
         cells = [cell.strip() for cell in line.split("|")[1:]]
         if cells and cells[-1] == "":
             cells = cells[:-1]
-        if len(cells) < 5:
+        normalized = normalize_row_fields(pid, cells)
+        if normalized is None:
             continue
-        if len(cells) >= 6:
-            id_cell, statement_cell, time_cell, model_cell, tokens_cell, error_cell = cells[:6]
-            if not statement_cell:
-                statement_cell = explanation_link(pid)
-        else:
-            id_cell, time_cell, model_cell, tokens_cell, error_cell = cells
-            statement_cell = explanation_link(pid)
+        id_cell, statement_cell, time_cell, model_cell, tokens_cell, error_cell = normalized
         row_map[(pid, "py")] = format_row_fields(
             id_cell,
             statement_cell,
@@ -450,6 +492,8 @@ def update_readme(results: list[Result]) -> None:
 
 def update_readme_not_found() -> None:
     reference_ids = set(load_reference_answers())
+    statement_ids = load_statement_ids()
+    known_ids = reference_ids | statement_ids
     existing_solver_ids: set[int] = set()
     for path in SOLVERS_DIR.glob("*"):
         pid = parse_solver_id(path)
@@ -502,15 +546,10 @@ def update_readme_not_found() -> None:
         cells = [cell.strip() for cell in line.split("|")[1:]]
         if cells and cells[-1] == "":
             cells = cells[:-1]
-        if len(cells) < 5:
+        normalized = normalize_row_fields(pid, cells)
+        if normalized is None:
             continue
-        if len(cells) >= 6:
-            id_cell, statement_cell, time_cell, model_cell, tokens_cell, error_cell = cells[:6]
-            if not statement_cell:
-                statement_cell = explanation_link(pid)
-        else:
-            id_cell, time_cell, model_cell, tokens_cell, error_cell = cells
-            statement_cell = explanation_link(pid)
+        id_cell, statement_cell, time_cell, model_cell, tokens_cell, error_cell = normalized
         row_map[(pid, language)] = format_row_fields(
             id_cell,
             statement_cell,
@@ -537,7 +576,7 @@ def update_readme_not_found() -> None:
         )
         result_map[result_key(res)] = format_row(res)
 
-    for pid in sorted(reference_ids):
+    for pid in sorted(known_ids):
         if pid in seen_ids or pid in existing_solver_ids:
             continue
         res = Result(
