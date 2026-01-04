@@ -55,7 +55,7 @@ def parse_args() -> argparse.Namespace:
         "-t",
         "--timeout",
         type=float,
-        default=None,
+        default=600,
         help="Per-solver timeout in seconds.",
     )
     parser.add_argument(

@@ -182,7 +182,7 @@ Same for an inclusive range of solvers:
 ./test.py 400-410
 ----
 
-Set timeout in seconds under which solvers must run with `-t`. This is useful when trying several solvers for the first time before you know if they are correct or not:
+Set timeout in seconds under which solvers must run with `-t`. The default value is 600. Having a timeout is useful when trying several solvers for the first time before you know if they are correct or not:
 
 [source,shell]
 ----
