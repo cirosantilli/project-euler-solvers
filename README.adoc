@@ -653,7 +653,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/376.py[376.py] | 4.841 |  |  |
 | link:solvers/377.py[377.py] | 0.105 |  |  |
 | link:solvers/378.py[378.py] | 13.007 |  |  |
-| link:solvers/379.py[379.py] |  |  |  | solver not found
+| link:solvers/379.py[379.py] |  | gpt-5.2-codex |  | timed out after 600.000s
 | link:solvers/380.py[380.py] | 0.098 |  |  |
 | link:solvers/381.py[381.py] | 2.832 |  |  |
 | link:solvers/382.py[382.py] | 0.087 |  |  |
