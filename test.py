@@ -187,6 +187,30 @@ def collect_solver_targets(
     return targets
 
 
+def collect_solver_entries() -> dict[tuple[int, str], Path]:
+    entries: dict[tuple[int, str], Path] = {}
+    for path in SOLVERS_DIR.glob("*"):
+        language = detect_language(path)
+        if language is None:
+            continue
+        pid = parse_solver_id(path)
+        if pid is None:
+            continue
+        key = (pid, language)
+        source_path = path
+        if path.suffix == ".out":
+            candidate = source_from_target(path, language)
+            if candidate.exists():
+                source_path = candidate
+        existing = entries.get(key)
+        if existing is None:
+            entries[key] = source_path
+            continue
+        if existing.suffix == ".out" and source_path.suffix != ".out":
+            entries[key] = source_path
+    return entries
+
+
 def collect_uncommitted_solvers() -> list[int]:
     try:
         proc = subprocess.run(
@@ -374,8 +398,13 @@ def normalize_row_fields(
         id_cell, statement_cell, time_cell, model_cell, tokens_cell, error_cell = cells[:6]
     elif len(cells) == 5:
         if row_has_statement(cells):
-            id_cell, statement_cell, time_cell, model_cell, tokens_cell = cells
-            error_cell = ""
+            id_cell, statement_cell, time_cell, model_cell, last_cell = cells
+            if last_cell and not looks_numeric(last_cell):
+                tokens_cell = ""
+                error_cell = last_cell
+            else:
+                tokens_cell = last_cell
+                error_cell = ""
         else:
             id_cell, time_cell, model_cell, tokens_cell, error_cell = cells
             statement_cell = explanation_link(pid)
@@ -569,11 +598,8 @@ def update_readme_not_found() -> None:
     reference_ids = set(load_reference_answers())
     statement_ids = load_statement_ids()
     known_ids = reference_ids | statement_ids
-    existing_solver_ids: set[int] = set()
-    for path in SOLVERS_DIR.glob("*"):
-        pid = parse_solver_id(path)
-        if pid is not None:
-            existing_solver_ids.add(pid)
+    solver_entries = collect_solver_entries()
+    solver_ids = {pid for pid, _language in solver_entries}
     readme_path = ROOT / "README.adoc"
     lines = readme_path.read_text().splitlines()
     try:
@@ -651,8 +677,24 @@ def update_readme_not_found() -> None:
         )
         result_map[result_key(res)] = format_row(res)
 
+    for key, path in solver_entries.items():
+        if key in row_map:
+            continue
+        pid, language = key
+        res = Result(
+            puzzle_id=pid,
+            correct=False,
+            elapsed=None,
+            model=None,
+            output_tokens=None,
+            message="untested",
+            language=language,
+            source_path=path,
+        )
+        result_map[result_key(res)] = format_row(res)
+
     for pid in sorted(known_ids):
-        if pid in seen_ids or pid in existing_solver_ids:
+        if pid in seen_ids or pid in solver_ids:
             continue
         res = Result(
             puzzle_id=pid,
