@@ -291,16 +291,19 @@ def format_row(res: Result) -> str:
     model_cell = res.model or ""
     tokens_cell = str(res.output_tokens) if res.output_tokens is not None else ""
     error_cell = "" if res.correct else res.message
-    link_path = (
-        res.source_path
-        if res.source_path is not None
-        else SOLVERS_DIR / f"{res.puzzle_id}.py"
-    )
-    try:
-        rel_path = link_path.resolve().relative_to(ROOT)
-    except ValueError:
-        rel_path = link_path
-    link = f"link:{rel_path.as_posix()}[{rel_path.name}]"
+    if res.message == "solver not found":
+        link = f"{res.puzzle_id}.py"
+    else:
+        link_path = (
+            res.source_path
+            if res.source_path is not None
+            else SOLVERS_DIR / f"{res.puzzle_id}.py"
+        )
+        try:
+            rel_path = link_path.resolve().relative_to(ROOT)
+        except ValueError:
+            rel_path = link_path
+        link = f"link:{rel_path.as_posix()}[{rel_path.name}]"
     return (
         f"| {link} | {time_cell} | {model_cell} | "
         f"{tokens_cell} | {error_cell}"

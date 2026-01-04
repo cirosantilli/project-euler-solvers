@@ -664,7 +664,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/387.py[387.py] | 0.122 |  |  |
 | link:solvers/388.py[388.py] | 0.561 |  |  |
 | link:solvers/389.py[389.py] | 0.062 |  |  |
-| link:solvers/390.py[390.py] |  |  |  | solver not found
+| 390.py |  |  |  | solver not found
 | link:solvers/391.py[391.py] | 1.027 | gpt-5.2-thinking |  |
 | link:solvers/392.py[392.py] | 0.080 |  |  |
 | link:solvers/393.py[393.py] | 13.176 |  |  |
