@@ -1207,4 +1207,5 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/974.py[974.py] | 0.320 |  |  |
 | link:solvers/975.py[975.py] | 17.709 |  |  | missing reference answer
 | link:solvers/976.py[976.py] | 0.721 | gpt-5.2-codex | 131264 | missing reference answer
+| link:solvers/977.py[977.py] | 1.768 |  |  | missing reference answer
 |===
