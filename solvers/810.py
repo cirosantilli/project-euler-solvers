@@ -14,8 +14,6 @@ Brute force shows that the first few primes are probably
 
 I learnt this in galois theory, Dummit and Foote pg 589
 
-Anwser:
-    124136381
 '''
 import math
 from functools import cache

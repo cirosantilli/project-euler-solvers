@@ -73,8 +73,6 @@ def main() -> None:
 
     ans_n, ans_len = longest_collatz_under(1_000_000)
 
-    # Known Project Euler #14 answer
-    assert ans_n == 837799
 
     print(ans_n)
 

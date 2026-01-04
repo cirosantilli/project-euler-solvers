@@ -23,8 +23,6 @@ def main() -> None:
     N: Final[int] = 100
     ans = solve(N)
 
-    # Known Project Euler #6 result
-    assert ans == 25164150
 
     print(ans)
 

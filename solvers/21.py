@@ -77,7 +77,6 @@ def main() -> None:
     assert proper_divisor_sum_factorization(284) == 220
 
     ans = amicable_sum_under(10000)
-    assert ans == 31626  # known result for this problem
     print(ans)
 
 

@@ -45,8 +45,6 @@ S(a, b, c) = sum_{k = 0 to b/a} a*(4(k + 1)a - (3k + 4)c) + 1/2(a + 1)(2ak + a -
 
 sum_{k = 0 to b/a} a*(4(k + 1)a - (3k + 4)c) = sum_{k = 0 to b/a} 4kaa + 4aa - 3kac - 4ac
 
-Anwser:
-    291504964
 '''
 import math
 

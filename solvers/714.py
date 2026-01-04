@@ -17,7 +17,6 @@ Since A has n + 1 elements there will be wto elements in A such that x1 = x2 (mo
 => x1 - x2 = 0 (mod n) and then x1 - x2 = 1111..000 and it is divisible by n
 That is x1 - x2 is a duodigit multiple of n consisting of only 1's and 0's
 
-Anwser:
     245276777556527592946
 '''
 import math

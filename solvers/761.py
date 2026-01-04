@@ -9,8 +9,6 @@ Created on Tue Jun 20 00:37:09 2023
 '''
 Project Euler Problem 761
 
-Anwser:
-    5.05505046
 '''
 from sympy import sin, cos, tan, pi, acos
     

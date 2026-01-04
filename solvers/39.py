@@ -67,7 +67,6 @@ def main() -> None:
         return counts[p_target]
 
     assert count_for(1000, 120) == 3
-    assert answer == 840  # Known correct result for p <= 1000
 
     print(answer)
 

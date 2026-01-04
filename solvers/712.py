@@ -110,8 +110,6 @@ for example for N = 10, we know sqrt(10) = 3.1
 so we have pi(10) - pi(5) = 1 (7), this contribution is 1*9*1
 then pi(5) - pi(3) = 1 (5), this contribution is 1*8*2
 
-Anwser:
-    413876461
 '''
 import math
 from functools import cache

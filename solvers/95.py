@@ -82,9 +82,6 @@ def amicable_chain_best(limit: int) -> Tuple[int, int]:
 def main() -> None:
     limit = 1_000_000
     best_len, best_min = amicable_chain_best(limit)
-
-    # Project Euler #95 known result:
-    assert best_min == 14316
     print(best_min)
 
 

@@ -21,8 +21,6 @@ A = a(2b + 1) = a^2 => a = 2b + 1, B = (b^2 + b) / 2
 
 for general formula see website, wrote it up nicely as I made some errors doing it in my head...
 
-Anwser:
-    563132994232918611
 '''
     
 def F(k, N):

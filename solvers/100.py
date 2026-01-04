@@ -45,8 +45,6 @@ def _self_test() -> None:
 
     b, r, n = blue_red_for_total_limit(10**12)
     assert n > 10**12
-    # Known Project Euler #100 answer:
-    assert b == 756872327473
 
 
 def main() -> None:

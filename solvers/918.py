@@ -19,8 +19,6 @@ Simple expansion of S(N) gives us
 S(N) = 4 - a_{N//2} if N is even
 S(n) = 4 - 3a_{N//2 + 1} if N is odd
 
-Answer:
-    -6999033352333308
 '''
 
 from functools import cache

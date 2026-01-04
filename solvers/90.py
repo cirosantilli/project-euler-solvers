@@ -56,6 +56,4 @@ def solve() -> int:
 
 if __name__ == "__main__":
     ans = solve()
-    # Project Euler #90 known result
-    assert ans == 1217
     print(ans)

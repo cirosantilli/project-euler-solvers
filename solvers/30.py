@@ -28,7 +28,6 @@ def solve() -> int:
 
     # Known results for Project Euler #30
     assert matches == [4150, 4151, 54748, 92727, 93084, 194979]
-    assert ans == 443839
 
     return ans
 

@@ -20,8 +20,6 @@ theta = 2.3, tau = 2.23...
 So we pick theta = 2.2
 Repeat
 
-Anwser:
-    2.223561019313554106173177
 '''
 
 import math

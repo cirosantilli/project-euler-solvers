@@ -56,7 +56,6 @@ def main() -> None:
     assert set(fracs) == {(16, 64), (19, 95), (26, 65), (49, 98)}
 
     ans = reduced_product_denominator(fracs)
-    assert ans == 100
 
     print(ans)
 

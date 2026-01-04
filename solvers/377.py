@@ -6,7 +6,7 @@ We need:
   f(n) = sum of all positive integers (base 10) that:
          - contain no digit 0
          - have digit sum n
-  Answer: last 9 digits of sum_{i=1..17} f(13^i)
+Answer: last 9 digits of sum_{i=1..17} f(13^i)
 
 No external libraries are used.
 """

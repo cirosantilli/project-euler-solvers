@@ -25,8 +25,6 @@ Therefore if n = p_1^e_1 * ... * p_k^e_k then
 3. Generate all possible multiples of this primes up to their multiplicities 
 4. sum all values such that π(n) = 120
 
-Anwser:
-    44511058204
 '''
 import math
 

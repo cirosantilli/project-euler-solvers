@@ -31,8 +31,6 @@ so q will be the largest prime factor of 4k^2 + 1
 
 Using Sieve like algorithm to quickly find largest prime factor of 4k^2 + 1
 
-Anwser:
-    238518915714422000
 '''
 
 

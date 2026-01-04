@@ -27,9 +27,6 @@ we are looking for
 log(10)(2^k) = log(10)(1.23... * 10^x)
 k*log(10)(2) = log(10)(1.23...) + x
 
-Anwser:
-    193060223
-    
 '''
 
 import math

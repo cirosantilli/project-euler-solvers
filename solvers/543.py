@@ -71,8 +71,6 @@ for example if n = 10 we test if 1, 3, 5, 7 are prime (3, 5, 7) are hence P((5, 
 
 this is the same as counting all primes less than n - 2 exlcuding 2!
 
-Anwser:
-    199007746081234640
 '''
 import math
 

@@ -9,8 +9,6 @@ def last_ten_digits() -> int:
 
 def main() -> None:
     ans = last_ten_digits()
-    # Project Euler #97 known result
-    assert ans == 8739992577
     print(ans)
 
 

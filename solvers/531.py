@@ -22,8 +22,6 @@ Let f(n,m)=g(φ(n),n,φ(m),m)
 
 Find ∑ f(n,m) for 1000000 ≤ n < m < 1005000
 
-Anwser:
-    4515432351156203105
 '''
 
 def ExtendedEuclideanAlgorithm(a, b):

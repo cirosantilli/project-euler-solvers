@@ -66,7 +66,6 @@ def _self_test() -> None:
 def main() -> None:
     _self_test()
     ans = smallest_counterexample()
-    assert ans == 5777  # known correct result for this problem
     print(ans)
 
 

@@ -38,8 +38,6 @@ that are not allowed because these primes would be less than y, which is not all
 
 So therefore we have the number of non-square-root-smooth numbers x ≤ n = sum_{y=1 to sqrt(n)} π(n/y) - π(y-1)
 
-Anwser:
-    2811077773
 '''
 
 import math

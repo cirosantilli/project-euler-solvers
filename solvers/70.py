@@ -91,8 +91,6 @@ def solve(limit: int = MAX_N) -> int:
             best_n = n
             best_phi = pn
 
-    # Known Project Euler #70 result (kept as a sanity check).
-    assert best_n == 8319823
     return best_n
 
 

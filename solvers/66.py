@@ -56,8 +56,6 @@ def _tests() -> None:
     # From the statement/example
     assert minimal_pell_x(13) == 649
 
-    # Known Project Euler #66 result
-    assert solve(1000) == 661
 
 
 def main() -> None:

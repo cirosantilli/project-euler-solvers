@@ -10,9 +10,6 @@ Created on Tue Aug  1 22:53:35 2023
 Project Euler Problem 795
 
 https://oeis.org/A353909
-
-Anwser:
-    955892601606483.0
 '''
 import math
 

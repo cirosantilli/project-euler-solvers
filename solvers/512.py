@@ -21,11 +21,6 @@ phi(n^k) = (-1)^(k-1) phi(n) mod(n+1)
 so f(n) = sum_{k = 1 to n} phi(n^k) mod(n+1) = sum_{k = 1 to n} (-1)^(k-1) phi(n)
 Therefore when n is even we have f(n) = 0
 and when n is odd we have f(n) = phi(n)
-
-Anwser:
-    2026423657126435 ~ 10^8
-
-    50660591862310323
 '''
 
 

@@ -60,7 +60,6 @@ def main() -> None:
     perimeters = generate_almost_equilateral_perimeters(LIMIT)
     ans = sum(perimeters)
 
-    # Known Project Euler #94 result (also serves as a strong regression check)
     assert ans == 518_408_346
 
     print(ans)

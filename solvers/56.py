@@ -28,12 +28,7 @@ def main() -> None:
     # Basic sanity checks
     assert digit_sum(10**100) == 1
     assert digit_sum(2**15) == 26
-
     best, a, b = max_digital_sum(100)
-
-    # Project Euler #56 known answer
-    assert best == 972
-
     print(best)
 
 

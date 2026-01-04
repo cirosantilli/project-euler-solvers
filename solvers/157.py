@@ -134,6 +134,4 @@ def _asserts_from_statement() -> None:
 if __name__ == "__main__":
     _asserts_from_statement()
     ans = solve()
-    # Known Project Euler answer (helps catch accidental regressions)
-    assert ans == 53490
     print(ans)

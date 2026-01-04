@@ -14,8 +14,6 @@ I modified it to python and to suit the problem better, however it is extremely 
 
 Modified it to become recursive and used cache to greatly speed it up
 
-Anwser:
-    148693670
 '''
 import itertools
 from pathlib import Path

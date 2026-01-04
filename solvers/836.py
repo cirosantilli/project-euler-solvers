@@ -11,8 +11,6 @@ Project Euler Problem 836
 
 Extremely difficult, do not attempt under any cost.
 
-Anwser:
-    aprilfoolsjoke
 '''
 import math
 

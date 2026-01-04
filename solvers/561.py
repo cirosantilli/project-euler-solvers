@@ -45,8 +45,6 @@ using this I get Q(8) = 2714883 which is 3 off and Q(10**12) = 45248049998823550
 I'm forgetting about the case n = 4k
 More in depth in problem explanation on website as it was getting messy without proper writing
 
-Anwser:
-    452480999988235494
 '''
 
 def divisors(n):

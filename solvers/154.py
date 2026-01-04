@@ -16,8 +16,6 @@ We get C(n, i, j) = C(i, j) * C(n, i)
 Note that we want to find all coefficients with 2^(12) * 5^(12) = 10^(12) in their prime factorization
 Recursively build up a prime factorization of all binomial coefficients, only caring about the 2's, and 5's
 
-Answer:
-    479742450
 '''
 
 def fac(n, d):

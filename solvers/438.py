@@ -358,8 +358,6 @@ def main():
 
     # Final answer:
     c7, s7 = solve_for_n(7)
-    # Known Project Euler answer:
-    assert s7 == 2046409616809, s7
     print(s7)
 
 

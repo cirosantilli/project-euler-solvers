@@ -28,9 +28,6 @@ For a given b, a <= sqrt(n/b^6) and a has to be cubefree, therefore we count all
 If b is prime then we subtract 1 extra
 
 For some reason I cannot fix the issue of being 1 off
-
-Anwser:
-    4019680945 - correct answer is 4019680944
 '''
 import math
 

@@ -17,9 +17,6 @@ then 10^n/x = abcde ... n.op ...
 We then have that n = floor(10^n/x) (mod 10) 
                     = floor(10*(10^(n - 1)))/x (mod 10)
                     = floor(10 * (10^(n - 1) (mod x)) / x)
-                    
-Anwser:
-    44967734
 '''
 
 def d(n, k):

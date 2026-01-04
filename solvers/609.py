@@ -25,10 +25,9 @@ P(n) = product of all p(n,k) ≥ 0
 First thing to notice is u is deteremined by u_0, an array with all the pi(n) may be necessary
 
 
-Anwser:
     742870469 ~ 10^7
 
-    172023848 ~ 10^8
+~ 10^8
 '''
 
 import math

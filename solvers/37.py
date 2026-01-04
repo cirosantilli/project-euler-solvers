@@ -64,9 +64,6 @@ def solve() -> int:
 
     assert len(truncatable) == 11, "Increase LIMIT; did not find all 11 truncatable primes."
     result = sum(truncatable)
-
-    # Project Euler #37 known answer (used as a correctness assert)
-    assert result == 748317
     return result
 
 

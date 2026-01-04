@@ -64,10 +64,7 @@ x^2 = 1 (mod 2^4) using solutions +- 1 again we get new solutions +-1 and 2^3 +-
 using solutions 2^2 +- 1 we get no solutions
 
 So we can find I(n) now
-                            
 
-Anwser:
-    153651073760956
 '''
 import math
 from functools import cache

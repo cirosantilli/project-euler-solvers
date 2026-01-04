@@ -20,8 +20,6 @@ We call a number a reversible prime square if:
 
 Find the sum of the first 50 reversible prime squares.
 
-Anwser:
-    3807504276997394
 '''
 
 import math

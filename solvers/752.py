@@ -58,8 +58,6 @@ so it keep cycling between 1, 1 and 2, 2, so once we get into a cycle we cannot 
 
 this also explains the multiples since the cycle will simply repeat hence every multiple of n will solve the congruence
 
-Anwser:
-    5610899769745488
 '''
 import math
 #from sympy import divisors

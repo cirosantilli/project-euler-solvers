@@ -163,8 +163,6 @@ def main() -> None:
 
     ans, clique = solve(10000)
 
-    # Known Project Euler #60 answer (also validates we really found the minimum)
-    assert ans == 26033
     assert set(clique) == {13, 5197, 5701, 6733, 8389}
 
     print(ans)

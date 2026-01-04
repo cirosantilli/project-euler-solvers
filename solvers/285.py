@@ -13,8 +13,6 @@ The probability we win can be mapped inside a torus
 
 (sqrt((k - 0.5)^2 - (k*x + 1)^2) - 1)/k ≤ y ≤ (sqrt((k + 0.5)^2 - (k*x + 1)^2) - 1)/k
 
-Anwser:
-    157055.80999
 '''
 import math
     

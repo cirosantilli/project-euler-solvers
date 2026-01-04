@@ -49,9 +49,6 @@ In our case we have:
     sum_{n = 1}^N val(n + 1,2) = sum_{n = 1}^(N + 1) val(n,2) - val(1, 2)
                                = sum_{n = 1}^(N + 1) val(n,2)
                                = N + 1 - bit cout of N + 1
-    
-Anwser:
-    501985601490518144
 '''
 import math
 

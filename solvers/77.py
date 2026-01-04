@@ -49,8 +49,6 @@ def main() -> None:
     assert count_prime_summations(10, sieve_primes(10)) == 5
 
     ans = first_value_over(5000)
-    # Known Project Euler #77 result: answer is 71 (and its count is > 5000)
-    assert ans == 71
     assert count_prime_summations(ans, sieve_primes(ans)) > 5000
 
     print(ans)

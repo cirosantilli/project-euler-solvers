@@ -58,8 +58,6 @@ n = 9 aa|bb|c|bb|aa
 31 900011069
 32 900004693
 
-Anwser:
-    2000008332
 '''
 import math
 

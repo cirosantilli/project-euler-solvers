@@ -70,5 +70,5 @@ assert nuggets(20)[19] == 211_345_365
 
 
 if __name__ == "__main__":
-    print(solve(30))  # 5673835352990
+    print(solve(30))
 

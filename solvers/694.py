@@ -28,10 +28,7 @@ the summation and lim as the sequence is bounded above by their limit therefore 
 lim n goes to inf S(n)/n = sum_{1 <= cube full i} lim n goes to inf 1/n * floor(n/i) = 
  = sum_{1 <= cube full i} 1/i = prod_{primes p} (1 + 1/p^3 + 1/p^4 + ...) = prod_{primes p} (1 + 1/(p^2(p-1)))
 which converges!!
- 
 
-Anwser:
-    1339784153569958487
 '''
 
 import math

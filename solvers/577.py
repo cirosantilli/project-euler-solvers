@@ -23,8 +23,6 @@ In general every time H(3n) we add n new types of hexagons
 H(3) we have a 1 side length hexagons
 H(6) we have 2 side length and also sqrt(3) side length 
 
-Anwser:
-    265695031399260211
 '''
 
 

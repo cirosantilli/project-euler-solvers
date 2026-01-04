@@ -37,8 +37,6 @@ def main() -> None:
     assert digital_sum_first_100_digits_of_sqrt(2) == 475
 
     ans = solve()
-    # Known Project Euler #80 answer
-    assert ans == 40886
 
     print(ans)
 

@@ -10,8 +10,6 @@ Created on Tue Jul 27 12:50:03 2021
 '''
 Project Euler Problem 743
 
-Anwser:
-    259158998
 '''
 
 import math

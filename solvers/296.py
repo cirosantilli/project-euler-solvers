@@ -31,8 +31,6 @@ Let d = gcd(AC, BC) => AC = d * AC', BC = d * BC' where gcd(AC', BC') = 1
 
 we then have that BE = AB * BC' / (AC' + BC') clearly AC' + BC' cannot divide BC' therefore AC' + BC' | AB
 
-Anwser:
-    1137208419
 '''
 import math
 

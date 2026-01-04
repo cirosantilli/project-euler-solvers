@@ -20,8 +20,6 @@ My function find_f() confirms wolframalpha value f ≈ 0.146883922440941..., whi
 
 we need atleast 432 heads to reach one billion therefore the solution is sum h = 432 to 1000 of 1000Ch/2^1000
 
-Anwser:
-    0.999992836187
 '''
 import math
 

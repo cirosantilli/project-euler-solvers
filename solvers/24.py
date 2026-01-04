@@ -28,10 +28,6 @@ def nth_lexicographic_permutation(digits: List[int], n: int) -> str:
 def main() -> None:
     digits = list(range(10))
     ans = nth_lexicographic_permutation(digits, 1_000_000)
-
-    # Project Euler #24 known result
-    assert ans == "2783915460"
-
     print(ans)
 
 

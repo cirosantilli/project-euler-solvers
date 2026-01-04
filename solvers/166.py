@@ -32,8 +32,6 @@ and we can notice g = s - d - j - m
 
 Using this we only need 9 variables (a, b, c, d, e, f, i, j, k)
 
-Anwser:
-    7130034
 '''
 
 def valid(n):

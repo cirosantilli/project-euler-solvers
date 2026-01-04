@@ -37,7 +37,5 @@ if __name__ == "__main__":
     assert best_fraction_left_of(3, 7, 8) == (2, 5)
 
     ans = solve(1_000_000)
-    # Known Project Euler #71 result
-    assert ans == 428570
 
     print(ans)

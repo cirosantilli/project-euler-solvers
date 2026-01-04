@@ -116,9 +116,6 @@ Now we find M''(5) where (a, b, a^b) = (16, 32, 48)
     2.1. 16 > 5 So we cannot sum the entire block, we need to subdivide the blocks and find the respective sums
     2.2. First we need to go down a power of 4, i -= 1
     2.3. We know we need to sum the block 16 <= a < 20 and just a = 20
-    
-Anwser:
-    552839586
 '''
 
 def mex(A):

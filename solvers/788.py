@@ -13,8 +13,6 @@ D(N) = sum_{n = 1}^N sum_{m = n//2 + 1}^n c(n, m)
 
 where c(n, m) = 9^(n - m + 1) nCm
 
-Answer:
-    471745499
 '''
 
 def factorial_mod(n, mod):

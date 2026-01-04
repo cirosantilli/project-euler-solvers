@@ -26,8 +26,6 @@ def _self_tests() -> None:
     assert count_sqrt2_convergents(7) == 0
     assert count_sqrt2_convergents(8) == 1
 
-    # Known Project Euler #57 result
-    assert count_sqrt2_convergents(1000) == 153
 
 
 def main() -> None:

@@ -66,5 +66,5 @@ if __name__ == "__main__":
     assert 784 in torricelli_sums(784)
 
     # Solve the actual problem:
-    print(euler143(120000))  # 30758397
+    print(euler143(120000))
 

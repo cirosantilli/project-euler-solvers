@@ -33,8 +33,6 @@ Therefore using tonelli shanks, I find the smallest q such that q^2 = 13 mod p, 
 
 using hensels lemma to lift it to find q^2 = 13 (mod p^2)
 
-Anwser:
-    2647787126797397063
 '''
 
 import math

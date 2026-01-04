@@ -12,8 +12,6 @@ Project Euler Problem 816
 simple closest points algorithm O(n*log^2(n)), optimsed to O(n*log(n))
 I took a programming class this semester and we actually briefly talked about this algorithm
 
-Anwser:
-    20.880613018
 '''
 
 import math

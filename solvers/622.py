@@ -25,8 +25,6 @@ For each candidate number, x, we check if 2^n (mod x) = 1, if yes then we need t
 Knowing that 2^n = 1 (mod x), we know that either this is the order of 2 or a divisor of 60 is,
 simply check each divisor of 60
 
-Anwser:
-    3010983666182123972
 '''
 import math
         

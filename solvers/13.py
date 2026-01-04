@@ -113,10 +113,6 @@ def first_ten_digits(nums: List[str]) -> str:
 def main() -> None:
     nums = [line.strip() for line in NUMBERS_TEXT.splitlines() if line.strip()]
     ans = first_ten_digits(nums)
-
-    # Known result for this fixed dataset (Project Euler #13)
-    assert ans == "5537376230"
-
     print(ans)
 
 

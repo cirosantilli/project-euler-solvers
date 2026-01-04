@@ -71,8 +71,6 @@ def magic_5gon_max_16digit() -> str:
 
 def main() -> None:
     ans = magic_5gon_max_16digit()
-    # Known Project Euler #68 answer
-    assert ans == "6531031914842725"
     print(ans)
 
 

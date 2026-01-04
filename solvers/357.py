@@ -30,8 +30,6 @@ So n must be even and n/2 must be odd => n must be a multiple of 2 but not 4, be
 Conclusion: n = 1 is a valid number, we need to check through all numbers divisible by 2 but not 4 and a quick check is to 
 see if n + 1 is prime
 
-Anwser:
-    1739023853137
 '''
 
 import math, itertools

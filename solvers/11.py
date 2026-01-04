@@ -66,10 +66,6 @@ def main() -> None:
     assert 26 * 63 * 78 * 14 == 1788696
 
     ans = max_adjacent_product(grid, 4)
-
-    # Known correct result for this grid (Project Euler #11)
-    assert ans == 70600674
-
     print(ans)
 
 

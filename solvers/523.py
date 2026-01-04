@@ -40,8 +40,6 @@ E(n) = sum_{k = 1 to n} (2^(k - 1) - 1)/k
 
 See website for the actual proof of why
 
-Anwser:
-    37125450.44
 '''
 from itertools import permutations
 

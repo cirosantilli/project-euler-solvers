@@ -86,8 +86,6 @@ So now we know how to generate any array of this form!
 
 We just binary exponentiation to do it quickly and we are done
 
-Anwser:
-    779429131
 '''
 import math
     

@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 # Runtime: 0m0.186s on Python 3.11.11, Ubuntu 25.04, Lenovo ThinkPad P51.
-# Output: 4.7126135532e-29
 
 from functools import lru_cache
 from fractions import Fraction

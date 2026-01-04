@@ -56,8 +56,6 @@ and sum_{K = 1 -> inf} (1/(p_i^(K+1)) = 1/(p_i(p_i - 1)), therefore
 sum_{K = 1 -> inf} bar(f_K) = sum_{p_i in primes} (1 - 1/2)(1 - 1/3)(1 - 1/5)...(1 - 1/(p_i - 1)) * (1/(p_i(p_i - 1)^2))
 
 
-Anwser:
-    0.547326103833
 '''
 
 import math

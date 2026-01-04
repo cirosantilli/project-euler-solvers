@@ -58,7 +58,6 @@ def main() -> None:
     ans = max_path_sum(tri)
 
     # Project Euler #67 known answer (helps catch file/parse issues)
-    assert ans == 7273
 
     print(ans)
 

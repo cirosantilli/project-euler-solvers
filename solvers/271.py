@@ -17,8 +17,6 @@ x^3 = 1 mod 5
 ...
 x^3 = 1 mod 43
 
-Anwser:
-    4617456485273129588
 '''
 
 def prime_factors(n):

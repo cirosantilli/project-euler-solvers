@@ -32,8 +32,6 @@ If we have array[1] = a and x = 256 then, then array[7] += a
 Although there is slight problem if we do this, our array updates as we get causing massive overflow, so we need to create
 a duplicate array which stores the previous values
 
-Anwser:
-    1425480602091519
 '''
 
 def compute(limit):

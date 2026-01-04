@@ -11,8 +11,6 @@ Project Euler Problem 318
 
 Just need to sum ceil(-2011/log_10(p + q - 2sqrt(pq))) if 0 < p + q - 2sqrt(pq) < 1
 
-Anwser:
-    709313889
 '''
 import math
 

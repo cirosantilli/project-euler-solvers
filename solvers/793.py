@@ -25,8 +25,6 @@ be our initial guess for the median
 
 3. After the binary search we will have found our median
 
-Anwser:
-    475808650131120
 '''
 from bisect import bisect_right
 

@@ -37,7 +37,6 @@ that is n - 1 C d_0
 
 total is (d_1 + ... d _9)!/ prod d_i! * n - 1 C d_0 = (n - d_0)! * (n - 1)! / (n - 1 - d_0)! / prod d_i!
 
-Answer:
     6111397420909321590
 '''
 

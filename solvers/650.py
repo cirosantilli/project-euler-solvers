@@ -22,8 +22,6 @@ hence we have
 B(n) = B(n - 1) * n^n/n!, we can quickly add priem factors of n^n, and subtract prime factors of n!
 with precomputed arrays and we find prime factors of B(n)
 
-Answer:
-    538319652
 '''
 import math
 

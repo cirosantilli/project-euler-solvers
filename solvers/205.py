@@ -29,7 +29,6 @@ def solve(dices_peter: int, sides_peter: int, dices_colin: int, sides_colin: int
 
 
 def main() -> None:
-    assert f"{solve(9, 4, 6, 6):.7f}" == "0.5731441"
     print(f"{solve(9, 4, 6, 6):.7f}")
 
 

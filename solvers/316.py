@@ -40,8 +40,6 @@ https://en.wikipedia.org/wiki/Absorbing_Markov_chain#String_generation
 
 N = (I - P)^(-1), then t = N * [1 ,1 ,1]^T, and t[0] is the anwser
 
-Anwser:
-    542934735751917735
 '''
 import random
 

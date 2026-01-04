@@ -49,7 +49,6 @@ def main() -> None:
 
     # Target question
     ans = smallest_cube_with_k_permutations(5)
-    assert ans == 127035954683
 
     print(ans)
 

@@ -36,9 +36,8 @@ if we denote the differnt slopes m1,m2,...mk
 
 Then M = sum from 1 to k (mi) and S = sum from 1 to k of mi(M-mi)
 
-Anwser:
 (4948, 24477690)
-(3109535, 9669182880384)
+(3109535, )
 '''
 
 import math

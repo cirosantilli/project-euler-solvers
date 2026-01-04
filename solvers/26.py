@@ -47,8 +47,6 @@ def _tests() -> None:
     assert recurring_cycle_length(9) == 1
     assert recurring_cycle_length(10) == 0
 
-    # Known Project Euler #26 result
-    assert solve(1000) == 983
 
 
 def main() -> None:

@@ -82,8 +82,6 @@ def solve() -> int:
     # Problem statement example check
     assert is_pandigital_substring_property(1406357289)
 
-    # Known Project Euler #43 answer
-    assert total == 16695334890
 
     return total
 

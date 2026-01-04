@@ -39,7 +39,6 @@ def main() -> None:
 
     # Target problem
     ans = first_consecutive_with_k_factors(4, 4, 200_000)
-    assert ans == 134043
 
     print(ans)
 

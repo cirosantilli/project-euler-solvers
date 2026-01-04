@@ -92,11 +92,6 @@ def derive_passcode(attempts: Iterable[str]) -> str:
 def main() -> None:
     attempts = load_attempts()
     passcode = derive_passcode(attempts)
-
-    # Known result for the Project Euler #79 keylog dataset.
-    if attempts == EMBEDDED_KEYLOG:
-        assert passcode == "73162890"
-
     print(passcode)
 
 

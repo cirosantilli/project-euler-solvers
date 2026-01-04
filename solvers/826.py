@@ -44,8 +44,6 @@ n = 1,000,000: 0.3888891119536712, Fraction(7, 18), Fraction(7, 18), 100 trials
 
 Conjecture: painted amount is (7n + a)/(18n + b) comparing first 2 values we get a = 15, b = 18
 
-Answer:
-    0.3889014797
 '''
 import math
 import random

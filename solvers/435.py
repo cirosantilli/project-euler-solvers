@@ -20,8 +20,6 @@ Proof:
 
 a/b = x (mod m) <=> a/b = my + x< => a = bx + bmy <=> a = bx (mod bm)
 
-Anwser:
-    252541322550
 '''
 
 import math

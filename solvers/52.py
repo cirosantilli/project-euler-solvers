@@ -29,8 +29,6 @@ def smallest_permuted_multiple(limit_mul: int = 6) -> int:
 
 def main() -> None:
     ans = smallest_permuted_multiple(6)
-    # Known Project Euler #52 answer
-    assert ans == 142857
     print(ans)
 
 

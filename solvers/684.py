@@ -10,9 +10,6 @@ Created on Sun Dec 20 09:56:17 2020
 '''
 Project Euler Problem 684
 
-Anwser:
-    922058210
-    
 '''
 
 import math

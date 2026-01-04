@@ -15,8 +15,6 @@ We have |S\G| = 1/m*n sum_{d|m*n} phi(d)x_d^(m*n/d)
 
 we replace x_d with a^i + b^i + ... + c^i which represent the colours, and we search for the co-efficient a^nb^n...c^n
 
-Anwser:
-    1485776387445623
 '''
 import math
 

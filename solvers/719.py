@@ -10,8 +10,6 @@ Created on Sun Apr 11 18:17:04 2021
 '''
 Project Euler Problem 719
 
-Anwser:
-128088830547982
 '''
 
 import math

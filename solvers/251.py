@@ -25,8 +25,6 @@ We want a + b + c <= limit
 
 Fix k, a = 3k + 2 therefore b^2c = (1 + k)^2 (5 + 8k)
 
-Anwser:
-    18946051
 '''
 import math
 

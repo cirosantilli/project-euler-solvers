@@ -18,8 +18,6 @@ the largest 47 smooth number is 1109496723126, found from https://oeis.org/A1175
 
 After that I just generate all 47-smooth numbers under this limit and I go through the list
 
-Anwser:
-    2227616372734
 '''
 
 import math

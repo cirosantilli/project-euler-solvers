@@ -90,11 +90,5 @@ def solve() -> int:
     return sum(products)
 
 
-def _self_test() -> None:
-    # Known Project Euler #32 answer
-    assert solve() == 45228
-
-
 if __name__ == "__main__":
-    _self_test()
     print(solve())

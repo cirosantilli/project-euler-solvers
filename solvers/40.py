@@ -49,6 +49,5 @@ if __name__ == "__main__":
     assert digit_at(1000000) == 1
 
     ans = solve()
-    assert ans == 210
 
     print(ans)

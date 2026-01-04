@@ -73,8 +73,6 @@ An important note:
     
     Final table of exponents is [12, 12, 11, 11, 11, 11, 11, 11, 10] as we expected
 
-Anwser:
-    950591530
 '''
 import math
 

@@ -14,7 +14,6 @@ def count_combinatoric_selections(limit_n: int, threshold: int) -> int:
 
 def main() -> None:
     ans = count_combinatoric_selections(100, 1_000_000)
-    assert ans == 4075
     print(ans)
 
 

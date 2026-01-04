@@ -93,5 +93,5 @@ if __name__ == "__main__":
     # Problem statement example: U(1,2) begins with 1,2,3,4,6,8,11
     assert ulam_sequence(1, 2, 7) == [1, 2, 3, 4, 6, 8, 11]
 
-    print(solve())  # -> 3916160068885
+    print(solve())
 

@@ -51,7 +51,6 @@ def main() -> None:
     assert nth_prime(6) == 13
 
     ans = nth_prime(10001)
-    assert ans == 104743
 
     print(ans)
 

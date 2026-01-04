@@ -30,8 +30,6 @@ Hence for every partition of x we get the total sum
 = (10^n - 1)/9 * (sum_{i in x} d_i * i (n - 1)!/(d_0!d_1!...d_9!)) 
 = (10^n - 1)/9 * (sum_{i in x} d_i * i) * (n - 1)!/(d_0!d_1!...d_9!)
 
-Answer:
-    4598797036650685
 '''
 import math
 

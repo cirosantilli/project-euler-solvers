@@ -23,12 +23,6 @@ def solve(limit: int = 10_000) -> int:
     return sum(1 for n in range(1, limit) if is_lychrel_candidate(n, 50))
 
 
-def _self_test() -> None:
-    # Project Euler #55 known result:
-    assert solve(10_000) == 249
-
-
 if __name__ == "__main__":
-    _self_test()
     result = solve(10_000)
     print(result)

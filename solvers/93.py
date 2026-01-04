@@ -78,8 +78,6 @@ def _self_test() -> None:
     assert max(ints_1234) == 36  # statement says 36 is the maximum for {1,2,3,4}
 
     ans, L = solve()
-    # Known Project Euler #93 result:
-    assert ans == "1258"
     assert L == 51
 
 

@@ -23,8 +23,6 @@ log(p^q) + log(q^p) = qlog(p) + plog(q) = blog(a)
 given p if we can find smallest prime q such that qlog(p) + plog(q) > blog(a), then
 we can just add all the prime between p and q
 
-Anwser:
-    1412403576
 '''
 
 import math

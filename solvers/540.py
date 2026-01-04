@@ -24,8 +24,6 @@ Barely faster than my optimized method
 3. Following this paper https://www.sciencedirect.com/science/article/pii/S0377042701004964 we can get an answer
 See website for details
 
-Anwser:
-    500000000002845
 '''
 import math
 

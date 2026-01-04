@@ -172,7 +172,7 @@ def main():
     assert T(2) == 540
     assert T(5) == 334795890
 
-    print(T(47, MOD))  # expected: 6273134
+    print(T(47, MOD))
 
 
 if __name__ == "__main__":

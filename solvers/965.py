@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 # Runtime: 1m41.925s on Python 3.11.11, Ubuntu 25.04, Lenovo ThinkPad P51.
-# Output: 0.0003452201133
 
 from decimal import Decimal, getcontext
 

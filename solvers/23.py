@@ -47,8 +47,6 @@ def non_abundant_sums(limit: int = 28123) -> int:
 def main() -> None:
     result = non_abundant_sums()
     print(result)
-    # Known Project Euler #23 answer (not in the statement, but a useful correctness check)
-    assert result == 4179871
 
 
 if __name__ == "__main__":

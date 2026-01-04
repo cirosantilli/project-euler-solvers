@@ -31,8 +31,6 @@ S((i+1)!) = S(i!) * y/x for all p < i + 1
 
 Using a sieve to find all prime factors and modular division, problem can be solved in reasonable time
 
-Anwser:
-    416146418
 '''
 
 

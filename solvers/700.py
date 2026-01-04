@@ -25,8 +25,6 @@ The sum of the first 2 Eulercoins is therefore 1513083232796311.
 
 Find the sum of all Eulercoins.
 
-Anwser:
-    1517926517777556
 '''
 
 

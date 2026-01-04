@@ -23,8 +23,6 @@ These are known as Bipronic numbers
 
 For a given x, y can take values y^2 + y < 10^14/(x(x+1)) => x <= y < 1/2*(1+ sqrt(x^2+x+400,000,000,000,000 / (x(x+1))))
 
-Anwser:
-    75737353
 '''
 
 import math

@@ -31,8 +31,6 @@ if p = 3, you will get 2 points
 if p = 5, you will get 2 points
 if p = 7 you will get 3 points
 
-Answer:
-    14.97696693
 '''
 
 import math

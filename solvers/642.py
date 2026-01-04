@@ -11,8 +11,6 @@ Project Euler Problem 642
 
 See website for clearer notes
 
-Anwser:
-    631499044
 '''
 import math
 from functools import cache

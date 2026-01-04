@@ -120,6 +120,4 @@ def solve() -> int:
 if __name__ == "__main__":
     _asserts_from_statement()
     ans = solve()
-    # Known Project Euler answer (helps catch accidental regressions)
-    assert ans == 301
     print(ans)

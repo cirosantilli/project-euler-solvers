@@ -33,8 +33,6 @@ OEIS search: https://oeis.org/A000111 the 8th value is 1385
 https://mathworld.wolfram.com/EulerZigzagNumber.html
 https://mathworld.wolfram.com/EntringerNumber.html
 
-Anwser:
-    773479144
 '''
 
 def E(n, k):

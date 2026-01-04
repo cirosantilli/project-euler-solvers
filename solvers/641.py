@@ -67,8 +67,6 @@ All of our numbers are represented as n = a^6 * b^4
     f(10**30) = 25055676
     f(10**32) = 79290673
 
-Anwser:
-    793525366
 '''
 import math
 

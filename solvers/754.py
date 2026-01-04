@@ -20,8 +20,6 @@ g(n) = n^phi(n)*Product_{d|n} (d!/d^d)^mu(n/d)
     557051244 ~ 10^6
     623561178 ~ 10^7
 
-Anwser:
-    785845900
 '''
 import math
 

@@ -42,8 +42,6 @@ def main() -> None:
     assert is_palindrome_base2(585)
 
     ans = solve(1_000_000)
-    # Known Project Euler #36 answer
-    assert ans == 872187
 
     print(ans)
 

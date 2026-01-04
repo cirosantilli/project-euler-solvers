@@ -53,8 +53,6 @@ def main() -> None:
 
     ans = total_name_scores(names)
 
-    # Known Project Euler #22 answer for the standard names.txt
-    assert ans == 871198282
 
     print(ans)
 

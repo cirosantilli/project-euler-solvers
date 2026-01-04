@@ -24,8 +24,6 @@ let x = ceil(sqrt(a))
 (x + sqrt(a))^(2n) = (a(n) + b(n)sqrt(a))(a(n) + b(n)sqrt(a))
                    = a(n)^2 + ab(n)^2 + 2a(n)b(n)sqrt(a)
 
-Anwser:
-    700792959
 '''
 import math
     

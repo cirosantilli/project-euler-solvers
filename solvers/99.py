@@ -48,8 +48,6 @@ def main() -> None:
         pairs = parse_pairs(f)
     assert best_line_number(pairs[:2]) == 2
     ans = best_line_number(pairs)
-    # Project Euler #99 known answer (for the provided file) is 709.
-    assert ans == 709
     print(ans)
 
 

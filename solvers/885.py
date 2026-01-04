@@ -25,8 +25,6 @@ Use itertools, for each combinations, count how many there are using n!/prod (d_
 where d_i is the number of times d_i appears. For example 00001 appears 5!/4! = 5 times
 they are 1, 10, 100, 1000, 10000
 
-Answer:
-    827850196
 '''
 
 import math, itertools

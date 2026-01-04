@@ -31,8 +31,6 @@ So what about d(k,p) when p is a prime, we an see a pattern in the first column
 d(k,2) = 2*d(k-2,2) and again in the second column d(k,3) = 3*d(k-3,3)
 So we have found a general relation d(k,p) = p*(k-p,p) when p is a prime
 
-Anwser:
-    634212216
 '''
 
 import math

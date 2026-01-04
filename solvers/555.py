@@ -54,8 +54,6 @@ So loop through s, find all divisors, d, of s, then d = k - s <=> k = d + s then
 
 note that we restrict k <= p
 
-Anwser:
-    208517717451208352
 '''
 import math
 

@@ -97,7 +97,6 @@ def main() -> None:
     assert is_circular_prime(197, prime_sieve(1000))
 
     ans = circular_prime_count(1_000_000)
-    assert ans == 55
     print(ans)
 
 

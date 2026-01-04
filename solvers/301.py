@@ -53,9 +53,6 @@ length 30 that do not have consecutive 1's
 
 that is a(30) = f(n+2)
 
-Anwser:
-    2178309
-    
 '''
 
 

@@ -16,16 +16,6 @@ Project Euler Problem 473
 3) φ^(-n) = (-1)^(n+1) (f(n)φ - f(n + 1)))
 4) (φ)^n + (φ)^(-n - 1) = (f(n) + f(n + 1))φ + (f(n - 1) - f(n + 2)), when n is even
 5) (φ)^n + (φ)^(-n - 1) = (f(n) - f(n + 1))φ + (f(n - 1) + f(n + 2)), when n is odd
-
-
-Anwser:
-    10^5 - 3517491
-    10^6 - 51883315
-    10^7 - 2218435383
-    10^8 - 43116488159
-    10^9 - 634787225557 - for some reason this one is slow so I added a stopper
-    10^10 - 35856681704365
-    35856681704365
 '''
 import math
 from decimal import *

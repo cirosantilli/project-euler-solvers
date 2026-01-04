@@ -12,8 +12,6 @@ Project Euler Problem 745
 
 Product of first 13 primes > 10^14
 
-Anwser:
-    94586478
 '''
 
 import math

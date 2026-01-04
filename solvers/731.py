@@ -29,8 +29,6 @@ But 10^(n - 3^i - 1) is massive so instead we calculate 10^(n - 3^i - 1) mod 3^i
 We can do this because we have r = 10^(n - 3^i - 1)/3^i - 10^(n - 3^i - 1)//3^i = (10^(n - 3^i - 1) - 3^i*(10^(n - 3^i - 1)//3^i))/3^i
 = (10^(n - 3^i - 1) mod 3^i) / 3^i
 
-Anwser:
-    6086371427
 '''
 
 import math

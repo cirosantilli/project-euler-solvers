@@ -49,8 +49,6 @@ so f(p) = -r * ((p - 1)*2^(p - 1) + 1)/p + n*2^p
 
 then g(p) = f(p) (mod p) = 
 
-Anwser:
-    1603036763131
 '''
 import math
 

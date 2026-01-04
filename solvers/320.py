@@ -15,8 +15,6 @@ We can use legendres formula to find how many times a prime occurs in n! using l
 then we can perform a bisection algorithm to find the smallest factorial such that there are e*1234567890 factors 
 of i in its factorial
 
-Anwser:
-    278157919195482643
 '''
 import math
 

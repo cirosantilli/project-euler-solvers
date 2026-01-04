@@ -31,8 +31,6 @@ If μ(i) = 1, we have an even number of prime factors
 
 C_k(n) = (-1)^? sum_{i = 1}^sqrt(n) μ(i) floor(n/i*i) choose(p(i), k)
 
-Anwser:
-    728378714
 '''
 import math
 from functools import cache

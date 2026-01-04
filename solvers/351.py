@@ -43,12 +43,6 @@ Hence the problem is reduced to the following:
            = 3*n(n+1) - 6*sum_{i = 1}^n φ(i)
            
 https://en.wikipedia.org/wiki/Totient_summatory_function = sum_{i = 1}^n φ(i) 
-
-Anwser:
-    11762187201804552
-
-After optimization
-    11762187201804552
 '''
 import math
     

@@ -51,9 +51,6 @@ f(n) = 21
 
 We we simple iterate from the fibonnaci 23416728348467685
 
-Anwser:
-    842043391019219959
-    
 '''
 
 

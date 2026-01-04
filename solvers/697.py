@@ -32,8 +32,6 @@ then we find ln(c) and our answer is ln(c)/ln(10)
 
 Then I used an online tool https://homepage.divms.uiowa.edu/~mbognar/applets/gamma.html and wolfram alpha
 
-Anwser:
-    4343871.06
 '''
     
 from math import log, sqrt

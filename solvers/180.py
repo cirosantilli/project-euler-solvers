@@ -92,6 +92,4 @@ def solve(k: int = 35) -> int:
 
 if __name__ == "__main__":
     ans = solve(35)
-    # Known Project Euler answer (helps catch accidental regressions)
-    assert ans == 285196020571078987
     print(ans)

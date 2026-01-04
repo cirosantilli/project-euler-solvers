@@ -48,7 +48,6 @@ def _tests() -> None:
 def main() -> None:
     _tests()
     ans = find_min_difference(10_000)
-    # Known Project Euler #44 result
     assert ans == 5_482_660
     print(ans)
 

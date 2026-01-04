@@ -64,7 +64,6 @@ def main() -> None:
     assert is_1_to_9_pandigital("918273645")
 
     ans = solve()
-    assert ans == 932718654
     print(ans)
 
 

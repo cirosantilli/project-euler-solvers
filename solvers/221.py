@@ -17,8 +17,6 @@ A_1 = p(p + a)((p^2 + 1)/a + p) = p(p + a)(b + p)
                                         ||
 A_2 = p(p + b)((p^2 + 1)/b + p) = p(p + b)(a + p)
 
-Anwser:
-    1884161251122450
 '''
 import math
 

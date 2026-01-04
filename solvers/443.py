@@ -61,8 +61,6 @@ Adding a function to check if x is prime shows that only if x is prime do we get
 
 the only value which breaks this is 6, since 6*2 - 1 = 11 is prime but a new chain does not start at 11
 
-Anwser:
-    2744233049300770
 '''
 import math
 

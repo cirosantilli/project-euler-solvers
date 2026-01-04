@@ -39,11 +39,7 @@ def largest_palindrome_product(lo: int, hi: int) -> Tuple[int, int, int]:
 def main() -> None:
     # Given example: largest palindrome from product of two 2-digit numbers.
     assert largest_palindrome_product(10, 99)[0] == 9009
-
     ans, a, b = largest_palindrome_product(100, 999)
-    # Known result for verification (Project Euler #4).
-    assert ans == 906609
-
     print(ans)
 
 

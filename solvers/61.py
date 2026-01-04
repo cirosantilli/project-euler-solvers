@@ -76,8 +76,6 @@ def main() -> None:
     assert polygonal(5, 44) == 2882
 
     ans = find_cycle_sum()
-    # Known Project Euler #61 answer
-    assert ans == 28684
 
     print(ans)
 

@@ -117,7 +117,6 @@ def main() -> None:
     assert count_prime_family_for_positions(56003, [2, 3]) == 7
 
     ans = find_smallest_prime_in_family(8)
-    assert ans == 121313
     print(ans)
 
 

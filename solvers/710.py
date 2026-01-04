@@ -9,8 +9,6 @@ Created on Mon Jan 13 15:35:15 2025
 '''
 Project Euler Problem 710
 
-Answer:
-    1275000
 '''
 from functools import cache
 

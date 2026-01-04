@@ -57,10 +57,6 @@ def find_prime_perm_arith_sequence() -> Tuple[int, int, int]:
 def main() -> None:
     a, b, c = find_prime_perm_arith_sequence()
     result = int(f"{a}{b}{c}")
-
-    # Sanity: the classic known answer for this problem.
-    assert result == 296962999629, (a, b, c, result)
-
     print(result)
 
 

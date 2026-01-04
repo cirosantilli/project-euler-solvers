@@ -34,8 +34,6 @@ def count_sundays_on_first(start_year: int, end_year: int) -> int:
 
 def main() -> None:
     ans = count_sundays_on_first(1901, 2000)
-    # Known Project Euler #19 answer:
-    assert ans == 171
     print(ans)
 
 

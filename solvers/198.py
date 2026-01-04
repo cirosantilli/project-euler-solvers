@@ -92,5 +92,5 @@ if __name__ == "__main__":
     # 9/40 has the two best approximations 1/4 and 1/5 for denominator bound 6.
     assert best_approximations(Fraction(9, 40), 6) == {Fraction(1, 4), Fraction(1, 5)}
 
-    print(solve())  # 52374425
+    print(solve())
 

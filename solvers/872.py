@@ -31,8 +31,6 @@ of T_n, if x in [n-1, n-2, n-4, n-8, etc], it's parent is n, which obeys ** othe
 change, that is if x + 2k = y, k is as large as possible such that x + 2^k <= n + 1, then the same
 k is chosen so that x + 2^k <= n
 
-Answer:
-    2903144925319290239
 '''
     
 import math

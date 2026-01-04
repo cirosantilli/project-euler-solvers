@@ -19,7 +19,6 @@ Here we find sum_{n = 1 to inf} q^n * sigma_k(n) = zeta(k + 1) * sum_{n = 1 to i
 
 = https://www.wolframalpha.com/input/?i=zeta%2816%29 * https://www.wolframalpha.com/input/?i=%28sum+from+n+%3D+1+to+inf+n%5E15+*+%281-+1%2F2%5E25%29%5En%29
 
-Anwser:
     3.3767927765019874495661798092357242956848214897422484015781 × 10^132
     ~ 3.376792776502 × 10^132
 '''

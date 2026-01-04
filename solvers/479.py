@@ -34,8 +34,6 @@ S - (1-k^2)S = (1- k^2) - (1-k^2)^(n+1)
 
 Now this is simple to solve using modular division
 
-Anwser:
-    191541795
 '''
 import math
 
