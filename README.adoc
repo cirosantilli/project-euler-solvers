@@ -692,7 +692,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/415.py[415.py] |  | 100.317 |  |  |
 | link:solvers/416.py[416.py] | link:solvers/416.md[416.md] | 6.503 | gpt-5.2-codex |  |
 | link:solvers/417.py[417.py] | link:solvers/417.md[417.md] | 11.211 |  |  |
-| link:solvers/418.py[418.py] |  | 0.084 |  |  | error: failed (exit 1)
+| link:solvers/418.py[418.py] | link:solvers/418.md[418.md] | 2.043 | gpt-5.2-thinking |  |
 | link:solvers/419.py[419.py] | link:solvers/419.md[419.md] | 0.960 |  |  |
 | link:solvers/420.py[420.py] |  | 0.982 |  |  |
 | link:solvers/421.py[421.py] | link:solvers/421.md[421.md] | 2.073 | gpt-5.2-thinking |  |
