@@ -14,8 +14,8 @@ This repo aims to solve ALL https://projecteuler.net[Project Euler] problems in 
 
 Status:
 
-* all solved up to: **250**
-* all solved up to **500** except for less than 12 problems. Ctrl + F "error: " to see the first missing ones.
+* all solved up to: **350**
+* all solved up to **500** except 10 or less problems. Ctrl + F "error: " to see the first missing ones.
 
 Tested on Python 3.13.7, PyPy 7.3.20, Ubuntu 25.10.
 
@@ -544,7 +544,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/252.py[252.py] | link:solvers/252.md[252.md] | 8.775 |  |  |
 | link:solvers/253.py[253.py] | link:solvers/253.md[253.md] | 23.854 |  |  |
 | link:solvers/254.py[254.py] | link:solvers/254.md[254.md] | 0.642 |  |  |
-| 255.py |  |  |  |  | error: solver not found
+| link:solvers/255.py[255.py] | link:solvers/255.md[255.md] | 1.105 | gpt-5.2-thinking |  |
 | link:solvers/256.py[256.py] | link:solvers/256.md[256.md] | 1.786 |  |  |
 | link:solvers/257.py[257.py] | link:solvers/257.md[257.md] | 2.900 |  |  |
 | link:solvers/258.py[258.py] | link:solvers/258.md[258.md] | 1.565 |  |  |
@@ -584,7 +584,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/292.py[292.py] | link:solvers/292.md[292.md] | 1.841 |  |  |
 | link:solvers/293.py[293.py] |  | 0.173 |  |  |
 | link:solvers/294.py[294.py] | link:solvers/294.md[294.md] | 0.204 |  |  |
-| 295.py |  |  |  |  | error: solver not found
+| link:solvers/295.py[295.py] | link:solvers/295.md[295.md] | 4.636 | gpt-5.2-codex |  |
 | link:solvers/296.py[296.py] |  | 80.048 |  |  |
 | link:solvers/297.py[297.py] |  | 0.065 |  |  |
 | link:solvers/298.py[298.py] | link:solvers/298.md[298.md] | 0.538 |  |  |
@@ -620,7 +620,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/328.py[328.py] | link:solvers/328.md[328.md] | 0.208 |  |  |
 | link:solvers/329.py[329.py] |  | 0.098 |  |  |
 | link:solvers/330.py[330.py] | link:solvers/330.md[330.md] | 0.103 |  |  |
-| 331.py |  |  |  |  | error: solver not found
+| link:solvers/331.py[331.py] | link:solvers/331.md[331.md] | 0.225 | gpt-5.2-thinking |  |
 | link:solvers/332.py[332.py] | link:solvers/332.md[332.md] | 0.406 |  |  |
 | link:solvers/333.py[333.py] |  | 2.909 |  |  |
 | link:solvers/334.py[334.py] | link:solvers/334.md[334.md] | 0.640 |  |  |
@@ -678,7 +678,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/386.py[386.py] | link:solvers/386.md[386.md] |  | gpt-5.2-thinking |  | error: timed out after 600.000s
 | link:solvers/387.py[387.py] |  | 0.122 |  |  |
 | link:solvers/388.py[388.py] | link:solvers/388.md[388.md] | 0.561 |  |  |
-| 389.py |  |  |  |  | error: solver not found
+| link:solvers/389.py[389.py] | link:solvers/389.md[389.md] | 0.131 | gpt-5.2-thinking |  |
 | link:solvers/390.py[390.py] | link:solvers/390.md[390.md] | 0.127 | gpt-5.2-thinking |  |
 | link:solvers/391.py[391.py] | link:solvers/391.md[391.md] | 1.027 | gpt-5.2-thinking |  |
 | link:solvers/392.py[392.py] | link:solvers/392.md[392.md] | 0.080 |  |  |
@@ -687,7 +687,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/395.py[395.py] | link:solvers/395.md[395.md] | 0.245 |  |  |
 | link:solvers/396.py[396.py] | link:solvers/396.md[396.md] | 0.116 |  |  |
 | link:solvers/397.py[397.py] | link:solvers/397.md[397.md] | 3.560 |  |  |
-| link:solvers/398.py[398.py] | link:solvers/398.md[398.md] | 0.154 |  |  |
+| link:solvers/398.py[398.py] | link:solvers/398.md[398.md] | 0.118 | gpt-5.2-thinking |  | error: expected '2010.59096', got '2406376.3623'
 | link:solvers/399.py[399.py] | link:solvers/399.md[399.md] | 4.903 |  |  |
 | link:solvers/400.py[400.py] |  | 0.342 |  |  |
 | link:solvers/401.py[401.py] |  | 2.009 |  |  |
