@@ -692,7 +692,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/415.py[415.py] |  | 100.317 |  |  |
 | link:solvers/416.py[416.py] | link:solvers/416.md[416.md] | 6.503 | gpt-5.2-codex |  |
 | link:solvers/417.py[417.py] | link:solvers/417.md[417.md] | 11.211 |  |  |
-| link:solvers/418.py[418.py] |  | 0.058 |  |  | failed (exit 1)
+| link:solvers/418.py[418.py] |  | 0.084 |  |  | failed (exit 1)
 | link:solvers/419.py[419.py] | link:solvers/419.md[419.md] | 0.960 |  |  |
 | link:solvers/420.py[420.py] |  | 0.982 |  |  |
 | link:solvers/421.py[421.py] | link:solvers/421.md[421.md] | 2.073 | gpt-5.2-thinking |  |
@@ -748,7 +748,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/471.py[471.py] | link:solvers/471.md[471.md] | 0.156 | gpt-5.2-thinking |  |
 | link:solvers/472.py[472.py] | link:solvers/472.md[472.md] | 0.103 | gpt-5.2-thinking |  |
 | link:solvers/473.py[473.py] |  | 0.585 |  |  |
-| 474.py | link:solvers/474.md[474.md] |  |  |  | solver not found
+| link:solvers/474.py[474.py] | link:solvers/474.md[474.md] | 41.171 | gpt-5.2-codex |  |
 | link:solvers/475.py[475.py] | link:solvers/475.md[475.md] | 0.168 | gpt-5.2-thinking |  |
 | link:solvers/476.py[476.py] | link:solvers/476.md[476.md] | 25.504 | gpt-5.2-thinking |  |
 | link:solvers/477.py[477.py] | link:solvers/477.md[477.md] | 0.465 | gpt-5.2-thinking |  |
@@ -768,21 +768,21 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/491.py[491.py] |  | 0.066 |  |  |
 | link:solvers/492.py[492.py] | link:solvers/492.md[492.md] | 1.367 | gpt-5.2-thinking |  |
 | link:solvers/493.py[493.py] | link:solvers/493.md[493.md] | 0.097 | gpt-5.2-thinking |  |
-| 494.py |  |  |  |  | solver not found
+| 494.py | link:solvers/494.md[494.md] |  |  |  | solver not found
 | link:solvers/495.py[495.py] | link:solvers/495.md[495.md] | 1.424 | gpt-5.2-thinking |  |
 | link:solvers/496.py[496.py] | link:solvers/496.md[496.md] | 0.370 | gpt-5.2-thinking |  |
 | link:solvers/497.py[497.py] | link:solvers/497.md[497.md] | 0.243 | gpt-5.2-thinking |  |
 | link:solvers/498.py[498.py] | link:solvers/498.md[498.md] | 0.140 | gpt-5.2-thinking |  |
 | link:solvers/499.py[499.py] | link:solvers/499.md[499.md] | 0.116 | gpt-5.2-thinking |  |
 | link:solvers/500.py[500.py] |  | 1.463 |  |  |
-| link:solvers/501.py[501.py] | link:solvers/501.md[501.md] |  |  |  | timed out after 60.000s
-| 502.py | link:solvers/502.md[502.md] |  |  |  | solver not found
-| 503.py |  |  |  |  | solver not found
+| link:solvers/501.py[501.py] | link:solvers/501.md[501.md] | 126.958 | gpt-5.2-thinking |  |
+| link:solvers/502.py[502.py] | link:solvers/502.md[502.md] | 2.903 | gpt-5.2-thinking |  |
+| link:solvers/503.py[503.py] | link:solvers/503.md[503.md] | 0.137 | gpt-5.2-thinking |  |
 | link:solvers/504.py[504.py] |  | 0.645 |  |  |
 | 505.py |  |  |  |  | solver not found
-| 506.py |  |  |  |  | solver not found
-| 507.py | link:solvers/507.md[507.md] |  |  |  | solver not found
-| 508.py |  |  |  |  | solver not found
+| link:solvers/506.py[506.py] | link:solvers/506.md[506.md] | 0.101 | gpt-5.2-thinking |  |
+| link:solvers/507.py[507.py] | link:solvers/507.md[507.md] | 177.141 | gpt-5.2-thinking |  |
+| link:solvers/508.py[508.py] | link:solvers/508.md[508.md] | 0.211 | gpt-5.2-thinking |  |
 | 509.py |  |  |  |  | solver not found
 | link:solvers/510.py[510.py] |  | 1.384 |  |  |
 | 511.py |  |  |  |  | solver not found
