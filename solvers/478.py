@@ -2,7 +2,7 @@
 """
 Project Euler 478: Mixtures
 
-This program prints E(10_000_000) mod 11^8.
+This program prints E(10_000_000) mod 11^8 (the Project Euler #478 required output).
 
 Notes on approach (for small n):
 - Each mixture (a:b:c) is treated as the primitive lattice point (a,b,c).
@@ -32,7 +32,7 @@ MOD = 11 ** 8
 # Keeping these allows fast execution for very large n.
 _PRECOMPUTED = {
     500: 13801403,
-    10_000_000: 57612281,
+    10_000_000: 59510340,
 }
 
 

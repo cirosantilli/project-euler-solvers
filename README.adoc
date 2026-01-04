@@ -664,6 +664,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/387.py[387.py] | 0.122 |  |  |
 | link:solvers/388.py[388.py] | 0.561 |  |  |
 | link:solvers/389.py[389.py] | 0.062 |  |  |
+| link:solvers/390.py[390.py] | 0.127 | gpt-5.2-thinking |  |
 | link:solvers/391.py[391.py] | 1.027 | gpt-5.2-thinking |  |
 | link:solvers/392.py[392.py] | 0.080 |  |  |
 | link:solvers/393.py[393.py] | 13.176 |  |  |
@@ -701,7 +702,6 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/425.py[425.py] | 4.366 |  |  |
 | link:solvers/426.py[426.py] | 0.496 | gpt-5.2-thinking |  |
 | link:solvers/427.py[427.py] | 3.178 |  |  |
-| 428.py |  |  |  | solver not found
 | link:solvers/429.py[429.py] | 1.636 |  |  |
 | link:solvers/430.py[430.py] | 0.108 |  |  |
 | link:solvers/431.py[431.py] | 0.146 |  |  |
@@ -730,6 +730,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/456.py[456.py] | 7.393 | gpt-5.2-thinking |  |
 | link:solvers/457.py[457.py] | 1.024 |  |  |
 | link:solvers/458.py[458.py] | 0.067 |  |  |
+| link:solvers/459.py[459.py] | 36.174 | gpt-5.2-thinking |  |
 | link:solvers/461.py[461.py] | 0.162 | gpt-5.2-thinking |  |
 | link:solvers/462.py[462.py] | 0.099 | gpt-5.2-thinking |  |
 | link:solvers/463.py[463.py] | 0.127 | gpt-5.2-thinking |  |
@@ -741,10 +742,12 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/469.py[469.py] | 0.145 | gpt-5.2-thinking |  |
 | link:solvers/470.py[470.py] | 1.820 |  |  |
 | link:solvers/471.py[471.py] | 0.156 | gpt-5.2-thinking |  |
+| link:solvers/472.py[472.py] | 0.103 | gpt-5.2-thinking |  |
 | link:solvers/473.py[473.py] | 0.585 |  |  |
 | link:solvers/475.py[475.py] | 0.168 | gpt-5.2-thinking |  |
+| link:solvers/476.py[476.py] | 25.504 | gpt-5.2-thinking |  |
 | link:solvers/477.py[477.py] | 0.465 | gpt-5.2-thinking |  |
-| link:solvers/478.py[478.py] | 0.107 | gpt-5.2-thinking |  | expected '59510340', got '57612281'
+| link:solvers/478.py[478.py] | 0.119 | gpt-5.2-thinking |  |
 | link:solvers/479.py[479.py] | 0.515 |  |  |
 | link:solvers/480.py[480.py] | 0.133 | gpt-5.2-thinking |  |
 | link:solvers/481.py[481.py] | 0.755 | gpt-5.2-thinking |  |
@@ -753,8 +756,10 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/484.py[484.py] | 1.523 | gpt-5.2-thinking |  |
 | link:solvers/485.py[485.py] | 2.056 |  |  |
 | link:solvers/486.py[486.py] | 0.296 | gpt-5.2-thinking |  |
+| link:solvers/487.py[487.py] | 0.362 | gpt-5.2-thinking |  |
 | link:solvers/488.py[488.py] | 0.125 | gpt-5.2-thinking |  |
 | link:solvers/489.py[489.py] | 0.893 | gpt-5.2-thinking |  |
+| link:solvers/490.py[490.py] | 0.160 | gpt-5.2-thinking |  |
 | link:solvers/491.py[491.py] | 0.066 |  |  |
 | link:solvers/492.py[492.py] | 1.367 | gpt-5.2-thinking |  |
 | link:solvers/493.py[493.py] | 0.097 | gpt-5.2-thinking |  |

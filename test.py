@@ -344,6 +344,7 @@ def update_readme(results: list[Result]) -> None:
 
     header_line = "| ID | Runtime (s) | Model | Out Tokens | Error"
     row_re = re.compile(r"^\|\s+link:([^\[]+)\[")
+    plain_re = re.compile(r"^\|\s+(\d+)\.py\s+\|")
     result_map: dict[tuple[int, str], str] = {}
     row_map: dict[tuple[int, str], str] = {}
 
@@ -351,18 +352,27 @@ def update_readme(results: list[Result]) -> None:
         result_map[result_key(res)] = format_row(res)
 
     for i in range(start + 1, end):
-        match = row_re.match(lines[i])
-        if not match:
+        line = lines[i]
+        match = row_re.match(line)
+        if match:
+            link_target = match.group(1)
+            pid = parse_solver_id(Path(link_target))
+            if pid is None:
+                id_match = re.search(r"\\[(\\d+)\\]", line)
+                if not id_match:
+                    continue
+                pid = int(id_match.group(1))
+            language = detect_language(Path(link_target)) or ""
+            row_map[(pid, language)] = line
             continue
-        link_target = match.group(1)
-        pid = parse_solver_id(Path(link_target))
-        if pid is None:
-            id_match = re.search(r"\\[(\\d+)\\]", lines[i])
-            if not id_match:
-                continue
-            pid = int(id_match.group(1))
-        language = detect_language(Path(link_target)) or ""
-        row_map[(pid, language)] = lines[i]
+        plain_match = plain_re.match(line)
+        if not plain_match:
+            continue
+        pid_text = plain_match.group(1)
+        if not pid_text:
+            continue
+        pid = int(pid_text)
+        row_map[(pid, "py")] = line
 
     for key, row in result_map.items():
         row_map[key] = row
