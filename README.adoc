@@ -772,7 +772,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/480.py[480.py] | link:solvers/480.md[480.md] | 0.133 | gpt-5.2-thinking |  |
 | link:solvers/481.py[481.py] | link:solvers/481.md[481.md] | 0.755 | gpt-5.2-thinking |  |
 | link:solvers/482.py[482.py] | link:solvers/482.md[482.md] | 3.574 | gpt-5.2-thinking |  |
-| 483.py |  |  |  |  | error: solver not found
+| link:solvers/483.py[483.py] | link:solvers/483.md[483.md] |  |  |  | error: timed out after 600.000s
 | link:solvers/484.py[484.py] | link:solvers/484.md[484.md] | 1.523 | gpt-5.2-thinking |  |
 | link:solvers/485.py[485.py] |  | 2.056 |  |  |
 | link:solvers/486.py[486.py] | link:solvers/486.md[486.md] | 0.296 | gpt-5.2-thinking |  |
@@ -783,7 +783,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/491.py[491.py] |  | 0.066 |  |  |
 | link:solvers/492.py[492.py] | link:solvers/492.md[492.md] | 1.367 | gpt-5.2-thinking |  |
 | link:solvers/493.py[493.py] | link:solvers/493.md[493.md] | 0.097 | gpt-5.2-thinking |  |
-| link:solvers/494.py[494.py] | link:solvers/494.md[494.md] |  | gpt-5.2-codex |  | error: timed out after 600.000s
+| link:solvers/494.py[494.py] | link:solvers/494.md[494.md] | 0.083 | gpt-5.2-thinking |  |
 | link:solvers/495.py[495.py] | link:solvers/495.md[495.md] | 1.424 | gpt-5.2-thinking |  |
 | link:solvers/496.py[496.py] | link:solvers/496.md[496.md] | 0.370 | gpt-5.2-thinking |  |
 | link:solvers/497.py[497.py] | link:solvers/497.md[497.md] | 0.243 | gpt-5.2-thinking |  |
