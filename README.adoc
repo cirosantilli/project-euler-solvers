@@ -15,7 +15,7 @@ This repo aims to solve ALL https://projecteuler.net[Project Euler] problems in 
 Status:
 
 * all solved up to: **350**
-* all solved up to **500** except 10 or less problems. Ctrl + F "error: " to see the first missing ones.
+* all solved up to **500** except less than 10 problems. Ctrl + F "error: " to see the first missing ones.
 
 Tested on Python 3.13.7, PyPy 7.3.20, Ubuntu 25.10.
 
@@ -687,7 +687,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/395.py[395.py] | link:solvers/395.md[395.md] | 0.245 |  |  |
 | link:solvers/396.py[396.py] | link:solvers/396.md[396.md] | 0.116 |  |  |
 | link:solvers/397.py[397.py] | link:solvers/397.md[397.md] | 3.560 |  |  |
-| link:solvers/398.py[398.py] | link:solvers/398.md[398.md] | 0.118 | gpt-5.2-thinking |  | error: expected '2010.59096', got '2406376.3623'
+| link:solvers/398.py[398.py] | link:solvers/398.md[398.md] | 0.328 | gpt-5.2-thinking |  |
 | link:solvers/399.py[399.py] | link:solvers/399.md[399.md] | 4.903 |  |  |
 | link:solvers/400.py[400.py] |  | 0.342 |  |  |
 | link:solvers/401.py[401.py] |  | 2.009 |  |  |

@@ -117,7 +117,7 @@ def expected_second_shortest(n: int, m: int) -> float:
 
         acc += base * factor
 
-        N2 -= m - 1
+        N2 -= (m - 1)
         N1 -= m
 
     return acc
@@ -134,3 +134,4 @@ if __name__ == "__main__":
     assert expected_second_shortest_exact(8, 3) == Fraction(16, 7)
 
     solve()
+
