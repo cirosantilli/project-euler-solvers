@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00722%20-%20Slowly%20Converging%20Series.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00722%20-%20Slowly%20Converging%20Series.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Tue Jan  4 14:55:39 2022
@@ -7,7 +7,7 @@ Created on Tue Jan  4 14:55:39 2022
 @author: igorvanloo
 """
 
-'''
+"""
 Project Euler Problem 722
 
 https://en.wikipedia.org/wiki/Lambert_series#Examples
@@ -21,10 +21,11 @@ Here we find sum_{n = 1 to inf} q^n * sigma_k(n) = zeta(k + 1) * sum_{n = 1 to i
 
     3.3767927765019874495661798092357242956848214897422484015781 × 10^132
     ~ 3.376792776502 × 10^132
-'''
+"""
 
 import math
 from decimal import *
+
 getcontext().prec = 20
 
 EXAMPLES = {
@@ -33,20 +34,22 @@ EXAMPLES = {
     (7, 15): Decimal("6.725803486744e39"),
 }
 
+
 def E(k, q):
     total = 0
     for n in range(1, 10**8):
         if n % 10**7 == 0:
             print(n)
         x = Decimal(q**n)
-        total += Decimal(n**k) * x/(Decimal(1) - x)
+        total += Decimal(n**k) * x / (Decimal(1) - x)
     return total
-    
+
+
 if __name__ == "__main__":
     assert EXAMPLES[(1, 4)] == Decimal("3.872155809243e2")
     assert EXAMPLES[(3, 8)] == Decimal("2.767385314772e10")
     assert EXAMPLES[(7, 15)] == Decimal("6.725803486744e39")
-    #print(E(1, 1 - Decimal(1)/Decimal(2**4))) #Good enough with 10^6
-    #print(E(3, 1 - Decimal(1)/Decimal(2**8))) #Good enough with 10^7
-    #print(E(7, 1 - Decimal(1)/Decimal(2**15))) #Good enough with 2*10^7
-    print(E(15, 1 - Decimal(1)/Decimal(2**25)))
+    # print(E(1, 1 - Decimal(1)/Decimal(2**4))) #Good enough with 10^6
+    # print(E(3, 1 - Decimal(1)/Decimal(2**8))) #Good enough with 10^7
+    # print(E(7, 1 - Decimal(1)/Decimal(2**15))) #Good enough with 2*10^7
+    print(E(15, 1 - Decimal(1) / Decimal(2**25)))

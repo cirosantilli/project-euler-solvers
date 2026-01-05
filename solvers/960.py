@@ -1,10 +1,11 @@
 from math import comb, factorial
 
-'''
+"""
 By GPT-5. Runtime: 0m0.249s on pypy3 3.11.13, Ubuntu 25.10, Lenovo ThinkPad P14s.
-'''
+"""
 
 MOD = 10**9 + 7
+
 
 def F(n: int) -> int:
     S = 0
@@ -22,6 +23,7 @@ def F(n: int) -> int:
             ways = ways * inv2 % MOD
         S = (S + k * ways) % MOD
     return S * factorial(n - 1) % MOD
+
 
 assert F(3) == 12
 assert F(4) == 360

@@ -1,36 +1,44 @@
 #!/usr/bin/env python
 
-'''
+"""
 By GPT-5. Runtime: 3.4s on pypy3 3.11.11, Ubuntu 25.04, Lenovo ThinkPad P14s.
-'''
+"""
 
 from math import isqrt
 
+
 def sieve_primes_upto(n):
-    """Return list of primes <= n using odd-only sieve (memory ~ n/2 bytes).
-    """
+    """Return list of primes <= n using odd-only sieve (memory ~ n/2 bytes)."""
     if n < 2:
         return []
-    sieve = bytearray((n//2) + 1)  # index i represents number 2*i+1
+    sieve = bytearray((n // 2) + 1)  # index i represents number 2*i+1
     limit = isqrt(n)
-    for i in range(1, (limit//2) + 1):
+    for i in range(1, (limit // 2) + 1):
         if sieve[i] == 0:
-            p = 2*i + 1
-            start = (p*p - 1)//2
-            sieve[start::p] = b'\x01' * (((len(sieve) - 1 - start)//p) + 1)
+            p = 2 * i + 1
+            start = (p * p - 1) // 2
+            sieve[start::p] = b"\x01" * (((len(sieve) - 1 - start) // p) + 1)
     primes = [2]
-    primes.extend([2*i+1 for i, v in enumerate(sieve) if i>0 and v==0 and (2*i+1) <= n])
+    primes.extend(
+        [
+            2 * i + 1
+            for i, v in enumerate(sieve)
+            if i > 0 and v == 0 and (2 * i + 1) <= n
+        ]
+    )
     return primes
+
 
 # For mapping on the 5-element subgroup mu5 we will use simple graph traversal to
 # classify which elements are on cycles. We represent elements by their canonical
 # integer residue in 0..p-1.
 
+
 def count_periodic_in_mu5(p):
     """For prime p with p % 5 == 1, compute t = number of s in mu5 that are periodic under phi(s)=s*(1+s)^n mod p,
     where n=(p-1)//5. Returns t.
     """
-    n = (p-1)//5
+    n = (p - 1) // 5
     # find an a with a^n != 1, so that zeta = a^n is a generator of mu5 (or at least not 1)
     # in practice small a (2,3,5,7,11...) will work; loop until found.
     a = 2
@@ -41,7 +49,7 @@ def count_periodic_in_mu5(p):
     # build mu5 list (five distinct elements)
     mu5 = [1]
     cur = 1
-    for _ in range(1,5):
+    for _ in range(1, 5):
         cur = (cur * zeta) % p
         mu5.append(cur)
     # Map each element to its image under phi (reduced modulo p)
@@ -100,13 +108,14 @@ def compute_S(limit):
         if p % 5 != 1:
             continue
         count_primes += 1
-        n = (p-1)//5
+        n = (p - 1) // 5
         t = count_periodic_in_mu5(p)
         C_p = 1 + n * t
         total += C_p
     return total
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     assert compute_S(11) == 7
     assert compute_S(100) == 127
     print(compute_S(10**8))

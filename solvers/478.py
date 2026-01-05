@@ -26,7 +26,7 @@ from __future__ import annotations
 from math import gcd
 from functools import cmp_to_key
 
-MOD = 11 ** 8
+MOD = 11**8
 
 # Known values (mod 11^8) from the problem statement / community verification.
 # Keeping these allows fast execution for very large n.
@@ -134,8 +134,8 @@ def _count_e_mod_small(n: int) -> int:
         while j < i + G and in_open_semicircle(dirs2[i], dirs2[j]):
             j += 1
 
-        arc_total = pref[j] - pref[i]      # points in an open semicircle, including group i
-        mi = counts[i]                     # points exactly at the starting direction
+        arc_total = pref[j] - pref[i]  # points in an open semicircle, including group i
+        mi = counts[i]  # points exactly at the starting direction
         # choose a non-empty subset from the start direction, and anything from the rest
         bad_nonempty = (bad_nonempty + (pow2[mi] - 1) * pow2[arc_total - mi]) % MOD
 

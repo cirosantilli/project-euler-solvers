@@ -188,16 +188,17 @@ def solve(M: int, N: int) -> int:
             return partial + full_cnt * len_side
 
         # Non-square: y_max = floor(sqrt(k)*x), saturation when sqrt(k)*x >= U
-        b = isqrt(U2m1 // k)  # largest x with k*x^2 <= U^2-1  => floor(sqrt(k)*x) <= U-1
+        b = isqrt(
+            U2m1 // k
+        )  # largest x with k*x^2 <= U^2-1  => floor(sqrt(k)*x) <= U-1
         if b < L:
             return total_pairs
         if b > U:
             b = U
         cnt = b - L + 1
 
-        sum_floor = (
-            sum_floor_mul_surd(0, 1, 1, k, b)
-            - sum_floor_mul_surd(0, 1, 1, k, Lm1)
+        sum_floor = sum_floor_mul_surd(0, 1, 1, k, b) - sum_floor_mul_surd(
+            0, 1, 1, k, Lm1
         )
         partial = sum_floor - (L - 1) * cnt
         full_cnt = U - b

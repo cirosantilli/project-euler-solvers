@@ -1,5 +1,6 @@
 from array import array
 
+
 def ulam_sequence(a: int, b: int, n_terms: int) -> list[int]:
     """
     Slow but simple generator for small n_terms (used only for problem-statement asserts).
@@ -49,7 +50,7 @@ def ulam_2_v_k(v: int, k: int) -> int:
     # because there are exactly two even terms in the whole sequence.
     target_odd = k - 2  # 1-indexed among odd terms
 
-    m = v + 1                # recurrence order; second even term is 2v+2 = 2m
+    m = v + 1  # recurrence order; second even term is 2v+2 = 2m
     n = (v - 1) // 2
 
     # f[t] = 1 iff odd number (2t+1) is in U(2,v).
@@ -81,7 +82,7 @@ def ulam_2_v_k(v: int, k: int) -> int:
     ones_per_period = len(ones_pos)
 
     q, r = divmod(target_odd - 1, ones_per_period)  # r is 0-indexed inside the period
-    t = q * period + ones_pos[r]                    # index of the target odd number
+    t = q * period + ones_pos[r]  # index of the target odd number
     return 2 * t + 1
 
 
@@ -94,4 +95,3 @@ if __name__ == "__main__":
     assert ulam_sequence(1, 2, 7) == [1, 2, 3, 4, 6, 8, 11]
 
     print(solve())
-

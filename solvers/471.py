@@ -171,7 +171,9 @@ def format_sci_10(x: Decimal) -> str:
     exp = x.adjusted()  # floor(log10(x))
     mant = x.scaleb(-exp)  # in [1,10)
 
-    mant = mant.quantize(Decimal("1.000000000"))  # 9 digits after the dot => 10 significant digits total
+    mant = mant.quantize(
+        Decimal("1.000000000")
+    )  # 9 digits after the dot => 10 significant digits total
     if mant >= 10:
         mant = (mant / 10).quantize(Decimal("1.000000000"))
         exp += 1

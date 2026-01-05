@@ -48,7 +48,7 @@ def _S_bruteforce(L: int) -> int:
     for a in range(1, L + 1):
         for b in range(1, L + 1):
             for c in range(1, L + 1):
-                total += gcd(T[c ** a], T[c ** b])
+                total += gcd(T[c**a], T[c**b])
     return total
 
 
@@ -154,7 +154,9 @@ def _sq_pair(a0: int, a1: int, mod: int) -> tuple[int, int]:
     return w0, w1
 
 
-def _pow_pair_by_bits(base0: int, base1: int, bits_lsb_to_msb: list[int], mod: int) -> tuple[int, int]:
+def _pow_pair_by_bits(
+    base0: int, base1: int, bits_lsb_to_msb: list[int], mod: int
+) -> tuple[int, int]:
     """
     Compute (A^n)^e = A^{n*e} where base is A^n represented as (U_n, U_{n+1}).
     Exponent e is fixed for the call and provided as bits (LSB->MSB).

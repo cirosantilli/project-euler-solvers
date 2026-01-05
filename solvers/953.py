@@ -1,12 +1,13 @@
-'''
+"""
 By GPT-5.1. Runtime: 1.22s on pypy3 3.11.13, Ubuntu 25.10, Lenovo ThinkPad P14s.
-'''
+"""
 
 import math
 from typing import List, Tuple
 
 MOD: int = 10**9 + 7
 PRIME_LIMIT: int = 1 << 24
+
 
 def sieve(limit: int) -> Tuple[bytearray, List[int]]:
     is_prime: bytearray = bytearray(b"\x01") * (limit + 1)
@@ -16,16 +17,21 @@ def sieve(limit: int) -> Tuple[bytearray, List[int]]:
         if is_prime[p]:
             step: int = p
             start: int = p * p
-            is_prime[start:limit+1:step] = b"\x00" * (((limit - start) // step) + 1)
+            is_prime[start : limit + 1 : step] = b"\x00" * (
+                ((limit - start) // step) + 1
+            )
     primes: List[int] = [i for i in range(2, limit + 1) if is_prime[i]]
     return is_prime, primes
+
 
 is_prime, primes = sieve(PRIME_LIMIT)
 INV6: int = pow(6, MOD - 2, MOD)
 
+
 def sum_sq(T: int) -> int:
     T_mod: int = T % MOD
     return (T_mod * (T_mod + 1) % MOD * (2 * T_mod + 1) % MOD) * INV6 % MOD
+
 
 def contribution_for_m(m: int, N: int) -> int:
     if m > N:
@@ -34,6 +40,7 @@ def contribution_for_m(m: int, N: int) -> int:
     if T == 0:
         return 0
     return (m % MOD) * sum_sq(T) % MOD
+
 
 def compute_S(N: int) -> int:
     ans: int = contribution_for_m(1, N) % MOD
@@ -56,7 +63,12 @@ def compute_S(N: int) -> int:
     while stack:
         next_idx, prod, xor_val, last_p = stack.pop()
         cand: int = xor_val
-        if cand > last_p and cand <= PRIME_LIMIT_LOCAL and is_prime_local[cand] and prod * cand <= N_local:
+        if (
+            cand > last_p
+            and cand <= PRIME_LIMIT_LOCAL
+            and is_prime_local[cand]
+            and prod * cand <= N_local
+        ):
             m: int = prod * cand
             ans = (ans + contribution_for_m(m, N_local)) % MOD
         N_div_prod: int = N_local // prod
@@ -68,6 +80,7 @@ def compute_S(N: int) -> int:
             new_xor: int = xor_val ^ q
             stack.append((j + 1, new_prod, new_xor, q))
     return ans % MOD
+
 
 if __name__ == "__main__":
     assert compute_S(10) == 14

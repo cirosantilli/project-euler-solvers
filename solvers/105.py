@@ -82,7 +82,9 @@ def solve() -> int:
         except FileNotFoundError:
             continue
     if all_sets is None:
-        raise FileNotFoundError("Could not find input file (tried 0105_sets.txt and sets.txt).")
+        raise FileNotFoundError(
+            "Could not find input file (tried 0105_sets.txt and sets.txt)."
+        )
 
     total = 0
     for s in all_sets:

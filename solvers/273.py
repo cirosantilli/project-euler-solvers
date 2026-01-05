@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0273.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0273.cpp"""
 SEED = (1, 0)
 primes = []
 
@@ -71,8 +71,8 @@ def sum_of_a_values(limit: int) -> int:
 
 def brute_s(n: int) -> int:
     total = 0
-    for a in range(int(n ** 0.5) + 1):
-        for b in range(a, int(n ** 0.5) + 1):
+    for a in range(int(n**0.5) + 1):
+        for b in range(a, int(n**0.5) + 1):
             if a * a + b * b == n:
                 total += a
     return total

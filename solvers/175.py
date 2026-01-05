@@ -116,4 +116,3 @@ def _assert_examples() -> None:
 if __name__ == "__main__":
     _assert_examples()
     print(solve())
-

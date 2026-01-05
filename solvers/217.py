@@ -123,7 +123,7 @@ def T(n: int, mod: int | None = None) -> int:
 
     for k in range(2, n + 1):
         L = k // 2
-        even = (k % 2 == 0)
+        even = k % 2 == 0
 
         right_c = un_counts[L]
         right_s = un_sums[L]
@@ -177,4 +177,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

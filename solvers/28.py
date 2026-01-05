@@ -13,8 +13,8 @@ def spiral_diagonals_sum(n: int) -> int:
     # With s=2k+1 this becomes 16k^2 + 4k + 4.
     total = 1
     total += 16 * m * (m + 1) * (2 * m + 1) // 6  # 16 * sum k^2
-    total += 4 * m * (m + 1) // 2                # 4 * sum k
-    total += 4 * m                                # 4 * sum 1
+    total += 4 * m * (m + 1) // 2  # 4 * sum k
+    total += 4 * m  # 4 * sum 1
     return total
 
 

@@ -62,4 +62,3 @@ def _self_test() -> None:
 if __name__ == "__main__":
     _self_test()
     print(solve())
-

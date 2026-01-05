@@ -12,7 +12,7 @@ from __future__ import annotations
 import math
 
 
-LIMIT_N = 10 ** 10
+LIMIT_N = 10**10
 
 
 def iroot3_floor(n: int) -> int:
@@ -84,9 +84,9 @@ def is_perfect_cube(x: int) -> bool:
     r = int(round(x ** (1.0 / 3.0)))
     while (r + 1) ** 3 <= x:
         r += 1
-    while r ** 3 > x:
+    while r**3 > x:
         r -= 1
-    return r ** 3 == x
+    return r**3 == x
 
 
 def solve(limit_n: int = LIMIT_N) -> int:
@@ -133,8 +133,8 @@ def solve(limit_n: int = LIMIT_N) -> int:
 
         # Precompute subset products
         size = 1 << k
-        prodp = [1] * size       # Π p
-        prodd = [1] * size       # Π (p-1)
+        prodp = [1] * size  # Π p
+        prodd = [1] * size  # Π (p-1)
         for mask in range(1, size):
             lsb = mask & -mask
             j = lsb.bit_length() - 1

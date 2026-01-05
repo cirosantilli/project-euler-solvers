@@ -67,7 +67,7 @@ def _round_ratio_to_decimal_string(num: int, den: int, digits: int = 10) -> str:
     if num < 0:
         raise ValueError("num must be non-negative")
 
-    scale = 10 ** digits
+    scale = 10**digits
     # round-half-up for positive rationals:
     scaled = (2 * num * scale + den) // (2 * den)
     integer_part = scaled // scale
@@ -115,7 +115,12 @@ def _iters_sum_over_s_interval(mm: int, s_lo: int, s_hi: int, x0: int) -> int:
                     total += nk * cnt
                 else:
                     # merge adjacent segments when possible to keep the list tiny
-                    if new and new[-1][2] == x1 and new[-1][3] == nk and new[-1][1] + 1 == sa:
+                    if (
+                        new
+                        and new[-1][2] == x1
+                        and new[-1][3] == nk
+                        and new[-1][1] + 1 == sa
+                    ):
                         prev_a, _prev_b, _prev_x, _prev_k = new[-1]
                         new[-1] = (prev_a, sb, x1, nk)
                     else:
@@ -154,7 +159,7 @@ def average_iterations_for_digit_length(d: int, processes: int | None = None) ->
         raise ValueError("d must be positive")
 
     L = 10 ** (d - 1)
-    U = 10 ** d - 1
+    U = 10**d - 1
     x0 = x0_for_digit_length(d)
 
     # Determine which rounded-root intervals I_m are fully inside [L,U].
@@ -221,7 +226,9 @@ def average_iterations_for_digit_length(d: int, processes: int | None = None) ->
                 total += _chunk_sum_full_intervals(t)
         else:
             with mp.Pool(processes=processes) as pool:
-                for subtotal in pool.imap_unordered(_chunk_sum_full_intervals, tasks, chunksize=1):
+                for subtotal in pool.imap_unordered(
+                    _chunk_sum_full_intervals, tasks, chunksize=1
+                ):
                     total += subtotal
 
     count = U - L + 1
@@ -243,7 +250,9 @@ def average_iterations_for_digit_length(d: int, processes: int | None = None) ->
 
     full_cnt = 0
     if m_full_start <= m_full_end:
-        full_cnt = (m_full_start + m_full_end) * (m_full_end - m_full_start + 1)  # sum of 2m
+        full_cnt = (m_full_start + m_full_end) * (
+            m_full_end - m_full_start + 1
+        )  # sum of 2m
 
     assert partial_low_cnt + full_cnt + partial_high_cnt == count
 

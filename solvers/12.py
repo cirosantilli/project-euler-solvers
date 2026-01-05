@@ -44,7 +44,7 @@ class PrimeTable:
                 while x % p == 0:
                     x //= p
                     exp += 1
-                total *= (exp + 1)
+                total *= exp + 1
         if x > 1:
             total *= 2
         return total

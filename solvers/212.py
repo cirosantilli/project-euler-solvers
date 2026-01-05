@@ -40,7 +40,9 @@ def generate_cuboids(n: int) -> list[tuple[int, int, int, int, int, int]]:
     return cubs
 
 
-def union_volume_blockwise(cuboids: list[tuple[int, int, int, int, int, int]], B: int = 400) -> int:
+def union_volume_blockwise(
+    cuboids: list[tuple[int, int, int, int, int, int]], B: int = 400
+) -> int:
     """
     Exact union volume by splitting into BxBxB blocks and summing per-block union volumes.
     """
@@ -50,13 +52,15 @@ def union_volume_blockwise(cuboids: list[tuple[int, int, int, int, int, int]], B
 
     # blocks[(bx,by,bz)] stored in flat list:
     # idx = (bx*nb + by)*nb + bz
-    blocks: list[list[tuple[int, int, int, int, int, int]]] = [[] for _ in range(nb * nb * nb)]
+    blocks: list[list[tuple[int, int, int, int, int, int]]] = [
+        [] for _ in range(nb * nb * nb)
+    ]
 
     def bindex(bx: int, by: int, bz: int) -> int:
         return (bx * nb + by) * nb + bz
 
     # Distribute clipped sub-cuboids into blocks
-    for (x0, x1, y0, y1, z0, z1) in cuboids:
+    for x0, x1, y0, y1, z0, z1 in cuboids:
         bx0 = x0 // B
         bx1 = (x1 - 1) // B
         by0 = y0 // B
@@ -199,4 +203,3 @@ def solve() -> int:
 
 if __name__ == "__main__":
     print(solve())
-

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00793%20-%20Median%20of%20Products.py'''
-'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00793%20-%20Median%20of%20Products.py"""
+"""
 Project Euler Problem 793
 
 Instead of directly calculating the median by listing all elements (would take n^2 +nlog(n) time), we do something smarter.
@@ -25,41 +25,44 @@ be our initial guess for the median
 
 3. After the binary search we will have found our median
 
-'''
+"""
 from bisect import bisect_right
 
+
 def bisect(alist, goal):
-    #Equivalent to bisect_right from bisect module
+    # Equivalent to bisect_right from bisect module
     lo = 0
     hi = len(alist)
     while lo < hi:
-        mid = (lo + hi)//2
+        mid = (lo + hi) // 2
         if goal < alist[mid]:
             hi = mid
         else:
             lo = mid + 1
     return lo
 
+
 def s(n):
     s0 = 290797
     array = []
     for _ in range(n):
         array.append(s0)
-        s0 = (s0*s0) % 50515093
+        s0 = (s0 * s0) % 50515093
     return sorted(array)
+
 
 def compute(n):
     S = s(n)
-    lo, hi = S[0]*S[1], S[-1]*S[-2]
-    goal = (n*(n-1))//4
+    lo, hi = S[0] * S[1], S[-1] * S[-2]
+    goal = (n * (n - 1)) // 4
     while lo < hi - 1:
-        mid = (lo + hi)//2
+        mid = (lo + hi) // 2
         products = 0
         for i, x in enumerate(S):
             if x * x > mid:
                 break
-            #j = bisect(S, mid//x) #This method is about 5x slower
-            j = bisect_right(S, mid//x) #Use C implementation for speed up 
+            # j = bisect(S, mid//x) #This method is about 5x slower
+            j = bisect_right(S, mid // x)  # Use C implementation for speed up
             if j > i:
                 products += j - i - 1
         if products > goal:
@@ -67,6 +70,7 @@ def compute(n):
         else:
             lo = mid
     return hi
+
 
 if __name__ == "__main__":
     assert compute(3) == 3878983057768

@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0230.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0230.cpp"""
+
+
 def build_fibonacci(block_size: int) -> list[int]:
     fibonacci = [0, block_size]
     while fibonacci[-1] < (1 << 63):

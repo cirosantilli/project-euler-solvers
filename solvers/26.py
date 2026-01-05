@@ -48,7 +48,6 @@ def _tests() -> None:
     assert recurring_cycle_length(10) == 0
 
 
-
 def main() -> None:
     _tests()
     print(solve(1000))

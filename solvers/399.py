@@ -18,10 +18,11 @@ import math
 import sys
 from collections import defaultdict
 
-LAST16_MOD = 10 ** 16
+LAST16_MOD = 10**16
 
 
 # ----------------------------- Fibonacci (fast doubling) -----------------------------
+
 
 def fib_mod(n: int, mod: int) -> int:
     """Return F_n mod mod, with F_0 = 0, F_1 = 1."""
@@ -30,8 +31,8 @@ def fib_mod(n: int, mod: int) -> int:
     for bit in range(n.bit_length() - 1, -1, -1):
         # (a, b) = (F_k, F_{k+1})
         two_b_minus_a = (2 * b - a) % mod
-        c = (a * two_b_minus_a) % mod          # F_{2k}
-        d = (a * a + b * b) % mod              # F_{2k+1}
+        c = (a * two_b_minus_a) % mod  # F_{2k}
+        d = (a * a + b * b) % mod  # F_{2k+1}
         if (n >> bit) & 1:
             a, b = d, (c + d) % mod
         else:
@@ -54,13 +55,14 @@ def fib_big(n: int) -> int:
 
 # ----------------------------- Number theory helpers -----------------------------
 
+
 def primes_upto(n: int) -> list[int]:
     """Simple sieve of Eratosthenes."""
     if n < 2:
         return []
     sieve = bytearray(b"\x01") * (n + 1)
     sieve[0:2] = b"\x00\x00"
-    limit = int(n ** 0.5)
+    limit = int(n**0.5)
     for i in range(2, limit + 1):
         if sieve[i]:
             step = i
@@ -116,6 +118,7 @@ def rank_of_apparition_prime(p: int, small_primes: list[int]) -> int:
 
 
 # ----------------------------- Core counting logic -----------------------------
+
 
 def prime_upper_bound_for_moduli(nmax: int) -> int:
     """Upper bound for primes p that can satisfy p*z(p) <= nmax.
@@ -241,7 +244,7 @@ def format_fibonacci_answer(n: int) -> str:
     last16 = fib_mod(n, LAST16_MOD)
 
     # F_n ≈ phi^n / sqrt(5)
-    phi = (1.0 + 5.0 ** 0.5) / 2.0
+    phi = (1.0 + 5.0**0.5) / 2.0
     log10F = n * math.log10(phi) - 0.5 * math.log10(5.0)
 
     exp = int(math.floor(log10F))
@@ -255,6 +258,7 @@ def format_fibonacci_answer(n: int) -> str:
 
 
 # ----------------------------- Tests from the statement -----------------------------
+
 
 def is_squarefree_int(x: int) -> bool:
     """Squarefree test for small integers (used only for tiny statement examples)."""
@@ -289,15 +293,14 @@ def run_statement_asserts(lcms: list[int], coeffs: list[int], nmax: int) -> None
     assert n200 == 260  # implied by the given 200th value
 
     F200 = fib_big(n200)
-    assert F200 == int(
-        "971183874599339129547649988289594072811608739584170445"
-    )
+    assert F200 == int("971183874599339129547649988289594072811608739584170445")
 
     sample = format_fibonacci_answer(n200)
     assert sample == "1608739584170445,9.7e53"
 
 
 # ----------------------------- Solve PE399 -----------------------------
+
 
 def solve(k: int = 100_000_000) -> str:
     # A safe upper bound for the index needed for k=100,000,000.

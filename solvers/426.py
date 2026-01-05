@@ -19,7 +19,9 @@ Answer required: sum of squares of the final state's elements.
 from __future__ import annotations
 
 
-def _ts_soliton_sum_squares_from_runs(runs, start_with_one: bool = True, collect: bool = False):
+def _ts_soliton_sum_squares_from_runs(
+    runs, start_with_one: bool = True, collect: bool = False
+):
     """
     Takahashi–Satsuma soliton identification algorithm on a run-length encoded word.
 
@@ -36,8 +38,8 @@ def _ts_soliton_sum_squares_from_runs(runs, start_with_one: bool = True, collect
     """
     # Represent the doubly-infinite word by adding a huge leading 0-run (never removed)
     # and a sufficiently large trailing 0-run (added after total balls is known).
-    stack_sym = [0]           # 0/1 symbols
-    stack_len = [10**18]      # "infinite" leading zeros (record)
+    stack_sym = [0]  # 0/1 symbols
+    stack_len = [10**18]  # "infinite" leading zeros (record)
     solitons = [] if collect else None
 
     sum_sq = 0
@@ -71,8 +73,10 @@ def _ts_soliton_sum_squares_from_runs(runs, start_with_one: bool = True, collect
             cur_l = stack_len[-1] - k
 
             # Remove the previous run (size k) and the first k symbols of current run.
-            stack_sym.pop(); stack_len.pop()
-            stack_sym.pop(); stack_len.pop()
+            stack_sym.pop()
+            stack_len.pop()
+            stack_sym.pop()
+            stack_len.pop()
 
             # Reinsert the remainder of current run, merging if needed.
             if cur_l > 0:
@@ -100,8 +104,10 @@ def _ts_soliton_sum_squares_from_runs(runs, start_with_one: bool = True, collect
         cur_s = stack_sym[-1]
         cur_l = stack_len[-1] - k
 
-        stack_sym.pop(); stack_len.pop()
-        stack_sym.pop(); stack_len.pop()
+        stack_sym.pop()
+        stack_len.pop()
+        stack_sym.pop()
+        stack_len.pop()
 
         if cur_l > 0:
             if stack_sym[-1] == cur_s:
@@ -130,17 +136,23 @@ def solve(n: int = 10_000_000) -> int:
     """
     Compute the Project Euler 426 answer for runs (t_0, t_1, ..., t_n).
     """
-    return _ts_soliton_sum_squares_from_runs(_t_sequence_runs(n), start_with_one=True, collect=False)
+    return _ts_soliton_sum_squares_from_runs(
+        _t_sequence_runs(n), start_with_one=True, collect=False
+    )
 
 
 def _run_tests() -> None:
     # Example in statement: (2, 2, 2, 1, 2) -> final state [1, 2, 3], answer 14.
-    ssq, fs = _ts_soliton_sum_squares_from_runs([2, 2, 2, 1, 2], start_with_one=True, collect=True)
+    ssq, fs = _ts_soliton_sum_squares_from_runs(
+        [2, 2, 2, 1, 2], start_with_one=True, collect=True
+    )
     assert fs == [1, 2, 3]
     assert ssq == 14
 
     # Example in statement: starting from (t0..t10) final state is [1, 3, 10, 24, 51, 75].
-    ssq2, fs2 = _ts_soliton_sum_squares_from_runs(_t_sequence_runs(10), start_with_one=True, collect=True)
+    ssq2, fs2 = _ts_soliton_sum_squares_from_runs(
+        _t_sequence_runs(10), start_with_one=True, collect=True
+    )
     assert fs2 == [1, 3, 10, 24, 51, 75]
     assert ssq2 == sum(x * x for x in fs2)
 
@@ -148,4 +160,3 @@ def _run_tests() -> None:
 if __name__ == "__main__":
     _run_tests()
     print(solve())
-

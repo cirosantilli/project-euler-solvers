@@ -33,7 +33,7 @@ def icbrt(n: int) -> int:
             # Fix possible off-by-one due to integer rounding.
             while (x + 1) ** 3 <= n:
                 x += 1
-            while x ** 3 > n:
+            while x**3 > n:
                 x -= 1
             return x
         x = y
@@ -46,9 +46,9 @@ def mobius_prefix_linear(n: int):
       - mu is array('b') of length n+1
       - M is a Python list of ints of length n+1 (M[0]=0)
     """
-    mu = array('b', [0]) * (n + 1)
+    mu = array("b", [0]) * (n + 1)
     mu[1] = 1
-    lp = array('I', [0]) * (n + 1)  # lowest prime factor
+    lp = array("I", [0]) * (n + 1)  # lowest prime factor
     primes = []  # Python list is fast for iteration
 
     for i in range(2, n + 1):

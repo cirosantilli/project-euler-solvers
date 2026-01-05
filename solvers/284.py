@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0284.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0284.cpp"""
+
 
 class BigNum:
     MaxDigit = 14
@@ -41,7 +42,7 @@ class BigNum:
         result = []
         for digit in reversed(self.digits):
             result.append(digits_map[digit])
-        while len(result) > 1 and result[0] == '0':
+        while len(result) > 1 and result[0] == "0":
             result.pop(0)
         return "".join(result)
 
@@ -106,7 +107,9 @@ class BigNum:
 
             result = BigNum(0)
             for i in range(len(other.digits) - 1, -1, -1):
-                result = result.multiply_int(self.MaxDigit) + self.multiply_int(other.digits[i])
+                result = result.multiply_int(self.MaxDigit) + self.multiply_int(
+                    other.digits[i]
+                )
             return result
 
         return self.multiply_int(other)

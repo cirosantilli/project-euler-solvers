@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00316%20-%20Numbers%20in%20decimal%20expansions.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00316%20-%20Numbers%20in%20decimal%20expansions.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Thu Jun  9 10:49:23 2022
 
 @author: igorvanloo
 """
-'''
+"""
 Project Euler Problem 316
 
 Markov Chains, matrix state transformation
@@ -40,8 +40,9 @@ https://en.wikipedia.org/wiki/Absorbing_Markov_chain#String_generation
 
 N = (I - P)^(-1), then t = N * [1 ,1 ,1]^T, and t[0] is the anwser
 
-'''
+"""
 import random
+
 
 def MonteCarlo(trials, n):
     n = str(n)
@@ -60,24 +61,25 @@ def MonteCarlo(trials, n):
             guess += random.choice(choices)
             guess = guess[1:]
             if guess == n:
-                total += (count - 2)
+                total += count - 2
                 break
-    return total/trials
+    return total / trials
+
 
 def GenerateP(n):
-    #Used to generate the state matrix
+    # Used to generate the state matrix
     n = str(n)
     l = len(n)
     matrix = []
     for i in range(l):
-        #i denotes the current number we are on
-        rowi = [0]*l
-        #This row represents going from state i to all other states
+        # i denotes the current number we are on
+        rowi = [0] * l
+        # This row represents going from state i to all other states
         main = n[:i]
-        next_state = n[:i+1]
-        #This is what our current string looks like
+        next_state = n[: i + 1]
+        # This is what our current string looks like
         for digit in range(10):
-            #We go through all the digits, and we will test them
+            # We go through all the digits, and we will test them
             curr = main + str(digit)
             if curr == next_state:
                 if i != l - 1:
@@ -86,7 +88,7 @@ def GenerateP(n):
                 l2 = len(curr)
                 not_found = True
                 for j in range(1, l2):
-                    if curr[j:] == main[:l2 - j]:
+                    if curr[j:] == main[: l2 - j]:
                         rowi[l2 - j] -= 1
                         not_found = False
                         break
@@ -95,6 +97,7 @@ def GenerateP(n):
         rowi[i] += 10
         matrix.append(rowi)
     return matrix
+
 
 def GaussJordanEliminationInteger(matrix, b):
     m, n = len(matrix), len(matrix[0]) + 1
@@ -105,14 +108,15 @@ def GaussJordanEliminationInteger(matrix, b):
         for j in range(i + 1, m):
             t = matrix[j][i]
             for k in range(n):
-                matrix[j][k] -= t*rowi[k]
-    for y in range(m-1, -1, -1):
-        for z in range(0,y):
-            for x in range(n-1, y-1, -1):
+                matrix[j][k] -= t * rowi[k]
+    for y in range(m - 1, -1, -1):
+        for z in range(0, y):
+            for x in range(n - 1, y - 1, -1):
                 matrix[z][x] -= matrix[y][x] * matrix[z][y]
                 matrix[z][x] = round(matrix[z][x], 2)
         matrix[y][y] = round(matrix[y][y], 2)
     return matrix
+
 
 def solve1(matrix, b):
     m, n = len(matrix), len(matrix[0])
@@ -121,20 +125,23 @@ def solve1(matrix, b):
     GaussJordanEliminationInteger(matrix, b)
     return [matrix[x][n:] for x in range(m)]
 
+
 def g(n):
     P = GenerateP(n)
     n = str(n)
     l = len(n)
     N = solve1(P, [[10] for _ in range(l)])
     return int(N[0][0] - l + 1)
-    
+
+
 def compute(limit, divider):
     total = 0
     for n in range(2, limit + 1):
         if n % 10000 == 0:
             print(n)
-        total += g((divider)//n)
+        total += g((divider) // n)
     return total
+
 
 if __name__ == "__main__":
     assert g(535) == 1008

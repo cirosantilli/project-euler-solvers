@@ -64,7 +64,9 @@ def amicable_chain_best(limit: int) -> Tuple[int, int]:
                 cycle = path[idx[n] :]
                 clen = len(cycle)
                 cmin = min(cycle)
-                if clen > best_len or (clen == best_len and (best_min == 0 or cmin < best_min)):
+                if clen > best_len or (
+                    clen == best_len and (best_min == 0 or cmin < best_min)
+                ):
                     best_len = clen
                     best_min = cmin
 

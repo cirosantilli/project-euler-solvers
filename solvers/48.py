@@ -2,7 +2,7 @@ from typing import Tuple
 
 
 def last_k_digits_self_powers(n: int, k: int = 10) -> str:
-    mod = 10 ** k
+    mod = 10**k
     s = 0
     for i in range(1, n + 1):
         s = (s + pow(i, i, mod)) % mod

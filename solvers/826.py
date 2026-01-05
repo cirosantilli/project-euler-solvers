@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00826%20-%20Birds%20on%20a%20Wire.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00826%20-%20Birds%20on%20a%20Wire.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Wed Feb 19 21:10:50 2025
 
 @author: Igor Van Loo
 """
-'''
+"""
 Project Euler Problem 826
 
 Approximation with 10^7 trials using fractions limit_denominator method
@@ -44,10 +44,11 @@ n = 1,000,000: 0.3888891119536712, Fraction(7, 18), Fraction(7, 18), 100 trials
 
 Conjecture: painted amount is (7n + a)/(18n + b) comparing first 2 values we get a = 15, b = 18
 
-'''
+"""
 import math
 import random
 import fractions
+
 
 def monte_carlo(trials, n):
     total = 0
@@ -67,39 +68,48 @@ def monte_carlo(trials, n):
                     curr = 0
                 else:
                     curr = 1
-                    
+
                 if prev != 1 or curr != 0:
                     painted += v[curr]
                 prev = curr
         total += painted
-    return n, total/trials, fractions.Fraction(total / trials).limit_denominator(1000), fractions.Fraction(total / trials).limit_denominator(100)
-    
-def F(n):
-    num = 7*n + 15
-    den = 18*(n + 1)
-    #g = math.gcd(num, den)
-    return round(num/den, 15)
+    return (
+        n,
+        total / trials,
+        fractions.Fraction(total / trials).limit_denominator(1000),
+        fractions.Fraction(total / trials).limit_denominator(100),
+    )
 
-def prime_sieve(limit, values = True):
+
+def F(n):
+    num = 7 * n + 15
+    den = 18 * (n + 1)
+    # g = math.gcd(num, den)
+    return round(num / den, 15)
+
+
+def prime_sieve(limit, values=True):
     result = [True] * (limit + 1)
     result[0] = result[1] = False
     for i in range(int(math.sqrt(limit)) + 1):
-    	if result[i]:
-    		for j in range(2 * i, len(result), i):
-    			result[j] = False
+        if result[i]:
+            for j in range(2 * i, len(result), i):
+                result[j] = False
     if values:
         return [i for (i, isprime) in enumerate(result) if isprime]
     else:
         return result
-    
+
+
 def compute(n):
     primes = prime_sieve(n)
     l = len(primes) - 1
     total = 0
     for p in primes[1:]:
         total += F(p)
-    return round(total/l, 10)
-            
+    return round(total / l, 10)
+
+
 if __name__ == "__main__":
     assert F(3) == 0.5
     print(compute(10**6))

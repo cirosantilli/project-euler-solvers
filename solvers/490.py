@@ -20,10 +20,12 @@ MOD = 10**9
 # f(1)..f(8)
 F_INIT = [1, 1, 1, 2, 6, 14, 28, 56]
 
+
 # For n >= 9:
 # f(n) = 2 f(n-1) - f(n-2) + 2 f(n-3) + f(n-4) + f(n-5) - f(n-7) - f(n-8)
 def f_recurrence_next(f_nm1, f_nm2, f_nm3, f_nm4, f_nm5, f_nm6, f_nm7, f_nm8):
-    return (2*f_nm1 - f_nm2 + 2*f_nm3 + f_nm4 + f_nm5 - f_nm7 - f_nm8)
+    return 2 * f_nm1 - f_nm2 + 2 * f_nm3 + f_nm4 + f_nm5 - f_nm7 - f_nm8
+
 
 def f_exact_up_to(n):
     """Return list f[0..n] with f[0]=0, exact integers."""
@@ -31,13 +33,23 @@ def f_exact_up_to(n):
         return [0]
     f = [0] + F_INIT[:]  # indices: 1..8 available
     if n <= 8:
-        return f[:n+1]
+        return f[: n + 1]
     # Extend
-    for k in range(9, n+1):
-        f.append(f_recurrence_next(
-            f[k-1], f[k-2], f[k-3], f[k-4], f[k-5], f[k-6], f[k-7], f[k-8]
-        ))
+    for k in range(9, n + 1):
+        f.append(
+            f_recurrence_next(
+                f[k - 1],
+                f[k - 2],
+                f[k - 3],
+                f[k - 4],
+                f[k - 5],
+                f[k - 6],
+                f[k - 7],
+                f[k - 8],
+            )
+        )
     return f
+
 
 def build_companion_matrix(mod):
     """
@@ -48,15 +60,16 @@ def build_companion_matrix(mod):
     # f(n+1) in terms of f(n..n-7):
     # f(n+1) = 2 f(n) - f(n-1) + 2 f(n-2) + f(n-3) + f(n-4) - f(n-6) - f(n-7)
     coeff = [2, -1, 2, 1, 1, 0, -1, -1]
-    A = [[0]*8 for _ in range(8)]
+    A = [[0] * 8 for _ in range(8)]
     A[0] = [(c % mod) for c in coeff]
     for i in range(1, 8):
-        A[i][i-1] = 1
+        A[i][i - 1] = 1
     return A
+
 
 def mat_mul8(A, B, mod):
     """8x8 matrix multiplication modulo mod, exploiting sparsity."""
-    res = [[0]*8 for _ in range(8)]
+    res = [[0] * 8 for _ in range(8)]
     for i in range(8):
         Ai = A[i]
         for k in range(8):
@@ -67,18 +80,20 @@ def mat_mul8(A, B, mod):
                     res[i][j] = (res[i][j] + aik * Bk[j]) % mod
     return res
 
+
 def tensor_from_vec(v, mod):
     """Return flattened 8x8x8 tensor for v⊗v⊗v (mod mod)."""
-    T = [0]*512
+    T = [0] * 512
     vv = [x % mod for x in v]
     for i in range(8):
         vi = vv[i]
         for j in range(8):
             vij = (vi * vv[j]) % mod
-            base = i*64 + j*8
+            base = i * 64 + j * 8
             for k in range(8):
                 T[base + k] = (vij * vv[k]) % mod
     return T
+
 
 def tensor_transform(M, T, mod):
     """
@@ -87,36 +102,36 @@ def tensor_transform(M, T, mod):
     Implemented as 3 successive mode-multiplications, each costing 8^4 operations.
     """
     # mode-1: i index
-    U = [0]*512
+    U = [0] * 512
     for j in range(8):
         for k in range(8):
-            base_jk = j*8 + k
+            base_jk = j * 8 + k
             for i in range(8):
                 row = M[i]
                 s = 0
                 # sum over p
                 for p in range(8):
-                    s += row[p] * T[p*64 + base_jk]
-                U[i*64 + base_jk] = s % mod
+                    s += row[p] * T[p * 64 + base_jk]
+                U[i * 64 + base_jk] = s % mod
 
     # mode-2: j index
-    V = [0]*512
+    V = [0] * 512
     for i in range(8):
-        ioff = i*64
+        ioff = i * 64
         for k in range(8):
             for j in range(8):
                 row = M[j]
                 s = 0
                 for q in range(8):
-                    s += row[q] * U[ioff + q*8 + k]
-                V[ioff + j*8 + k] = s % mod
+                    s += row[q] * U[ioff + q * 8 + k]
+                V[ioff + j * 8 + k] = s % mod
 
     # mode-3: k index
-    W = [0]*512
+    W = [0] * 512
     for i in range(8):
-        ioff = i*64
+        ioff = i * 64
         for j in range(8):
-            joff = ioff + j*8
+            joff = ioff + j * 8
             for k in range(8):
                 row = M[k]
                 s = 0
@@ -125,6 +140,7 @@ def tensor_transform(M, T, mod):
                 W[joff + k] = s % mod
 
     return W
+
 
 def sum_cubes_from_state(u, length, A, mod):
     """
@@ -155,11 +171,11 @@ def sum_cubes_from_state(u, length, A, mod):
         m <<= 1
 
     # Accumulate selected blocks
-    Q = [[0]*8 for _ in range(8)]
+    Q = [[0] * 8 for _ in range(8)]
     for i in range(8):
         Q[i][i] = 1  # identity = A^0
 
-    acc = [0]*512
+    acc = [0] * 512
     bit = 0
     rem = length
     while rem:
@@ -173,23 +189,34 @@ def sum_cubes_from_state(u, length, A, mod):
     # entry (0,0,0) holds Σ (first_component)^3
     return acc[0]
 
+
 def S_mod(L, mod=MOD):
     """Compute S(L) = Σ_{n=1..L} f(n)^3 (mod mod)."""
     if L <= 0:
         return 0
     if L <= 8:
-        return sum((F_INIT[i]**3) % mod for i in range(L)) % mod
+        return sum((F_INIT[i] ** 3) % mod for i in range(L)) % mod
 
     # sum of cubes for n=1..7 directly
-    prefix = sum((F_INIT[i]**3) % mod for i in range(7)) % mod
+    prefix = sum((F_INIT[i] ** 3) % mod for i in range(7)) % mod
 
     # state at n=8: [f(8), f(7), ..., f(1)]
-    u = [F_INIT[7], F_INIT[6], F_INIT[5], F_INIT[4], F_INIT[3], F_INIT[2], F_INIT[1], F_INIT[0]]
+    u = [
+        F_INIT[7],
+        F_INIT[6],
+        F_INIT[5],
+        F_INIT[4],
+        F_INIT[3],
+        F_INIT[2],
+        F_INIT[1],
+        F_INIT[0],
+    ]
     A = build_companion_matrix(mod)
 
     # need terms n=8..L inclusive => length = L-7
     tail = sum_cubes_from_state(u, L - 7, A, mod)
     return (prefix + tail) % mod
+
 
 def run_asserts():
     # f(n) examples
@@ -199,8 +226,8 @@ def run_asserts():
     assert f[40] == 1439682432976
 
     # S(L) examples (exact for small)
-    S10 = sum(f[i]**3 for i in range(1, 11))
-    S20 = sum(f[i]**3 for i in range(1, 21))
+    S10 = sum(f[i] ** 3 for i in range(1, 11))
+    S20 = sum(f[i] ** 3 for i in range(1, 21))
     assert S10 == 18230635
     assert S20 == 104207881192114219
 
@@ -208,10 +235,11 @@ def run_asserts():
     assert S_mod(1000) == 225031475
     assert S_mod(1_000_000) == 363486179
 
+
 def main():
     run_asserts()
     print(S_mod(10**14))
 
+
 if __name__ == "__main__":
     main()
-

@@ -71,7 +71,9 @@ def solve(words: List[str]) -> int:
 
     lengths_needed = sorted({len(w) for g in anagram_groups for w in g})
 
-    squares_cache: Dict[int, SquaresByLength] = {L: squares_with_length(L) for L in lengths_needed}
+    squares_cache: Dict[int, SquaresByLength] = {
+        L: squares_with_length(L) for L in lengths_needed
+    }
 
     # Cache word patterns
     word_pat: Dict[str, Tuple[int, ...]] = {}

@@ -164,6 +164,7 @@ def _self_test() -> None:
     assert solve(1) == 0  # C(1)
     assert solve(2) == 1  # C(1)+C(2)=1 => C(2)=1
     assert solve(3) == 3  # 0+1+2
+
     # Direct C(n) checks:
     # (Compute via prefix differences)
     def Cn(n: int) -> int:

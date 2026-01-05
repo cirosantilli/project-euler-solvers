@@ -32,7 +32,9 @@ def count_prime_family_for_positions(p: int, idxs: List[int]) -> int:
 
     digits = [ord(c) - 48 for c in s]
     d0 = digits[idxs[0]]
-    assert all(digits[i] == d0 for i in idxs), "chosen positions must share same digit in p"
+    assert all(
+        digits[i] == d0 for i in idxs
+    ), "chosen positions must share same digit in p"
 
     pow10 = [10 ** (n - 1 - i) for i in range(n)]
     shift = sum(pow10[i] for i in idxs)

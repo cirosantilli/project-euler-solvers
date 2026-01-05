@@ -5,6 +5,7 @@
 MOD = 10**9 + 7
 INV2 = (MOD + 1) // 2
 
+
 def S_k_value(N: int, k: int, mod: int = MOD) -> int:
     if k == 0:
         if N == 0:
@@ -45,6 +46,7 @@ def S_k_value(N: int, k: int, mod: int = MOD) -> int:
         PP[n] = (PP[n - 1] + SS[n]) % m
     return SS[N]
 
+
 def X(n: int, mod: int = MOD) -> int:
     if n <= 0:
         return 0
@@ -57,9 +59,9 @@ def X(n: int, mod: int = MOD) -> int:
     total = (total - (n & 1)) % mod
     return total
 
+
 if __name__ == "__main__":
     assert X(2) == 2
     assert X(4) == 14
     assert X(10) == 1418
     print(X(10_000))
-

@@ -26,8 +26,8 @@ def compute_phi(n: int) -> array:
 
     Returns an array('I') where result[k] == φ(k) (with φ(0)=0, φ(1)=1).
     """
-    phi = array('I', [0]) * (n + 1)
-    primes = array('I')
+    phi = array("I", [0]) * (n + 1)
+    primes = array("I")
     if n >= 1:
         phi[1] = 1
 
@@ -96,7 +96,7 @@ def solve(n: int, mod: int | None = MOD_DEFAULT) -> int:
         return ans
 
     MOD = mod
-    bit = array('I', [0]) * (n + 1)
+    bit = array("I", [0]) * (n + 1)
 
     def add_mod(idx: int, delta: int) -> None:
         if delta == 0:
@@ -148,7 +148,7 @@ def main() -> None:
     _run_tests()
     n = N_DEFAULT
     if len(sys.argv) >= 2:
-        n = int(sys.argv[1].replace('_', ''))
+        n = int(sys.argv[1].replace("_", ""))
     print(solve(n, mod=MOD_DEFAULT))
 
 

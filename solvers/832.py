@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00832%20-%20Mex%20Sequence.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00832%20-%20Mex%20Sequence.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Mon Aug  7 17:02:12 2023
 
 @author: igorvanloo
 """
-'''
+"""
 Project Euler Problem 832
 
 Brute force function and searched the a terms in OEIS and we get https://oeis.org/A053738
@@ -116,7 +116,8 @@ Now we find M''(5) where (a, b, a^b) = (16, 32, 48)
     2.1. 16 > 5 So we cannot sum the entire block, we need to subdivide the blocks and find the respective sums
     2.2. First we need to go down a power of 4, i -= 1
     2.3. We know we need to sum the block 16 <= a < 20 and just a = 20
-'''
+"""
+
 
 def mex(A):
     mex = 0
@@ -128,54 +129,85 @@ def mex(A):
             return mex
     return mex + 1
 
+
 def BF(n):
-    paper = [0,]
+    paper = [
+        0,
+    ]
     for x in range(n):
-        #print("x = ", x)
-        #Step 1
+        # print("x = ", x)
+        # Step 1
         a = mex(paper)
-        #print("a = ", a)
+        # print("a = ", a)
         paper.append(a)
         paper = sorted(paper)
-        
-        #Step 2
+
+        # Step 2
         b = mex(paper)
         while True:
-            if b not in paper and a^b not in paper:
+            if b not in paper and a ^ b not in paper:
                 break
             b += 1
-        paper += [a^b, b]
-        #print("<tr> <td>" + str(a) + "</td> <td>" + str(b) + "</td> <td>" +str(a^b) + "</td> <td>" + str(a + b + a^b) + "</td> </tr>")
-        print(a, b, (a^b), a + b + (a^b))
-        #print(a % 256, b % 256, (a^b) % 256)
+        paper += [a ^ b, b]
+        # print("<tr> <td>" + str(a) + "</td> <td>" + str(b) + "</td> <td>" +str(a^b) + "</td> <td>" + str(a + b + a^b) + "</td> </tr>")
+        print(a, b, (a ^ b), a + b + (a ^ b))
+        # print(a % 256, b % 256, (a^b) % 256)
         paper = sorted(paper)
-        #print(paper)
+        # print(paper)
     return sum(paper)
 
-def M(n, a = 1, b = 2, c = 3, i = 0):
+
+def M(n, a=1, b=2, c=3, i=0):
     mod = 10**9 + 7
     if n <= 0:
         return 0
-    
+
     power = pow(4, i)
     if power < n:
-        #M(power) + M'(n - power)
-        return (M(power, a, b, c, i) + M(n - power, 4*a, 4*b, 4*c, i + 1)) % mod
+        # M(power) + M'(n - power)
+        return (M(power, a, b, c, i) + M(n - power, 4 * a, 4 * b, 4 * c, i + 1)) % mod
     elif power == n:
-        #We just need to return the sum of the block which starts at (a, b, c) and is power long
-        #sum_a = (a + power) // 2 * (a + power - 1) - a * (a - 1) // 2 
-        sum_a = (a + power - 1) * (a + power) // 2 - (a - 1) * a // 2 
-        #sum_b = 3*power // 2 * (3*power - 1) - 2*power * (2*power - 1) // 2 
-        sum_b = (b + power - 1) * (b + power) // 2 - (b - 1) * b // 2 
-        #sum_c = 4*power // 2 * (4*power - 1) - 3*power * (3*power - 1) // 2 
-        sum_c = (c + power - 1) * (c + power) // 2 - (c - 1) * c // 2  
+        # We just need to return the sum of the block which starts at (a, b, c) and is power long
+        # sum_a = (a + power) // 2 * (a + power - 1) - a * (a - 1) // 2
+        sum_a = (a + power - 1) * (a + power) // 2 - (a - 1) * a // 2
+        # sum_b = 3*power // 2 * (3*power - 1) - 2*power * (2*power - 1) // 2
+        sum_b = (b + power - 1) * (b + power) // 2 - (b - 1) * b // 2
+        # sum_c = 4*power // 2 * (4*power - 1) - 3*power * (3*power - 1) // 2
+        sum_c = (c + power - 1) * (c + power) // 2 - (c - 1) * c // 2
         return (sum_a + sum_b + sum_c) % mod
     else:
         s_power = power // 4
         sum_1 = M(min(n, s_power), a, b, c, i - 1) % mod
-        sum_2 = M(min(n - 1*s_power, s_power), a + 1*s_power, b + 2*s_power, c + 3*s_power, i - 1) % mod
-        sum_3 = M(min(n - 2*s_power, s_power), a + 2*s_power, b + 3*s_power, c + 1*s_power, i - 1) % mod
-        sum_4 = M(min(n - 3*s_power, s_power), a + 3*s_power, b + 1*s_power, c + 2*s_power, i - 1) % mod
+        sum_2 = (
+            M(
+                min(n - 1 * s_power, s_power),
+                a + 1 * s_power,
+                b + 2 * s_power,
+                c + 3 * s_power,
+                i - 1,
+            )
+            % mod
+        )
+        sum_3 = (
+            M(
+                min(n - 2 * s_power, s_power),
+                a + 2 * s_power,
+                b + 3 * s_power,
+                c + 1 * s_power,
+                i - 1,
+            )
+            % mod
+        )
+        sum_4 = (
+            M(
+                min(n - 3 * s_power, s_power),
+                a + 3 * s_power,
+                b + 1 * s_power,
+                c + 2 * s_power,
+                i - 1,
+            )
+            % mod
+        )
         return (sum_1 + sum_2 + sum_3 + sum_4) % mod
 
 

@@ -69,8 +69,8 @@ def N(r: int) -> int:
     # In (u,v)=(x+y, x-y): this becomes (u-a)^2 + v^2 < a^2 with u,v same parity.
     # Let p=u-a. Then count (p,v) with p^2+v^2 < a^2 and parity p+v ≡ a (mod 2).
     # If a is even, we want p+v even; else odd.
-    n_total = a * a - 1                   # p^2+v^2 <= a^2-1
-    n_even = (a * a - 1) // 2             # for p+v even: s^2+t^2 <= floor((a^2-1)/2)
+    n_total = a * a - 1  # p^2+v^2 <= a^2-1
+    n_even = (a * a - 1) // 2  # for p+v even: s^2+t^2 <= floor((a^2-1)/2)
 
     if a % 2 == 0:
         N_B = circle_points_leq(n_even)
@@ -86,10 +86,9 @@ def N(r: int) -> int:
     return N_O + N_C + N_B - degenerate
 
 
-# Tests from the problem statement 
+# Tests from the problem statement
 assert N(4) == 24
 assert N(8) == 100
 
 if __name__ == "__main__":
     print(N(1_000_000_000))
-

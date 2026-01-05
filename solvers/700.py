@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00700%20-%20Eulercoin.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00700%20-%20Eulercoin.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Mon Dec 21 10:43:07 2020
@@ -7,7 +7,7 @@ Created on Mon Dec 21 10:43:07 2020
 @author: igorvanloo
 """
 
-'''
+"""
 Project Euler Problem 700
 
 Leonhard Euler was born on 15 April 1707.
@@ -25,7 +25,7 @@ The sum of the first 2 Eulercoins is therefore 1513083232796311.
 
 Find the sum of all Eulercoins.
 
-'''
+"""
 
 
 def compute():
@@ -34,7 +34,7 @@ def compute():
     inv = pow(1504170715041707, -1, 4503599627370517)
     n = 2
     while True:
-        number = 1504170715041707*n % 4503599627370517
+        number = 1504170715041707 * n % 4503599627370517
         if number < current_eulercoin:
             current_eulercoin = number
             eulercoins.append(number)
@@ -44,39 +44,41 @@ def compute():
             new_curr_eulercoin = 1
             curr_max = 4503599627370517
             while new_curr_eulercoin != 15806432:
-                
-                number = (inv*new_curr_eulercoin) % 4503599627370517
-                
+
+                number = (inv * new_curr_eulercoin) % 4503599627370517
+
                 if number < curr_max:
                     curr_max = number
                     eulercoins.append(new_curr_eulercoin)
                     print(number, new_curr_eulercoin)
-                    
+
                 new_curr_eulercoin += 1
             break
         n += 1
-        
+
     return sum(eulercoins)
-    
+
+
 def maxminmethod():
     mod = 4503599627370517
     maxe = 1504170715041707
     mine = 1504170715041707
     total = 1504170715041707
-    
+
     while True:
         if mine == 1:
             break
         middle = (maxe + mine) % mod
-        
+
         if middle > maxe:
-            maxe = middle 
-            
+            maxe = middle
+
         if middle < mine:
             mine = middle
-            #print(mine)
+            # print(mine)
             total += mine
     return total
+
 
 def first_eulercoins(count):
     mod = 4503599627370517
@@ -91,10 +93,11 @@ def first_eulercoins(count):
             current_min = value
         n += 1
     return eulercoins
-    
+
+
 if __name__ == "__main__":
     coins = first_eulercoins(2)
     assert coins[0] == 1504170715041707
     assert sum(coins) == 1513083232796311
     print(compute())
-    #print(maxminmethod())
+    # print(maxminmethod())

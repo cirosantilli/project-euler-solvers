@@ -38,8 +38,8 @@ def S_base(b: int) -> int:
     size = b * (b + 1) // 2
     target = idx(p_star, q_star)
 
-    nxt = array("I", [0]) * size   # next state index
-    w = array("Q", [0]) * size     # weight (# of i mapping to this state)
+    nxt = array("I", [0]) * size  # next state index
+    w = array("Q", [0]) * size  # weight (# of i mapping to this state)
 
     # Build transitions + weights for all p >= 1 (p=0 => all digits equal => sb(i)=0)
     for p in range(1, b):
@@ -150,4 +150,3 @@ if __name__ == "__main__":
     assert S_base(111) == 400_668_930_299
 
     print(solve())
-

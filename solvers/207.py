@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0207.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0207.cpp"""
+
+
 def is_power_of_two(x: int) -> bool:
     return (x & (x - 1)) == 0
 

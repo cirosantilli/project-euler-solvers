@@ -54,7 +54,9 @@ def T(s: int, p: float, kmax: int = 100) -> float:
         U[1] = 1.0  # need one test to classify one animal
 
     if kmax >= 1:
-        P[1] = 0.0  # with one animal and "at least one infected", it's infected for sure
+        P[1] = (
+            0.0  # with one animal and "at least one infected", it's infected for sure
+        )
 
     # Compute coupled DP for sizes up to kmax (or s if smaller).
     nlimit = min(s, kmax)

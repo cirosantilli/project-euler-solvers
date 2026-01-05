@@ -117,7 +117,7 @@ def expected_second_shortest(n: int, m: int) -> float:
 
         acc += base * factor
 
-        N2 -= (m - 1)
+        N2 -= m - 1
         N1 -= m
 
     return acc

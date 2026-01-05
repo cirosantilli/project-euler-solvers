@@ -24,7 +24,7 @@ INPUT_FILE = "0424_kakuro200.txt"
 # Bitmask helpers
 # ----------------------------------------------------------------------
 
-ALL10 = (1 << 10) - 1                 # digits 0..9
+ALL10 = (1 << 10) - 1  # digits 0..9
 DIGITS_1_9 = sum(1 << d for d in range(1, 10))
 
 
@@ -43,6 +43,7 @@ def iter_bits(mask: int):
 # ----------------------------------------------------------------------
 # Parsing
 # ----------------------------------------------------------------------
+
 
 def split_tokens(line: str) -> list[str]:
     """Split comma-separated tokens, but ignore commas inside parentheses."""
@@ -172,7 +173,11 @@ def build_csp(line: str):
     def add_run(code: str, cell_vars: list[int]):
         if not cell_vars:
             return
-        sum_letters = (ord(code) - 65,) if len(code) == 1 else (ord(code[0]) - 65, ord(code[1]) - 65)
+        sum_letters = (
+            (ord(code) - 65,)
+            if len(code) == 1
+            else (ord(code[0]) - 65, ord(code[1]) - 65)
+        )
         L = len(cell_vars)
         sums_list = tuple(PERMS_BY_LEN_SUM[L].keys())
         cell_vars_t = tuple(cell_vars)
@@ -230,6 +235,7 @@ def build_csp(line: str):
 # Propagation (generalized arc consistency for runs + all-different on letters)
 # ----------------------------------------------------------------------
 
+
 def enforce_all_diff_letters(dom: list[int]):
     """
     Simple all-different propagation:
@@ -268,7 +274,10 @@ def process_run(run: RunConstraint, dom: list[int]):
     Returns (changed_var_ids, failed).
     """
     if run.dup_cells:
-        return (), True  # repeated variable inside a run would force duplicate digits -> impossible
+        return (
+            (),
+            True,
+        )  # repeated variable inside a run would force duplicate digits -> impossible
 
     support = [0] * len(run.involved)
     inv = run.inv_index
@@ -356,7 +365,9 @@ def process_run(run: RunConstraint, dom: list[int]):
     return tuple(changed), False
 
 
-def propagate(dom: list[int], runs: list[RunConstraint], var_to_runs: list[list[int]]) -> bool:
+def propagate(
+    dom: list[int], runs: list[RunConstraint], var_to_runs: list[list[int]]
+) -> bool:
     """
     Queue-based propagation: only re-check constraints that touch a changed variable.
     """
@@ -391,6 +402,7 @@ def propagate(dom: list[int], runs: list[RunConstraint], var_to_runs: list[list[
 # ----------------------------------------------------------------------
 # Backtracking search
 # ----------------------------------------------------------------------
+
 
 def select_var(dom: list[int]) -> int | None:
     """Minimum Remaining Values heuristic."""
@@ -444,6 +456,7 @@ def solve_puzzle(line: str) -> int:
 # ----------------------------------------------------------------------
 # Main
 # ----------------------------------------------------------------------
+
 
 def read_puzzles(path: str = INPUT_FILE) -> list[str]:
     p = Path(path)

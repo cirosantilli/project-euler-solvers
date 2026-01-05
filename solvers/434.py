@@ -19,6 +19,7 @@ We compute these counts for 1<=m,n<=100 and sum them modulo 1000000033.
 
 MOD = 1000000033
 
+
 def build_binom(nmax: int, mod: int):
     """Pascal-triangle binomial coefficients C(n,k) mod mod for 0<=n<=nmax."""
     binom = [[0] * (nmax + 1) for _ in range(nmax + 1)]
@@ -28,6 +29,7 @@ def build_binom(nmax: int, mod: int):
         for k in range(1, n):
             binom[n][k] = (binom[n - 1][k - 1] + binom[n - 1][k]) % mod
     return binom
+
 
 def solve(N: int = 100, mod: int = MOD) -> int:
     # Precompute powers of two up to N*N (since total graphs = 2^(m*n)).
@@ -88,6 +90,7 @@ def solve(N: int = 100, mod: int = MOD) -> int:
     # Compute S(N)
     ans = sum(R[i][j] for i in range(1, N + 1) for j in range(1, N + 1)) % mod
     return ans
+
 
 if __name__ == "__main__":
     print(solve())

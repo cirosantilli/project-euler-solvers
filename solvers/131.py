@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0131.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0131.cpp"""
+
+
 def is_prime(x: int) -> bool:
     if x % 2 == 0 or x % 3 == 0 or x % 5 == 0:
         return x in (2, 3, 5)

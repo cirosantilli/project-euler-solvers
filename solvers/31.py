@@ -22,7 +22,6 @@ def main() -> None:
 
     ans = count_ways(200, coins)
 
-
     print(ans)
 
 

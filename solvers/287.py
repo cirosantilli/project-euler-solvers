@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0287.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0287.cpp"""
 size = 1 << 24
 
 
@@ -44,5 +44,5 @@ def solve(shift: int) -> int:
 
 if __name__ == "__main__":
     # TODO extra assert
-    #assert solve(2) == 16
+    # assert solve(2) == 16
     print(solve(24))

@@ -43,7 +43,9 @@ def sieve_primes(limit: int) -> List[int]:
     return [i for i, v in enumerate(sieve) if v]
 
 
-PRIMES = sieve_primes(50000)  # enough for factoring numbers up to ~2e9 after removing 2s/5s
+PRIMES = sieve_primes(
+    50000
+)  # enough for factoring numbers up to ~2e9 after removing 2s/5s
 
 
 @lru_cache(maxsize=None)
@@ -98,12 +100,12 @@ def divisor_count_for_m_times_s(m: int, s: int) -> int:
     # Compute divisor count
     d = (a2 + 1) * (a5 + 1)
     for e in factors.values():
-        d *= (e + 1)
+        d *= e + 1
     return d
 
 
 def count_solutions_for_n(n: int) -> int:
-    N = 10 ** n
+    N = 10**n
 
     # Divisors of 10^n are 2^i * 5^j.
     divs = [2**i * 5**j for i in range(n + 1) for j in range(n + 1)]

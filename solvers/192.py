@@ -83,4 +83,3 @@ if __name__ == "__main__":
     assert best_approx_fraction_sqrt(13, 20) == (18, 5)
     assert best_approx_fraction_sqrt(13, 30) == (101, 28)
     print(solve())
-

@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0136.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0136.cpp"""
+
+
 def compute_flags(limit: int) -> tuple[bytearray, bytearray]:
     at_least_one = bytearray(limit)
     more_than_one = bytearray(limit)

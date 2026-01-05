@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0491.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0491.cpp"""
 import itertools
 
 
@@ -56,7 +56,9 @@ def fast(max_digit):
                         repeated += 1
 
             if (digit_sum - 2 * sum_odd) % 11 == 0:
-                result += permutations_repeated[repeated] * permutations_repeated[repeated]
+                result += (
+                    permutations_repeated[repeated] * permutations_repeated[repeated]
+                )
 
         if bitmask == max_bitmask:
             break

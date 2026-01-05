@@ -112,7 +112,9 @@ def F(L: int) -> int:
             q_end = min(q_high, M // v)  # largest q with same quotient v
 
             # sum of q in [q, q_end] coprime to p
-            sum_q = coprime_prefix_sum(divs_mu_d, q_end) - coprime_prefix_sum(divs_mu_d, q - 1)
+            sum_q = coprime_prefix_sum(divs_mu_d, q_end) - coprime_prefix_sum(
+                divs_mu_d, q - 1
+            )
             if sum_q:
                 tri = v * (v + 1) // 2  # 1+2+...+v
                 ans += p * tri * sum_q

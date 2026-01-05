@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00267%20-%20Billionaire.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00267%20-%20Billionaire.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Sat May 21 21:59:16 2022
 
 @author: igorvanloo
 """
-'''
+"""
 Project Euler Problem 
 
 First notice that if we have x$
@@ -20,27 +20,30 @@ My function find_f() confirms wolframalpha value f ≈ 0.146883922440941..., whi
 
 we need atleast 432 heads to reach one billion therefore the solution is sum h = 432 to 1000 of 1000Ch/2^1000
 
-'''
+"""
 import math
 
+
 def winnings(x, f):
-    return pow(1 + 2*f, x) * pow(1 - f, 1000 - x)
+    return pow(1 + 2 * f, x) * pow(1 - f, 1000 - x)
+
 
 def simulate_sequence(f, sequence):
     capital = 1.0
     for outcome in sequence:
         if outcome == "H":
-            capital *= (1 + 2*f)
+            capital *= 1 + 2 * f
         else:
-            capital *= (1 - f)
+            capital *= 1 - f
     return capital
-    
+
+
 def find_f():
     f = 0.001
     goal = 10**9
     step = 0.001
     best_f, corresponding_x = 0, 1000
-    
+
     while f < 0.5:
         x = 1
         while winnings(x, f) < goal:
@@ -50,18 +53,21 @@ def find_f():
         f += step
     return best_f, corresponding_x
 
+
 def n_choose_r(n, r):  # nCr function
     if r > n:
         return "n must be greter than r"
     else:
         return int(math.factorial(n) / (math.factorial(r) * math.factorial(n - r)))
-    
+
+
 def compute():
     total = 0
     for h in range(432, 1001):
         total += n_choose_r(1000, h)
-    return round(total/pow(2, 1000), 12)
-    
+    return round(total / pow(2, 1000), 12)
+
+
 if __name__ == "__main__":
     assert abs(simulate_sequence(0.25, "HT") - 1.125) < 1e-12
     print(compute())

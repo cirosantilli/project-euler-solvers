@@ -21,6 +21,7 @@ import sys
 # Basic number theory helpers
 # ---------------------------
 
+
 def is_prime_miller_rabin_32(n: int) -> bool:
     """Deterministic Miller-Rabin for n < 2^32 (we only need up to 1e8)."""
     if n < 2:
@@ -115,14 +116,19 @@ def is_primitive_root(g: int, p: int, prime_factors_p_minus_1: list[int]) -> boo
     return True
 
 
-def is_fibonacci_primitive_root(g: int, p: int, prime_factors_p_minus_1: list[int]) -> bool:
+def is_fibonacci_primitive_root(
+    g: int, p: int, prime_factors_p_minus_1: list[int]
+) -> bool:
     """Full check: g^2 ≡ g+1 and g is a primitive root mod p."""
-    return ((g * g - g - 1) % p == 0) and is_primitive_root(g, p, prime_factors_p_minus_1)
+    return ((g * g - g - 1) % p == 0) and is_primitive_root(
+        g, p, prime_factors_p_minus_1
+    )
 
 
 # ---------------------------
 # Prime generation
 # ---------------------------
+
 
 def simple_sieve(limit: int) -> list[int]:
     """Return list of primes <= limit using an odd-only sieve (fast enough for limit ~ 1e5)."""
@@ -155,7 +161,9 @@ def iter_primes_below(n: int, base_primes: list[int], segment_odd_count: int = 1
         return
     yield 2
     # segments over odd numbers [low, high)
-    span = 2 * segment_odd_count  # covers this many integers, but we store only odds => segment_odd_count bytes
+    span = (
+        2 * segment_odd_count
+    )  # covers this many integers, but we store only odds => segment_odd_count bytes
     low = 3
     while low < n:
         high = low + span
@@ -190,7 +198,10 @@ def iter_primes_below(n: int, base_primes: list[int], segment_odd_count: int = 1
 # Factoring p-1 (distinct prime factors)
 # ---------------------------
 
-def distinct_prime_factors(n: int, primes_up_to_1e4: list[int], idx_after_97: int) -> list[int]:
+
+def distinct_prime_factors(
+    n: int, primes_up_to_1e4: list[int], idx_after_97: int
+) -> list[int]:
     """
     Return distinct prime factors of n (n <= 1e8 here).
     Uses a small amount of trial division, plus Miller-Rabin to stop early if the remaining cofactor is prime.
@@ -246,7 +257,10 @@ def distinct_prime_factors(n: int, primes_up_to_1e4: list[int], idx_after_97: in
 # Core problem logic
 # ---------------------------
 
-def has_fib_primitive_root(p: int, primes_up_to_1e4: list[int], idx_after_97: int) -> bool:
+
+def has_fib_primitive_root(
+    p: int, primes_up_to_1e4: list[int], idx_after_97: int
+) -> bool:
     """
     True iff prime p has at least one Fibonacci primitive root.
 
@@ -322,6 +336,7 @@ def solve(limit_exclusive: int = 100_000_000) -> tuple[int, int]:
 # ---------------------------
 # Self-tests (from the problem statement)
 # ---------------------------
+
 
 def _self_test() -> None:
     # 8 is shown to be a Fibonacci primitive root of 11 in the statement.

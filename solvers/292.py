@@ -55,7 +55,9 @@ def _upper_half_direction_groups(max_perim: int) -> List[Tuple[int, int, int]]:
     return groups
 
 
-def _build_half_dp(max_perim: int) -> Tuple[List[Dict[int, int]], List[Tuple[int, int, int]], int, int, int]:
+def _build_half_dp(
+    max_perim: int,
+) -> Tuple[List[Dict[int, int]], List[Tuple[int, int, int]], int, int, int]:
     """
     DP over the *upper* half-plane directions only.
 
@@ -106,7 +108,9 @@ def _build_half_dp(max_perim: int) -> Tuple[List[Dict[int, int]], List[Tuple[int
     return dp, groups, O, W, origin
 
 
-def _count_polygons_from_half_dp(n: int, dp: List[Dict[int, int]], groups: List[Tuple[int, int, int]]) -> int:
+def _count_polygons_from_half_dp(
+    n: int, dp: List[Dict[int, int]], groups: List[Tuple[int, int, int]]
+) -> int:
     """
     Use the half-plane dp to count full polygons with perimeter <= n.
 

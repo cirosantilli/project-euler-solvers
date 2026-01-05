@@ -26,10 +26,8 @@ C = MOD - 1
 # If v(k) = [x(k), x(floor(k/2))]^T then:
 #   v(2k)   = M0 * v(k)
 #   v(2k+1) = M1 * v(k)
-M0 = ((3, 2),
-      (1, 0))
-M1 = ((2, 3),
-      (1, 0))
+M0 = ((3, 2), (1, 0))
+M1 = ((2, 3), (1, 0))
 
 
 def _mat_vec(M, v):
@@ -168,18 +166,26 @@ def A(n: int) -> int:
             if D == 0:
                 j = j0
                 if j < boundary:
-                    ans = (_uniform_eval_A(j, 0, root_is_min, leaf_depth_even))
+                    ans = _uniform_eval_A(j, 0, root_is_min, leaf_depth_even)
                 else:
-                    ans = (_uniform_eval_B(j, 0, root_is_min, leaf_depth_even))
+                    ans = _uniform_eval_B(j, 0, root_is_min, leaf_depth_even)
             else:
                 mid = j0 + (length >> 1)
                 left_val, left_win = rec(j0, D - 1, not root_is_min)
                 right_val, right_win = rec(mid, D - 1, not root_is_min)
 
                 if root_is_min:
-                    ans = (left_val, left_win) if left_val <= right_val else (right_val, right_win)
+                    ans = (
+                        (left_val, left_win)
+                        if left_val <= right_val
+                        else (right_val, right_win)
+                    )
                 else:
-                    ans = (left_val, left_win) if left_val >= right_val else (right_val, right_win)
+                    ans = (
+                        (left_val, left_win)
+                        if left_val >= right_val
+                        else (right_val, right_win)
+                    )
 
         memo[key] = ans
         return ans

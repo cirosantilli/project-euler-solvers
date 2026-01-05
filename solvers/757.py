@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00757%20-%20Stealthy%20Numbers.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00757%20-%20Stealthy%20Numbers.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Fri Dec  3 21:46:17 2021
 
 @author: igorvanloo
 """
-'''
+"""
 Project Euler Problem 757
 
 N = ab = cd , a + b = c + d + 1
@@ -23,41 +23,49 @@ These are known as Bipronic numbers
 
 For a given x, y can take values y^2 + y < 10^14/(x(x+1)) => x <= y < 1/2*(1+ sqrt(x^2+x+400,000,000,000,000 / (x(x+1))))
 
-'''
+"""
 
 import math
 
-def Divisors(x): #Find the divisors of a number
-    divisors = []
-    for i in range(int(math.sqrt(x)),0,-1):
-        if x % i == 0:
-            divisors.append(i + int(x/i))
-    return (divisors)
 
-def compute(limit): #Specific for 10^14 somehow faster? Not sure why
+def Divisors(x):  # Find the divisors of a number
+    divisors = []
+    for i in range(int(math.sqrt(x)), 0, -1):
+        if x % i == 0:
+            divisors.append(i + int(x / i))
+    return divisors
+
+
+def compute(limit):  # Specific for 10^14 somehow faster? Not sure why
     array = set()
-    for x in range(1, int(1/2*(math.sqrt(200000000000001) - 1)) + 1):
-        for y in range(x, int(1/2*(math.sqrt((x**2 + x + 400000000000000)/(x*(x+1)))-1)) + 1):
-            n = x*(x+1)*y*(y+1)
+    for x in range(1, int(1 / 2 * (math.sqrt(200000000000001) - 1)) + 1):
+        for y in range(
+            x,
+            int(1 / 2 * (math.sqrt((x**2 + x + 400000000000000) / (x * (x + 1))) - 1))
+            + 1,
+        ):
+            n = x * (x + 1) * y * (y + 1)
             if n > limit:
                 break
             array.add(n)
-            
+
     return len(array)
-    
-def compute1(limit): #Faster for lower numbers
+
+
+def compute1(limit):  # Faster for lower numbers
     a = set()
     p = []
-    for x in range(1, int(math.sqrt(limit))+1):
-        p.append(x*(x+1))
-        
+    for x in range(1, int(math.sqrt(limit)) + 1):
+        p.append(x * (x + 1))
+
     for x in p:
         for y in p:
-            if x*y > limit:
+            if x * y > limit:
                 break
-            a.add(x*y)
-            
+            a.add(x * y)
+
     return len(a)
+
 
 def is_stealthy(n):
     for x in range(1, int(math.sqrt(n)) + 1):
@@ -68,8 +76,9 @@ def is_stealthy(n):
             if r * (r + 1) == y:
                 return True
     return False
-    
+
+
 if __name__ == "__main__":
     assert is_stealthy(36)
     assert compute1(10**6) == 2851
-    print(compute(10^14))
+    print(compute(10 ^ 14))

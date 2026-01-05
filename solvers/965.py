@@ -4,6 +4,7 @@
 
 from decimal import Decimal, getcontext
 
+
 def F(N: int) -> Decimal:
     # high precision to ensure correct rounding to 13 decimals
     getcontext().prec = 50
@@ -18,8 +19,9 @@ def F(N: int) -> Decimal:
         a, b, c, d = c, d, e, f
     return total
 
+
 if __name__ == "__main__":
-    assert F(1) == Decimal('0.5')
-    assert F(4) == Decimal('0.25')
-    assert str(F(10).quantize(Decimal('0.0000000000001'))) == '0.1319444444444'
-    print(F(10*4).quantize(Decimal('0.0000000000001')))
+    assert F(1) == Decimal("0.5")
+    assert F(4) == Decimal("0.25")
+    assert str(F(10).quantize(Decimal("0.0000000000001"))) == "0.1319444444444"
+    print(F(10 * 4).quantize(Decimal("0.0000000000001")))

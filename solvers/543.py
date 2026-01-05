@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00543%20-%20Prime-Sum%20Numbers.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00543%20-%20Prime-Sum%20Numbers.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Sun Jun  4 17:20:16 2023
 
 @author: igorvanloo
 """
-'''
+"""
 Project Euler Problem 543
 
 P(n, k) = 1 if n can we written as sum of k primes (can be repeated), if not P(n, k) = 0
@@ -71,8 +71,9 @@ for example if n = 10 we test if 1, 3, 5, 7 are prime (3, 5, 7) are hence P((5, 
 
 this is the same as counting all primes less than n - 2 exlcuding 2!
 
-'''
+"""
 import math
+
 
 def list_primality(n):
     result = [True] * (n + 1)
@@ -83,36 +84,39 @@ def list_primality(n):
                 result[j] = False
     return result
 
+
 def list_primes(n):
     return [i for (i, isprime) in enumerate(list_primality(n)) if isprime]
 
+
 def matrix_S(n):
-    #This function was very useful for testing and was my inital idea
+    # This function was very useful for testing and was my inital idea
     primes = list_primes(n)
-    
+
     matrix = []
     for x in range(n + 1):
-        t = [0]*(n + 1)
+        t = [0] * (n + 1)
         if x in primes:
             t[1] = 1
         matrix.append(t)
-    
+
     for x in range(3, n + 1):
-        for k in range(2, x//2 + 1):
+        for k in range(2, x // 2 + 1):
             for p in primes:
                 if p > x:
                     break
                 if matrix[x - p][k - 1]:
                     matrix[x][k] = 1
                     break
-            
+
     total = 0
     for x in range(n + 1):
         t = sum(matrix[x])
-        #print(x, t)
+        # print(x, t)
         total += t
-            
+
     return total
+
 
 def primepiarray(limit):  # Returns an array such that array[x] = number of primes < x
     prime_gen = list_primality(limit + 50)
@@ -127,75 +131,83 @@ def primepiarray(limit):  # Returns an array such that array[x] = number of prim
             p_index += 1
     return array
 
+
 def primePi(x):
     limit = int(math.sqrt(x))
     primes = list_primes(limit)
     array = primepiarray(limit)
-    
+
     phiCache = {}
+
     def phi(x, a):
         if (x, a) in phiCache:
             return phiCache[(x, a)]
         if a == 0:
             return int(x)
         if a == 1:
-            return int(x) - x//2
+            return int(x) - x // 2
         result = phi(x, a - 1) - phi(int(x / primes[a - 1]), a - 1)
         phiCache[(x, a)] = result
         return result
-    
+
     piCache = {}
+
     def pi(x):
         if int(x) in piCache:
             return piCache[int(x)]
-        
+
         if x <= limit:
             return array[math.floor(x)]
-        
-        a = pi(pow(x, 1/4))
-        b = pi(pow(x, 1/2))
-        c = pi(pow(x, 1/3))
-        result = phi(int(x), int(a)) + ((b + a - 2) * (b - a + 1))//2
+
+        a = pi(pow(x, 1 / 4))
+        b = pi(pow(x, 1 / 2))
+        c = pi(pow(x, 1 / 3))
+        result = phi(int(x), int(a)) + ((b + a - 2) * (b - a + 1)) // 2
         for i in range(a + 1, b + 1):
             w = x / primes[i - 1]
             result -= pi(w)
             if i <= c:
                 bi = pi(int(math.sqrt(w)))
                 for j in range(i, bi + 1):
-                    result -= (pi(w / primes[j - 1]) - j + 1)
+                    result -= pi(w / primes[j - 1]) - j + 1
         piCache[int(x)] = result
         return int(result)
-    
+
     return int(pi(x))
+
 
 def fibonacci(n):  # Finds the nth fibonacci number
     v1, v2, v3 = 1, 1, 0  # initialise a matrix [[1,1],[1,0]]
-    for rec in bin(n)[3:]:  # perform fast exponentiation of the matrix (quickly raise it to the nth power)
+    for rec in bin(n)[
+        3:
+    ]:  # perform fast exponentiation of the matrix (quickly raise it to the nth power)
         calc = v2 * v2
         v1, v2, v3 = v1 * v1 + calc, (v1 + v3) * v2, calc + v3 * v3
-        if rec == '1':
+        if rec == "1":
             v1, v2, v3 = v1 + v2, v1, v2
     return v2
 
+
 def S(n):
     res = 0
-    
-    #k = 1 case
+
+    # k = 1 case
     res += primePi(n)
-    
-    #k = 2 case
+
+    # k = 2 case
     if n >= 4:
-        #all even numbers (except 2) are the sum of 2 prime
-        res += n//2 - 1
-        #all odd numbers - 2 which are still prime, excluding 2
+        # all even numbers (except 2) are the sum of 2 prime
+        res += n // 2 - 1
+        # all odd numbers - 2 which are still prime, excluding 2
         res += primePi(n - 2) - 1
-                
-    #k >= 3 case
+
+    # k >= 3 case
     if n >= 6:
-        #res += (n//2 - 2)*(n - n//2 - 2)
-        res += (n//2 - 2)*(n + 1) - (n//2 + 1)*(n//2) + 6
-    
+        # res += (n//2 - 2)*(n - n//2 - 2)
+        res += (n // 2 - 2) * (n + 1) - (n // 2 + 1) * (n // 2) + 6
+
     return res
+
 
 def P(n, k):
     if k != 2:
@@ -204,15 +216,17 @@ def P(n, k):
     prime_set = set(primes)
     return 1 if any((n - p) in prime_set for p in primes) else 0
 
+
 def compute(k):
     total = 0
     for k in range(3, k + 1):
         fib = fibonacci(k)
         t = S(fib)
-        #print(k, fib, t)
+        # print(k, fib, t)
         total += t
     return total
-    
+
+
 if __name__ == "__main__":
     assert P(10, 2) == 1
     assert P(11, 2) == 0

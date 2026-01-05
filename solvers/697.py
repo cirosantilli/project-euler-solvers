@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00697%20-%20Randomly%20Decaying%20Sequences.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00697%20-%20Randomly%20Decaying%20Sequences.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Fri Jan  7 18:24:52 2022
@@ -7,7 +7,7 @@ Created on Fri Jan  7 18:24:52 2022
 @author: igorvanloo
 """
 
-'''
+"""
 Project Euler Problem 697
 
 log is in the question so I assume we need to use it somehow
@@ -32,9 +32,10 @@ then we find ln(c) and our answer is ln(c)/ln(10)
 
 Then I used an online tool https://homepage.divms.uiowa.edu/~mbognar/applets/gamma.html and wolfram alpha
 
-'''
-    
+"""
+
 from math import log, sqrt
+
 
 def compute(n):
     # Wilson-Hilferty approximation for chi-square; Gamma(n,1) => 2*X ~ chi2(2n)
@@ -42,6 +43,7 @@ def compute(n):
     df = 2.0 * n
     chi2_ppf = df * (1.0 - 2.0 / (9.0 * df) + z * sqrt(2.0 / (9.0 * df))) ** 3
     return round((0.5 * chi2_ppf) / log(10), 2)
+
 
 if __name__ == "__main__":
     assert compute(100) == 46.27

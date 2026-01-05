@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00694%20-%20Cube-full%20Divisors.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00694%20-%20Cube-full%20Divisors.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Tue Dec  7 00:37:34 2021
 
 @author: igorvanloo
 """
-'''
+"""
 Project Euler Problem 694
 
 n is Cube full means that if for every prime, p, that divides n then p^3 also divides n
@@ -29,87 +29,92 @@ lim n goes to inf S(n)/n = sum_{1 <= cube full i} lim n goes to inf 1/n * floor(
  = sum_{1 <= cube full i} 1/i = prod_{primes p} (1 + 1/p^3 + 1/p^4 + ...) = prod_{primes p} (1 + 1/(p^2(p-1)))
 which converges!!
 
-'''
+"""
 
 import math
 
+
 def list_primality(n):
-	result = [True] * (n + 1)
-	result[0] = result[1] = False
-	for i in range(int(math.sqrt(n)) + 1):
-		if result[i]:
-			for j in range(2 * i, len(result), i):
-				result[j] = False
-	return result
+    result = [True] * (n + 1)
+    result[0] = result[1] = False
+    for i in range(int(math.sqrt(n)) + 1):
+        if result[i]:
+            for j in range(2 * i, len(result), i):
+                result[j] = False
+    return result
+
 
 def list_primes(n):
-	return [i for (i, isprime) in enumerate(list_primality(n)) if isprime]
+    return [i for (i, isprime) in enumerate(list_primality(n)) if isprime]
+
 
 def S(n):
-    primes = list_primes(int(n**(1/3)) + 1)
-    pp = [1] # Prime Powers: p^3 ,p^4, ... up till limit for all primes
+    primes = list_primes(int(n ** (1 / 3)) + 1)
+    pp = [1]  # Prime Powers: p^3 ,p^4, ... up till limit for all primes
     for p in primes:
         x = pow(p, 3)
         while x <= n:
             pp.append(x)
             x *= p
-    
+
     pp = sorted(pp)
     d = []
     l = len(pp)
     for x in range(l):
         for y in range(l):
-            v = pp[x]*pp[y]
+            v = pp[x] * pp[y]
             if v > n:
                 break
             else:
-                d.append(pp[x]*pp[y])
-                
+                d.append(pp[x] * pp[y])
+
     d = sorted(set(d))
     d1 = []
     for x in range(len(d)):
         for y in range(len(d)):
-            v = d[x]*d[y]
+            v = d[x] * d[y]
             if v > n:
                 break
             else:
-                d1.append(d[x]*d[y])
-                
+                d1.append(d[x] * d[y])
+
     d1 = sorted(set(d1))
     d2 = []
     for x in range(len(d1)):
         for y in range(len(d1)):
-            v = d1[x]*d1[y]
+            v = d1[x] * d1[y]
             if v > n:
                 break
             else:
-                d2.append(d1[x]*d1[y])
+                d2.append(d1[x] * d1[y])
     d2 = set(d2)
-    
+
     total = 0
     for x in d2:
-        total += n//x
-    
+        total += n // x
+
     return total
+
 
 def S_estimate(n):
     primes = list_primes(n)
     total = 1
     for p in primes:
-        total *= (1 + 1/(pow(p,3) - pow(p, 2)))
-    
+        total *= 1 + 1 / (pow(p, 3) - pow(p, 2))
+
     return total
 
+
 def S1(n):
-    primes = list_primes(int(n**(1/3)) + 1)
+    primes = list_primes(int(n ** (1 / 3)) + 1)
     l = len(primes)
-    
+
     def generate(curr, primeIndex):
         total = 0
         p = primes[primeIndex]
         curr *= pow(p, 3)
         while curr <= n:
-            total += n//curr
+            total += n // curr
             for j in range(primeIndex + 1, l):
                 t = generate(curr, j)
                 if t == 0:
@@ -117,10 +122,11 @@ def S1(n):
                 else:
                     total += t
             curr *= p
-        return total   
-    
-    return n + sum([generate(1, i) for i in range(l)])             
-                
+        return total
+
+    return n + sum([generate(1, i) for i in range(l)])
+
+
 def is_cube_full(x):
     if x == 1:
         return True
@@ -136,12 +142,15 @@ def is_cube_full(x):
         p += 1
     return x == 1
 
+
 def s_small(n):
     return sum(1 for d in range(1, n + 1) if n % d == 0 and is_cube_full(d))
 
+
 def S_small(n):
     return sum(s_small(i) for i in range(1, n + 1))
-    
+
+
 if __name__ == "__main__":
     assert s_small(16) == 3
     assert S_small(16) == 19

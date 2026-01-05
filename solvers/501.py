@@ -23,6 +23,7 @@ from bisect import bisect_right
 # Integer roots (safe)
 # -----------------------------
 
+
 def iroot_k(n: int, k: int) -> int:
     """floor(n^(1/k)) using integer binary search (safe for huge n)."""
     if n < 2:
@@ -30,11 +31,12 @@ def iroot_k(n: int, k: int) -> int:
     lo, hi = 1, int(n ** (1.0 / k)) + 3
     while lo + 1 < hi:
         mid = (lo + hi) >> 1
-        if mid ** k <= n:
+        if mid**k <= n:
             lo = mid
         else:
             hi = mid
     return lo
+
 
 def isqrt(n: int) -> int:
     return int(math.isqrt(n))
@@ -47,15 +49,16 @@ def isqrt(n: int) -> int:
 
 SIEVE_MAX = 1_000_000
 
+
 def sieve(n: int):
     is_prime = bytearray(b"\x01") * (n + 1)
     is_prime[0:2] = b"\x00\x00"
-    limit = int(n ** 0.5)
+    limit = int(n**0.5)
     for i in range(2, limit + 1):
         if is_prime[i]:
             step = i
             start = i * i
-            is_prime[start:n + 1:step] = b"\x00" * (((n - start) // step) + 1)
+            is_prime[start : n + 1 : step] = b"\x00" * (((n - start) // step) + 1)
     primes = []
     pi = [0] * (n + 1)
     cnt = 0
@@ -66,12 +69,14 @@ def sieve(n: int):
         pi[i] = cnt
     return primes, pi
 
+
 PRIMES, PI_SMALL = sieve(SIEVE_MAX)
 
 
 # -----------------------------
 # Lehmer prime counting pi(n)
 # -----------------------------
+
 
 @lru_cache(maxsize=None)
 def phi(x: int, s: int) -> int:
@@ -87,6 +92,7 @@ def phi(x: int, s: int) -> int:
         return x - x // 2 - x // 3 + x // 6
     # General recursion
     return phi(x, s - 1) - phi(x // PRIMES[s - 1], s - 1)
+
 
 @lru_cache(maxsize=None)
 def prime_pi(n: int) -> int:
@@ -119,6 +125,7 @@ def prime_pi(n: int) -> int:
 # -----------------------------
 # Count numbers with exactly 8 divisors <= N
 # -----------------------------
+
 
 def count_eight_divisors(N: int) -> int:
     # Case 1: p^7 <= N
@@ -175,4 +182,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

@@ -108,8 +108,8 @@ def sum_interval(k, d):
       [k*2^d, k*2^d + 2^d - 1], with k>=1 and d>=0.
     """
     a, b = vk(k)
-    P = mat_pow(A, d)      # A^d
-    r0, r1 = P[0]          # [1,0] * A^d is the first row of A^d
+    P = mat_pow(A, d)  # A^d
+    r0, r1 = P[0]  # [1,0] * A^d is the first row of A^d
     return (r0 * a + r1 * b) % MOD
 
 
@@ -140,7 +140,7 @@ def main():
     assert S(8) == 22
     assert S(100) == 3604
 
-    n = 3 ** 37
+    n = 3**37
     ans = S(n)
     print(f"{ans:09d}")
 

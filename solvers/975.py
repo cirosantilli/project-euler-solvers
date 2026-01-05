@@ -170,7 +170,9 @@ def F(a: int, b: int, c: int, d: int) -> float:
                 return
             if p2 == pt:
                 return
-            raise RuntimeError("Degenerate cell (too many boundary points); try tightening eps")
+            raise RuntimeError(
+                "Degenerate cell (too many boundary points); try tightening eps"
+            )
 
         # left edge: (i,j)->(i,j+1)
         if s00 == 0:

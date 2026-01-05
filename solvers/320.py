@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00320%20-%20Factorials%20divisible%20by%20a%20huge%20integer.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00320%20-%20Factorials%20divisible%20by%20a%20huge%20integer.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Sun Jun 12 23:04:41 2022
@@ -7,7 +7,7 @@ Created on Sun Jun 12 23:04:41 2022
 @author: igorvanloo
 """
 
-'''
+"""
 Project Euler Problem 320
 
 if (i!)^1234567890 divides n!
@@ -15,14 +15,15 @@ We can use legendres formula to find how many times a prime occurs in n! using l
 then we can perform a bisection algorithm to find the smallest factorial such that there are e*1234567890 factors 
 of i in its factorial
 
-'''
+"""
 import math
+
 
 def prime_factors_sieve(limit):
     result = [{} for _ in range(limit + 1)]
     for i in range(2, limit + 1):
         if len(result[i]) == 0:
-            #prime number found
+            # prime number found
             for j in range(i, limit + 1, i):
                 n = j
                 if i in result[j]:
@@ -36,6 +37,7 @@ def prime_factors_sieve(limit):
                         n //= i
                         result[j][i] += 1
     return result
+
 
 def prime_factors(n):
     factors = {}
@@ -58,62 +60,65 @@ def prime_factors(n):
             break
     return factors
 
+
 def legendre_factorial(n, p):
-    #Modified legendre factorial function, finds number of factors of p in n!
+    # Modified legendre factorial function, finds number of factors of p in n!
     total = 0
     for i in range(1, int(math.floor(math.log(n, p))) + 1):
-        total += n // (p ** i)
+        total += n // (p**i)
     return total
 
+
 def inv_legendre_factorial(p, e):
-    #Finds smallest number, n, such that p^e divides n!
-    #Use bisection method
-    low = p #Low guess is n = p
-    high = p*e #high guess is n = p*e
+    # Finds smallest number, n, such that p^e divides n!
+    # Use bisection method
+    low = p  # Low guess is n = p
+    high = p * e  # high guess is n = p*e
     while high - low > 1:
-        mid = (low + high)//2
+        mid = (low + high) // 2
         if legendre_factorial(mid, p) >= e:
-            #If middle number has more factors of p than needed
-            #make high = mid
+            # If middle number has more factors of p than needed
+            # make high = mid
             high = mid
         else:
-            #Otherwise low = mid
+            # Otherwise low = mid
             low = mid
-    #After high and low are one integer apart we test high and low
+    # After high and low are one integer apart we test high and low
     if legendre_factorial(low, p) >= e:
-        #If low has enough prime factors, we return low
+        # If low has enough prime factors, we return low
         return low
     else:
-        #Otherwise return high
+        # Otherwise return high
         return high
-    
+
+
 def compute(limit):
     exp = 1234567890
     mod = 10**18
     S = 0
-    
+
     pf = prime_factors_sieve(limit)
-    curr_pf = {2:7, 3:4, 5:1, 7:1}
-    
+    curr_pf = {2: 7, 3: 4, 5: 1, 7: 1}
+
     curr_N = 9876543138
-    
+
     for n in range(10, limit + 1):
         new_pf = pf[n]
         for p in new_pf:
             if p in curr_pf:
                 curr_pf[p] += new_pf[p]
-                t = inv_legendre_factorial(p, curr_pf[p]*exp)
+                t = inv_legendre_factorial(p, curr_pf[p] * exp)
                 if t > curr_N:
                     curr_N = t
             else:
                 curr_pf[p] = new_pf[p]
-                t = inv_legendre_factorial(p, curr_pf[p]*exp)
+                t = inv_legendre_factorial(p, curr_pf[p] * exp)
                 if t > curr_N:
                     curr_N = t
         S += curr_N
         S %= mod
     return S % mod
-        
+
+
 if __name__ == "__main__":
     print(compute(1000000))
-    

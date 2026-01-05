@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00166%20-%20Criss%20Cross.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00166%20-%20Criss%20Cross.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Mon May  9 10:41:26 2022
 
 @author: igorvanloo
 """
-'''
+"""
 Project Euler Problem 166
 
 a b c d
@@ -32,12 +32,14 @@ and we can notice g = s - d - j - m
 
 Using this we only need 9 variables (a, b, c, d, e, f, i, j, k)
 
-'''
+"""
+
 
 def valid(n):
     if n < 0 or n > 9:
         return False
     return True
+
 
 def compute():
     total = 0
@@ -66,15 +68,25 @@ def compute():
                                                             if valid(l):
                                                                 p = s - a - f - k
                                                                 if valid(p):
-                                                                    if m + n + o + p == s and d + h + l + p == s:
-                                                                        '''print(total)
+                                                                    if (
+                                                                        m + n + o + p
+                                                                        == s
+                                                                        and d
+                                                                        + h
+                                                                        + l
+                                                                        + p
+                                                                        == s
+                                                                    ):
+                                                                        """print(total)
                                                                         print(a, b, c, d)
                                                                         print(e, f, g, h)
                                                                         print(i, j, k, l)
-                                                                        print(m, n, o, p)'''
+                                                                        print(m, n, o, p)
+                                                                        """
                                                                         total += 1
-    
+
     return total
-                                
+
+
 if __name__ == "__main__":
     print(compute())

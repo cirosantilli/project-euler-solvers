@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0226.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0226.cpp"""
 import math
 
 EPSILON = 1e-8
@@ -9,7 +9,7 @@ def s_curve(x: float) -> float:
     result = 0.0
     n = 0
     while True:
-        power = 2 ** n
+        power = 2**n
         parameter = power * x
 
         s_val = parameter - math.floor(parameter)
@@ -24,7 +24,9 @@ def s_curve(x: float) -> float:
         n += 1
 
 
-def find_intersection(circle_x: float, circle_y: float, radius: float, x: float, step: float) -> float:
+def find_intersection(
+    circle_x: float, circle_y: float, radius: float, x: float, step: float
+) -> float:
     while True:
         y = s_curve(x)
 
@@ -55,7 +57,14 @@ def find_intersection(circle_x: float, circle_y: float, radius: float, x: float,
         x += step
 
 
-def integrate(circle_x: float, circle_y: float, radius: float, from_x: float, to_x: float, step: float) -> float:
+def integrate(
+    circle_x: float,
+    circle_y: float,
+    radius: float,
+    from_x: float,
+    to_x: float,
+    step: float,
+) -> float:
     result = 0.0
     x = from_x
     while x <= to_x:

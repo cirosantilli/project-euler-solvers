@@ -14,7 +14,9 @@ def sieve_primes(limit: int) -> List[int]:
         if is_prime[p]:
             step = p
             start = p * p
-            is_prime[start : limit + 1 : step] = b"\x00" * (((limit - start) // step) + 1)
+            is_prime[start : limit + 1 : step] = b"\x00" * (
+                ((limit - start) // step) + 1
+            )
         p += 1
     return [i for i in range(2, limit + 1) if is_prime[i]]
 
@@ -30,7 +32,7 @@ def is_prime(n: int, trial_primes: List[int], cache: Dict[int, bool]) -> bool:
             cache[n] = True
             return True
         if n % p == 0:
-            cache[n] = (n == p)
+            cache[n] = n == p
             return cache[n]
     # Should not happen for this problem constraints (trial_primes are enough),
     # but keep a safe fallback.
@@ -44,7 +46,9 @@ def is_prime(n: int, trial_primes: List[int], cache: Dict[int, bool]) -> bool:
     return True
 
 
-def consecutive_prime_length(a: int, b: int, trial_primes: List[int], cache: Dict[int, bool]) -> int:
+def consecutive_prime_length(
+    a: int, b: int, trial_primes: List[int], cache: Dict[int, bool]
+) -> int:
     n = 0
     while True:
         val = n * n + a * n + b

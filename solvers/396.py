@@ -26,11 +26,12 @@ using:
 """
 
 MOD = 1_000_000_000
-MOD2 = 1 << 9          # 2^9 = 512
-MOD5 = 5 ** 9          # 1953125
+MOD2 = 1 << 9  # 2^9 = 512
+MOD5 = 5**9  # 1953125
 
 
 # ---------- basic number theory helpers ----------
+
 
 def _egcd(a: int, b: int):
     """Extended GCD: returns (g, x, y) with ax + by = g = gcd(a,b)."""
@@ -42,12 +43,14 @@ def _egcd(a: int, b: int):
         y0, y1 = y1, y0 - q * y1
     return a, x0, y0
 
+
 def _inv_mod(a: int, m: int) -> int:
     a %= m
     g, x, _ = _egcd(a, m)
     if g != 1:
         raise ValueError("inverse does not exist")
     return x % m
+
 
 def _factor_2_5(n: int):
     """n must be of form 2^a * 5^b. Returns (a,b)."""
@@ -62,6 +65,7 @@ def _factor_2_5(n: int):
     if tmp != 1:
         raise ValueError("unexpected modulus factorization")
     return a, b
+
 
 def _phi_2_5(n: int) -> int:
     """Euler's totient for n = 2^a * 5^b."""
@@ -82,6 +86,7 @@ def _phi_2_5(n: int) -> int:
         phi5 = 4 * (5 ** (b - 1))
     return phi2 * phi5
 
+
 def _phi_chain(mod0: int):
     """[mod0, phi(mod0), phi(phi(mod0)), ..., 1] for mod0 = 2^a*5^b."""
     mods = [mod0]
@@ -91,6 +96,7 @@ def _phi_chain(mod0: int):
 
 
 # ---------- Hardy / weak Goodstein machinery for this problem ----------
+
 
 def _f2_exact(x: int) -> int:
     """f(x) = H_{ω^2}(x) exactly (only used for tiny x)."""
@@ -127,6 +133,7 @@ def _a_exact_upto7(n: int) -> int:
 # Precompute CRT constants for 10^9 = 2^9 * 5^9
 _INV_MOD2_MOD5 = _inv_mod(MOD2 % MOD5, MOD5)
 
+
 def _crt_1e9(r2: int, r5: int) -> int:
     """Combine residues modulo 2^9 and 5^9 into a residue modulo 10^9."""
     t = ((r5 - r2) % MOD5) * _INV_MOD2_MOD5 % MOD5
@@ -135,6 +142,7 @@ def _crt_1e9(r2: int, r5: int) -> int:
 
 class _ChainInfo:
     __slots__ = ("mod", "a2", "b5", "m2", "m5", "phi5", "inv_m5_mod_m2")
+
     def __init__(self, mod: int):
         self.mod = mod
         if mod == 1:
@@ -147,7 +155,7 @@ class _ChainInfo:
         a2, b5 = _factor_2_5(mod)
         self.a2, self.b5 = a2, b5
         self.m2 = 1 << a2 if a2 else 1
-        self.m5 = 5 ** b5 if b5 else 1
+        self.m5 = 5**b5 if b5 else 1
         self.phi5 = 4 * (5 ** (b5 - 1)) if b5 else 1
         if a2 and b5:
             self.inv_m5_mod_m2 = _inv_mod(self.m5 % self.m2, self.m2)

@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00686%20-%20Powers%20of%202.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00686%20-%20Powers%20of%202.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Sun Dec 20 23:15:37 2020
 
 @author: igorvanloo
 """
-'''
+"""
 Project Euler Problem 686
 
 2^7 = 128 is the first power of two whose leading digits are "12".
@@ -27,9 +27,10 @@ we are looking for
 log(10)(2^k) = log(10)(1.23... * 10^x)
 k*log(10)(2) = log(10)(1.23...) + x
 
-'''
+"""
 
 import math
+
 
 def p(L, n):
     digits = len(str(L))
@@ -40,19 +41,18 @@ def p(L, n):
     j = 0
     while count != n:
         j += 1
-        temp = j*cons
+        temp = j * cons
         if lower < temp - math.floor(temp) < upper:
             count += 1
     return j
 
+
 def compute(n):
     return p(123, n)
-    
+
+
 if __name__ == "__main__":
     assert p(12, 1) == 7
     assert p(12, 2) == 80
     assert p(123, 45) == 12710
     print(compute(678910))
-    
-
-    

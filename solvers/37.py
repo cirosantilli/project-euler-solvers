@@ -62,7 +62,9 @@ def solve() -> int:
             if len(truncatable) == 11:
                 break
 
-    assert len(truncatable) == 11, "Increase LIMIT; did not find all 11 truncatable primes."
+    assert (
+        len(truncatable) == 11
+    ), "Increase LIMIT; did not find all 11 truncatable primes."
     result = sum(truncatable)
     return result
 

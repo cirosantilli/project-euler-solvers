@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0215.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0215.cpp"""
+
+
 def generate_rows(row, max_width, all_rows):
     width = row[-1] if row else 0
     if width + 2 == max_width or width + 3 == max_width:

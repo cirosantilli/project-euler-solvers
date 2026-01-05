@@ -94,7 +94,6 @@ def union_size(state: State) -> int:
     return max((max(L) if L else -1), (max(R) if R else -1)) + 1
 
 
-
 @lru_cache(maxsize=None)
 def transitions(state: State) -> Tuple[Tuple[State, int, int], ...]:
     """Return compressed transitions as (next_state, delta, weight) triples.

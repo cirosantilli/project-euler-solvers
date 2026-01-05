@@ -22,6 +22,7 @@ import math
 
 # -------------------- Ramvok (single game) --------------------
 
+
 def ramvok_best_profit(values_sorted, c):
     """
     Expected optimal net profit R for a Ramvok game with prizes 'values_sorted'
@@ -133,6 +134,7 @@ def best_profits_all_integer_c_for_mask(mask, max_c):
 
 
 # -------------------- Super Ramvok (Markov chain by visible-count) --------------------
+
 
 def gauss_jordan_inverse(mat):
     """Invert a small dense matrix using Gauss-Jordan (n <= 20 here)."""
@@ -251,6 +253,7 @@ def round_half_up(x):
 
 # -------------------- Main (compute F(20)) --------------------
 
+
 def solve():
     # Assert samples from the statement
     # R(4,0.2) = 2.65
@@ -272,4 +275,3 @@ def solve():
 
 if __name__ == "__main__":
     print(solve())
-

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0199.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0199.cpp"""
 import math
 
 
@@ -14,7 +14,12 @@ def evaluate(k1: float, k2: float, k3: float, depth: int) -> float:
     if depth == 1:
         return area
 
-    return area + evaluate(k1, k2, k4, depth - 1) + evaluate(k2, k3, k4, depth - 1) + evaluate(k1, k3, k4, depth - 1)
+    return (
+        area
+        + evaluate(k1, k2, k4, depth - 1)
+        + evaluate(k2, k3, k4, depth - 1)
+        + evaluate(k1, k3, k4, depth - 1)
+    )
 
 
 def solve(depth: int) -> float:

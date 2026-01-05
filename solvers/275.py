@@ -86,7 +86,9 @@ def _count_total_balanced(n: int) -> int:
 
     ans = 0
 
-    def rec(q_begin: int, q_end_: int, size: int, moment: int, minx: int, maxx: int) -> None:
+    def rec(
+        q_begin: int, q_end_: int, size: int, moment: int, minx: int, maxx: int
+    ) -> None:
         nonlocal ans
         if size == n:
             if moment == 0:
@@ -239,4 +241,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

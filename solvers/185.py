@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0185.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0185.cpp"""
+
+
 def myrand(modulo: int) -> int:
     myrand.seed = (1103515245 * myrand.seed + 12345) & 0xFFFFFFFF
     return myrand.seed % modulo
@@ -13,7 +15,9 @@ def shuffle_digit(digit: int) -> int:
             return digit
 
 
-def add_guess(guess: str, matches: int, sequences: list[list[int]], hits: list[int]) -> None:
+def add_guess(
+    guess: str, matches: int, sequences: list[list[int]], hits: list[int]
+) -> None:
     sequences.append([int(c) for c in guess])
     hits.append(matches)
 

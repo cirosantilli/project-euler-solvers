@@ -15,7 +15,7 @@ def digital_sum_first_100_digits_of_sqrt(n: int) -> int:
     """
     # We need floor(sqrt(n) * 10^99).
     # That equals isqrt(n * 10^(2*99)) = isqrt(n * 10^198).
-    scaled = n * (10 ** 198)
+    scaled = n * (10**198)
     root_scaled = math.isqrt(scaled)  # floor(sqrt(n) * 10^99)
     s = str(root_scaled)
     assert len(s) == 100, f"Expected 100 digits for n={n}, got {len(s)}"

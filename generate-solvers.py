@@ -109,7 +109,7 @@ def statement_files(statements_dir: Path) -> list[Path]:
 
 
 def build_prompt(statement: str) -> str:
-    return f'''TASK
+    return f"""TASK
 
 Solve the following problem by coding a Python program that runs on pypy3. Add asserts for the test cases given in the problem statement if any, and a print with the final result at the end. Your code must run in a few minutes at most, usually a few seconds. Don't try to brute force the solution, only use brute forcing if needed to better understand the problem on small instances. Don't use external libraries, only the Python standard library. Don't use multithreading, only a single CPU core. Don't take input from stdin nor CLI arguments. If an external file is required sa input for the program, use the basename of the problem statement for it. Use typing for function signatures.
 
@@ -130,7 +130,7 @@ PROBLEM
 ```
 
 {statement.strip()}
-'''
+"""
 
 
 def build_requests(
@@ -293,9 +293,7 @@ def strip_code_fences(text: str) -> str:
 
 
 def parse_sections(text: str) -> tuple[str | None, str | None]:
-    match = re.search(
-        r"(?is)\bmain\.py\b\s*(.*?)\s*\bREADME\.md\b\s*(.*)", text
-    )
+    match = re.search(r"(?is)\bmain\.py\b\s*(.*?)\s*\bREADME\.md\b\s*(.*)", text)
     if not match:
         return None, None
     main_text = strip_code_fences(match.group(1))
@@ -305,9 +303,7 @@ def parse_sections(text: str) -> tuple[str | None, str | None]:
     return main_text, readme_text
 
 
-def solver_stem(
-    solvers_dir: Path, problem_id: int, force: bool
-) -> str | None:
+def solver_stem(solvers_dir: Path, problem_id: int, force: bool) -> str | None:
     def stem_exists(stem: str) -> bool:
         return (
             (solvers_dir / f"{stem}.py").exists()
@@ -376,6 +372,7 @@ def write_jsonl(requests: list[dict], out_path: Path) -> None:
     with out_path.open("w", encoding="utf-8") as handle:
         for entry in requests:
             handle.write(json.dumps(entry, ensure_ascii=True) + "\n")
+
 
 def print_requests(requests: list[dict]) -> None:
     for entry in requests:
@@ -541,11 +538,10 @@ def run_codex_solver(
             main_path.read_text(encoding="utf-8") if main_path.exists() else None
         )
         readme_text = (
-            readme_path.read_text(encoding="utf-8")
-            if readme_path.exists()
-            else None
+            readme_path.read_text(encoding="utf-8") if readme_path.exists() else None
         )
         return main_text, readme_text, stdout + stderr, elapsed, proc.returncode
+
 
 async def _fetch_response(
     client: AsyncOpenAI,
@@ -556,9 +552,9 @@ async def _fetch_response(
     started_at = time.monotonic()
     try:
         if timeout is not None:
-            response = await client.with_options(
-                timeout=timeout
-            ).responses.create(**request["body"])
+            response = await client.with_options(timeout=timeout).responses.create(
+                **request["body"]
+            )
         else:
             response = await client.responses.create(**request["body"])
         return {
@@ -757,19 +753,14 @@ def main() -> None:
             )
             completed += 1
             if returncode != 0:
-                print(
-                    f"Codex failed for problem {problem_id} "
-                    f"(exit {returncode})"
-                )
+                print(f"Codex failed for problem {problem_id} " f"(exit {returncode})")
                 print(
                     f"Request for problem {problem_id} completed in "
                     f"{elapsed:.2f}s ({completed}/{total})"
                 )
                 continue
             if not main_text or not readme_text:
-                print(
-                    f"Failed to parse Codex output for problem {problem_id}."
-                )
+                print(f"Failed to parse Codex output for problem {problem_id}.")
                 print(
                     f"Request for problem {problem_id} completed in "
                     f"{elapsed:.2f}s ({completed}/{total})"
@@ -852,9 +843,7 @@ def main() -> None:
         f" Problems: {format_problem_ids(problem_ids)}"
     )
     print_requests(requests)
-    asyncio.run(
-        submit_requests_async(requests, args.timeout, solvers_dir, args.force)
-    )
+    asyncio.run(submit_requests_async(requests, args.timeout, solvers_dir, args.force))
 
 
 if __name__ == "__main__":

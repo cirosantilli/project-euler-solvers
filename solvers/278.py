@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0278.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0278.cpp"""
+
 
 def f(p: int, q: int, r: int) -> int:
     return 2 * p * q * r - p * q - p * r - q * r

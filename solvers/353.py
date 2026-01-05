@@ -49,6 +49,7 @@ sums_odd = [i for i in range(MAX_S + 1) if pairs_odd[i]]
 # Small helpers
 # ------------------------------------------------------------
 
+
 def gcd3(x, y, z):
     return math.gcd(math.gcd(abs(x), abs(y)), abs(z))
 
@@ -84,6 +85,7 @@ def divisors_from_factors(factors):
 # ------------------------------------------------------------
 # Hurwitz quaternion parameterization of integer points on x^2+y^2+z^2=r^2
 # ------------------------------------------------------------
+
 
 def add_points_from_quaternion_int(a, b, c, d, out):
     aa = a * a
@@ -177,10 +179,9 @@ def all_points_on_sphere(r):
 # Sparse bounded Dijkstra using 3D bucket hashing
 # ------------------------------------------------------------
 
-NEIGHBOR_OFFSETS_27 = [(dx, dy, dz)
-                       for dx in (-1, 0, 1)
-                       for dy in (-1, 0, 1)
-                       for dz in (-1, 0, 1)]
+NEIGHBOR_OFFSETS_27 = [
+    (dx, dy, dz) for dx in (-1, 0, 1) for dy in (-1, 0, 1) for dz in (-1, 0, 1)
+]
 
 
 def dijkstra_sparse_bounded(points, r, D):

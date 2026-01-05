@@ -63,8 +63,9 @@ def count_triangles(r: int) -> int:
     vecs = list(ray.keys())
     weights = [ray[v] for v in vecs]
 
-    order = sorted(range(len(vecs)),
-                   key=cmp_to_key(lambda i, j: polar_cmp(vecs[i], vecs[j])))
+    order = sorted(
+        range(len(vecs)), key=cmp_to_key(lambda i, j: polar_cmp(vecs[i], vecs[j]))
+    )
     vecs = [vecs[i] for i in order]
     weights = [weights[i] for i in order]
 
@@ -120,4 +121,3 @@ if __name__ == "__main__":
     assert count_triangles(3) == 360
     assert count_triangles(5) == 10600
     print(solve())
-

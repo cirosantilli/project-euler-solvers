@@ -21,7 +21,9 @@ def generate_throws() -> Tuple[List[Throw], List[Throw]]:
     return all_throws, finishing_doubles
 
 
-def count_checkouts_under(limit_exclusive: int, all_throws: List[Throw], finishing_doubles: List[Throw]) -> int:
+def count_checkouts_under(
+    limit_exclusive: int, all_throws: List[Throw], finishing_doubles: List[Throw]
+) -> int:
     """
     Count distinct checkout combinations with total score < limit_exclusive.
     Distinctness rules:
@@ -58,7 +60,9 @@ def count_checkouts_under(limit_exclusive: int, all_throws: List[Throw], finishi
     return total
 
 
-def count_checkouts_exact(target: int, all_throws: List[Throw], finishing_doubles: List[Throw]) -> int:
+def count_checkouts_exact(
+    target: int, all_throws: List[Throw], finishing_doubles: List[Throw]
+) -> int:
     """Count distinct checkout combinations with total score exactly equal to target."""
     scores = [t.score for t in all_throws]
     n = len(all_throws)

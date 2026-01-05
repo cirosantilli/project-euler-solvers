@@ -150,7 +150,16 @@ def solve(limit: int = 100_000_000) -> int:
 
     # Enumerate all feasible ordered exponent sequences (a_1,...,a_k) for primes p_1<...<p_k.
     # Feasibility check: smallest primes 2,3,5,... with those exponents must fit in 'limit'.
-    min_primes = (2, 3, 5, 7, 11, 13, 17, 19)  # enough for n<=1e8 (max distinct primes is 8)
+    min_primes = (
+        2,
+        3,
+        5,
+        7,
+        11,
+        13,
+        17,
+        19,
+    )  # enough for n<=1e8 (max distinct primes is 8)
     exponent_seqs: List[Tuple[int, ...]] = []
 
     def gen(pos: int, prod: int, seq: List[int]) -> None:

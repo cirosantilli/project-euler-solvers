@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0610.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0610.cpp"""
 import math
 
 NUM_LETTERS = 7
@@ -131,7 +131,7 @@ def solve():
     while True:
         many_m = num_m * 1000 * (1 - ANY_LETTER)
         increment = many_m + up_to_1000
-        result += increment * (ANY_LETTER ** num_m)
+        result += increment * (ANY_LETTER**num_m)
 
         if increment < precision:
             break

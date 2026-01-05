@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0161.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0161.cpp"""
+
+
 def use(pos: int, row: int) -> tuple[bool, int]:
     mask = 1 << pos
     result = (row & mask) == 0
@@ -7,7 +9,9 @@ def use(pos: int, row: int) -> tuple[bool, int]:
     return result, row
 
 
-def search(rows_left: int, row_a: int, row_b: int, row_c: int, width: int, cache: dict) -> int:
+def search(
+    rows_left: int, row_a: int, row_b: int, row_c: int, width: int, cache: dict
+) -> int:
     if rows_left == 0:
         return 1
 

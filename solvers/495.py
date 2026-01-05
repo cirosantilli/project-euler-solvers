@@ -17,6 +17,7 @@ MOD = 1_000_000_007
 # Prime sieve + factorial exponents
 # ----------------------------
 
+
 def sieve_primes_upto(n: int) -> list[int]:
     """Simple bytearray sieve."""
     if n < 2:
@@ -28,7 +29,7 @@ def sieve_primes_upto(n: int) -> list[int]:
         if bs[i]:
             step = i
             start = i * i
-            bs[start:n + 1:step] = b"\x00" * (((n - start) // step) + 1)
+            bs[start : n + 1 : step] = b"\x00" * (((n - start) // step) + 1)
     return [i for i in range(n + 1) if bs[i]]
 
 
@@ -53,6 +54,7 @@ def factorial_prime_exponent_frequencies(n: int) -> dict[int, int]:
 # Integer partitions of k (cycle types)
 # ----------------------------
 
+
 def partitions_of(n: int, max_part: int | None = None):
     """
     Generates integer partitions of n as non-increasing lists.
@@ -71,6 +73,7 @@ def partitions_of(n: int, max_part: int | None = None):
 # ----------------------------
 # Core solver
 # ----------------------------
+
 
 def precompute_base_ones_twos(max_e: int, k: int) -> list[list[array]]:
     """
@@ -227,6 +230,7 @@ def solve() -> int:
 # ----------------------------
 # Tests from the statement
 # ----------------------------
+
 
 def _test():
     # W(144,4) = 7

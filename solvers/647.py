@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00647%20-%20Linear%20Transformations%20of%20Polygonal%20Numbers.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00647%20-%20Linear%20Transformations%20of%20Polygonal%20Numbers.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Thu Jun 15 11:32:00 2023
 
 @author: igorvanloo
 """
-'''
+"""
 Project Euler Problem 647
 
 Find (A, B) such that AT_n + B = T_x
@@ -21,25 +21,27 @@ A = a(2b + 1) = a^2 => a = 2b + 1, B = (b^2 + b) / 2
 
 for general formula see website, wrote it up nicely as I made some errors doing it in my head...
 
-'''
-    
+"""
+
+
 def F(k, N):
     total = 0
     i = 1
     while True:
-        
-        a = 2*(k - 2)*i + 1
-        b = (4 - k)*i
-        
+
+        a = 2 * (k - 2) * i + 1
+        b = (4 - k) * i
+
         A = pow(a, 2)
-        B = ((k - 2)*b*b + (4 - k)*b)//2
-        
+        B = ((k - 2) * b * b + (4 - k) * b) // 2
+
         if max(A, B) > N:
             break
-        
+
         total += A + B
         i += 1
     return total
+
 
 def S(N):
     total = 0
@@ -51,7 +53,8 @@ def S(N):
         total += t
         k += 2
     return total
-        
+
+
 if __name__ == "__main__":
     assert F(3, 100) == 184
     assert S(10**3) == 14993

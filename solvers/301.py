@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00301%20-%20Nim.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00301%20-%20Nim.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Tue May 18 21:02:53 2021
@@ -7,7 +7,7 @@ Created on Tue May 18 21:02:53 2021
 @author: igorvanloo
 """
 
-'''
+"""
 Project Euler Problem 301
 
 The function X is called nim-sum and it cancels binary bits that are equal for example it is defined by the ^ operation
@@ -53,30 +53,35 @@ length 30 that do not have consecutive 1's
 
 that is a(30) = f(n+2)
 
-'''
+"""
 
 
-def fibonnaci(n): #Finds the nth fibonnaci number
-    v1, v2, v3 = 1, 1, 0    # initialise a matrix [[1,1],[1,0]]
-    for rec in bin(n)[3:]:  # perform fast exponentiation of the matrix (quickly raise it to the nth power)
-        calc = v2*v2
-        v1, v2, v3 = v1*v1+calc, (v1+v3)*v2, calc+v3*v3
-        if rec=='1':
-            v1, v2, v3 = v1+v2, v1, v2
+def fibonnaci(n):  # Finds the nth fibonnaci number
+    v1, v2, v3 = 1, 1, 0  # initialise a matrix [[1,1],[1,0]]
+    for rec in bin(n)[
+        3:
+    ]:  # perform fast exponentiation of the matrix (quickly raise it to the nth power)
+        calc = v2 * v2
+        v1, v2, v3 = v1 * v1 + calc, (v1 + v3) * v2, calc + v3 * v3
+        if rec == "1":
+            v1, v2, v3 = v1 + v2, v1, v2
     return v2
+
 
 def nim_sum(n1, n2, n3):
     return n1 ^ n2 ^ n3
 
+
 def compute():
     count = 0
-    for n in range(1,2**30 + 1):
+    for n in range(1, 2**30 + 1):
         if n % 10**6 == 0:
-            print(n)            
-        if int(bin(n)[2:])^int(bin(2*n)[2:])^int(bin(3*n)[2:]) == 0:
+            print(n)
+        if int(bin(n)[2:]) ^ int(bin(2 * n)[2:]) ^ int(bin(3 * n)[2:]) == 0:
             print(n)
             count += 1
     return count
+
 
 if __name__ == "__main__":
     assert nim_sum(1, 2, 3) == 0

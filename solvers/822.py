@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00822%20-%20Square%20the%20Smallest.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00822%20-%20Square%20the%20Smallest.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Sat Apr 29 16:26:16 2023
 
 @author: igorvanloo
 """
-'''
+"""
 Project Euler Problem 822
 
 Start with list [2, ..., n]
@@ -73,20 +73,22 @@ An important note:
     
     Final table of exponents is [12, 12, 11, 11, 11, 11, 11, 11, 10] as we expected
 
-'''
+"""
 import math
+
 
 def BruteS(n, m):
     A = [i for i in range(2, n + 1)]
-    power = [0]*(n - 1)
+    power = [0] * (n - 1)
     for _ in range(m):
         e = min(A)
         i = A.index(e)
         A[i] = pow(e, 2)
         power[i] += 1
     return power
-    
-def S(n, m, mod = 1234567891):
+
+
+def S(n, m, mod=1234567891):
     A = [i for i in range(2, n + 1)]
     k = 0
     while pow(min(A), 2) < max(A):
@@ -94,18 +96,19 @@ def S(n, m, mod = 1234567891):
         i = A.index(e)
         A[i] = pow(e, 2)
         k += 1
-        
+
     A = sorted(A)
     total = 0
     q, r = divmod(m - k, n - 1)
-    
+
     for i in range(len(A)):
         if i < r:
             total += pow(A[i], pow(2, q + 1, mod - 1), mod)
         else:
             total += pow(A[i], pow(2, q, mod - 1), mod)
-        
+
     return total % mod
+
 
 if __name__ == "__main__":
     assert S(5, 3) == 34

@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 
-'''
+"""
 By GPT-5. Runtime: 0m25.085s on pypy3 3.11.13, Ubuntu 25.10, Lenovo ThinkPad P14s.
-'''
+"""
 
 from math import isqrt, gcd
+
 
 def sieve_primes(limit: int) -> list[int]:
     sieve = bytearray(b"\x01") * (limit + 1)
@@ -14,10 +15,12 @@ def sieve_primes(limit: int) -> list[int]:
         if sieve[p]:
             step = p
             start = p * p
-            sieve[start:limit+1:step] = b"\x00" * ((limit - start) // step + 1)
+            sieve[start : limit + 1 : step] = b"\x00" * ((limit - start) // step + 1)
     return [i for i in range(2, limit + 1) if sieve[i]]
 
+
 PRIMES = sieve_primes(10**6)
+
 
 def factor(n: int) -> list[tuple[int, int]]:
     res: list[tuple[int, int]] = []
@@ -38,6 +41,7 @@ def factor(n: int) -> list[tuple[int, int]]:
         res.append((tmp, 1))
     return res
 
+
 def divisors_from_factors(factors: list[tuple[int, int]]) -> list[int]:
     divs = [1]
     for p, e in factors:
@@ -51,12 +55,14 @@ def divisors_from_factors(factors: list[tuple[int, int]]) -> list[int]:
         divs = new_divs
     return divs
 
+
 def gen_us_from_z_factor(z_factors: list[tuple[int, int]]) -> list[int]:
     if not z_factors:
         return [1]
     bases = [p for p, _ in z_factors]
     limits = [(2 * e) // 3 for _, e in z_factors]
     us: list[int] = []
+
     def backtrack(i: int, cur: int) -> None:
         if i == len(bases):
             us.append(cur)
@@ -67,8 +73,10 @@ def gen_us_from_z_factor(z_factors: list[tuple[int, int]]) -> list[int]:
         for _ in range(max_e + 1):
             backtrack(i + 1, cur * val)
             val *= p
+
     backtrack(0, 1)
     return us
+
 
 def integer_cuberoot_floor(n: int) -> int:
     if n <= 0:
@@ -76,9 +84,10 @@ def integer_cuberoot_floor(n: int) -> int:
     x = int(round(n ** (1.0 / 3.0)))
     while (x + 1) ** 3 <= n:
         x += 1
-    while x > 0 and x ** 3 > n:
+    while x > 0 and x**3 > n:
         x -= 1
     return x
+
 
 def count_triangles(N: int) -> int:
     total = 0
@@ -130,6 +139,7 @@ def count_triangles(N: int) -> int:
                     total += 1
     return total
 
+
 def brute_force(N: int) -> int:
     cnt = 0
     for a in range(1, N // 3 + 1):
@@ -146,8 +156,8 @@ def brute_force(N: int) -> int:
                     cnt += 1
     return cnt
 
+
 if __name__ == "__main__":
     for test_N in (60, 80, 100, 150, 200):
         assert count_triangles(test_N) == brute_force(test_N)
     print(count_triangles(10**6))
-

@@ -92,7 +92,7 @@ def nim_mul(a: int, b: int) -> int:
         p2 = nim_mul(a2, b2)
         p3 = nim_mul(a1 ^ a2, b1 ^ b2)
         p4 = nim_mul(p1, Fn >> 1)  # p1 * (Fn/2)
-        p5 = p3 ^ p2               # a1b1 + a1b2 + a2b1
+        p5 = p3 ^ p2  # a1b1 + a1b2 + a2b1
 
         r = (p5 << shift) ^ p2 ^ p4
 
@@ -144,7 +144,9 @@ def make_triangles_upto(n: int) -> List[int]:
     return out
 
 
-def compute_1d_prefix_and_freq(n: int, lengths: List[int], verbose: bool = False) -> Tuple[array, array]:
+def compute_1d_prefix_and_freq(
+    n: int, lengths: List[int], verbose: bool = False
+) -> Tuple[array, array]:
     """
     Computes:
       - C[x] for x=0..n where C[x] is the XOR prefix of the 1D nim-values (see Pearson),
@@ -160,11 +162,11 @@ def compute_1d_prefix_and_freq(n: int, lengths: List[int], verbose: bool = False
     - We also count multiplicities of candidate values at each x, then update strip frequencies
       with one pass over distinct candidates (avoids re-indexing C twice).
     """
-    C = array('H', [0]) * (n + 1)  # values stay < 1024
-    freq = array('Q', [0]) * M
+    C = array("H", [0]) * (n + 1)  # values stay < 1024
+    freq = array("Q", [0]) * M
 
-    mark = [0] * M     # timestamp (current x) if present
-    cnt = [0] * M      # multiplicity for current x
+    mark = [0] * M  # timestamp (current x) if present
+    cnt = [0] * M  # multiplicity for current x
     touched = [0] * M  # distinct values touched at current x
 
     m = 0
@@ -249,7 +251,7 @@ def W(n: int, verbose: bool = False) -> int:
 
 
 def main() -> None:
-    verbose = ("--verbose" in sys.argv)
+    verbose = "--verbose" in sys.argv
 
     # Tests from the problem statement
     assert W(1) == 1

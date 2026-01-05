@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0336.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0336.cpp"""
+
+
 def next_permutation(seq):
     i = len(seq) - 2
     while i >= 0 and seq[i] >= seq[i + 1]:
@@ -22,7 +24,7 @@ def solve(length=11, stop_when_found=2011):
 
     while True:
         current = train[:]
-        expect = ord('A')
+        expect = ord("A")
         rotations = 0
         for i in range(len(current) - 1):
             if current[i] == chr(expect):

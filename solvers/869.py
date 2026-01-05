@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00869%20-%20Prime%20Guessing.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00869%20-%20Prime%20Guessing.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Fri Mar  8 15:48:01 2024
 
 @author: IP176077
 """
-'''
+"""
 Project Euler Problem 869
 
 2 = 10
@@ -31,20 +31,22 @@ if p = 3, you will get 2 points
 if p = 5, you will get 2 points
 if p = 7 you will get 3 points
 
-'''
+"""
 
 import math
+
 
 class Node:
     def __init__(self, key, left, right):
         self.left = left
         self.right = right
         self.key = key
-        
+
+
 class Tree:
     def __init__(self, root):
         self.root = root
-    
+
     def add_node(self, value):
         binary = bin(value)[2:][::-1]
         curr = self.root
@@ -56,7 +58,7 @@ class Tree:
                 else:
                     curr.left.key += [value]
                 curr = curr.left
-            
+
             if b == "1":
                 if curr.right == None:
                     curr.right = Node([value], None, None)
@@ -64,14 +66,15 @@ class Tree:
                 else:
                     curr.right.key += [value]
                 curr = curr.right
-    
+
     def return_height(self, t):
         if t == None:
             return 0
         l = self.return_height(t.left)
         r = self.return_height(t.right)
         return max(r, l) + 1
-        
+
+
 def list_primality(n):
     result = [True] * (n + 1)
     result[0] = result[1] = False
@@ -81,8 +84,10 @@ def list_primality(n):
                 result[j] = False
     return result
 
+
 def list_primes(n):
     return [i for (i, isprime) in enumerate(list_primality(n)) if isprime]
+
 
 def play_game(p, tree):
     if p == 2:
@@ -92,23 +97,24 @@ def play_game(p, tree):
     points = 0
     for i in range(len(bp)):
         if len(curr.right.key) >= len(curr.left.key):
-            #More likely to be on the right side so we guess 1
+            # More likely to be on the right side so we guess 1
             if bp[i] == "1":
-                #If we guessed correctly, we get a point and continue down right subtree
+                # If we guessed correctly, we get a point and continue down right subtree
                 points += 1
                 curr = curr.right
             else:
-                #Otherwise we continued down left subtree
+                # Otherwise we continued down left subtree
                 curr = curr.left
         else:
-            #More likely to be on left side so we guess 0
+            # More likely to be on left side so we guess 0
             if bp[i] == "0":
                 points += 1
                 curr = curr.left
             else:
                 curr = curr.right
     return points
-    
+
+
 def E1(N):
     primes = list_primes(N)
     root = Node("_", None, None)
@@ -120,40 +126,43 @@ def E1(N):
     for p in primes:
         points += play_game(p, tree)
     return round(points / len(primes), 8)
-        
-def _build_tree_string(root, curr_index, index=False, delimiter='-'):
+
+
+def _build_tree_string(root, curr_index, index=False, delimiter="-"):
     if root is None:
         return [], 0, 0, 0
 
     line1 = []
     line2 = []
     if index:
-        node_repr = '{}{}{}'.format(curr_index, delimiter, root.key)
+        node_repr = "{}{}{}".format(curr_index, delimiter, root.key)
     else:
-        #try:
-            #node_repr = str(root.key) + "(" + str(root.size) + ")"
-        #except AttributeError:
+        # try:
+        # node_repr = str(root.key) + "(" + str(root.size) + ")"
+        # except AttributeError:
         node_repr = str(root.key)
 
     new_root_width = gap_size = len(node_repr)
 
-    if root.left == root or root.right == root: 
+    if root.left == root or root.right == root:
         print("ouch")
         input("frefref")
     # Get the left and right sub-boxes, their widths, and root repr positions
-    l_box, l_box_width, l_root_start, l_root_end = \
-        _build_tree_string(root.left, 2 * curr_index + 1, index, delimiter)
-    r_box, r_box_width, r_root_start, r_root_end = \
-        _build_tree_string(root.right, 2 * curr_index + 2, index, delimiter)
+    l_box, l_box_width, l_root_start, l_root_end = _build_tree_string(
+        root.left, 2 * curr_index + 1, index, delimiter
+    )
+    r_box, r_box_width, r_root_start, r_root_end = _build_tree_string(
+        root.right, 2 * curr_index + 2, index, delimiter
+    )
 
     # Draw the branch connecting the current root node to the left sub-box
     # Pad the line with whitespaces where necessary
     if l_box_width > 0:
         l_root = (l_root_start + l_root_end) // 2 + 1
-        line1.append(' ' * (l_root + 1))
-        line1.append('_' * (l_box_width - l_root))
-        line2.append(' ' * l_root + '/')
-        line2.append(' ' * (l_box_width - l_root))
+        line1.append(" " * (l_root + 1))
+        line1.append("_" * (l_box_width - l_root))
+        line2.append(" " * l_root + "/")
+        line2.append(" " * (l_box_width - l_root))
         new_root_start = l_box_width + 1
         gap_size += 1
     else:
@@ -161,39 +170,40 @@ def _build_tree_string(root, curr_index, index=False, delimiter='-'):
 
     # Draw the representation of the current root node
     line1.append(node_repr)
-    line2.append(' ' * new_root_width)
+    line2.append(" " * new_root_width)
 
     # Draw the branch connecting the current root node to the right sub-box
     # Pad the line with whitespaces where necessary
     if r_box_width > 0:
         r_root = (r_root_start + r_root_end) // 2
-        line1.append('_' * r_root)
-        line1.append(' ' * (r_box_width - r_root + 1))
-        line2.append(' ' * r_root + '\\')
-        line2.append(' ' * (r_box_width - r_root))
+        line1.append("_" * r_root)
+        line1.append(" " * (r_box_width - r_root + 1))
+        line2.append(" " * r_root + "\\")
+        line2.append(" " * (r_box_width - r_root))
         gap_size += 1
     new_root_end = new_root_start + new_root_width - 1
 
     # Combine the left and right sub-boxes with the branches drawn above
-    gap = ' ' * gap_size
-    new_box = [''.join(line1), ''.join(line2)]
+    gap = " " * gap_size
+    new_box = ["".join(line1), "".join(line2)]
     for i in range(max(len(l_box), len(r_box))):
-        l_line = l_box[i] if i < len(l_box) else ' ' * l_box_width
-        r_line = r_box[i] if i < len(r_box) else ' ' * r_box_width
+        l_line = l_box[i] if i < len(l_box) else " " * l_box_width
+        r_line = r_box[i] if i < len(r_box) else " " * r_box_width
         new_box.append(l_line + gap + r_line)
 
     # Return the new box, its width and its root repr positions
     return new_box, len(new_box[0]), new_root_start, new_root_end
 
+
 def print_tree(tree):
     lines = _build_tree_string(tree.root, 0, False, "-")[0]
-    print('\n' + '\n'.join((line.rstrip() for line in lines)))
-    
+    print("\n" + "\n".join((line.rstrip() for line in lines)))
+
 
 def E(N):
     primes = list_primes(N)
     bp = [bin(p)[2:][::-1] for p in primes]
-    
+
     def calc_points(bp):
         if len(bp) == 0:
             return 0
@@ -211,9 +221,10 @@ def E(N):
                 if len(p) > 1:
                     p0.append(p[1:])
         return max(p1_score, p0_score) + calc_points(p0) + calc_points(p1)
-    
+
     return round(calc_points(bp) / len(primes), 8)
-    
+
+
 if __name__ == "__main__":
     assert E(10) == 2
     assert E(30) == 2.9

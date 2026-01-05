@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0329.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0329.cpp"""
+
+
 def gcd(a, b):
     while a != 0:
         a, b = b % a, a
@@ -8,7 +10,7 @@ def gcd(a, b):
 
 def probability(square, depth, max_depth, limit, is_prime, sequence, cache):
     chance = 1
-    if is_prime[square] ^ (sequence[depth] == 'N'):
+    if is_prime[square] ^ (sequence[depth] == "N"):
         chance = 2
 
     if depth == max_depth:

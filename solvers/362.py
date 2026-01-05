@@ -31,7 +31,7 @@ def prime_sieve(n: int):
     """Return (primes, pi) for all <= n using a simple sieve."""
     bs = bytearray(b"\x01") * (n + 1)
     bs[:2] = b"\x00\x00"
-    m = int(n ** 0.5)
+    m = int(n**0.5)
     for i in range(2, m + 1):
         if bs[i]:
             step = i
@@ -59,7 +59,7 @@ def iroot(n: int, k: int) -> int:
     x = int(round(n ** (1.0 / k)))
     while (x + 1) ** k <= n:
         x += 1
-    while x ** k > n:
+    while x**k > n:
         x -= 1
     return x
 
@@ -129,6 +129,7 @@ def prime_pi(x: int) -> int:
 
 
 # ---- Fsf(n) from exponent multiset ----
+
 
 def bell_numbers(nmax: int) -> list[int]:
     """Bell numbers up to nmax via Stirling numbers of the 2nd kind."""
@@ -231,6 +232,7 @@ def factor_exponents(n: int) -> list[int]:
 
 # ---- Counting numbers with a fixed ordered exponent sequence ----
 
+
 def min_suffix_product(exps: tuple[int, ...], start_idx: int) -> int:
     """Minimal product of consecutive primes starting at start_idx with exponents exps."""
     prod = 1
@@ -325,7 +327,10 @@ def S(limit: int) -> int:
 
 def main() -> None:
     # Asserts from the problem statement
-    assert fsf_from_sorted_exponents(tuple(sorted(factor_exponents(54), reverse=True))) == 2
+    assert (
+        fsf_from_sorted_exponents(tuple(sorted(factor_exponents(54), reverse=True)))
+        == 2
+    )
     assert S(100) == 193
 
     print(S(TARGET_N))

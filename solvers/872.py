@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00872%20-%20Recursive%20Tree.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00872%20-%20Recursive%20Tree.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Thu Dec 19 16:22:50 2024
 
 @author: Igor Van Loo
 """
-'''
+"""
 Project Euler Problem 872
 
 After drawing a few trees a few patterns emerge. For example the height of the tree is log_2(n) + 1
@@ -31,9 +31,10 @@ of T_n, if x in [n-1, n-2, n-4, n-8, etc], it's parent is n, which obeys ** othe
 change, that is if x + 2k = y, k is as large as possible such that x + 2^k <= n + 1, then the same
 k is chosen so that x + 2^k <= n
 
-'''
-    
+"""
+
 import math
+
 
 def f(n, x):
     total = x
@@ -43,6 +44,7 @@ def f(n, x):
         curr += pow(2, k)
         total += curr
     return total
+
 
 if __name__ == "__main__":
     assert f(6, 1) == 12

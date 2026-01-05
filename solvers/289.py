@@ -168,7 +168,7 @@ def L(m: int, n: int, mod: int = MOD) -> int:
 
     for x in range(n + 1):
         for y in range(m + 1):
-            final = (x == n and y == m)
+            final = x == n and y == m
             nxt = defaultdict(int)
             for st, ways in dp.items():
                 new_color = 0 if (x == n or y == m) else 15

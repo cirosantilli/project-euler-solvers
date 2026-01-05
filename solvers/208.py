@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0208.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0208.cpp"""
 num_visited = [0, 0, 0, 0, 0]
 max_per_arc = 0
 UNKNOWN = None
@@ -10,7 +10,11 @@ def search(arcs_left: int, current_arc: int) -> int:
     if arcs_left == 0:
         if current_arc != 0:
             return 0
-        if num_visited[0] != num_visited[1] or num_visited[2] != num_visited[3] or num_visited[0] != num_visited[2]:
+        if (
+            num_visited[0] != num_visited[1]
+            or num_visited[2] != num_visited[3]
+            or num_visited[0] != num_visited[2]
+        ):
             return 0
         return 1
 

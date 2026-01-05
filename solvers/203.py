@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0203.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0203.cpp"""
+
+
 def is_squarefree(x: int, max_square: int) -> bool:
     for p in range(2, max_square + 1):
         if x % (p * p) == 0:

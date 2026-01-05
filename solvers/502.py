@@ -7,12 +7,13 @@ INV2 = (MOD + 1) // 2
 
 # ---------- Small exact arithmetic helpers (for assertions) ----------
 
+
 def build_PQ_exact(h, y, deg_limit):
     # Build P_h(x), Q_h(x) over integers (no mod), truncated to deg_limit.
     if h <= 0:
         return [0], [1]
-    P = [0, y]          # y*x
-    Q = [1, -1]         # 1-x
+    P = [0, y]  # y*x
+    Q = [1, -1]  # 1-x
     if deg_limit == 0:
         return [0], [1]
 
@@ -67,12 +68,15 @@ P1, G1 = 998244353, 3
 P2, G2 = 1004535809, 3
 P3, G3 = 469762049, 3
 
+
 def modinv(a, mod):
     return pow(a, mod - 2, mod)
+
 
 INV_P1_MOD_P2 = modinv(P1 % P2, P2)
 P12 = P1 * P2
 INV_P12_MOD_P3 = modinv(P12 % P3, P3)
+
 
 def ntt(a, invert, mod, root):
     n = len(a)
@@ -106,6 +110,7 @@ def ntt(a, invert, mod, root):
         n_inv = pow(n, mod - 2, mod)
         for i in range(n):
             a[i] = (a[i] * n_inv) % mod
+
 
 def convolve_mod(a, b):
     if not a or not b:
@@ -164,11 +169,13 @@ def convolve_mod(a, b):
 
     return res
 
+
 def poly_mul_trunc(a, b, n):
     res = convolve_mod(a, b)
     if len(res) < n:
         res += [0] * (n - len(res))
     return res[:n]
+
 
 def inv_series(q, n):
     invq = [pow(q[0], MOD - 2, MOD)]
@@ -183,7 +190,9 @@ def inv_series(q, n):
         m = m2
     return invq[:n]
 
+
 # ---------- Build P/Q mod MOD for moderate sizes ----------
+
 
 def build_PQ_mod(h, y, deg_limit, need_prev=False):
     if h <= 0:
@@ -197,8 +206,8 @@ def build_PQ_mod(h, y, deg_limit, need_prev=False):
 
     if h == 1:
         if need_prev:
-            return [0], [1], P[:deg_limit + 1], Q[:deg_limit + 1]
-        return P[:deg_limit + 1], Q[:deg_limit + 1]
+            return [0], [1], P[: deg_limit + 1], Q[: deg_limit + 1]
+        return P[: deg_limit + 1], Q[: deg_limit + 1]
 
     prevP = prevQ = None
     for step in range(2, h + 1):
@@ -250,6 +259,7 @@ def build_PQ_mod(h, y, deg_limit, need_prev=False):
         return prevP, prevQ, P, Q
     return P, Q
 
+
 def series_coeff_mod(P, Q, w):
     n = w + 1
     if w < 2048:
@@ -264,7 +274,9 @@ def series_coeff_mod(P, Q, w):
     prod = poly_mul_trunc(P[:n], invQ, n)
     return prod[w]
 
+
 # ---------- Kitamasa for huge width, small height ----------
+
 
 def kitamasa(init, coef, k):
     d = len(coef)
@@ -303,6 +315,7 @@ def kitamasa(init, coef, k):
         ans = (ans + pol[i] * init[i]) % MOD
     return ans
 
+
 def coeff_large_w_small_h(w, h, y):
     # build full deg h polynomials, then compute coefficient via recurrence
     P, Q = build_PQ_mod(h, y, h)
@@ -320,10 +333,12 @@ def coeff_large_w_small_h(w, h, y):
     # recurrence valid for n >= h+1:
     # f_n = -sum_{i=1..h} Q[i]*f_{n-i}
     coef = [(-Q[i]) % MOD for i in range(1, h + 1)]
-    init = f[1:h + 1]     # shift to make recurrence valid from index h onward
+    init = f[1 : h + 1]  # shift to make recurrence valid from index h onward
     return kitamasa(init, coef, w - 1)
 
+
 # ---------- Matrix power for huge height, small width ----------
+
 
 def poly_mul_small(a, b, limit):
     res = [0] * min(limit, len(a) + len(b) - 1)
@@ -336,22 +351,33 @@ def poly_mul_small(a, b, limit):
                 res[ij] = (res[ij] + ai * bj) % MOD
     return res
 
+
 def poly_add_small(a, b, limit):
     res = [0] * limit
     for i in range(limit):
         res[i] = ((a[i] if i < len(a) else 0) + (b[i] if i < len(b) else 0)) % MOD
     return res
 
+
 def mat_mul(A, B, limit):
     a00, a01 = A[0]
     a10, a11 = A[1]
     b00, b01 = B[0]
     b10, b11 = B[1]
-    c00 = poly_add_small(poly_mul_small(a00, b00, limit), poly_mul_small(a01, b10, limit), limit)
-    c01 = poly_add_small(poly_mul_small(a00, b01, limit), poly_mul_small(a01, b11, limit), limit)
-    c10 = poly_add_small(poly_mul_small(a10, b00, limit), poly_mul_small(a11, b10, limit), limit)
-    c11 = poly_add_small(poly_mul_small(a10, b01, limit), poly_mul_small(a11, b11, limit), limit)
+    c00 = poly_add_small(
+        poly_mul_small(a00, b00, limit), poly_mul_small(a01, b10, limit), limit
+    )
+    c01 = poly_add_small(
+        poly_mul_small(a00, b01, limit), poly_mul_small(a01, b11, limit), limit
+    )
+    c10 = poly_add_small(
+        poly_mul_small(a10, b00, limit), poly_mul_small(a11, b10, limit), limit
+    )
+    c11 = poly_add_small(
+        poly_mul_small(a10, b01, limit), poly_mul_small(a11, b11, limit), limit
+    )
     return [[c00, c01], [c10, c11]]
+
 
 def mat_pow(M, e, limit):
     I = [
@@ -365,12 +391,14 @@ def mat_pow(M, e, limit):
         e >>= 1
     return I
 
+
 def apply_mat(M, P, Q, limit):
     a, b = M[0]
     c, d = M[1]
     Pn = poly_add_small(poly_mul_small(a, P, limit), poly_mul_small(b, Q, limit), limit)
     Qn = poly_add_small(poly_mul_small(c, P, limit), poly_mul_small(d, Q, limit), limit)
     return Pn, Qn
+
 
 def coeff_large_h_small_w(w, h, y):
     if h <= 0:
@@ -412,7 +440,9 @@ def coeff_large_h_small_w(w, h, y):
     Pn, Qn = apply_mat(Mp, P, Q, limit)
     return series_coeff_mod(Pn, Qn, w)
 
+
 # ---------- Unified coefficient accessor ----------
+
 
 def coeff_C_mod(w, h, y):
     if h <= 0:
@@ -426,6 +456,7 @@ def coeff_C_mod(w, h, y):
     P, Q = build_PQ_mod(h, y, w)
     return series_coeff_mod(P, Q, w)
 
+
 def E_leq_mod(w, h):
     if h <= 0:
         return 0
@@ -433,10 +464,13 @@ def E_leq_mod(w, h):
     S = coeff_C_mod(w, h, -1)
     return ((T + S) * INV2) % MOD
 
+
 def F_mod(w, h):
     return (E_leq_mod(w, h) - E_leq_mod(w, h - 1)) % MOD
 
+
 # ---------- Main ----------
+
 
 def main():
     # Assertions from the problem statement
@@ -445,13 +479,9 @@ def main():
     assert F_exact(10, 13) == 37959702514
     assert F_mod(100, 100) == 841913936
 
-    ans = (
-        F_mod(10**12, 100) +
-        F_mod(10000, 10000) +
-        F_mod(100, 10**12)
-    ) % MOD
+    ans = (F_mod(10**12, 100) + F_mod(10000, 10000) + F_mod(100, 10**12)) % MOD
     print(ans)
+
 
 if __name__ == "__main__":
     main()
-

@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0304.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0304.cpp"""
+
 
 def is_prime(p):
     bitmask_primes_2_to_31 = (
@@ -32,7 +33,24 @@ def is_prime(p):
         return True
 
     small_primes = [
-        19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97
+        19,
+        23,
+        29,
+        31,
+        37,
+        41,
+        43,
+        47,
+        53,
+        59,
+        61,
+        67,
+        71,
+        73,
+        79,
+        83,
+        89,
+        97,
     ]
     for sp in small_primes:
         if p % sp == 0:

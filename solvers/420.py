@@ -12,9 +12,9 @@ def divisor_counts_upto_linear(M: int) -> array:
     Return d[n] = number of positive divisors of n, for 0..M, using a linear sieve.
     d is an array('I') of length M+1.
     """
-    spf = array("I", [0]) * (M + 1)     # smallest prime factor
-    d = array("I", [0]) * (M + 1)       # divisor counts
-    exp = array("B", [0]) * (M + 1)     # exponent of spf in n
+    spf = array("I", [0]) * (M + 1)  # smallest prime factor
+    d = array("I", [0]) * (M + 1)  # divisor counts
+    exp = array("B", [0]) * (M + 1)  # exponent of spf in n
     primes = []
 
     d[1] = 1
@@ -111,4 +111,3 @@ if __name__ == "__main__":
     assert F(50) == 7
     assert F(1000) == 1019
     print(F(10_000_000))
-

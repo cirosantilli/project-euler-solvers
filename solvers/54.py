@@ -130,12 +130,15 @@ def _run_sample_asserts() -> None:
     assert player1_wins("2H 2D 4C 4D 4S 3C 3D 3S 9S 9D") is True
 
     # Extra sanity: wheel straight beats high card
-    assert hand_rank(["AS", "2D", "3H", "4C", "5S"]) > hand_rank(["KS", "QD", "9H", "4C", "3S"])
+    assert hand_rank(["AS", "2D", "3H", "4C", "5S"]) > hand_rank(
+        ["KS", "QD", "9H", "4C", "3S"]
+    )
 
 
 def _read_input_lines() -> List[str]:
     with open("0054_poker.txt", "r", encoding="utf-8") as f:
         return [ln.strip() for ln in f if ln.strip()]
+
 
 def main() -> None:
     _run_sample_asserts()

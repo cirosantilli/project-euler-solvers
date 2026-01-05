@@ -79,12 +79,13 @@ _self_tests_from_statement()
 # Math utilities
 # ----------------------------
 
+
 def sieve_smallest_prime_factor(limit: int) -> list[int]:
     """Return SPF array where spf[x] is smallest prime factor of x (spf[p]=p for prime p)."""
     spf = list(range(limit + 1))
     if limit >= 1:
         spf[1] = 1
-    r = int(limit ** 0.5)
+    r = int(limit**0.5)
     for i in range(2, r + 1):
         if spf[i] == i:  # prime
             step = i
@@ -105,12 +106,14 @@ def nth_prime(n: int) -> int:
     while True:
         is_prime = bytearray(b"\x01") * (limit + 1)
         is_prime[0:2] = b"\x00\x00"
-        r = int(limit ** 0.5)
+        r = int(limit**0.5)
         for p in range(2, r + 1):
             if is_prime[p]:
                 step = p
                 start = p * p
-                is_prime[start:limit + 1:step] = b"\x00" * (((limit - start) // step) + 1)
+                is_prime[start : limit + 1 : step] = b"\x00" * (
+                    ((limit - start) // step) + 1
+                )
         primes = [i for i, v in enumerate(is_prime) if v]
         if len(primes) >= n:
             return primes[n - 1]
@@ -137,6 +140,7 @@ def sum_floor_division_range(n: int, lo: int, hi: int) -> int:
 # ----------------------------
 # Core solution
 # ----------------------------
+
 
 def steps_until_power_of_two_exponent(p: int) -> int:
     """
@@ -177,4 +181,3 @@ def solve() -> int:
 
 if __name__ == "__main__":
     print(solve())
-

@@ -55,7 +55,7 @@ def f(N: int, M: int) -> int:
 
     # Frequency of prefix sums in s_0..s_N.
     # Counts fit in uint64 (<= N+1 <= 1e12+1).
-    freq = array('Q', [0]) * M
+    freq = array("Q", [0]) * M
 
     # Index i=0 has s_0=0. Residue 0 (mod P) appears at indices 0, P, ..., qP.
     freq[0] += q + 1
@@ -95,5 +95,5 @@ def main() -> None:
     print(f(10**12, 10**6))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

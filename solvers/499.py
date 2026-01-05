@@ -56,7 +56,7 @@ def _f_expm1(t: float, m: int) -> float:
         s = tmp
 
         # Once the weight is far below double precision noise, further terms can't matter.
-        if weight < 2.0 ** -90:
+        if weight < 2.0**-90:
             break
 
         pow2 *= 2.0

@@ -164,7 +164,9 @@ def berlekamp_massey(seq: Sequence[int], mod: int = MOD) -> List[int]:
     return [(-C[i]) % mod for i in range(1, L + 1)]
 
 
-def kitamasa_nth(init: Sequence[int], rec: Sequence[int], n: int, mod: int = MOD) -> int:
+def kitamasa_nth(
+    init: Sequence[int], rec: Sequence[int], n: int, mod: int = MOD
+) -> int:
     """Compute the n-th term of a linear recurrence in O(k^2 log n).
 
     rec length k defines:
@@ -255,7 +257,7 @@ def main() -> None:
 
     # Target: f(10^10000) mod 100000007.
     # Only even n are tileable, so f(10^10000) = a((10^10000)/2) = a(5*10^9999).
-    index = 5 * (10 ** 9999)
+    index = 5 * (10**9999)
     print(kitamasa_nth(init, rec, index, MOD))
 
 

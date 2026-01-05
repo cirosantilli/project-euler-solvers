@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0244.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0244.cpp"""
 import sys
 
-RED = 'r'
-BLUE = 'b'
-EMPTY = '.'
+RED = "r"
+BLUE = "b"
+EMPTY = "."
 
 MOVE_UP = 85
 MOVE_LEFT = 76
@@ -61,7 +61,10 @@ class Board:
 
         next_index = to_y * SIZE + to_x
         new_pieces = list(self.pieces)
-        new_pieces[index], new_pieces[next_index] = new_pieces[next_index], new_pieces[index]
+        new_pieces[index], new_pieces[next_index] = (
+            new_pieces[next_index],
+            new_pieces[index],
+        )
 
         new_checksum = (self.checksum * 243 + move) % MOD
         return Board("".join(new_pieces), new_checksum)
@@ -83,7 +86,11 @@ def search(final_board):
 
             for move in (MOVE_LEFT, MOVE_RIGHT, MOVE_UP, MOVE_DOWN):
                 moved = current.move(move)
-                if moved is not None and moved.is_valid() and moved.pieces not in history:
+                if (
+                    moved is not None
+                    and moved.is_valid()
+                    and moved.pieces not in history
+                ):
                     next_level.append(moved)
                     history.add(moved.pieces)
 

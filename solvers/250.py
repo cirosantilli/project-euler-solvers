@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00250%20-%20250250.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00250%20-%20250250.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Wed May 18 15:38:05 2022
 
 @author: igorvanloo
 """
-'''
+"""
 Project Euler Problem 250
 
 Similar to problem 249
@@ -32,33 +32,36 @@ If we have array[1] = a and x = 256 then, then array[7] += a
 Although there is slight problem if we do this, our array updates as we get causing massive overflow, so we need to create
 a duplicate array which stores the previous values
 
-'''
+"""
+
 
 def compute(limit):
     mod = 10**16
-    values = [pow(i, i, 250) for i in range(1, limit+1)]
-    
-    array = [1] + [0]*249
-    array2 = [1] + [0]*249
-    
+    values = [pow(i, i, 250) for i in range(1, limit + 1)]
+
+    array = [1] + [0] * 249
+    array2 = [1] + [0] * 249
+
     for x in values:
-        
+
         for y in range(250):
-            #print(x, y, array2[y])
+            # print(x, y, array2[y])
             array[(x + y) % 250] += array2[y]
             array[(x + y) % 250] %= mod
-        
-        array2 = [x for x in array]    
-        
+
+        array2 = [x for x in array]
+
     return (array[0] - 1) % mod
 
-def compute2(limit): #Slightly cleaner code
+
+def compute2(limit):  # Slightly cleaner code
     mod = 10**16
-    values = [pow(i, i, 250) for i in range(1, limit+1)]
-    array = [1] + [0]*249
+    values = [pow(i, i, 250) for i in range(1, limit + 1)]
+    array = [1] + [0] * 249
     for x in values:
         array = [(array[y] + array[(x + y) % 250]) % mod for y in range(len(array))]
     return array[0] - 1
+
 
 if __name__ == "__main__":
     print(compute2(250250))

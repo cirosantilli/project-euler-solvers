@@ -19,7 +19,7 @@ def num_distinct_solutions(n: int) -> int:
             while nn % p == 0:
                 nn //= p
                 e += 1
-            d_n_sq *= (2 * e + 1)
+            d_n_sq *= 2 * e + 1
         p += 1 if p == 2 else 2
     if nn > 1:
         d_n_sq *= 3  # exponent 1 in n -> exponent 2 in n^2 -> (2*1+1)=3

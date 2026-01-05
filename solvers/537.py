@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00537%20-%20Counting%20Tuples.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00537%20-%20Counting%20Tuples.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Wed May 17 20:45:25 2023
 
 @author: igorvanloo
 """
-'''
+"""
 Project Euler Problem 537
 
 Find partitions of n, then for each partition calculate number of possibilities
@@ -86,9 +86,10 @@ So now we know how to generate any array of this form!
 
 We just binary exponentiation to do it quickly and we are done
 
-'''
+"""
 import math
-    
+
+
 def list_primality(n):
     result = [True] * (n + 1)
     result[0] = result[1] = False
@@ -98,30 +99,33 @@ def list_primality(n):
                 result[j] = False
     return result
 
+
 def list_primes(n):
     return [i for (i, isprime) in enumerate(list_primality(n)) if isprime]
 
+
 def pi(n):
     return sum(list_primality(n))
-    
+
+
 def T(n, k):
     mod = 1004535809
     primes = list_primes(300000)
     t1 = [1]
     for i in range(n + 1):
         t1.append(primes[i + 1] - primes[i])
-    
+
     def conv(A, B):
         array = []
         for i, x in enumerate(A):
             t = 0
             for j in range(i + 1):
-                t += A[j]*B[i - j]
+                t += A[j] * B[i - j]
                 t %= mod
             array.append(t)
         return array
-    
-    res = [1]+[0]*(n)
+
+    res = [1] + [0] * (n)
     sq = t1
     while k != 0:
         print(k)
@@ -131,7 +135,8 @@ def T(n, k):
         sq = conv(sq, sq)
         k //= 2
     return res[-1] % mod
-    
+
+
 if __name__ == "__main__":
     mod = 1004535809
     assert pi(1) == 0
@@ -140,4 +145,4 @@ if __name__ == "__main__":
     assert T(3, 3) == 19
     assert T(10, 10) == 869985
     assert T(1000, 1000) % mod == 578270566
-    print(T(2*10**4, 2*10**4))
+    print(T(2 * 10**4, 2 * 10**4))

@@ -20,9 +20,10 @@ from math import gcd
 _PELL_SEEDS = {
     468: [(24, 6), (30, 12)],
     117: [(12, 3), (15, 6)],
-    36:  [(6, 0)],
-    9:   [(3, 0)],
+    36: [(6, 0)],
+    9: [(3, 0)],
 }
+
 
 def _pell_step(s: int, t: int) -> tuple[int, int]:
     """
@@ -109,7 +110,12 @@ def A(N: int) -> int:
                             x3 = -c
                             y3 = -d
 
-                            if max(abs(x1), abs(y1), abs(x2), abs(y2), abs(x3), abs(y3)) > N:
+                            if (
+                                max(
+                                    abs(x1), abs(y1), abs(x2), abs(y2), abs(x3), abs(y3)
+                                )
+                                > N
+                            ):
                                 continue
 
                             tri = tuple(sorted(((x1, y1), (x2, y2), (x3, y3))))
@@ -141,4 +147,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

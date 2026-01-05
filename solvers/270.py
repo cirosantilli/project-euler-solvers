@@ -55,14 +55,14 @@ def compute_C(N: int, mod: int = MOD_DEFAULT) -> int:
     # Only 8 distinct masks occur on an axis-aligned square boundary.
     # Map them to 0..7 for compact bitset state.
     type_map = {
-        1: 0,   # B
-        2: 1,   # R
-        4: 2,   # T
-        8: 3,   # L
-        3: 4,   # B|R
-        6: 5,   # R|T
+        1: 0,  # B
+        2: 1,  # R
+        4: 2,  # T
+        8: 3,  # L
+        3: 4,  # B|R
+        6: 5,  # R|T
         12: 6,  # T|L
-        9: 7,   # L|B
+        9: 7,  # L|B
     }
     types = [type_map[m] for m in masks]
 

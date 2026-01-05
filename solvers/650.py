@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00650%20-%20Divisors%20of%20Binomial%20Product.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00650%20-%20Divisors%20of%20Binomial%20Product.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Thu Dec 26 20:46:05 2024
 
 @author: Igor Van Loo
 """
-'''
+"""
 Project Euler Problem 650
 
 B(n) = https://oeis.org/A001142
@@ -22,8 +22,9 @@ hence we have
 B(n) = B(n - 1) * n^n/n!, we can quickly add priem factors of n^n, and subtract prime factors of n!
 with precomputed arrays and we find prime factors of B(n)
 
-'''
+"""
 import math
+
 
 def prime_factors(n):
     factors = {}
@@ -43,6 +44,7 @@ def prime_factors(n):
             break
     return factors
 
+
 def divisor(pf, mod):
     total = 1
     for p in pf:
@@ -50,11 +52,12 @@ def divisor(pf, mod):
         total *= (pow(p, e + 1, mod) - 1) * pow(p - 1, -1, mod) % mod
     return total % mod
 
+
 def prime_factors_sieve(limit):
     result = [{} for _ in range(limit + 1)]
     for i in range(2, limit + 1):
         if len(result[i]) == 0:
-            #prime number found
+            # prime number found
             for j in range(i, limit + 1, i):
                 n = j
                 if i in result[j]:
@@ -69,15 +72,16 @@ def prime_factors_sieve(limit):
                         result[j][i] += 1
     return result
 
+
 def S(n):
     if n == 1:
         return 1
     if n == 2:
         return 4
-    #pre compute prime factors of all n
+    # pre compute prime factors of all n
     pf_array = prime_factors_sieve(n + 1)
-    
-    #Precompute prime factors of n! iteratively
+
+    # Precompute prime factors of n! iteratively
     pf_fac = [{} for _ in range(n + 1)]
     for x in range(2, n + 1):
         pf_fac[x] = {}
@@ -89,21 +93,21 @@ def S(n):
                 pf_fac[x][p] += v[p]
             else:
                 pf_fac[x][p] = v[p]
-    
+
     mod = 10**9 + 7
     B = {2: 1}
-    
+
     D = [0] * (n + 1)
     D[1] = 1
     D[2] = 3
-    
+
     for x in range(3, n + 1):
         pf_x = pf_array[x]
         for p in pf_x:
             if p in B:
-                B[p] += pf_x[p]*x
+                B[p] += pf_x[p] * x
             else:
-                B[p] = pf_x[p]*x
+                B[p] = pf_x[p] * x
         lpf_x = pf_fac[x]
         for p in lpf_x:
             if p in B:
@@ -113,21 +117,25 @@ def S(n):
         D[x] = divisor(B, mod)
     return sum(D) % mod
 
+
 def B_small(n):
     total = 1
     for k in range(n + 1):
         total *= math.comb(n, k)
     return total
 
+
 def D_small(n):
     pf = prime_factors(B_small(n))
     total = 1
     for p, e in pf.items():
-        total *= (p**(e + 1) - 1) // (p - 1)
+        total *= (p ** (e + 1) - 1) // (p - 1)
     return total
+
 
 def S_exact(n):
     return sum(D_small(k) for k in range(1, n + 1))
+
 
 if __name__ == "__main__":
     assert B_small(5) == 2500

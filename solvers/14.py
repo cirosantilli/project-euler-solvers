@@ -3,7 +3,9 @@ from __future__ import annotations
 from typing import Dict, List, Tuple
 
 
-def collatz_length(n: int, limit: int, cache_small: List[int], cache_big: Dict[int, int]) -> int:
+def collatz_length(
+    n: int, limit: int, cache_small: List[int], cache_big: Dict[int, int]
+) -> int:
     """
     Returns the number of terms in the Collatz chain starting at n and ending at 1 (inclusive).
     Uses memoization in cache_small for values <= limit and cache_big for values > limit.
@@ -72,7 +74,6 @@ def main() -> None:
     assert collatz_length(13, limit, cache_small, cache_big) == 10
 
     ans_n, ans_len = longest_collatz_under(1_000_000)
-
 
     print(ans_n)
 

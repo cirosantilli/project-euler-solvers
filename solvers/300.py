@@ -106,10 +106,10 @@ def _bitset_P_positions(n: int, i: int) -> int:
     This is built in O(1) big-int ops via a repeated-bit-pattern formula.
     """
     M = 1 << n
-    L = 1 << i              # run length
-    W = 2 * L               # pattern width
-    U = ((1 << L) - 1) << L # lower L zeros, upper L ones
-    r = M // W              # repeats
+    L = 1 << i  # run length
+    W = 2 * L  # pattern width
+    U = ((1 << L) - 1) << L  # lower L zeros, upper L ones
+    r = M // W  # repeats
     series = ((1 << (r * W)) - 1) // ((1 << W) - 1)  # 1 + 2^W + ... + 2^{(r-1)W}
     return U * series
 
@@ -155,8 +155,8 @@ def _max_slices(A: List[int], B: List[int], bits: int, mask_all: int) -> List[in
     for k in range(bits - 1, -1, -1):
         ai = A[k] if k < len(A) else 0
         bi = B[k] if k < len(B) else 0
-        gt |= eq & bi & (mask_all ^ ai)   # bi & ~ai
-        eq &= mask_all ^ (ai ^ bi)        # ~(ai^bi)
+        gt |= eq & bi & (mask_all ^ ai)  # bi & ~ai
+        eq &= mask_all ^ (ai ^ bi)  # ~(ai^bi)
     not_gt = mask_all ^ gt
 
     res = [0] * bits

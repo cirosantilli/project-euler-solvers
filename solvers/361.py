@@ -58,7 +58,9 @@ def find_length_by_index(index: int) -> int:
 class Node:
     __slots__ = ("kind", "child", "length", "value")
 
-    def __init__(self, kind: str, child: Node | None, length: int, value: str | None = None) -> None:
+    def __init__(
+        self, kind: str, child: Node | None, length: int, value: str | None = None
+    ) -> None:
         self.kind = kind
         self.child = child
         self.length = length
@@ -283,7 +285,12 @@ def evals(node: Node) -> List[int]:
             u_mid = drop_last(drop_first(node.child))  # type: ignore[arg-type]
             mu_mid = mu_evals(u_mid)
             arr = [
-                ((1 - u_first) * pow_x(k, 2 * half - 1) + mu_mid[k] * X_POWERS[k] + u_last) % MOD
+                (
+                    (1 - u_first) * pow_x(k, 2 * half - 1)
+                    + mu_mid[k] * X_POWERS[k]
+                    + u_last
+                )
+                % MOD
                 for k in range(KMAX + 2)
             ]
     eval_cache[node] = arr

@@ -111,7 +111,12 @@ def make_sum_funcs(
     return sum_even, sum_odd
 
 
-def compute_F(R: int, X: int, sum_even: Callable[[int, int], int], sum_odd: Callable[[int, int], int]) -> int:
+def compute_F(
+    R: int,
+    X: int,
+    sum_even: Callable[[int, int], int],
+    sum_odd: Callable[[int, int], int],
+) -> int:
     M = min(R, X)
     res = 0
     s = 1
@@ -143,7 +148,9 @@ def main() -> None:
     block_size = 1 << 10
     omega = build_omega_odd(limit)
     even_prefix, odd_prefix = build_block_prefix(limit, omega, block_size)
-    sum_even, sum_odd = make_sum_funcs(limit, omega, even_prefix, odd_prefix, block_size)
+    sum_even, sum_odd = make_sum_funcs(
+        limit, omega, even_prefix, odd_prefix, block_size
+    )
 
     assert compute_F(1, 5, sum_even, sum_odd) == 10
     assert compute_F(2, 10, sum_even, sum_odd) == 52

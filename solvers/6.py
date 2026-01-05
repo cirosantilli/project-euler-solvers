@@ -23,7 +23,6 @@ def main() -> None:
     N: Final[int] = 100
     ans = solve(N)
 
-
     print(ans)
 
 

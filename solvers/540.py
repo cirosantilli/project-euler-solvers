@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00540%20-%20Counting%20Primitive%20Pythagorean%20Triples.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00540%20-%20Counting%20Primitive%20Pythagorean%20Triples.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Sat Jul 29 15:46:58 2023
 
 @author: igorvanloo
 """
-'''
+"""
 Project Euler Problem 540
 
 Optimizing an optimized version of my pythagorean_triples function 
@@ -24,18 +24,18 @@ Barely faster than my optimized method
 3. Following this paper https://www.sciencedirect.com/science/article/pii/S0377042701004964 we can get an answer
 See website for details
 
-'''
+"""
 import math
 
 
-def mobius_k_sieve(limit, k = 2):
-    isprime = [1]*(limit + 1)
+def mobius_k_sieve(limit, k=2):
+    isprime = [1] * (limit + 1)
     isprime[0] = isprime[1] = 0
-    mob = [0] + [1]*(limit)
+    mob = [0] + [1] * (limit)
     for p in range(2, limit + 1):
         if isprime[p]:
             mob[p] *= -1
-            for i in range(2*p, limit + 1, p):
+            for i in range(2 * p, limit + 1, p):
                 isprime[i] = 0
                 mob[i] *= -1
             sq = pow(p, k)
@@ -44,29 +44,31 @@ def mobius_k_sieve(limit, k = 2):
                     mob[j] = 0
     return mob
 
+
 def P(n):
     mu = mobius_k_sieve(int(math.sqrt(n)) + 1)
-    
+
     R_cache = {}
+
     def R(n):
         if n in R_cache:
             return R_cache[n]
-        c = 0 
+        c = 0
         for x in range(int(math.sqrt(n)) + 1):
-            min_y, max_y = x + 1, int(math.sqrt(n - x*x))
+            min_y, max_y = x + 1, int(math.sqrt(n - x * x))
             if max_y < min_y:
                 break
             c += max_y - min_y + 1
         R_cache[n] = c
         return c
-    
+
     def Q(n):
         total = 0
         m = math.sqrt(n)
         for d in range(1, int(m) + 1):
-            total += mu[d] * R(n // (d*d))
+            total += mu[d] * R(n // (d * d))
         return total
-    
+
     c = 0
     k = 0
     while 2**k <= n:
@@ -75,8 +77,9 @@ def P(n):
         k += 1
     return c
 
+
 if __name__ == "__main__":
     # TODO extra assert
-    #assert P(20) == 3
+    # assert P(20) == 3
     assert P(10**6) == 159139
     print(P(3141592653589793))

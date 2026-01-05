@@ -143,7 +143,12 @@ def solve() -> int:
                             continue
 
                         # Convexity already checked via sums, but keep safe:
-                        if a1 + a2 >= 180 or b1 + b2 >= 180 or c1 + c2 >= 180 or d1 + d2 >= 180:
+                        if (
+                            a1 + a2 >= 180
+                            or b1 + b2 >= 180
+                            or c1 + c2 >= 180
+                            or d1 + d2 >= 180
+                        ):
                             continue
 
                         t: Angles = (a1, a2, b1, b2, c1, c2, d1, d2)
@@ -166,4 +171,3 @@ def _assert_examples() -> None:
 if __name__ == "__main__":
     _assert_examples()
     print(solve())
-

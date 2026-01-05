@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00717%20-%20Summation%20of%20a%20Modular%20Formula.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00717%20-%20Summation%20of%20a%20Modular%20Formula.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Sun May 21 16:36:51 2023
 
 @author: igorvanloo
 """
-'''
+"""
 Project Euler Problem 717
 
 f(p) = floor(2^(2^p) / p) (mod 2^p)
@@ -49,8 +49,9 @@ so f(p) = -r * ((p - 1)*2^(p - 1) + 1)/p + n*2^p
 
 then g(p) = f(p) (mod p) = 
 
-'''
+"""
 import math
+
 
 def list_primality(n):
     result = [True] * (n + 1)
@@ -61,24 +62,29 @@ def list_primality(n):
                 result[j] = False
     return result
 
+
 def list_primes(n):
     return [i for (i, isprime) in enumerate(list_primality(n)) if isprime]
+
 
 def g(p):
     x = pow(2, p, p - 1)
     r = pow(2, x, p)
-    n = r*(p - 1) // (2*p) + 1
-    
-    pp = pow(2, p - 1, p*p)
-    fp = ((-r * (p - 1) * pp + 1) % (p*p)) // p
-    return (fp + 2*n) % p
+    n = r * (p - 1) // (2 * p) + 1
+
+    pp = pow(2, p - 1, p * p)
+    fp = ((-r * (p - 1) * pp + 1) % (p * p)) // p
+    return (fp + 2 * n) % p
+
 
 def G(N):
     primes = list_primes(N)[1:]
     return sum(g(p) for p in primes)
 
+
 def f_small(p):
     return (pow(2, 2**p) // p) % (2**p)
+
 
 if __name__ == "__main__":
     assert f_small(3) == 5

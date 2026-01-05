@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0359.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0359.cpp"""
 import math
 
 
@@ -37,7 +37,7 @@ def p_value(floor, room, modulo=100000000):
 
 
 def solve(max_exponent_two=27, max_exponent_three=12):
-    number = (2 ** max_exponent_two) * (3 ** max_exponent_three)
+    number = (2**max_exponent_two) * (3**max_exponent_three)
     modulo = 100000000
 
     total = 0

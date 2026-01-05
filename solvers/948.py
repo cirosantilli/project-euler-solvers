@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
-'''
+"""
 By GPT-5. Runtime: 0.3s on pypy3 3.11.13, Ubuntu 25.10, Lenovo ThinkPad P14s.
-'''
+"""
 
 from functools import lru_cache
 from itertools import product
@@ -83,6 +83,7 @@ def compute_F(n_max):
 
 # --- Optional brute-force checker for small n -------------------------------
 
+
 def winners_for_word(s):
     """Return (winner_if_Left_starts, winner_if_Right_starts) for a given word s."""
     n = len(s)
@@ -94,14 +95,14 @@ def winners_for_word(s):
             return s[i]  # 'L' or 'R'
 
         if player == 0:  # Left to move
-            desired, other = 'L', 'R'
+            desired, other = "L", "R"
             for k in range(1, j - i + 1):  # remove k from the left (1..j-i)
                 w = solve(i + k, j, 1)
                 if w == desired:
                     return desired
             return other
         else:  # Right to move
-            desired, other = 'R', 'L'
+            desired, other = "R", "L"
             for k in range(1, j - i + 1):  # remove k from the right
                 w = solve(i, j - k, 0)
                 if w == desired:
@@ -116,10 +117,10 @@ def winners_for_word(s):
 def F_bruteforce(n):
     """Naively compute F(n) by enumerating all 2^n words (for small n)."""
     cnt = 0
-    for bits in product('LR', repeat=n):
-        s = ''.join(bits)
+    for bits in product("LR", repeat=n):
+        s = "".join(bits)
         wl, wr = winners_for_word(s)
-        if wl == 'L' and wr == 'R':
+        if wl == "L" and wr == "R":
             cnt += 1
     return cnt
 
@@ -132,4 +133,3 @@ if __name__ == "__main__":
         fb = F_bruteforce(n)
         assert fb == F[n]
     print(F[60])
-

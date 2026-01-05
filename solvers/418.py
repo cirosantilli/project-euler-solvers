@@ -18,12 +18,12 @@ def prime_sieve(limit: int) -> List[int]:
         return []
     sieve = bytearray(b"\x01") * (limit + 1)
     sieve[0:2] = b"\x00\x00"
-    r = int(limit ** 0.5)
+    r = int(limit**0.5)
     for p in range(2, r + 1):
         if sieve[p]:
             step = p
             start = p * p
-            sieve[start:limit + 1:step] = b"\x00" * (((limit - start) // step) + 1)
+            sieve[start : limit + 1 : step] = b"\x00" * (((limit - start) // step) + 1)
     return [i for i in range(2, limit + 1) if sieve[i]]
 
 
@@ -67,19 +67,21 @@ def choose_split(exps: List[int], max_divisors: int) -> int:
     for i, e in enumerate(exps):
         if i > 0 and dcount * (e + 1) > max_divisors:
             break
-        dcount *= (e + 1)
+        dcount *= e + 1
         split = i + 1
     return split
 
 
-def divisors_in_range(L: int, H: int, divs1_sorted: List[int], divs2: List[int]) -> List[int]:
+def divisors_in_range(
+    L: int, H: int, divs1_sorted: List[int], divs2: List[int]
+) -> List[int]:
     """All divisors d = d1*d2 with d in [L,H], where primes(d1) and primes(d2) are disjoint."""
     if L > H:
         return []
     res: List[int] = []
     for d2 in divs2:
         lo = (L + d2 - 1) // d2  # ceil(L/d2)
-        hi = H // d2            # floor(H/d2)
+        hi = H // d2  # floor(H/d2)
         if lo > hi:
             continue
         i = bisect.bisect_left(divs1_sorted, lo)
@@ -89,7 +91,9 @@ def divisors_in_range(L: int, H: int, divs1_sorted: List[int], divs2: List[int])
     return res
 
 
-def best_triple_from_candidates(n: int, a_list: List[int], c_list: List[int]) -> Tuple[int, int, int] | None:
+def best_triple_from_candidates(
+    n: int, a_list: List[int], c_list: List[int]
+) -> Tuple[int, int, int] | None:
     """
     Return (a,b,c) among candidates minimising c/a, or None if no triple exists.
     Compare ratios exactly using cross-multiplication.

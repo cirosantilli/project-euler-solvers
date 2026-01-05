@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0171.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0171.cpp"""
 MODULO = 1000000000
 
 
@@ -32,7 +32,9 @@ def count_sum(digits: list[int], factorials: list[int], is_square: list[bool]) -
     return result
 
 
-def search(digits: list[int], at_least_digit: int, digits_left: int, factorials, is_square) -> int:
+def search(
+    digits: list[int], at_least_digit: int, digits_left: int, factorials, is_square
+) -> int:
     if digits_left == 0:
         return count_sum(digits, factorials, is_square)
 

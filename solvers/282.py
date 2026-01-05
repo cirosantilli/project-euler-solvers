@@ -29,6 +29,7 @@ MOD = 14**8
 
 # ---------------------------- number theory helpers ----------------------------
 
+
 def _factorize(n: int) -> Dict[int, int]:
     """Trial division factorization (fast enough for n <= a few million)."""
     factors: Dict[int, int] = {}
@@ -94,6 +95,7 @@ def crt_pair(a1: int, m1: int, a2: int, m2: int) -> int:
 
 
 # --------------------------- base-2 tetration modulo --------------------------
+
 
 def _tetration_exact_height(h: int) -> int:
     """Exact 2^^h for very small h."""
@@ -178,6 +180,7 @@ def _find_tetration_fixed_height(mod: int, max_h: int = 60) -> int:
 
 
 # ------------------------------ Ackermann pieces ------------------------------
+
 
 def ackermann_small(m: int, n: int) -> int:
     """Exact Ackermann for small m (used only for the problem's sample asserts)."""

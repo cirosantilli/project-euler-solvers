@@ -15,6 +15,7 @@ import math
 
 # ---------- Exact (small) spanning tree counts via Matrix-Tree + Bareiss ----------
 
+
 def _laplacian_minor(m: int, n: int, drop: int = 0):
     """Return the (mn-1)x(mn-1) Laplacian minor of the m×n grid graph with vertex `drop` removed."""
     N = m * n
@@ -123,6 +124,7 @@ def spanning_trees_exact(m: int, n: int) -> int:
 
 # ---------- Fast large-grid computation via Laplacian eigenvalues (log domain) ----------
 
+
 def log10_spanning_trees(m: int, n: int) -> float:
     """
     Return log10(C(m,n)) for an m×n grid.
@@ -162,7 +164,7 @@ def format_sci_from_log10(log10x: float, sig: int = 5) -> str:
     """Format 10**log10x into scientific notation with `sig` significant digits."""
     exp = int(math.floor(log10x))
     frac = log10x - exp
-    mant = 10.0 ** frac  # mantissa in [1, 10)
+    mant = 10.0**frac  # mantissa in [1, 10)
 
     decimals = sig - 1
     mant_rounded = round(mant, decimals)

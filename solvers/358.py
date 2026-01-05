@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0358.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0358.cpp"""
 sieve = []
 
 
@@ -74,6 +74,7 @@ def solve(limit=750000000):
 
 def main():
     print(solve())
+
 
 if __name__ == "__main__":
     main()

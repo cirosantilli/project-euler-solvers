@@ -60,8 +60,8 @@ def T(N: int) -> int:
             ranges = [(1, m - 1)]
         else:
             s = isqrt(D)
-            r1 = (3 * m - s) // 4                 # floor of smaller root
-            r2 = (3 * m + s + 3) // 4             # ceil of larger root
+            r1 = (3 * m - s) // 4  # floor of smaller root
+            r2 = (3 * m + s + 3) // 4  # ceil of larger root
 
             # If there's no "gap" where p2 > p2_max, everything is valid.
             if r2 <= r1 + 1:
@@ -96,4 +96,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

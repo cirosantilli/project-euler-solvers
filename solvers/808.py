@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00808%20-%20Reversible%20Prime%20Squares.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00808%20-%20Reversible%20Prime%20Squares.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Fri Dec  2 12:21:39 2022
 
 @author: igorvanloo
 """
-'''
+"""
 Project Euler Problem 808
 
 Both 169 and 961 are the square of a prime. 169 is the reverse of 961.
@@ -20,9 +20,10 @@ We call a number a reversible prime square if:
 
 Find the sum of the first 50 reversible prime squares.
 
-'''
+"""
 
 import math
+
 
 def list_primality(n):
     result = [True] * (n + 1)
@@ -33,21 +34,25 @@ def list_primality(n):
                 result[j] = False
     return result
 
+
 def list_primes(n):
     return [i for (i, isprime) in enumerate(list_primality(n)) if isprime]
-    
+
+
 def is_not_palindrome(x):
     if x == x[::-1]:
         return False
     return True
 
+
 def is_quadratic(x):
-    sqrt__root = (x ** (1 / 2))
+    sqrt__root = x ** (1 / 2)
     if round(sqrt__root) ** 2 == x:
         return True
     return False
 
-def compute(n, limit = 5*10**7):
+
+def compute(n, limit=5 * 10**7):
     is_prime = list_primality(limit)
     primes = [i for (i, isprime) in enumerate(is_prime) if isprime]
     values = []
@@ -60,6 +65,7 @@ def compute(n, limit = 5*10**7):
                     values.append(int(sq))
                     values.append(rev)
     return sum(sorted(set(values))[:n]), len(sorted(set(values)))
+
 
 if __name__ == "__main__":
     print(compute(50))

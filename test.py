@@ -14,9 +14,7 @@ ROOT = Path(__file__).resolve().parent
 SOLUTIONS_PATH = ROOT / "data/projecteuler-solutions/Solutions.md"
 SOLVERS_DIR = ROOT / "solvers"
 STATEMENTS_DOCS_DIR = ROOT / "data" / "project-euler-statements" / "data" / "documents"
-STATEMENTS_PROBLEM_DIR = (
-    ROOT / "data" / "project-euler-statements" / "data" / "problem"
-)
+STATEMENTS_PROBLEM_DIR = ROOT / "data" / "project-euler-statements" / "data" / "problem"
 
 LINE_RE = re.compile(r"^(\d+)\.\s+(.*)$")
 NUMERIC_RE = re.compile(r"^\d+(?:\.\d+)?$")
@@ -88,6 +86,7 @@ def parse_args() -> argparse.Namespace:
         help="Run only solvers modified or added since the last git commit.",
     )
     return parser.parse_args()
+
 
 def expand_ids(values: list[str]) -> tuple[list[int], dict[int, list[Path]]]:
     ids: list[int] = []
@@ -334,6 +333,7 @@ def extract_answer(raw_output: str) -> str:
     lines = [line.strip() for line in raw_output.splitlines() if line.strip()]
     return lines[-1] if lines else ""
 
+
 def format_row(res: Result) -> str:
     time_cell = f"{res.elapsed:.3f}" if res.elapsed is not None else ""
     model_cell = res.model or ""
@@ -357,6 +357,7 @@ def format_row(res: Result) -> str:
         link, explanation_cell, time_cell, model_cell, tokens_cell, error_cell
     )
 
+
 def result_key(res: Result) -> tuple[int, str]:
     if res.source_path is not None:
         link_path = res.source_path
@@ -364,6 +365,7 @@ def result_key(res: Result) -> tuple[int, str]:
         link_path = SOLVERS_DIR / f"{res.puzzle_id}.py"
     language = res.language or detect_language(link_path) or ""
     return res.puzzle_id, language
+
 
 def explanation_link(puzzle_id: int) -> str:
     md_path = SOLVERS_DIR / f"{puzzle_id}.md"
@@ -375,8 +377,10 @@ def explanation_link(puzzle_id: int) -> str:
         rel_path = md_path
     return f"link:{rel_path.as_posix()}[{md_path.name}]"
 
+
 def looks_numeric(value: str) -> bool:
     return bool(NUMERIC_RE.match(value))
+
 
 def row_has_statement(cells: list[str]) -> bool:
     if len(cells) < 2:
@@ -389,13 +393,20 @@ def row_has_statement(cells: list[str]) -> bool:
         return True
     return False
 
+
 def normalize_row_fields(
     pid: int, cells: list[str]
 ) -> tuple[str, str, str, str, str, str] | None:
-    if len(cells) >= 6 and cells[1].startswith("link:") and cells[2].startswith("link:"):
+    if (
+        len(cells) >= 6
+        and cells[1].startswith("link:")
+        and cells[2].startswith("link:")
+    ):
         cells = [cells[0], cells[1], *cells[3:]]
     if len(cells) >= 6:
-        id_cell, statement_cell, time_cell, model_cell, tokens_cell, error_cell = cells[:6]
+        id_cell, statement_cell, time_cell, model_cell, tokens_cell, error_cell = cells[
+            :6
+        ]
     elif len(cells) == 5:
         if row_has_statement(cells):
             id_cell, statement_cell, time_cell, model_cell, last_cell = cells
@@ -419,12 +430,14 @@ def normalize_row_fields(
     error_cell = normalize_error_cell(error_cell)
     return id_cell, statement_cell, time_cell, model_cell, tokens_cell, error_cell
 
+
 def normalize_error_cell(value: str) -> str:
     if not value:
         return ""
     if value.startswith("error: "):
         return value
     return f"error: {value}"
+
 
 def format_row_fields(
     id_cell: str,
@@ -439,11 +452,14 @@ def format_row_fields(
         f"{model_cell} | {tokens_cell} | {error_cell}"
     ).rstrip()
 
+
 def update_readme(results: list[Result]) -> None:
     readme_path = ROOT / "README.adoc"
     lines = readme_path.read_text().splitlines()
     try:
-        results_idx = next(i for i, line in enumerate(lines) if line.strip() == "== Results")
+        results_idx = next(
+            i for i, line in enumerate(lines) if line.strip() == "== Results"
+        )
     except StopIteration:
         raise RuntimeError("Could not find Results section in README.adoc")
 
@@ -486,7 +502,9 @@ def update_readme(results: list[Result]) -> None:
             normalized = normalize_row_fields(pid, cells)
             if normalized is None:
                 continue
-            id_cell, statement_cell, time_cell, model_cell, tokens_cell, error_cell = normalized
+            id_cell, statement_cell, time_cell, model_cell, tokens_cell, error_cell = (
+                normalized
+            )
             row_map[(pid, language)] = format_row_fields(
                 id_cell,
                 statement_cell,
@@ -509,7 +527,9 @@ def update_readme(results: list[Result]) -> None:
         normalized = normalize_row_fields(pid, cells)
         if normalized is None:
             continue
-        id_cell, statement_cell, time_cell, model_cell, tokens_cell, error_cell = normalized
+        id_cell, statement_cell, time_cell, model_cell, tokens_cell, error_cell = (
+            normalized
+        )
         row_map[(pid, "py")] = format_row_fields(
             id_cell,
             statement_cell,
@@ -522,10 +542,7 @@ def update_readme(results: list[Result]) -> None:
     for key, row in result_map.items():
         row_map[key] = row
 
-    sorted_rows = [
-        row_map[key]
-        for key in sorted(row_map, key=lambda k: (k[0], k[1]))
-    ]
+    sorted_rows = [row_map[key] for key in sorted(row_map, key=lambda k: (k[0], k[1]))]
     new_block = [header_line, *sorted_rows]
     lines[start + 1 : end] = new_block
 
@@ -584,7 +601,9 @@ def update_readme_links() -> None:
         normalized = normalize_row_fields(pid, cells)
         if normalized is None:
             continue
-        id_cell, statement_cell, time_cell, model_cell, tokens_cell, error_cell = normalized
+        id_cell, statement_cell, time_cell, model_cell, tokens_cell, error_cell = (
+            normalized
+        )
         row_map[(pid, language)] = format_row_fields(
             id_cell,
             statement_cell,
@@ -594,10 +613,7 @@ def update_readme_links() -> None:
             error_cell,
         )
 
-    sorted_rows = [
-        row_map[key]
-        for key in sorted(row_map, key=lambda k: (k[0], k[1]))
-    ]
+    sorted_rows = [row_map[key] for key in sorted(row_map, key=lambda k: (k[0], k[1]))]
     lines[start + 1 : end] = [header_line, *sorted_rows]
     readme_path.write_text("\n".join(lines) + "\n")
 
@@ -611,7 +627,9 @@ def update_readme_not_found() -> None:
     readme_path = ROOT / "README.adoc"
     lines = readme_path.read_text().splitlines()
     try:
-        results_idx = next(i for i, line in enumerate(lines) if line.strip() == "== Results")
+        results_idx = next(
+            i for i, line in enumerate(lines) if line.strip() == "== Results"
+        )
     except StopIteration:
         raise RuntimeError("Could not find Results section in README.adoc")
 
@@ -658,7 +676,9 @@ def update_readme_not_found() -> None:
         normalized = normalize_row_fields(pid, cells)
         if normalized is None:
             continue
-        id_cell, statement_cell, time_cell, model_cell, tokens_cell, error_cell = normalized
+        id_cell, statement_cell, time_cell, model_cell, tokens_cell, error_cell = (
+            normalized
+        )
         row_map[(pid, language)] = format_row_fields(
             id_cell,
             statement_cell,
@@ -719,10 +739,7 @@ def update_readme_not_found() -> None:
     for key, row in result_map.items():
         row_map[key] = row
 
-    sorted_rows = [
-        row_map[key]
-        for key in sorted(row_map, key=lambda k: (k[0], k[1]))
-    ]
+    sorted_rows = [row_map[key] for key in sorted(row_map, key=lambda k: (k[0], k[1]))]
     lines[start + 1 : end] = [
         "| ID | Explanation | Runtime (s) | Model | Out Tokens | Error",
         *sorted_rows,
@@ -838,9 +855,7 @@ def main() -> None:
                         output_tokens=output_tokens,
                         message=f"timed out after {limit:.3f}s",
                         language=target.language,
-                        source_path=source_from_target(
-                            target.path, target.language
-                        ),
+                        source_path=source_from_target(target.path, target.language),
                     )
                 )
                 print(f"[{pid}] timed out after {limit:.3f}s", file=sys.stderr)
@@ -858,9 +873,7 @@ def main() -> None:
                         output_tokens=output_tokens,
                         message=f"failed (exit {rc})",
                         language=target.language,
-                        source_path=source_from_target(
-                            target.path, target.language
-                        ),
+                        source_path=source_from_target(target.path, target.language),
                     )
                 )
                 print(f"[{pid}] failed (exit {rc})", file=sys.stderr)
@@ -876,9 +889,7 @@ def main() -> None:
                         output_tokens=output_tokens,
                         message="missing reference answer",
                         language=target.language,
-                        source_path=source_from_target(
-                            target.path, target.language
-                        ),
+                        source_path=source_from_target(target.path, target.language),
                     )
                 )
                 print(f"[{pid}] missing reference answer", file=sys.stderr)
@@ -895,9 +906,7 @@ def main() -> None:
                         output_tokens=output_tokens,
                         message="ok",
                         language=target.language,
-                        source_path=source_from_target(
-                            target.path, target.language
-                        ),
+                        source_path=source_from_target(target.path, target.language),
                     )
                 )
                 print(f"[{pid}] ok ({elapsed:.3f}s)")
@@ -912,9 +921,7 @@ def main() -> None:
                         output_tokens=output_tokens,
                         message=msg,
                         language=target.language,
-                        source_path=source_from_target(
-                            target.path, target.language
-                        ),
+                        source_path=source_from_target(target.path, target.language),
                     )
                 )
                 print(f"[{pid}] wrong answer: {msg}", file=sys.stderr)

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00512%20-%20Sums%20of%20totients%20of%20powers.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00512%20-%20Sums%20of%20totients%20of%20powers.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Tue Dec 21 16:10:56 2021
@@ -7,7 +7,7 @@ Created on Tue Dec 21 16:10:56 2021
 @author: igorvanloo
 """
 
-'''
+"""
 Project Euler Problem 512
 
 It appears that f(n) = 0 when n is even and is equal to phi(n) when n is odd
@@ -21,21 +21,22 @@ phi(n^k) = (-1)^(k-1) phi(n) mod(n+1)
 so f(n) = sum_{k = 1 to n} phi(n^k) mod(n+1) = sum_{k = 1 to n} (-1)^(k-1) phi(n)
 Therefore when n is even we have f(n) = 0
 and when n is odd we have f(n) = phi(n)
-'''
+"""
 
 
-def totient_sieve(n): 
-    phi = [i for i in range(n+1)]
-    for p in range(3, n+1, 2): 
+def totient_sieve(n):
+    phi = [i for i in range(n + 1)]
+    for p in range(3, n + 1, 2):
         if phi[p] == p:
-            #print(p)
+            # print(p)
             phi[p] -= 1
-            for i in range(3*p, n+1, 2*p):
-                phi[i] -= (phi[i]//p)
+            for i in range(3 * p, n + 1, 2 * p):
+                phi[i] -= phi[i] // p
     total = 0
     for x in range(1, len(phi), 2):
         total += phi[x]
     return total
 
+
 if __name__ == "__main__":
-    print(totient_sieve(5*(10**8)))
+    print(totient_sieve(5 * (10**8)))

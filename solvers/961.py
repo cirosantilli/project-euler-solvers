@@ -10,13 +10,13 @@ from typing import Tuple
 
 def normalize(s: str) -> str:
     """Remove leading zeros. If empty, return '0'."""
-    s = s.lstrip('0')
-    return s if s != '' else '0'
+    s = s.lstrip("0")
+    return s if s != "" else "0"
 
 
 def is_terminal(s: str) -> bool:
     """Return True if the string has no nonzero digits."""
-    return all(ch == '0' for ch in s)
+    return all(ch == "0" for ch in s)
 
 
 @lru_cache(maxsize=None)
@@ -31,10 +31,10 @@ def first_player_wins(s: str) -> bool:
 
     n = len(s)
     for i in range(n):
-        new_s = s[:i] + s[i+1:]
+        new_s = s[:i] + s[i + 1 :]
 
         # If this move removes the last nonzero digit, current player wins
-        if not any(ch != '0' for ch in new_s):
+        if not any(ch != "0" for ch in new_s):
             return True
 
         new_s_norm = normalize(new_s)
@@ -56,7 +56,7 @@ def wins_for_pattern(pattern: Tuple[int, ...]) -> bool:
     The actual values of the nonzero digits don't matter,
     only their positions.
     """
-    s = ''.join('1' if b else '0' for b in pattern)
+    s = "".join("1" if b else "0" for b in pattern)
     return first_player_wins(s)
 
 
@@ -73,7 +73,7 @@ def W_digits_weighted(d: int) -> int:
             continue  # skip patterns with a leading zero
         if wins_for_pattern(bits):
             k = sum(bits)  # number of nonzero digits
-            total += 9 ** k
+            total += 9**k
     return total
 
 
@@ -97,12 +97,15 @@ def W(N: int) -> int:
         k += 1
 
     if tmp != 1:
-        raise ValueError("This implementation of W(N) currently expects N to be a power of 10.")
+        raise ValueError(
+            "This implementation of W(N) currently expects N to be a power of 10."
+        )
 
     total = 0
     for d in range(1, k + 1):
         total += W_digits_weighted(d)
     return total
+
 
 if __name__ == "__main__":
     assert W(100) == 18

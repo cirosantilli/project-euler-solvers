@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 
-'''
+"""
 By GPT-5.1. Runtime: 0m0.284s on pypy3 3.11.13, Ubuntu 25.10, Lenovo ThinkPad P14s.
-'''
+"""
 
 from typing import List
 
 MOD = 999_999_001
 ROOT = 17
+
 
 def primes_up_to(N: int) -> List[int]:
     is_prime = [True] * (N + 1)
@@ -23,6 +24,7 @@ def primes_up_to(N: int) -> List[int]:
                 is_prime[j] = False
                 j += step
     return primes
+
 
 def exponents_for_star(N: int, primes: List[int]) -> List[int]:
     exps: List[int] = []
@@ -43,6 +45,7 @@ def exponents_for_star(N: int, primes: List[int]) -> List[int]:
             E += (N + 1 - k) * fact_vp[k]
         exps.append(E)
     return exps
+
 
 def D_star_mod(N: int) -> int:
     primes = primes_up_to(N)
@@ -67,6 +70,7 @@ def D_star_mod(N: int) -> int:
         ans = (ans + prod) % MOD
         w = (w * omega) % MOD
     return (ans * inv_m) % MOD
+
 
 if __name__ == "__main__":
     assert D_star_mod(3) == 21 % MOD

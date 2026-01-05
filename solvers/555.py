@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00555%20-%20McCarthy%2091%20Function.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00555%20-%20McCarthy%2091%20Function.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Tue Jun  6 14:03:22 2023
 
 @author: igorvanloo
 """
-'''
+"""
 Project Euler Problem 555
 
 https://arxiv.org/pdf/cs/9301113v1.pdf following paper has some generalization of mccarthy 91 function
@@ -54,8 +54,9 @@ So loop through s, find all divisors, d, of s, then d = k - s <=> k = d + s then
 
 note that we restrict k <= p
 
-'''
+"""
 import math
+
 
 def prime_factors(n):
     factors = {}
@@ -74,14 +75,15 @@ def prime_factors(n):
                 factors[n] = 1
             break
     return factors
-            
-def divisors(n, proper = False):
+
+
+def divisors(n, proper=False):
 
     pf = prime_factors(n)
     primes = [x for x in pf]
     l = len(primes)
 
-    def gen(n = 0):
+    def gen(n=0):
         if n == l:
             return [1]
         else:
@@ -89,36 +91,43 @@ def divisors(n, proper = False):
             p = primes[n]
             for _ in range(pf[p]):
                 pows.append(pows[-1] * p)
-            
+
             div = []
             for q in gen(n + 1):
                 for p in pows:
                     div.append(q * p)
             return div
-                    
+
     div = gen()
     if proper:
         div.pop(-1)
         return div
     return div
-        
+
+
 def S1(p, m):
     total = 0
     for s in range(1, p):
         for d in divisors(s):
             k = d + s
             if k <= p:
-                total += (d*(2*m + d - 2*s + 1))//2
+                total += (d * (2 * m + d - 2 * s + 1)) // 2
     return total
 
+
 def S(p, m):
-    return sum(sum((d*(2*m + d - 2*s + 1))//2 for s in range(d, p - d + 1, d)) for d in range(1, p))
+    return sum(
+        sum((d * (2 * m + d - 2 * s + 1)) // 2 for s in range(d, p - d + 1, d))
+        for d in range(1, p)
+    )
+
 
 def M(m, k, s, n):
     if n > m:
         return n - s
-    return m + k - 2*s - ((m - n) % (k - s))
-            
+    return m + k - 2 * s - ((m - n) % (k - s))
+
+
 if __name__ == "__main__":
     fixed = [n for n in range(101) if M(100, 11, 10, n) == n]
     assert fixed == [91]

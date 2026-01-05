@@ -14,7 +14,7 @@ def smallest_permuted_multiple(limit_mul: int = 6) -> int:
     d = 1
     while True:
         lo = 10 ** (d - 1)
-        hi = (10 ** d - 1) // limit_mul  # ensure limit_mul*x still has <= d digits
+        hi = (10**d - 1) // limit_mul  # ensure limit_mul*x still has <= d digits
         for x in range(lo, hi + 1):
             sig = digit_signature(x)
             ok = True

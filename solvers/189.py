@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0189.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0189.cpp"""
+
+
 def get_id(row: int, triangles: list[int], num_colors: int) -> int:
     first = row * row
     width = 2 * row + 1
@@ -23,7 +25,14 @@ def get_id(row: int, triangles: list[int], num_colors: int) -> int:
     return reverse if result > reverse else result
 
 
-def search(row: int, column: int, height: int, num_colors: int, triangles: list[int], cache: dict) -> int:
+def search(
+    row: int,
+    column: int,
+    height: int,
+    num_colors: int,
+    triangles: list[int],
+    cache: dict,
+) -> int:
     first = row * row
     index = first + column
     width = 2 * row + 1
@@ -51,13 +60,17 @@ def search(row: int, column: int, height: int, num_colors: int, triangles: list[
             if column > 0 and triangles[index - 1] == color:
                 continue
             triangles[index] = color
-            result += search(next_row, next_column, height, num_colors, triangles, cache)
+            result += search(
+                next_row, next_column, height, num_colors, triangles, cache
+            )
     else:
         for color in range(1, num_colors + 1):
             if triangles[index - 1] == color or triangles[index - 2 * row] == color:
                 continue
             triangles[index] = color
-            result += search(next_row, next_column, height, num_colors, triangles, cache)
+            result += search(
+                next_row, next_column, height, num_colors, triangles, cache
+            )
 
     if column == 0 and row > 0:
         cache[prev_id] = result

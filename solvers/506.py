@@ -165,7 +165,9 @@ def solve(N: int) -> int:
         i = best_i[cur_pos][r]
         p = best_p[cur_pos][r]
         if i is None or p is None:
-            raise RuntimeError("Incompatible state (should not happen in the true sequence).")
+            raise RuntimeError(
+                "Incompatible state (should not happen in the true sequence)."
+            )
         b = block[cur_pos]
         pre = prefix_int[cur_pos][i]
         seq.append((n, cur_pos, i, p, b, pre))
@@ -200,7 +202,7 @@ def solve(N: int) -> int:
 
     # Add contributions of full cycles.
     if K:
-        for (n, _pos, i, p, b, pre) in seq:
+        for n, _pos, i, p, b, pre in seq:
             t0 = (n - p) // 15  # always 0 or 1 within the base 15-term cycle
             at0, G0 = pow_sum(a, t0, MOD)  # at0=a^t0, G0=sum_{u=0..t0-1} a^u
 

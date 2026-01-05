@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00335%20-%20Gathering%20the%20beans.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00335%20-%20Gathering%20the%20beans.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Sat Jun 18 11:46:44 2022
 
 @author: igorvanloo
 """
-'''
+"""
 Project Euler Problem 335
 
 First 35 values of M(n)
@@ -30,11 +30,12 @@ Therefore I have that M(2^i + 1) = 2^(i + 1) - 3^i + 4^i
 
 Sum_{k = 0}^10^18 2^(i + 1) - 3^i + 4^i = (2^(10^18 + 2) - 2) - 1/2(3^(10^18 + 1) - 1) + 1/3(4^(10^18 + 1) - 1)
 
-'''
+"""
+
 
 def M(n):
-    array = [1]*n
-    goal = [1]*n
+    array = [1] * n
+    goal = [1] * n
     curr = 0
     moves = 0
     while True:
@@ -48,6 +49,7 @@ def M(n):
             break
     return moves
 
+
 def ModDivision(a, b, m):
     try:
         inv = pow(b, -1, m)
@@ -59,9 +61,16 @@ def ModDivision(a, b, m):
         answer = (inv * a) % m
     return answer
 
+
 def compute(limit):
     mod = pow(7, 9)
-    return pow(2, limit + 2, mod) - 2 - ModDivision(pow(3, limit + 1, mod) - 1, 2, mod) + ModDivision(pow(4, limit + 1, mod) - 1, 3, mod)
+    return (
+        pow(2, limit + 2, mod)
+        - 2
+        - ModDivision(pow(3, limit + 1, mod) - 1, 2, mod)
+        + ModDivision(pow(4, limit + 1, mod) - 1, 3, mod)
+    )
+
 
 if __name__ == "__main__":
     assert M(5) == 15

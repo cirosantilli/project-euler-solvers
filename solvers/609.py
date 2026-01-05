@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00609%20-%20pi%20sequences.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00609%20-%20pi%20sequences.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Sat Dec 11 20:49:49 2021
@@ -7,7 +7,7 @@ Created on Sat Dec 11 20:49:49 2021
 @author: igorvanloo
 """
 
-'''
+"""
 Project Euler Problem 609
 
 pi(n) = number of primes not exceeding n
@@ -28,29 +28,31 @@ First thing to notice is u is deteremined by u_0, an array with all the pi(n) ma
     742870469 ~ 10^7
 
 ~ 10^8
-'''
+"""
 
 import math
 
-    
+
 def list_primality(n):
-	result = [True] * (n + 1)
-	result[0] = result[1] = False
-	for i in range(int(math.sqrt(n)) + 1):
-		if result[i]:
-			for j in range(2 * i, len(result), i):
-				result[j] = False
-	return result
+    result = [True] * (n + 1)
+    result[0] = result[1] = False
+    for i in range(int(math.sqrt(n)) + 1):
+        if result[i]:
+            for j in range(2 * i, len(result), i):
+                result[j] = False
+    return result
+
 
 def list_primes(n):
-	return [i for (i, isprime) in enumerate(list_primality(n)) if isprime]
+    return [i for (i, isprime) in enumerate(list_primality(n)) if isprime]
+
 
 def P(limit, mod=1000000007):
     prime_gen = list_primality(limit + 50)
     primes = [x for x in range(len(prime_gen)) if prime_gen[x]]
-    
+
     print("Primes done")
-    array = [0]*(limit+1)
+    array = [0] * (limit + 1)
     p_index = 0
     for x in range(1, limit + 1):
         while True:
@@ -59,9 +61,9 @@ def P(limit, mod=1000000007):
                 break
             p_index += 1
     print("Array done")
-    
-    array2 = [0]*(limit+1)
-    for x in range(1, limit+1):
+
+    array2 = [0] * (limit + 1)
+    for x in range(1, limit + 1):
         if x % 1000000 == 0:
             print(x)
         prime_non_count = 0
@@ -75,11 +77,11 @@ def P(limit, mod=1000000007):
             else:
                 if prime_gen[temp] == False:
                     prime_non_count += 1
-                    
+
             array2[prime_non_count] += 1
             curr = temp
 
-    print("array2 done") 
+    print("array2 done")
 
     total = 1
     for x in array2:
@@ -88,6 +90,7 @@ def P(limit, mod=1000000007):
             if mod is not None:
                 total %= mod
     return total if mod is None else total % mod
+
 
 if __name__ == "__main__":
     assert P(10, mod=None) == 648

@@ -66,4 +66,3 @@ if __name__ == "__main__":
     assert solve(5) == 35
     assert solve(10**5) == 17924657155
     print(solve(10**8))
-

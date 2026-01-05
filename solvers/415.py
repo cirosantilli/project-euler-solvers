@@ -24,6 +24,7 @@ class CoprimeSums:
       F(n,a,b) = sum_{1<=i,j<=n, gcd(i,j)=1} i^a j^b   (mod mod)
     for a,b in {0,1}.
     """
+
     def __init__(self, mod: int):
         self.mod = mod
         self.cache = [[{} for _ in range(2)] for __ in range(2)]
@@ -88,6 +89,7 @@ def sum_squares(a: int, b: int) -> int:
     # sum_{k=a..b} k^2 = SS(b)-SS(a-1)
     def SS(n: int) -> int:
         return n * (n + 1) * (2 * n + 1) // 6
+
     return SS(b) - SS(a - 1)
 
 
@@ -100,8 +102,8 @@ def block_contribution(n: int, L: int, R: int, q: int, cps: CoprimeSums) -> int:
 
     # Positive quadrant coprime sums:
     Cpos = cps.dfs(q, 0, 0)  # count
-    SX = cps.dfs(q, 1, 0)    # sum of x over ordered coprime pairs
-    SXY = cps.dfs(q, 1, 1)   # sum of x*y over ordered coprime pairs
+    SX = cps.dfs(q, 1, 0)  # sum of x over ordered coprime pairs
+    SXY = cps.dfs(q, 1, 1)  # sum of x*y over ordered coprime pairs
 
     # Lift to full [-q..q]^2 primitive vectors, excluding (0,0), including axes:
     # C = 4*Cpos + 4 axes
@@ -125,8 +127,8 @@ def block_contribution(n: int, L: int, R: int, q: int, cps: CoprimeSums) -> int:
     sumt22 = range_sum(pref_k2pow2, tL, tR, mod)
 
     sum_2km1 = sum2
-    sum_k_2km1 = (sumt2 + sum2) % mod               # (t+1)2^t
-    sum_k2_2km1 = (sumt22 + 2 * sumt2 + sum2) % mod # (t+1)^2 2^t
+    sum_k_2km1 = (sumt2 + sum2) % mod  # (t+1)2^t
+    sum_k2_2km1 = (sumt22 + 2 * sumt2 + sum2) % mod  # (t+1)^2 2^t
 
     length = R - L + 1
     sumk = (L + R) * length // 2
@@ -144,7 +146,7 @@ def collinear_subsets_ge3(N: int) -> int:
 
     Uses:
       B = (1/2) * sum_{k=2..n-1} f(n,k) * (2^(k-1) - 1)
-    where n=N+1, and f(n,k) is Mustonen's function. 
+    where n=N+1, and f(n,k) is Mustonen's function.
     """
     n = N + 1
     cps = CoprimeSums(MOD2)
@@ -169,7 +171,7 @@ def collinear_subsets_ge3(N: int) -> int:
 def titanic_sets(N: int) -> int:
     """
     T(N) = total subsets - empty - singletons - (collinear subsets of size>=3), mod 1e8.
-    Problem statement uses 0<=x,y<=N, so number of points is (N+1)^2. 
+    Problem statement uses 0<=x,y<=N, so number of points is (N+1)^2.
     """
     n = N + 1
     P = n * n
@@ -179,7 +181,7 @@ def titanic_sets(N: int) -> int:
 
 
 def main() -> None:
-    # Asserts for all test cases given in the problem statement. 
+    # Asserts for all test cases given in the problem statement.
     assert titanic_sets(1) == 11
     assert titanic_sets(2) == 494
     assert titanic_sets(4) == 33_554_178
@@ -192,4 +194,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

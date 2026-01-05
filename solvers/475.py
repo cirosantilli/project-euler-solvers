@@ -35,8 +35,8 @@ def _prep_factorials(limit: int):
 
 def compute_f(n: int) -> int:
     """Compute f(12n) modulo MOD."""
-    E = 4 * n          # number of trios
-    m = 3 * n          # number of quartets (variables)
+    E = 4 * n  # number of trios
+    m = 3 * n  # number of quartets (variables)
 
     # Largest factorial index we need is max(3i+j) where i,j <= E, i+j<=E.
     # So max(3i+j) <= 4E = 16n.

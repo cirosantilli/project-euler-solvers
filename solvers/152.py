@@ -67,7 +67,9 @@ def count_ways(max_n: int = 80) -> int:
             split_idx = i
             break
 
-    first = sorted(weights[:split_idx], reverse=True)  # large weights first -> better pruning
+    first = sorted(
+        weights[:split_idx], reverse=True
+    )  # large weights first -> better pruning
     last = weights[split_idx:]
 
     # Precompute all subset sums of the last part
@@ -97,7 +99,7 @@ def count_ways(max_n: int = 80) -> int:
             ans += sum_count.get(target - acc, 0)
             return
         dfs(i + 1, acc + first[i])  # include
-        dfs(i + 1, acc)             # exclude
+        dfs(i + 1, acc)  # exclude
 
     dfs(0, 0)
     return ans

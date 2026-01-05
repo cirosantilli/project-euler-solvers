@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00655%20-%20Divisible%20Palindromes.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00655%20-%20Divisible%20Palindromes.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Tue May 30 21:56:16 2023
 
 @author: igorvanloo
 """
-'''
+"""
 Project Euler Problem 655
 
 Let 1 <= x <= 99999
@@ -58,8 +58,9 @@ n = 9 aa|bb|c|bb|aa
 31 900011069
 32 900004693
 
-'''
+"""
 import math
+
 
 def rev(x, l):
     new_x = 0
@@ -70,6 +71,7 @@ def rev(x, l):
         new_x += r
     return new_x
 
+
 def gen(N, mod):
     if N == 2:
         count = 0
@@ -77,60 +79,69 @@ def gen(N, mod):
             if x // 10 == x % 10:
                 if x % mod == 0:
                     count += 1
-                    #print(x)
+                    # print(x)
         return count
-    
+
     if N == 3:
         count = 0
         for x in range(1, 1000):
             if x // 100 == x % 10:
                 if x % mod == 0:
                     count += 1
-                    #print(x)
+                    # print(x)
         return count
-    
+
     x_1_v = {}
     x_2_v = {}
-    
-    if N % 2 == 0:    
-        for a in range(pow(10, N//2 - N//4)):
-            if a >= pow(10, N//2 - N//4 - 1):
-                x_1 = (a * pow(10, (N - math.ceil(N/4))) + rev(a, N//2 - N//4)) % mod
+
+    if N % 2 == 0:
+        for a in range(pow(10, N // 2 - N // 4)):
+            if a >= pow(10, N // 2 - N // 4 - 1):
+                x_1 = (
+                    a * pow(10, (N - math.ceil(N / 4))) + rev(a, N // 2 - N // 4)
+                ) % mod
                 if x_1 in x_1_v:
                     x_1_v[x_1] += 1
                 else:
                     x_1_v[x_1] = 1
-            if a < pow(10, N//4):
-                x_2 = (rev(a, N//4) * pow(10, N//2) + a * pow(10, N//2 - N//4)) % mod
+            if a < pow(10, N // 4):
+                x_2 = (
+                    rev(a, N // 4) * pow(10, N // 2) + a * pow(10, N // 2 - N // 4)
+                ) % mod
                 if x_2 in x_2_v:
                     x_2_v[x_2] += 1
                 else:
                     x_2_v[x_2] = 1
     else:
-        for a in range(pow(10, N//2 - N//4)):
-            if a >= pow(10, N//2 - N//4 - 1):
-                t = a * pow(10, (N - round(N/4))) + rev(a, N//2 - N//4)
+        for a in range(pow(10, N // 2 - N // 4)):
+            if a >= pow(10, N // 2 - N // 4 - 1):
+                t = a * pow(10, (N - round(N / 4))) + rev(a, N // 2 - N // 4)
                 x_1 = t % mod
                 if x_1 in x_1_v:
                     x_1_v[x_1] += 1
                 else:
                     x_1_v[x_1] = 1
-                
-            if a < pow(10, N//4):
+
+            if a < pow(10, N // 4):
                 for c in range(10):
-                    t = rev(a, N//4) * pow(10, N//2 + 1) + c * pow(10, N//2) + a * pow(10, N//2 - N//4)
+                    t = (
+                        rev(a, N // 4) * pow(10, N // 2 + 1)
+                        + c * pow(10, N // 2)
+                        + a * pow(10, N // 2 - N // 4)
+                    )
                     x_2 = t % mod
                     if x_2 in x_2_v:
                         x_2_v[x_2] += 1
                     else:
                         x_2_v[x_2] = 1
-                    
+
     count = 0
     for x in x_1_v:
         t = (mod - x) % mod
         if t in x_2_v:
-            count += x_1_v[x]*x_2_v[t]
+            count += x_1_v[x] * x_2_v[t]
     return count
+
 
 def compute(N, mod):
     count = 0
@@ -139,7 +150,8 @@ def compute(N, mod):
         print(x, t)
         count += t
     return count
-    
+
+
 if __name__ == "__main__":
-    #print(compute(5, 109))
+    # print(compute(5, 109))
     print(compute(32, 10**7 + 19))

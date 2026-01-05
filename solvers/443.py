@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00443%20-%20GCD%20Sequence.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00443%20-%20GCD%20Sequence.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Fri Jun 16 11:23:50 2023
 
 @author: igorvanloo
 """
-'''
+"""
 Project Euler Problem 443
 
 if gcd(n, g(n - 1)) = 1 then g(n) = g(n - 1) + 1
@@ -61,8 +61,9 @@ Adding a function to check if x is prime shows that only if x is prime do we get
 
 the only value which breaks this is 6, since 6*2 - 1 = 11 is prime but a new chain does not start at 11
 
-'''
+"""
 import math
+
 
 def is_prime(x):  # Test if giving value is a prime
     if x <= 1:
@@ -76,13 +77,14 @@ def is_prime(x):  # Test if giving value is a prime
             if x % i == 0:
                 return False
         return True
-    
+
+
 def generate_table_for_website(n):
     g = 13
     table = '<table style="width: 100%;text-align: center;" border="2" cellspacing="5"> <tbody> <tr> \
         <td><b>At which n does jump occur</b></td> <td><b>count since last jump</b></td> \
              <td><b>decomposition</b></td> <td><b>is_prime(n)</b></td>'
-        
+
     curr_jump = 1
     for x in range(5, n + 1):
         t = math.gcd(x, g)
@@ -93,11 +95,23 @@ def generate_table_for_website(n):
             if s:
                 table += "<tr>"
                 table += '<td style="background-color: #1eeea6;">' + str(x) + "</td>"
-                table += '<td style="background-color: #1eeea6;">' + str(curr_jump) + "</td>"
-                table += '<td style="background-color: #1eeea6;">' + "(" + str(x) + "=" + str((x + 1)//2) + "*" + str(2) + "-1)" + "</td>"
+                table += (
+                    '<td style="background-color: #1eeea6;">' + str(curr_jump) + "</td>"
+                )
+                table += (
+                    '<td style="background-color: #1eeea6;">'
+                    + "("
+                    + str(x)
+                    + "="
+                    + str((x + 1) // 2)
+                    + "*"
+                    + str(2)
+                    + "-1)"
+                    + "</td>"
+                )
                 table += '<td style="background-color: #1eeea6;">' + str(s) + "</td>"
                 table += "</tr>"
-                #print(str(x) + " |", str(s) + " |", str(curr_jump) + " |", "(" + str(x) + "=" + str((x + 1)//2) + "*" + str(2) + "-1)")
+                # print(str(x) + " |", str(s) + " |", str(curr_jump) + " |", "(" + str(x) + "=" + str((x + 1)//2) + "*" + str(2) + "-1)")
             else:
                 table += "<tr>"
                 table += "<td>" + str(x) + "</td>"
@@ -105,24 +119,25 @@ def generate_table_for_website(n):
                 table += "<td> NA </td>"
                 table += "<td>" + str(s) + "</td>"
                 table += "</tr>"
-                #print(str(x) + " |", str(s) + " |", str(curr_jump) + " |")
+                # print(str(x) + " |", str(s) + " |", str(curr_jump) + " |")
             curr_jump = 1
         g += t
     table += "</tbody> </table>"
     return table
 
+
 def g(n):
     curr_g = 13
     for x in range(5, min(7, n + 1)):
         curr_g += math.gcd(x, curr_g)
-    
+
     x = 7
     while x <= n:
         gcd = math.gcd(x, curr_g)
         curr_g += gcd
-        
+
         if gcd > 1:
-            t = 2*x - 1
+            t = 2 * x - 1
             if is_prime(t):
                 if t > n:
                     curr_g += n - x
@@ -131,8 +146,9 @@ def g(n):
                 x = t - 1
 
         x += 1
-        #print(x, curr_g)
+        # print(x, curr_g)
     return curr_g
+
 
 if __name__ == "__main__":
     print(g(10**15))

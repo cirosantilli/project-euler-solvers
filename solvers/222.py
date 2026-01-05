@@ -84,7 +84,9 @@ def _self_checks() -> None:
         R = max_r
         radii = list(range(min_r, max_r + 1))
         order = construct_optimal_order(min_r, max_r)
-        assert abs(pipe_length_mm(R, order) - brute_force_best_mm(R, radii)) < Decimal("1e-30")
+        assert abs(pipe_length_mm(R, order) - brute_force_best_mm(R, radii)) < Decimal(
+            "1e-30"
+        )
 
     # 3) Feasibility: no overlaps in the final arrangement under alternating-wall placement
     R = 50

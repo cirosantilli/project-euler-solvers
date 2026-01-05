@@ -1,9 +1,11 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0172.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0172.cpp"""
 MAX_BITS = 1 << 20
 
 
-def search(counts: list[int], digits: int, max_digits: int, max_use: int, cache: dict) -> int:
+def search(
+    counts: list[int], digits: int, max_digits: int, max_use: int, cache: dict
+) -> int:
     if digits == max_digits:
         return 1
 

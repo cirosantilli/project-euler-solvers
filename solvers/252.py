@@ -228,7 +228,9 @@ def max_convex_hole_area(points: List[Point]) -> float:
             for prev, val in dp[curr].items():
                 p_idx = cand[prev]
                 # Convexity at curr for closure: prev -> curr -> s is left turn
-                if (x_c - xs[p_idx]) * (y_s - y_c) - (y_c - ys[p_idx]) * (x_s - x_c) > 0:
+                if (x_c - xs[p_idx]) * (y_s - y_c) - (y_c - ys[p_idx]) * (
+                    x_s - x_c
+                ) > 0:
                     if val > best2:
                         best2 = val
 
@@ -273,4 +275,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

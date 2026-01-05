@@ -27,6 +27,7 @@ PHI_MOD = MOD - 1  # Fermat exponent modulus (MOD is prime)
 # Fast doubling Fibonacci
 # ------------------------------
 
+
 def fib_mod(n: int, mod: int) -> tuple[int, int]:
     """Return (F_n, F_{n+1}) modulo mod, with F_0=0, F_1=1."""
     if n == 0:
@@ -44,6 +45,7 @@ def fib_mod(n: int, mod: int) -> tuple[int, int]:
 # ------------------------------
 # Exact rationals for statement checks
 # ------------------------------
+
 
 class Rat:
     __slots__ = ("n", "d")
@@ -119,6 +121,7 @@ def point_exact(n: int) -> tuple[Rat, Rat]:
 # ------------------------------
 # Modular solver (works for huge n)
 # ------------------------------
+
 
 def solve_mod(n: int) -> int:
     """Return (a+b+c+d) mod MOD for P_n = (a/b, c/d) reduced."""

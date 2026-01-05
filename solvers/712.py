@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00712%20-%20Exponent%20Difference.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00712%20-%20Exponent%20Difference.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Fri May 12 15:37:19 2023
 
 @author: igorvanloo
 """
-'''
+"""
 Project Euler Problem 712
 
 D(n, m) = sum_{p is prime} |v_p(n) - v_p(m)| where v_p(n) = largest r such that p^r|n
@@ -110,9 +110,10 @@ for example for N = 10, we know sqrt(10) = 3.1
 so we have pi(10) - pi(5) = 1 (7), this contribution is 1*9*1
 then pi(5) - pi(3) = 1 (5), this contribution is 1*8*2
 
-'''
+"""
 import math
 from functools import cache
+
 
 def list_primality(n):
     result = [True] * (n + 1)
@@ -123,20 +124,23 @@ def list_primality(n):
                 result[j] = False
     return result
 
+
 def list_primes(n):
     return [i for (i, isprime) in enumerate(list_primality(n)) if isprime]
 
+
 def bisect(alist, goal):
-    #Equivalent to bisect_right from bisect module
+    # Equivalent to bisect_right from bisect module
     lo = 0
     hi = len(alist)
     while lo < hi:
-        mid = (lo + hi)//2
+        mid = (lo + hi) // 2
         if goal < alist[mid]:
             hi = mid
         else:
             lo = mid + 1
     return lo
+
 
 def primepi(limit):  # Returns an array such that array[x] = number of primes < x
     prime_gen = list_primality(limit + 50)
@@ -151,115 +155,122 @@ def primepi(limit):  # Returns an array such that array[x] = number of primes < 
             p_index += 1
     return array
 
+
 def primePi(x):
     limit = int(math.sqrt(x))
     primes = list_primes(limit)
     array = primepi(limit)
-    
+
     phiCache = {}
+
     def phi(x, a):
         if (x, a) in phiCache:
             return phiCache[(x, a)]
         if a == 0:
             return int(x)
         if a == 1:
-            return int(x) - x//2
+            return int(x) - x // 2
         result = phi(x, a - 1) - phi(int(x / primes[a - 1]), a - 1)
         phiCache[(x, a)] = result
         return result
-    
+
     piCache = {}
+
     def pi(x):
         if int(x) in piCache:
             return piCache[int(x)]
-        
+
         if x <= limit:
             return array[math.floor(x)]
-        
-        a = pi(pow(x, 1/4))
-        b = pi(pow(x, 1/2))
-        c = pi(pow(x, 1/3))
-        result = phi(int(x), int(a)) + ((b + a - 2) * (b - a + 1))//2
+
+        a = pi(pow(x, 1 / 4))
+        b = pi(pow(x, 1 / 2))
+        c = pi(pow(x, 1 / 3))
+        result = phi(int(x), int(a)) + ((b + a - 2) * (b - a + 1)) // 2
         for i in range(a + 1, b + 1):
             w = x / primes[i - 1]
             result -= pi(w)
             if i <= c:
                 bi = pi(int(math.sqrt(w)))
                 for j in range(i, bi + 1):
-                    result -= (pi(w / primes[j - 1]) - j + 1)
+                    result -= pi(w / primes[j - 1]) - j + 1
         piCache[int(x)] = result
         return int(result)
-    
+
     return int(pi(x))
+
 
 def primePiMLArray(x):
     limit = int(math.sqrt(x))
     primes = list_primes(limit)
     array = primepi(limit)
-    
+
     @cache
     def phi(x, a):
         if a == 0:
             return int(x)
         if a == 1:
-            return int(x) - x//2
+            return int(x) - x // 2
         result = phi(x, a - 1) - phi(x // primes[a - 1], a - 1)
         return int(result)
-    
+
     piCache = {}
+
     def pi(x):
         if int(x) in piCache:
             return piCache[int(x)]
-        
+
         if x <= limit:
             return array[math.floor(x)]
-        
-        a = pi(pow(x, 1/4))
-        b = pi(pow(x, 1/2))
-        c = pi(pow(x, 1/3))
-        result = phi(int(x), int(a)) + ((b + a - 2) * (b - a + 1))//2
+
+        a = pi(pow(x, 1 / 4))
+        b = pi(pow(x, 1 / 2))
+        c = pi(pow(x, 1 / 3))
+        result = phi(int(x), int(a)) + ((b + a - 2) * (b - a + 1)) // 2
         for i in range(a + 1, b + 1):
             w = x / primes[i - 1]
             result -= pi(w)
             if i <= c:
                 bi = pi(int(math.sqrt(w)))
                 for j in range(i, bi + 1):
-                    result -= (pi(w / primes[j - 1]) - j + 1)
+                    result -= pi(w / primes[j - 1]) - j + 1
         piCache[int(x)] = result
         return int(result)
-    
+
     results = []
     for i in range(int(math.sqrt(x)), 0, -1):
-        #print(i, int(math.sqrt(x)))
-        results.append(pi(x/i))
-        
+        # print(i, int(math.sqrt(x)))
+        results.append(pi(x / i))
+
     return results[::-1]
+
 
 def S(N):
     primes = list_primes(int(math.sqrt(N)))
     total = 0
     mod = 10**9 + 7
-    
+
     for p in primes:
         exp = []
         k = 0
         while True:
-            t = N//pow(p, k) - N//pow(p, k + 1)
+            t = N // pow(p, k) - N // pow(p, k + 1)
             if t == 0:
                 break
             else:
                 exp.append(t)
             k += 1
-        
+
         for i in range(len(exp)):
             for j in range(i + 1, len(exp)):
-                total += exp[i]*exp[j]*(j - i)
-    
+                total += exp[i] * exp[j] * (j - i)
+
     array = primePiMLArray(N)
     for i in range(1, int(math.sqrt(N))):
-        total += (array[i - 1] - array[i])*i*(N - i)
-        
-    return 2*total % mod
+        total += (array[i - 1] - array[i]) * i * (N - i)
+
+    return 2 * total % mod
+
 
 def D(n, m):
     total = 0
@@ -278,8 +289,10 @@ def D(n, m):
         total += abs(vn - vm)
     return total
 
+
 def S_small(N):
     return sum(D(n, m) for n in range(1, N + 1) for m in range(1, N + 1))
+
 
 if __name__ == "__main__":
     assert D(14, 24) == 4

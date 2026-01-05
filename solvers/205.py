@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0205.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0205.cpp"""
+
+
 def roll(dices: int, sides: int, count: list[int], total: int = 0) -> None:
     if dices == 0:
         count[total] += 1
@@ -8,7 +10,9 @@ def roll(dices: int, sides: int, count: list[int], total: int = 0) -> None:
         roll(dices - 1, sides, count, total + i)
 
 
-def solve(dices_peter: int, sides_peter: int, dices_colin: int, sides_colin: int) -> float:
+def solve(
+    dices_peter: int, sides_peter: int, dices_colin: int, sides_colin: int
+) -> float:
     max_total = max(dices_peter * sides_peter, dices_colin * sides_colin)
 
     peter = [0] * (max_total + 1)

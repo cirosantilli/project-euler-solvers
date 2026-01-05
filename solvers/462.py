@@ -104,11 +104,11 @@ def to_sci_10(x: int) -> str:
         mant = s[0] + "." + s[1:].ljust(decimals, "0")
         return f"{mant}e{exp}"
 
-    head = s[:sig]               # first 11 digits
+    head = s[:sig]  # first 11 digits
     next_digit = ord(s[sig]) - 48  # 12th digit as int
     rounded = int(head) + (1 if next_digit >= 5 else 0)
 
-    if rounded == 10 ** sig:
+    if rounded == 10**sig:
         # Carry overflow, e.g. 9.999... rounds to 1.000...e(exp+1)
         exp += 1
         mant = "1." + "0" * decimals
@@ -120,7 +120,7 @@ def to_sci_10(x: int) -> str:
 
 
 def solve() -> str:
-    return to_sci_10(F(10 ** 18))
+    return to_sci_10(F(10**18))
 
 
 def _self_test() -> None:

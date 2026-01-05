@@ -8,9 +8,9 @@ def digit_at(n: int) -> int:
     """
     assert n >= 1
 
-    length = 1            # number of digits per integer in current block
-    start = 1             # first integer in current block
-    count = 9             # how many integers in current block
+    length = 1  # number of digits per integer in current block
+    start = 1  # first integer in current block
+    count = 9  # how many integers in current block
 
     while True:
         block_digits = count * length
@@ -21,8 +21,8 @@ def digit_at(n: int) -> int:
             count *= 10
         else:
             # n lies within this block
-            idx = (n - 1) // length          # which number in the block (0-based)
-            pos = (n - 1) % length           # which digit in that number (0-based)
+            idx = (n - 1) // length  # which number in the block (0-based)
+            pos = (n - 1) % length  # which digit in that number (0-based)
             num = start + idx
             return int(str(num)[pos])
 

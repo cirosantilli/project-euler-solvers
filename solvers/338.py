@@ -122,6 +122,7 @@ def solve(N: int) -> int:
 
 # --- Small reference implementation for the statement's F(w,h) examples -----
 
+
 def F_reference(w: int, h: int) -> int:
     """
     Reference implementation of F(w,h) from the problem definition,

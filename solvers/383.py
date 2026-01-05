@@ -102,7 +102,9 @@ def T5(n: int) -> int:
                 continue
             for carry_prev, borrow_prev, e in REV[key]:
                 # This digit contributes e - 2*d to delta.
-                total += dfs(pos + 1, tight2, carry_prev, borrow_prev, delta + e - 2 * d)
+                total += dfs(
+                    pos + 1, tight2, carry_prev, borrow_prev, delta + e - 2 * d
+                )
 
         return total
 

@@ -30,6 +30,7 @@ LIMIT = 10**18
 # Helpers
 # ------------------------------------------------------------
 
+
 def iroot(n: int, k: int) -> int:
     """floor(k-th root of n) for small k (k=2 or 3 used here)."""
     if k == 1:
@@ -40,7 +41,7 @@ def iroot(n: int, k: int) -> int:
     x = int(n ** (1.0 / k))
     while (x + 1) ** k <= n:
         x += 1
-    while x ** k > n:
+    while x**k > n:
         x -= 1
     return x
 
@@ -123,7 +124,7 @@ def phi_from_factorization(fac: dict[int, int]) -> dict[int, int]:
         if sieve[i]:
             primes_small.append(i)
             step = i
-            for j in range(i*i, len(sieve), step):
+            for j in range(i * i, len(sieve), step):
                 sieve[j] = False
 
     def fac_small(x: int) -> dict[int, int]:
@@ -176,6 +177,7 @@ def is_strong_achilles(n: int, primes: list[int]) -> bool:
 # ------------------------------------------------------------
 # Core solver
 # ------------------------------------------------------------
+
 
 def count_strong_achilles(limit_exclusive: int) -> int:
     """
@@ -320,6 +322,7 @@ def count_strong_achilles(limit_exclusive: int) -> int:
 # Main + required asserts from statement
 # ------------------------------------------------------------
 
+
 def main():
     # For asserts we only need small primes
     primes_small, _ = sieve_spf(200000)
@@ -340,4 +343,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

@@ -15,6 +15,7 @@ We count, for each n (4 <= n <= 13), the number of n-card selections that
 contain such a matching, then sum them.
 """
 
+
 def nCk(n: int, k: int) -> int:
     """Compute binomial coefficient C(n,k) with exact integer arithmetic."""
     if k < 0 or k > n:
@@ -28,12 +29,15 @@ def nCk(n: int, k: int) -> int:
         den *= i
     return num // den
 
+
 def popcount4(x: int) -> int:
     # x is 0..15, tiny popcount
     return (x & 1) + ((x >> 1) & 1) + ((x >> 2) & 1) + ((x >> 3) & 1)
 
+
 # Precompute popcounts for suit-subsets (0..15).
 POPCOUNT = [popcount4(s) for s in range(16)]
+
 
 def update_reachable(reach: int, suits_present: int) -> int:
     """
@@ -55,6 +59,7 @@ def update_reachable(reach: int, suits_present: int) -> int:
                 new_reach |= 1 << (m | lsb)
                 b -= lsb
     return new_reach & 0xFFFF
+
 
 def build_state_space():
     """
@@ -78,6 +83,7 @@ def build_state_space():
         for suits_present in range(16):
             trans[i][suits_present] = index[update_reachable(reach, suits_present)]
     return start, states, index, trans
+
 
 def solve(max_n: int = 13) -> int:
     start, states, index, trans = build_state_space()
@@ -121,8 +127,10 @@ def solve(max_n: int = 13) -> int:
 
     return sum(f[n] for n in range(4, max_n + 1))
 
+
 def main():
     print(solve(13))
+
 
 if __name__ == "__main__":
     main()

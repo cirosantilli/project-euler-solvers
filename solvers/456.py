@@ -48,7 +48,7 @@ def solve(n: int) -> int:
     ax, ay = 1248, 8421
     x, y = 1, 1
 
-    vecs: list[int] = []          # packed (x,y) for each point (excluding origin)
+    vecs: list[int] = []  # packed (x,y) for each point (excluding origin)
     line_counts: dict[int, int] = {}  # key -> packed counts (a + (b<<SHIFT))
 
     gcd = math.gcd

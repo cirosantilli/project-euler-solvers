@@ -138,11 +138,16 @@ def solve_large_n(n: int = 100_000_000) -> int:
     # Reduce n by blocks while the generator state repeats after 'period'
     lx = n
     k = 0
-    while lx > period and value_at_index_1based(lx, pref, mu, lam) == value_at_index_1based(lx - period, pref, mu, lam):
+    while lx > period and value_at_index_1based(
+        lx, pref, mu, lam
+    ) == value_at_index_1based(lx - period, pref, mu, lam):
         lx -= period
         k += 1
 
-    assert lx == base_len_expected, (lx, "Unexpected base length; constants would not apply")
+    assert lx == base_len_expected, (
+        lx,
+        "Unexpected base length; constants would not apply",
+    )
 
     # DIFF can be derived directly from the sequence as a parity sum over one block.
     # (For this N, base_len is even, so we sum the odd indices in the block.)

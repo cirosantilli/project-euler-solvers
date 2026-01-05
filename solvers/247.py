@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0247.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0247.cpp"""
 import heapq
 import math
 
@@ -39,11 +39,15 @@ def solve(index_left: int, index_below: int) -> int:
         current = squares.pop(side)
         heapq.heappop(heap)
 
-        top = Square(current.x, current.y + current.side, current.left, current.below + 1)
+        top = Square(
+            current.x, current.y + current.side, current.left, current.below + 1
+        )
         if top.side not in squares:
             squares[top.side] = top
             heapq.heappush(heap, -top.side)
-        right = Square(current.x + current.side, current.y, current.left + 1, current.below)
+        right = Square(
+            current.x + current.side, current.y, current.left + 1, current.below
+        )
         if right.side not in squares:
             squares[right.side] = right
             heapq.heappush(heap, -right.side)

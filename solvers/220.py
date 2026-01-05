@@ -32,10 +32,11 @@ def rot_cw(x: int, y: int, k: int) -> Tuple[int, int]:
 @dataclass(frozen=True)
 class Transform:
     """Effect of executing a fully-expanded symbol sequence."""
-    steps: int          # number of 'F' moves
-    dx: int             # displacement in local frame (facing up)
+
+    steps: int  # number of 'F' moves
+    dx: int  # displacement in local frame (facing up)
     dy: int
-    rot: int            # net rotation in quarter-turns clockwise (mod 4)
+    rot: int  # net rotation in quarter-turns clockwise (mod 4)
 
     def apply(self, pos: Tuple[int, int], d: int) -> Tuple[Tuple[int, int], int]:
         """Apply this transform from a given global position and direction."""
@@ -132,7 +133,7 @@ def exec_prefix(
     if n == 0:
         return pos, d, k  # ignored
 
-    total_steps = (A[n].steps if sym == "a" else B[n].steps)
+    total_steps = A[n].steps if sym == "a" else B[n].steps
     if k >= total_steps:
         # Execute whole segment in O(1)
         t = A[n] if sym == "a" else B[n]

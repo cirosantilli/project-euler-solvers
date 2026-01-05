@@ -106,7 +106,9 @@ def max_total(n: int) -> int:
         n = digit_sum(n)
 
 
-def _precompute_small(max_digit_sum: int = 72) -> Tuple[List[int], List[int], List[int]]:
+def _precompute_small(
+    max_digit_sum: int = 72,
+) -> Tuple[List[int], List[int], List[int]]:
     """Precompute helpers for numbers up to max_digit_sum.
 
     Returns:
@@ -202,7 +204,12 @@ def solve(a: int = 10_000_000, b: int = 20_000_000) -> int:
 
         # Sam: 2*pop_p + sam_small[sd]
         # Max: pop_p + popcount(seg_p ^ seg_small[sd]) + max_small_displayed[sd]
-        total_diff += pop_p + sam_small[sd] - (seg_p ^ seg_small[sd]).bit_count() - max_small_displayed[sd]
+        total_diff += (
+            pop_p
+            + sam_small[sd]
+            - (seg_p ^ seg_small[sd]).bit_count()
+            - max_small_displayed[sd]
+        )
 
     return total_diff
 
@@ -213,7 +220,9 @@ def _run_tests() -> None:
     assert DIGIT_MASKS[4].bit_count() == 4  # digit "4" uses four segments
     assert DIGIT_MASKS[8].bit_count() == 7  # digit "8" uses all segments
     assert DIGIT_MASKS[2].bit_count() == 5  # "To turn on a '2' will cost 5 transitions"
-    assert DIGIT_MASKS[7].bit_count() == 4  # "...while a '7' will cost only 4 transitions"
+    assert (
+        DIGIT_MASKS[7].bit_count() == 4
+    )  # "...while a '7' will cost only 4 transitions"
 
     # Example with number 137.
     assert sam_total(137) == 40
@@ -223,8 +232,12 @@ def _run_tests() -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Solve Project Euler 315")
-    parser.add_argument("--a", type=int, default=10_000_000, help="Range start (inclusive)")
-    parser.add_argument("--b", type=int, default=20_000_000, help="Range end (inclusive)")
+    parser.add_argument(
+        "--a", type=int, default=10_000_000, help="Range start (inclusive)"
+    )
+    parser.add_argument(
+        "--b", type=int, default=20_000_000, help="Range end (inclusive)"
+    )
     args = parser.parse_args()
 
     _run_tests()

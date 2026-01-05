@@ -74,7 +74,9 @@ def solve(limit_q: int = 10**8, R: int = 100) -> int:
     internal = 0
 
     for n in range(R, m + 1):
-        stack = [(n, n + 1)]  # denominator-pair of neighbors (1/n, 1/(n+1)) up to ordering
+        stack = [
+            (n, n + 1)
+        ]  # denominator-pair of neighbors (1/n, 1/(n+1)) up to ordering
         while stack:
             a, b = stack.pop()
             if a * b > L:
@@ -93,4 +95,3 @@ if __name__ == "__main__":
     assert best_approximations(Fraction(9, 40), 6) == {Fraction(1, 4), Fraction(1, 5)}
 
     print(solve())
-

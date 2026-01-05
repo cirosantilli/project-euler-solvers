@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00828%20-%20Numbers%20Challenge.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00828%20-%20Numbers%20Challenge.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Sun Apr 30 22:51:14 2023
 
 @author: igorvanloo
 """
-'''
+"""
 Project Euler Problem 828 
 
 I have a correct algorithm based on https://codinghelmet.com/exercises/expression-from-numbers
@@ -14,7 +14,7 @@ I modified it to python and to suit the problem better, however it is extremely 
 
 Modified it to become recursive and used cache to greatly speed it up
 
-'''
+"""
 import itertools
 from pathlib import Path
 from functools import lru_cache
@@ -39,10 +39,11 @@ def ReadFile():  # Create the inital list
         t = 4
         for i, k in enumerate(x[4:]):
             if k == ",":
-                n.append(int(x[t:4 + i]))
+                n.append(int(x[t : 4 + i]))
                 t = 4 + i + 1
         datalist.append((v, n))
     return datalist
+
 
 class P:
     def __init__(self, value, mask, left, right, operation):
@@ -51,61 +52,70 @@ class P:
         self.left = left
         self.right = right
         self.operation = operation
-        
+
         if self.left == None and self.right == None:
             self.expression = str(value)
         else:
-            self.expression = "(" + self.left.expression + self.operation + self.right.expression + ")"
-            
+            self.expression = (
+                "("
+                + self.left.expression
+                + self.operation
+                + self.right.expression
+                + ")"
+            )
+
+
 def generateExpressions(g, A):
-    values = [(x, "0"*i + "1") for i, x in enumerate(A)]
-    E = [P(x, "1" + "0"*i, None, None, None) for i, x in enumerate(A)]
-    Q = [P(x, "1" + "0"*i, None, None, None) for i, x in enumerate(A)]
+    values = [(x, "0" * i + "1") for i, x in enumerate(A)]
+    E = [P(x, "1" + "0" * i, None, None, None) for i, x in enumerate(A)]
+    Q = [P(x, "1" + "0" * i, None, None, None) for i, x in enumerate(A)]
     goal = []
-    
+
     while Q != []:
         a = Q.pop(0)
         if a.value == g:
             print(a.expression)
             goal.append(a)
-            
+
         for b in E:
-            if bin(int(a.mask, 2) & int(b.mask, 2))[2:] == "0": #We have not used a number twice
+            if (
+                bin(int(a.mask, 2) & int(b.mask, 2))[2:] == "0"
+            ):  # We have not used a number twice
                 newmask = bin(int(a.mask, 2) | int(b.mask, 2))[2:]
-                
-                #Addition
+
+                # Addition
                 c = P(a.value + b.value, newmask, a, b, "+")
                 if (c.value, c.mask) not in values:
                     values.append((c.value, c.mask))
                     Q.append(c)
                     E.append(c)
-                
-                #Subtraction
+
+                # Subtraction
                 if a.value - b.value > 0:
                     c = P(a.value - b.value, newmask, a, b, "-")
                     if (c.value, c.mask) not in values:
                         values.append((c.value, c.mask))
                         Q.append(c)
                         E.append(c)
-                
-                #Multiplication
+
+                # Multiplication
                 c = P(a.value * b.value, newmask, a, b, "*")
                 if (c.value, c.mask) not in values:
                     values.append((c.value, c.mask))
                     Q.append(c)
                     E.append(c)
-                
-                #Division
+
+                # Division
                 if a.value % b.value == 0:
                     c = P(a.value // b.value, newmask, a, b, "/")
                     if (c.value, c.mask) not in values:
                         values.append((c.value, c.mask))
                         Q.append(c)
                         E.append(c)
-                
+
     if goal == []:
         return 0
-    
+
     v = []
     for x in goal:
         total = 0
@@ -115,26 +125,27 @@ def generateExpressions(g, A):
         v.append(total)
     return min(v)
 
-@lru_cache(maxsize = 10**5)
+
+@lru_cache(maxsize=10**5)
 def recursiveGenerate(A):
     values = set()
     if len(A) == 1:
         values.add(A[0])
         return values
-    
+
     multiplesFlag = False
     for x in A:
         if A.count(x) > 1:
             multiplesFlag = True
-        
+
     for k in range(1, len(A)):
-        
+
         combs1 = [y for y in itertools.combinations(A, k)]
         combs2 = [y for y in itertools.combinations(A, len(A) - k)]
-        
+
         for i in range(len(combs1)):
             for j in range(len(combs2)):
-                
+
                 t = set(combs1[i]).intersection(set(combs2[j]))
                 flag = False
                 if len(t) == 0:
@@ -159,6 +170,7 @@ def recursiveGenerate(A):
                                 values.add(v1 // v2)
     return values
 
+
 def min_score(target, numbers):
     scores = []
     for k in range(1, len(numbers) + 1):
@@ -166,7 +178,8 @@ def min_score(target, numbers):
             if target in recursiveGenerate(combo):
                 scores.append(sum(combo))
     return min(scores) if scores else 0
-    
+
+
 def compute():
     data = ReadFile()
     total = 0
@@ -185,6 +198,7 @@ def compute():
         print(n + 1, s)
         total += pow(3, n + 1, mod) * s
     return total % mod
+
 
 if __name__ == "__main__":
     assert min_score(211, [2, 3, 4, 6, 7, 25]) == 40

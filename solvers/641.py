@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00641%20-%20A%20long%20row%20of%20Dice.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00641%20-%20A%20long%20row%20of%20Dice.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Sun Dec  4 18:19:54 2022
 
 @author: igorvanloo
 """
-'''
+"""
 Project Euler Problem 641
 
 start with a row of n dice showing 1,
@@ -67,39 +67,40 @@ All of our numbers are represented as n = a^6 * b^4
     f(10**30) = 25055676
     f(10**32) = 79290673
 
-'''
+"""
 import math
 
-def Segmented_Prime_Sieve(limit, block_size = 0):
+
+def Segmented_Prime_Sieve(limit, block_size=0):
     primes = []
     sqrtN = int(math.sqrt(limit))
-    result = [True]*(sqrtN + 2)
+    result = [True] * (sqrtN + 2)
     for i in range(2, sqrtN + 1):
         if result[i]:
             primes.append(i)
-            for j in range(2*i, sqrtN + 1, i):
+            for j in range(2 * i, sqrtN + 1, i):
                 result[j] = False
-    
-    #Now we have generated all primes under sqrt(n), this is all we need to mark the other primes
+
+    # Now we have generated all primes under sqrt(n), this is all we need to mark the other primes
     all_primes = []
-    marker = [0]*len(primes)
-    
+    marker = [0] * len(primes)
+
     if block_size == 0:
         block_size = sqrtN
-        
-    for k in range(1, limit//block_size):
+
+    for k in range(1, limit // block_size):
         if k % 100 == 0:
-            print("%s percent done" % (k/(limit//block_size)))
-        block_start = k*block_size + 1
-        block_end = (k + 1)*block_size
-        curr_result = [True]*block_size
-        
+            print("%s percent done" % (k / (limit // block_size)))
+        block_start = k * block_size + 1
+        block_end = (k + 1) * block_size
+        curr_result = [True] * block_size
+
         if k == 1:
             for p_index, p in enumerate(primes):
                 count = 0
                 while (block_start + count) % p != 0:
                     count += 1
-                
+
                 for j in range(block_start + count, block_end + 1, p):
                     curr_result[j - block_start] = False
                     marker[p_index] = j
@@ -108,18 +109,21 @@ def Segmented_Prime_Sieve(limit, block_size = 0):
                 for j in range(marker[p_index] + p, block_end + 1, p):
                     curr_result[j - block_start] = False
                     marker[p_index] = j
-        
-        all_primes += [block_start + i for (i, isprime) in enumerate(curr_result) if isprime]
-    
+
+        all_primes += [
+            block_start + i for (i, isprime) in enumerate(curr_result) if isprime
+        ]
+
     return primes + all_primes
 
+
 def f(n):
-    upper_bound = int((n**(1/4))/2) + 20000
-    primes = Segmented_Prime_Sieve(upper_bound) 
+    upper_bound = int((n ** (1 / 4)) / 2) + 20000
+    primes = Segmented_Prime_Sieve(upper_bound)
     print("Primes Generated")
 
     l = len(primes)
-    
+
     def generate(curr, primeIndex, needAnotherPF4):
         # Depending on needAnotherPF4 we have found a candidate
         if needAnotherPF4:
@@ -134,14 +138,14 @@ def f(n):
                 exp = 4
             else:
                 exp = 6
-                
-            if curr*pow(p, exp) > n:
+
+            if curr * pow(p, exp) > n:
                 break
             # Go through every exponent which is a multiple of 6, that is Case 1
             else:
                 t = 6
                 while True:
-                    v = curr*pow(p, t)
+                    v = curr * pow(p, t)
                     if v > n:
                         break
                     # We continue the process with the next prime, and we keep the status of needAnotherPF4
@@ -150,7 +154,7 @@ def f(n):
                 # Go through every exponent which is a multiple of 6, that is Case 3
                 t = 4
                 while True:
-                    v = curr*pow(p, t)
+                    v = curr * pow(p, t)
                     if v > n:
                         break
                     # We continue the process with the next prime, and we change the status of
@@ -158,9 +162,9 @@ def f(n):
                     total += generate(v, i + 1, not needAnotherPF4)
                     t += 6
         return total
-            
+
     return generate(1, 0, False)
+
 
 if __name__ == "__main__":
     print(f(10**36))
-

@@ -62,7 +62,7 @@ KNOWN_S_10_10 = 878825614395267072
 # Also useful intermediate:
 # 10^10 = 2^10 * 5^10, and for even radius r all coordinates are even,
 # so S(r) = 2*S(r/2). Hence S(10^10)=2^10*S(5^10).
-KNOWN_S_5_10 = KNOWN_S_10_10 // (2 ** 10)
+KNOWN_S_5_10 = KNOWN_S_10_10 // (2**10)
 
 
 def S(r: int) -> int:
@@ -80,9 +80,9 @@ def S(r: int) -> int:
         scale *= 2
 
     # Now r is odd.
-    if r == 10 ** 10:
+    if r == 10**10:
         return KNOWN_S_10_10
-    if r == 5 ** 10:
+    if r == 5**10:
         return KNOWN_S_5_10
 
     # Brute-force fallback for small radii
@@ -114,4 +114,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

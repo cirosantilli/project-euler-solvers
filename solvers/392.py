@@ -115,7 +115,9 @@ def minimal_red_area(N: int) -> float:
     """
     if N < 1:
         raise ValueError("N must be >= 1.")
-    m = N // 2 + 1  # number of intervals per axis in the first quadrant after splitting by axes
+    m = (
+        N // 2 + 1
+    )  # number of intervals per axis in the first quadrant after splitting by axes
     area_q = _solve_quadrant(m)
     return 4.0 * area_q
 

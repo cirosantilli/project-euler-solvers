@@ -105,7 +105,7 @@ def solve() -> int:
 
 def _largest_root_bisect(n: int, iters: int = 120) -> float:
     """Bisection for the largest real root of x^3 - 2^n x^2 + n = 0 (testing only)."""
-    A = 2.0 ** n
+    A = 2.0**n
 
     def f(x: float) -> float:
         return x * x * x - A * x * x + n

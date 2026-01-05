@@ -15,12 +15,12 @@ No external libraries are used (only Python standard library).
 
 from array import array
 
-MOD = 101 ** 4  # 104060401
+MOD = 101**4  # 104060401
 
 
 def _linear_sieve_spf(n: int) -> array:
     """Smallest prime factor for each 0..n using a linear sieve."""
-    spf = array('I', [0]) * (n + 1)
+    spf = array("I", [0]) * (n + 1)
     if n >= 1:
         spf[1] = 1
     primes = []  # Python ints are fine here; ~78k primes up to 1e6.
@@ -61,9 +61,9 @@ def _prefix_g_coprime_lcm(n: int, N: int, mod: int) -> array:
 
     spf = _linear_sieve_spf(n)
 
-    exp = bytearray(n + 1)              # exponent of spf[n] in n
-    rest = array('I', [0]) * (n + 1)    # n with spf[n]^exp[n] removed
-    c = array('I', [0]) * (n + 1)       # c[n] modulo mod
+    exp = bytearray(n + 1)  # exponent of spf[n] in n
+    rest = array("I", [0]) * (n + 1)  # n with spf[n]^exp[n] removed
+    c = array("I", [0]) * (n + 1)  # c[n] modulo mod
 
     rest[1] = 1
     c[1] = 1
@@ -79,7 +79,7 @@ def _prefix_g_coprime_lcm(n: int, N: int, mod: int) -> array:
             rest[i] = m
         c[i] = (c[rest[i]] * a[exp[i]]) % mod
 
-    pref = array('I', [0]) * (n + 1)
+    pref = array("I", [0]) * (n + 1)
     s = 0
     for i in range(1, n + 1):
         s += c[i]

@@ -35,7 +35,7 @@ def t_interval(
     p2 = -b + sqrt_d
     # strict inequality: t in (root1, root2)
     t_min = -((-p1) // q2)  # ceil
-    t_max = (p2 - 1) // q2   # strict upper bound
+    t_max = (p2 - 1) // q2  # strict upper bound
     if t_min > t_max:
         return None
     return (t_min, t_max)

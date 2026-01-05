@@ -43,7 +43,7 @@ def g_exact(n: int) -> Fraction:
         coeff = [Fraction(1, 1)]
         c = Fraction(1, 1)
         for a in range(1, maxa + 1):
-            c /= (k * a)
+            c /= k * a
             coeff.append(c)
 
         new = [d.copy() for d in dp]
@@ -139,7 +139,7 @@ def mask_to_value(mask: int, prime_info, cache: dict) -> int:
         block = (mask >> off) & ((1 << emax) - 1)
         e = block.bit_count()
         if e:
-            val *= p ** e
+            val *= p**e
     cache[mask] = val
     return val
 
@@ -239,4 +239,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

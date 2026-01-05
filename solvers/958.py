@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 
-'''
+"""
 By GPT-5. Runtime: 4m47.509s on pypy3 3.11.13, Ubuntu 25.10, Lenovo ThinkPad P14s.
-'''
+"""
 
 from collections import deque
 from typing import Tuple, Deque, List
+
 
 def d_subtractive(n: int, m: int) -> int:
     if m > n:
@@ -16,6 +17,7 @@ def d_subtractive(n: int, m: int) -> int:
         steps += q
         n, m = m, r
     return steps - 1
+
 
 def inv_mod(a: int, mod: int) -> int:
     t0: int = 0
@@ -30,6 +32,7 @@ def inv_mod(a: int, mod: int) -> int:
         raise ValueError("no inverse")
     return t0 % mod
 
+
 def can_represent(n: int, x: int, y: int) -> bool:
     if x == 0 or y == 0:
         return False
@@ -38,6 +41,7 @@ def can_represent(n: int, x: int, y: int) -> bool:
     inv: int = inv_mod(x % y, y)
     a0: int = (n % y) * inv % y
     return x * a0 <= n
+
 
 def f_search(n: int, max_B: int = 80) -> int:
     F: List[int] = [0, 1]
@@ -81,6 +85,7 @@ def f_search(n: int, max_B: int = 80) -> int:
         if best_m is not None:
             return best_m
     raise RuntimeError("No solution found up to max_B")
+
 
 if __name__ == "__main__":
     assert f_search(7) == 2

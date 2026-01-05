@@ -139,8 +139,10 @@ def solve(limit: int = TARGET_N, mod: int = MOD) -> int:
     sum_inv3 = 0  # H_k running
     prefix_Lm1 = 0
 
-    need_prefix = (1 <= r_max <= k_last - 2)
-    capture_k = k_last - r_max  # L-1, where L = k_last - r_max + 1 (only used if need_prefix)
+    need_prefix = 1 <= r_max <= k_last - 2
+    capture_k = (
+        k_last - r_max
+    )  # L-1, where L = k_last - r_max + 1 (only used if need_prefix)
     chunk = 4096  # reduce costly mod operations on ans
     c = 0
 

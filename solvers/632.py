@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00632%20-%20Square%20Prime%20Factors.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00632%20-%20Square%20Prime%20Factors.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Fri Dec  9 17:19:36 2022
 
 @author: igorvanloo
 """
-'''
+"""
 Project Euler Problem 632
 
 Using a modified generalised Mobius function sieve which counts the number of sq prime factors along side it,
@@ -31,20 +31,21 @@ If μ(i) = 1, we have an even number of prime factors
 
 C_k(n) = (-1)^? sum_{i = 1}^sqrt(n) μ(i) floor(n/i*i) choose(p(i), k)
 
-'''
+"""
 import math
 from functools import cache
-    
-def mobius_k_sieve(n, k = 2):
-    prime = [1]*(n + 1)
+
+
+def mobius_k_sieve(n, k=2):
+    prime = [1] * (n + 1)
     prime[0] = prime[1] = 0
-    mob = [0] + [1]*(n)
-    num_of_pf = [0]*(n + 1)
+    mob = [0] + [1] * (n)
+    num_of_pf = [0] * (n + 1)
     for p in range(2, n + 1):
         if prime[p]:
             mob[p] *= -1
             num_of_pf[p] += 1
-            for i in range(2*p, n + 1, p):
+            for i in range(2 * p, n + 1, p):
                 prime[i] = 0
                 mob[i] *= -1
                 num_of_pf[i] += 1
@@ -54,31 +55,33 @@ def mobius_k_sieve(n, k = 2):
                     mob[j] = 0
     return mob, num_of_pf, prime
 
+
 @cache
 def choose(n, r):
     if r > n:
         return 0
     if r == 0:
         return 1
-    return choose(n-1, r-1) + choose(n-1, r)
+    return choose(n - 1, r - 1) + choose(n - 1, r)
+
 
 def compute(n):
     sq = int(math.sqrt(n))
     mob, num_of_pf, isprime = mobius_k_sieve(sq, 2)
     prime = [i for i, p in enumerate(isprime) if p]
     print("sieve done")
-    
+
     max_prime = 1
     prod_prime = 2
     while prod_prime <= sq:
         prod_prime *= prime[max_prime]
         max_prime += 1
-    
-    Ck = [0]*max_prime
+
+    Ck = [0] * max_prime
     for i in range(1, sq + 1):
-        const = mob[i]*(n//pow(i, 2))
+        const = mob[i] * (n // pow(i, 2))
         for k in range(max_prime):
-            v = const*pow(-1, k)*choose(num_of_pf[i], k)
+            v = const * pow(-1, k) * choose(num_of_pf[i], k)
             if v == 0:
                 break
             Ck[k] += v
@@ -88,8 +91,9 @@ def compute(n):
         if x == 0:
             break
         total *= x
-        total %= (10**9 + 7)
+        total %= 10**9 + 7
     return total
+
 
 def square_prime_factors(n):
     factors = set()
@@ -103,6 +107,7 @@ def square_prime_factors(n):
             factors.add(p)
         p += 1
     return factors
+
 
 if __name__ == "__main__":
     assert square_prime_factors(1500) == {2, 5}

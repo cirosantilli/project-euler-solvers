@@ -25,17 +25,20 @@ from typing import Dict, List, Optional, Tuple
 
 # ------------------------- basic number theory helpers -------------------------
 
+
 def sieve(limit: int) -> List[int]:
     """Return list of all primes <= limit."""
     if limit < 2:
         return []
     is_prime = bytearray(b"\x01") * (limit + 1)
     is_prime[0:2] = b"\x00\x00"
-    for p in range(2, int(limit ** 0.5) + 1):
+    for p in range(2, int(limit**0.5) + 1):
         if is_prime[p]:
             step = p
             start = p * p
-            is_prime[start:limit + 1:step] = b"\x00" * (((limit - start) // step) + 1)
+            is_prime[start : limit + 1 : step] = b"\x00" * (
+                ((limit - start) // step) + 1
+            )
     return [i for i, v in enumerate(is_prime) if v]
 
 
@@ -149,7 +152,11 @@ def _initial_solutions_mod_p(a: int, b: int, p: int) -> List[int]:
 
     # For p == 2, brute.
     if p == 2:
-        return [n for n in range(2) if ((n * n * n + b) % 2 == 0 and (((n + a) ** 3) + b) % 2 == 0)]
+        return [
+            n
+            for n in range(2)
+            if ((n * n * n + b) % 2 == 0 and (((n + a) ** 3) + b) % 2 == 0)
+        ]
 
     # Solve 3n^2 + 3a n + a^2 ≡ 0 (mod p)
     a_mod = a % p
@@ -188,7 +195,9 @@ def _linear_solutions_mod_prime(A: int, B: int, p: int) -> List[int]:
     return [(B * inv_mod(A, p)) % p]
 
 
-def solutions_for_prime_power(a: int, b: int, p: int, e_max: int) -> Tuple[int, List[int]]:
+def solutions_for_prime_power(
+    a: int, b: int, p: int, e_max: int
+) -> Tuple[int, List[int]]:
     """Return (e, sols) where e is the maximum exponent <= e_max such that there
     exists n with both congruences holding modulo p^e, and sols are all such n
     modulo p^e.
@@ -295,8 +304,8 @@ def precompute_a_data(max_a: int) -> Tuple[List[int], List[int], List[Dict[int, 
     fac_a = [dict() for _ in range(max_a + 1)]
 
     for a in range(1, max_a + 1):
-        a3[a] = a ** 3
-        a6[a] = a ** 6
+        a3[a] = a**3
+        a6[a] = a**6
 
         x = a
         f: Dict[int, int] = {}
@@ -345,7 +354,7 @@ def compute_G(a: int, b: int) -> int:
     sols = [0]
     mod = 1
     for p, e, sols_p in blocks:
-        sols, mod = combine_congruences(sols, mod, sols_p, p ** e)
+        sols, mod = combine_congruences(sols, mod, sols_p, p**e)
 
     return min(sols)
 

@@ -46,8 +46,7 @@ def find_words_file() -> Path:
         if p.exists():
             return p
     raise FileNotFoundError(
-        "Could not find 0042_words.txt. Tried: "
-        + ", ".join(str(p) for p in candidates)
+        "Could not find 0042_words.txt. Tried: " + ", ".join(str(p) for p in candidates)
     )
 
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00675%20-%202^ω(n).py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00675%20-%202^ω(n).py"""
 # -*- coding: utf-8 -*-
 """
 Created on Sat Dec 25 22:19:53 2021
@@ -7,7 +7,7 @@ Created on Sat Dec 25 22:19:53 2021
 @author: igorvanloo
 """
 
-'''
+"""
 Project Euler Problem 675
 
 https://en.wikipedia.org/wiki/Prime_omega_function
@@ -31,15 +31,15 @@ S((i+1)!) = S(i!) * y/x for all p < i + 1
 
 Using a sieve to find all prime factors and modular division, problem can be solved in reasonable time
 
-'''
+"""
 
 
 def sieve_factors(n):
-    result = [0]*(n+1)
+    result = [0] * (n + 1)
     for i in range(2, n + 1):
         if (result[i]) == 0:
             result[i] = [[i], [1]]
-            for j in range(2*i, len(result), i):
+            for j in range(2 * i, len(result), i):
                 if result[j] == 0:
                     result[j] = [[i], []]
                 else:
@@ -52,43 +52,48 @@ def sieve_factors(n):
                 result[j][1].append(count)
     return result
 
-def ModDivision(a,b,m):
+
+def ModDivision(a, b, m):
     a = a % m
-    inv = pow(b,-1,m)
-    if(inv == -1):
+    inv = pow(b, -1, m)
+    if inv == -1:
         return "Division not defined"
     else:
-        return (inv*a) % m
-    
+        return (inv * a) % m
+
+
 def F(n, mod):
     main_total = 3
     running_total = 3
     sieve = sieve_factors(n)
     print("Sieve Generated")
-    
-    store = {2:1}
+
+    store = {2: 1}
     count = 1
-    
+
     for i in range(3, n + 1):
-        if i % (count*100000) == 0:
+        if i % (count * 100000) == 0:
             print(i)
             count += 1
-            
+
         if sieve[i] == [[i], [1]]:
             running_total *= 3
             store[i] = 1
         else:
             fac, exp = sieve[i]
-            
+
             for x in range(len(fac)):
                 y = fac[x]
-                running_total = ModDivision(running_total*(2*(store[y]+exp[x]) + 1), 2*store[y] + 1, mod)
+                running_total = ModDivision(
+                    running_total * (2 * (store[y] + exp[x]) + 1), 2 * store[y] + 1, mod
+                )
                 store[y] += exp[x]
-            
+
         main_total += running_total
         main_total %= mod
-    
+
     return main_total
-    
+
+
 if __name__ == "__main__":
     print(F(10**7, 1000000087))

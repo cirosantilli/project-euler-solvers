@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0163.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0163.cpp"""
 import math
 
 EPSILON = 1e-7
@@ -53,7 +53,11 @@ def is_valid_triangle(l1, l2, l3, A, B, C) -> bool:
         return False
     if points_equal(ab, bc):
         return False
-    return inside_hull(ab, A, B, C) and inside_hull(bc, A, B, C) and inside_hull(ac, A, B, C)
+    return (
+        inside_hull(ab, A, B, C)
+        and inside_hull(bc, A, B, C)
+        and inside_hull(ac, A, B, C)
+    )
 
 
 def solve(size: int) -> int:

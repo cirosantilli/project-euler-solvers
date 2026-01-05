@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00669%20-%20The%20King's%20Banquet.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00669%20-%20The%20King's%20Banquet.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Mon Dec 13 21:39:12 2021
@@ -7,7 +7,7 @@ Created on Mon Dec 13 21:39:12 2021
 @author: igorvanloo
 """
 
-'''
+"""
 Project Euler Problem 669
 
 99194853094755497 is a Fibonnacci number
@@ -40,18 +40,22 @@ which is that same as (61305790721611591 - (99194853094755497 - 4459742654737774
 = (44597426547377749 * 61305790721611591) % 99194853094755497
 
 =
-'''
+"""
 
 import math
 
-def fibonnaci(n): #Finds the nth fibonnaci number
-    v1, v2, v3 = 1, 1, 0    # initialise a matrix [[1,1],[1,0]]
-    for rec in bin(n)[3:]:  # perform fast exponentiation of the matrix (quickly raise it to the nth power)
-        calc = v2*v2
-        v1, v2, v3 = v1*v1+calc, (v1+v3)*v2, calc+v3*v3
-        if rec=='1':
-            v1, v2, v3 = v1+v2, v1, v2  
+
+def fibonnaci(n):  # Finds the nth fibonnaci number
+    v1, v2, v3 = 1, 1, 0  # initialise a matrix [[1,1],[1,0]]
+    for rec in bin(n)[
+        3:
+    ]:  # perform fast exponentiation of the matrix (quickly raise it to the nth power)
+        calc = v2 * v2
+        v1, v2, v3 = v1 * v1 + calc, (v1 + v3) * v2, calc + v3 * v3
+        if rec == "1":
+            v1, v2, v3 = v1 + v2, v1, v2
     return v2
+
 
 def Fibtill(x):
     fibnumbers = []
@@ -60,22 +64,24 @@ def Fibtill(x):
         fibnumbers.append(fibonnaci(n))
         n += 1
     return list(reversed(fibnumbers))
-  
+
+
 def find_poss_num(path, fib, limit):
     x = path[-1]
     options = []
-    
+
     for y in fib:
-        a = y-x
+        a = y - x
         if a <= 0:
             break
         if a <= limit:
             if a not in path:
                 options.append(a)
     return options
-    
+
+
 def find_path(path, limit):
-    fib = Fibtill(fibonnaci(len(Fibtill(2*limit + 1)) + 1))
+    fib = Fibtill(fibonnaci(len(Fibtill(2 * limit + 1)) + 1))
     poss_num = find_poss_num(path, fib, limit)
     if len(path) == limit:
         return True
@@ -83,48 +89,53 @@ def find_path(path, limit):
         path.pop(-1)
     else:
         for x in poss_num:
-            path.append(x)            
+            path.append(x)
             if find_path(path, limit) == True:
                 return True
-            
+
                 path.pop(-1)
         path.pop(-1)
     return False
-    
+
+
 def compute(limit):
     path = [max(Fibtill(limit))]
     find_path(path, limit)
-    #difference = []
-    #for x in range(len(path)-1):
-        #difference.append(path[x] + path[x+1])
-    return path#, difference
+    # difference = []
+    # for x in range(len(path)-1):
+    # difference.append(path[x] + path[x+1])
+    return path  # , difference
+
 
 def position(pos, limit):
     fib = Fibtill(fibonnaci(len(Fibtill(limit)) + 1))
-    x = fib[0] #we never need to use it but it makes it more readable
-    y = fib[1] #We always start with y
+    x = fib[0]  # we never need to use it but it makes it more readable
+    y = fib[1]  # We always start with y
     z = fib[2]
-    
-    def func1(a): #a -> z - a mod y, not actually used
+
+    def func1(a):  # a -> z - a mod y, not actually used
         return (z - a) % y
-    
-    def func2(a): #a -> y - a mod y = -a mod y
+
+    def func2(a):  # a -> y - a mod y = -a mod y
         return (-a) % y
-    
-    def func3(a, n): #both function composed give a -> a - z mod y if we repeat n times we have a -> a - z*n mod y
-        return (a - z*n) % y
-    
+
+    def func3(
+        a, n
+    ):  # both function composed give a -> a - z mod y if we repeat n times we have a -> a - z*n mod y
+        return (a - z * n) % y
+
     if pos == 1:
         return y
     if pos % 2 != 0:
-        mult = pos//2
+        mult = pos // 2
         temp = func3(y, mult)
     else:
-        mult = pos//2
+        mult = pos // 2
         temp = func3(y, mult)
         temp = func2(temp)
     return temp
-    
+
+
 if __name__ == "__main__":
     print(compute(34))
     print(position(89194853094755498, 99194853094755497))

@@ -28,7 +28,7 @@ def num_distinct_solutions(n: int) -> int:
     """
     div_count_n2 = 1
     for _, a in factorize(n):
-        div_count_n2 *= (2 * a + 1)
+        div_count_n2 *= 2 * a + 1
     return (div_count_n2 + 1) // 2
 
 

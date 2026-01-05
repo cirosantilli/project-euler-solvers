@@ -32,9 +32,9 @@ def build_automaton(max_digits: int):
         p *= 11
 
     # Trie construction
-    nxt = [dict()]   # digit -> next_state
-    link = [0]       # failure links
-    bad = [False]    # terminal or inherits terminal via failure link
+    nxt = [dict()]  # digit -> next_state
+    link = [0]  # failure links
+    bad = [False]  # terminal or inherits terminal via failure link
 
     for pat in patterns:
         v = 0

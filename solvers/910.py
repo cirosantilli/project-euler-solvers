@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
 #  runtime: 43s on pypy3 11
-'''
+"""
 From https://github.com/lucky-bai/projecteuler-solutions/issues/102 license unknown
 Runtime: 34s on pypy3 3.11.11, Ubuntu 25.04, Lenovo ThinkPad P14s.
-'''
+"""
 
 from __future__ import annotations
 
@@ -29,6 +29,7 @@ MOD_DEFAULT = 10**9
 
 
 # 5-adic unit helpers -----------------------------------------------------
+
 
 def modulus_to_k(mod: int) -> int:
     """Return k such that mod = 5^k (assumes mod is a power of 5)."""
@@ -105,6 +106,7 @@ def unit_pow(x: int, exp: int, mod: int) -> int:
 
 # Inner g-iterator for modulo 5^k ----------------------------------------
 
+
 class GCIterator:
     """
     Lazy binary-lifting iterator for the inner map g(c, x) = x^c (x + 1) mod 5^k.
@@ -113,7 +115,9 @@ class GCIterator:
 
     def __init__(self, mod: int):
         self.mod = mod
-        self.jump_cache: List[Dict[int, int]] = [{} for _ in range(PE_B.bit_length() + 1)]
+        self.jump_cache: List[Dict[int, int]] = [
+            {} for _ in range(PE_B.bit_length() + 1)
+        ]
         self.k = modulus_to_k(mod)
         self.unit_cache: Dict[int, Tuple[int, int]] = {}
         self.cycle_cache: Dict[int, Tuple[int, int]] = {}
@@ -175,6 +179,7 @@ class GCIterator:
 
 
 # Cycle-accelerated generic helpers --------------------------------------
+
 
 def g_mod(c: int, x: int, mod: int) -> int:
     """g(c, x) = x^c * (x + 1) modulo mod."""
@@ -353,6 +358,7 @@ def T_mod_cycle(a: int, b: int, c: int, d: int, mod: int = MOD_DEFAULT) -> int:
 
 # Orbit-focused Phi solver for 5^k ---------------------------------------
 
+
 class JumpIter:
     """Binary-lifting iterator for an arbitrary function f: X -> X mod m."""
 
@@ -459,6 +465,7 @@ class OrbitPhiSolver:
 
 
 # Top-level T(a,b,c,d) modulo specific powers -----------------------------
+
 
 def T_mod_2pow9(a: int, b: int, c: int, d: int, e: int = 0) -> int:
     mod = 2**9

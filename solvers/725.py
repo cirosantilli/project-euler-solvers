@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00725%20-%20Digit%20Sum%20Numbers.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00725%20-%20Digit%20Sum%20Numbers.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Tue Dec 24 10:28:07 2024
 
 @author: Igor Van Loo
 """
-'''
+"""
 Project Euler Problem 725
 
 https://oeis.org/A064544
@@ -30,8 +30,9 @@ Hence for every partition of x we get the total sum
 = (10^n - 1)/9 * (sum_{i in x} d_i * i (n - 1)!/(d_0!d_1!...d_9!)) 
 = (10^n - 1)/9 * (sum_{i in x} d_i * i) * (n - 1)!/(d_0!d_1!...d_9!)
 
-'''
+"""
 import math
+
 
 def partition(goal):
     A = [x for x in range(1, goal + 1)]
@@ -43,6 +44,7 @@ def partition(goal):
                 part[i + options].append((options,) + y)
     return part
 
+
 def combs(x, n):
     d = [x.count(i) for i in range(10)]
     d[0] = n - sum(d)
@@ -51,20 +53,22 @@ def combs(x, n):
         t //= math.factorial(d[v])
     return t
 
+
 def S(n):
     part = partition(9)
-    total = 0 
+    total = 0
     mod = 10**16
-    rep = (10**n - 1)//9
-    
+    rep = (10**n - 1) // 9
+
     for k in range(10):
         for p in part[k]:
-            p += (k, )
+            p += (k,)
             if len(p) - 1 < n:
-                v = rep * 2*k * combs(p, n) // n
+                v = rep * 2 * k * combs(p, n) // n
                 total += v
                 total %= mod
     return total
+
 
 if __name__ == "__main__":
     assert S(3) == 63270

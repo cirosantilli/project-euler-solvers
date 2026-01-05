@@ -111,9 +111,9 @@ def sum_m_upto(n: int, mod: int = MOD) -> int:
 def main() -> None:
     # Problem statement checks
     fib_small = build_fibs_upto(10**6)
-    assert m_single(5, fib_small) == 0          # 5 is losing
-    assert m_single(17, fib_small) == 4         # 17: can take 1 or 4, so M(17)=4
-    assert sum_m_upto(100) == 728               # given in statement
+    assert m_single(5, fib_small) == 0  # 5 is losing
+    assert m_single(17, fib_small) == 4  # 17: can take 1 or 4, so M(17)=4
+    assert sum_m_upto(100) == 728  # given in statement
 
     print(sum_m_upto(TARGET_N))
 

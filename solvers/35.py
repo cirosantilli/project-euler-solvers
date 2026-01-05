@@ -55,9 +55,13 @@ def circular_prime_count(limit: int) -> int:
     sieve_n = max(limit, 10**d)
     is_prime = prime_sieve(sieve_n)
 
-    processed = bytearray(limit)  # only need to mark numbers we may iterate over (< limit)
+    processed = bytearray(
+        limit
+    )  # only need to mark numbers we may iterate over (< limit)
 
-    allowed_digits = "1379"  # for multi-digit circular primes (2 and 5 are handled separately)
+    allowed_digits = (
+        "1379"  # for multi-digit circular primes (2 and 5 are handled separately)
+    )
 
     count = 0
     for p in range(2, limit):

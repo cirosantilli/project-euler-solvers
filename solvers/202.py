@@ -62,8 +62,8 @@ def count_ways(N: int) -> int:
     has_prime_1_mod_3 = any((p % 3) == 1 for p in fac)
     if not has_prime_1_mod_3:
         G = 1 if (M % 3) == 1 else -1  # since M%3 is 1 or 2 here
-        omega = len(fac)               # number of distinct prime factors
-        g = G * (1 << omega)           # G * 2^omega
+        omega = len(fac)  # number of distinct prime factors
+        g = G * (1 << omega)  # G * 2^omega
         phi_M -= g
 
     return phi_M // 3
@@ -79,4 +79,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

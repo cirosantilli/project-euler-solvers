@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00251%20-%20Cardano%20Triplets.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00251%20-%20Cardano%20Triplets.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Thu May 19 12:23:33 2022
 
 @author: igorvanloo
 """
-'''
+"""
 Project Euler Problem 251
 
 Simplifying using wolframalpha we get c = (a + 1)^2(8a - 1)/27b^2
@@ -25,7 +25,7 @@ We want a + b + c <= limit
 
 Fix k, a = 3k + 2 therefore b^2c = (1 + k)^2 (5 + 8k)
 
-'''
+"""
 import math
 
 
@@ -47,6 +47,7 @@ def prime_factors(n):
             break
     return factors
 
+
 def gen_multiples(primes, multiplicities, limit):
     if len(primes) == 0:
         return []
@@ -55,53 +56,56 @@ def gen_multiples(primes, multiplicities, limit):
     for i in range(multiplicities[0] + 1):
         if p > 1:
             multiples.append(p)
-            
+
         if len(primes) > 1:
-            for x in gen_multiples(primes[1:], multiplicities[1:], limit//p):
-                if p*x < limit:
-                    multiples.append(p*x)
-        
+            for x in gen_multiples(primes[1:], multiplicities[1:], limit // p):
+                if p * x < limit:
+                    multiples.append(p * x)
+
         p *= primes[0]
-        
+
     return multiples
 
+
 def get_sq_divisors(a, limit):
-    pf1 = prime_factors((a + 1)//3)
-    pf2 = prime_factors((8*a - 1)//3)
-    
+    pf1 = prime_factors((a + 1) // 3)
+    pf2 = prime_factors((8 * a - 1) // 3)
+
     pf = {}
     for p in pf1:
-        pf[p] = 2*pf1[p]
+        pf[p] = 2 * pf1[p]
     for p in pf2:
         pf[p] = pf2[p] + pf.get(p, 0)
-    
+
     primes = []
     multiplicities = []
     for p, e in pf.items():
-        mult = e//2
+        mult = e // 2
         if mult > 0:
             primes.append(p)
             multiplicities.append(mult)
-    
+
     return [x for x in gen_multiples(primes, multiplicities, limit)]
+
 
 def compute(limit):
     total = 0
-    klimit = int((limit - 2)/6.77)
+    klimit = int((limit - 2) / 6.77)
     for k in range(klimit + 1):
-        a = 3*k + 2
-        t = ((a + 1)*(a + 1)*(8*a - 1))//27
+        a = 3 * k + 2
+        t = ((a + 1) * (a + 1) * (8 * a - 1)) // 27
         for b in [1] + get_sq_divisors(a, t):
-            c = t//(b*b)
+            c = t // (b * b)
             v = a + b + c
             if v <= limit:
                 total += 1
     return total
-        
+
+
 if __name__ == "__main__":
     # TODO extra assert
-    #assert abs(
+    # assert abs(
     #    (2 + 1 * math.sqrt(5)) ** (1/3) + (2 - 1 * math.sqrt(5)) ** (1/3) - 1
-    #) < 1e-12
+    # ) < 1e-12
     assert compute(1000) == 149
     print(compute(110000000))

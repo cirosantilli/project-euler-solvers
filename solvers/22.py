@@ -53,7 +53,6 @@ def main() -> None:
 
     ans = total_name_scores(names)
 
-
     print(ans)
 
 

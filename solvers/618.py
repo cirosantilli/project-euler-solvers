@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00618%20-%20Numbers%20with%20a%20given%20prime%20factor%20sum.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00618%20-%20Numbers%20with%20a%20given%20prime%20factor%20sum.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Wed Jul 28 23:14:47 2021
@@ -7,7 +7,7 @@ Created on Wed Jul 28 23:14:47 2021
 @author: igorvanloo
 """
 
-'''
+"""
 Project Euler Problem 618
 
 Given all primes < the 24th Fibonnaci number = 46368
@@ -31,9 +31,10 @@ So what about d(k,p) when p is a prime, we an see a pattern in the first column
 d(k,2) = 2*d(k-2,2) and again in the second column d(k,3) = 3*d(k-3,3)
 So we have found a general relation d(k,p) = p*(k-p,p) when p is a prime
 
-'''
+"""
 
 import math
+
 
 def list_primality(n):
     result = [True] * (n + 1)
@@ -45,45 +46,73 @@ def list_primality(n):
             result[start : n + 1 : step] = [False] * (((n - start) // step) + 1)
     return result
 
+
 def list_primes(n):
     return [i for i, isprime in enumerate(list_primality(n)) if isprime]
 
+
 def sieve(n):
-    result = [0] * (n+1)
-    for i in range(2, int(n)+1):
+    result = [0] * (n + 1)
+    for i in range(2, int(n) + 1):
         if result[i] == 0:
             for j in range(i, len(result), i):
                 result[j] += i
-                remainder = j/i
+                remainder = j / i
                 while remainder % i == 0:
                     result[j] += i
                     remainder //= i
     return result
 
-def compute1(): #Method 1, tried to make a sieve with prime divisors but quickly realised it would never be fast enough
-    numbers = sieve(5*10**6)    
+
+def compute1():  # Method 1, tried to make a sieve with prime divisors but quickly realised it would never be fast enough
+    numbers = sieve(5 * 10**6)
     total = 0
     for x in range(len(numbers)):
         if numbers[x] == 4181:
-            #print(x)
-            total += (x % 10**9)
-    return total 
+            # print(x)
+            total += x % 10**9
+    return total
+
 
 def compute(limit):
     d = [1] + [0] * limit
     primes = list_primes(limit)
     mod = 10**9
-    Fibonnaci_numbers = [2,3,5,8,13,21,34,55,89,144,233,377,610,987,1597,2584,4181,6765,10946,17711,28657,46368]
+    Fibonnaci_numbers = [
+        2,
+        3,
+        5,
+        8,
+        13,
+        21,
+        34,
+        55,
+        89,
+        144,
+        233,
+        377,
+        610,
+        987,
+        1597,
+        2584,
+        4181,
+        6765,
+        10946,
+        17711,
+        28657,
+        46368,
+    ]
 
     for p in primes:
-        for i in range(p,limit+1):
-            d[i] += (p*d[i-p] % mod)
-    
+        for i in range(p, limit + 1):
+            d[i] += p * d[i - p] % mod
+
     total = 0
     for x in Fibonnaci_numbers:
-        total += (d[x] % mod)
-        
+        total += d[x] % mod
+
     return total % mod
+
 
 def S_small(k):
     d = [1] + [0] * k
@@ -92,9 +121,10 @@ def S_small(k):
         for i in range(p, k + 1):
             d[i] += p * d[i - p]
     return d[k]
-        
+
+
 if __name__ == "__main__":
-    #print(compute1())
+    # print(compute1())
     assert S_small(1) == 0
     assert S_small(2) == 2
     assert S_small(3) == 3

@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00709%20-%20Even%20Stevens.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00709%20-%20Even%20Stevens.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Wed Dec 14 12:31:19 2022
 
 @author: igorvanloo
 """
-'''
+"""
 Project Euler Problem 709
 
 Every day for the past n days Even Stevens brings home his groceries in a plastic bag. 
@@ -33,25 +33,28 @@ OEIS search: https://oeis.org/A000111 the 8th value is 1385
 https://mathworld.wolfram.com/EulerZigzagNumber.html
 https://mathworld.wolfram.com/EntringerNumber.html
 
-'''
+"""
+
 
 def E(n, k):
-    #https://mathworld.wolfram.com/EntringerNumber.html
-    #E(n, n) = f(n)
-    array = [[0]*(k + 1) for k in range(n + 1)]
+    # https://mathworld.wolfram.com/EntringerNumber.html
+    # E(n, n) = f(n)
+    array = [[0] * (k + 1) for k in range(n + 1)]
     array[0][0] = 1
     mod = 1020202009
     for i in range(1, n + 1):
         if i % 1000 == 0:
             print(i)
         for j in range(1, i + 1):
-            array[i][j] = ((array[i][j-1] + array[i - 1][i - j]) % mod)
-            #print(i, j, array[i][j])
+            array[i][j] = (array[i][j - 1] + array[i - 1][i - j]) % mod
+            # print(i, j, array[i][j])
     return array[-1][-1] % mod
+
 
 def f(n):
     return E(n, n)
-    
+
+
 if __name__ == "__main__":
     assert f(4) == 5
     assert f(8) == 1385

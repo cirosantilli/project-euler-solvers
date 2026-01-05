@@ -10,7 +10,7 @@ def sieve_spf(limit: int) -> array:
         spf[0] = 0
     if limit >= 1:
         spf[1] = 1
-    root = int(limit ** 0.5)
+    root = int(limit**0.5)
     for i in range(2, root + 1):
         if spf[i] == i:
             start = i * i

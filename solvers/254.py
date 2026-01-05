@@ -78,7 +78,9 @@ def precompute_low_digit_sums(limit: int) -> array:
     return ds
 
 
-def build_remainder_buckets() -> tuple[List[List[int]], List[bytearray], bytearray, array]:
+def build_remainder_buckets() -> (
+    tuple[List[List[int]], List[bytearray], bytearray, array]
+):
     """Precompute factoradic digit-counts for every remainder r in [0, 9!-1].
 
     Returns:
@@ -132,14 +134,7 @@ def build_remainder_buckets() -> tuple[List[List[int]], List[bytearray], bytearr
         ln = a1 + a2 + a3 + a4 + a5 + a6 + a7 + a8
         rem_len[r] = ln
         rem_sg[r] = (
-            1 * a1
-            + 2 * a2
-            + 3 * a3
-            + 4 * a4
-            + 5 * a5
-            + 6 * a6
-            + 7 * a7
-            + 8 * a8
+            1 * a1 + 2 * a2 + 3 * a3 + 4 * a4 + 5 * a5 + 6 * a6 + 7 * a7 + 8 * a8
         )
 
         # Sort key: length ascending, then more small digits first.

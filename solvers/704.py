@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00704%20-%20Factors%20of%20Two%20in%20Binomial%20Coefficients.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00704%20-%20Factors%20of%20Two%20in%20Binomial%20Coefficients.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Sat May  6 11:16:36 2023
 
 @author: igorvanloo
 """
-'''
+"""
 Project Euler Problem 704
 
 g(n, m) = largest power of 2 dividing nCm
@@ -49,23 +49,31 @@ In our case we have:
     sum_{n = 1}^N val(n + 1,2) = sum_{n = 1}^(N + 1) val(n,2) - val(1, 2)
                                = sum_{n = 1}^(N + 1) val(n,2)
                                = N + 1 - bit cout of N + 1
-'''
+"""
 import math
+
 
 def g(n, m):
     sm = bin(m).count("1")
-    snm = bin(n-m).count("1")
+    snm = bin(n - m).count("1")
     sn = bin(n).count("1")
     return sm + snm - sn
+
 
 def val(n):
     return int(math.log(n - (n & n - 1), 2))
 
+
 def F(n):
     return math.floor(math.log(n + 1, 2)) - val(n + 1)
 
+
 def S(N):
-    return (N + 2)*math.floor(math.log(N + 1, 2)) - 2*(pow(2, math.floor(math.log(N + 1, 2))) - 1) - (N + 1 - bin(N + 1).count("1"))
+    return (
+        (N + 2) * math.floor(math.log(N + 1, 2))
+        - 2 * (pow(2, math.floor(math.log(N + 1, 2))) - 1)
+        - (N + 1 - bin(N + 1).count("1"))
+    )
 
 
 if __name__ == "__main__":

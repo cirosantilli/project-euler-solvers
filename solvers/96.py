@@ -6,15 +6,18 @@ from pathlib import Path
 
 ALL = (1 << 9) - 1  # bits 0..8 represent digits 1..9
 
+
 def bit_to_digit(bit: int) -> int:
     # bit is power-of-two
     return (bit.bit_length() - 1) + 1
+
 
 def iter_bits(mask: int):
     while mask:
         b = mask & -mask
         yield b
         mask -= b
+
 
 def build_peers_units():
     units = []
@@ -37,10 +40,12 @@ def build_peers_units():
     for u in units:
         s = set(u)
         for i in u:
-            peers[i] |= (s - {i})
+            peers[i] |= s - {i}
     return peers, units
 
+
 PEERS, UNITS = build_peers_units()
+
 
 def reduce_cands(cands):
     """Constraint propagation: propagate singles + 'only place for digit in a unit'."""
@@ -75,6 +80,7 @@ def reduce_cands(cands):
 
     return True
 
+
 def solve_cands(cands):
     if not reduce_cands(cands):
         return None
@@ -83,7 +89,9 @@ def solve_cands(cands):
         return cands
 
     # choose cell with fewest candidates > 1
-    _, idx = min((cands[i].bit_count(), i) for i in range(81) if cands[i].bit_count() > 1)
+    _, idx = min(
+        (cands[i].bit_count(), i) for i in range(81) if cands[i].bit_count() > 1
+    )
 
     for b in iter_bits(cands[idx]):
         nxt = cands.copy()
@@ -93,16 +101,18 @@ def solve_cands(cands):
             return res
     return None
 
+
 def parse_puzzles(text: str):
     lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
     i = 0
     while i < len(lines):
         if lines[i].startswith("Grid"):
-            grid = lines[i+1:i+10]
+            grid = lines[i + 1 : i + 10]
             i += 10
             yield grid
         else:
             i += 1
+
 
 def grid_to_cands(grid_lines):
     cands = [ALL] * 81
@@ -115,11 +125,13 @@ def grid_to_cands(grid_lines):
                 cands[r * 9 + c] = 1 << (d - 1)
     return cands
 
+
 def top_left_number(solution_cands):
     a = bit_to_digit(solution_cands[0])
     b = bit_to_digit(solution_cands[1])
     c = bit_to_digit(solution_cands[2])
     return 100 * a + 10 * b + c
+
 
 def main(path="0096_sudoku.txt"):
     text = Path(path).read_text(encoding="utf-8")
@@ -132,6 +144,6 @@ def main(path="0096_sudoku.txt"):
         total += top_left_number(solved)
     print(total)
 
+
 if __name__ == "__main__":
     main()
-

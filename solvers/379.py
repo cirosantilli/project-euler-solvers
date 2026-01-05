@@ -52,7 +52,9 @@ def compute_g(n: int) -> int:
             if i * i <= limit:
                 step = i
                 start = i * i
-                sieve[start : limit + 1 : step] = b"\x00" * ((limit - start) // step + 1)
+                sieve[start : limit + 1 : step] = b"\x00" * (
+                    (limit - start) // step + 1
+                )
 
     pi_small = build_pi_table(limit, sieve)
 
@@ -82,15 +84,15 @@ def compute_g(n: int) -> int:
     def pi_lehmer(x: int) -> int:
         if x <= limit:
             return pi_small[x]
-        x14 = int(x ** 0.25)
+        x14 = int(x**0.25)
         while (x14 + 1) ** 4 <= x:
             x14 += 1
-        while x14 ** 4 > x:
+        while x14**4 > x:
             x14 -= 1
         x13 = int(round(x ** (1.0 / 3.0)))
         while (x13 + 1) ** 3 <= x:
             x13 += 1
-        while x13 ** 3 > x:
+        while x13**3 > x:
             x13 -= 1
         a = pi_lehmer(x14)
         b = pi_lehmer(int(math.isqrt(x)))

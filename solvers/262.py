@@ -28,6 +28,7 @@ B = (1400.0, 1400.0)
 
 # ---------- Terrain height and gradient (analytic) ----------
 
+
 def h_and_grad(x: float, y: float):
     """
     Returns (h(x,y), dh/dx, dh/dy).
@@ -72,6 +73,7 @@ def h_only(x: float, y: float) -> float:
 #    f_min = max_{0<=y<=1600} h(0,y)
 #
 # We compute it by coarse scan + golden-section refinement.
+
 
 def golden_section_maximize(f, a, b, iters=200, tol=1e-13):
     """Maximize unimodal f on [a,b] via golden section search."""
@@ -124,6 +126,7 @@ def compute_f_min():
 #
 # Solve by Newton in 2 variables, using finite-difference Jacobian.
 #
+
 
 def newton_tangent_point(origin, fmin, x0, y0, max_iter=120):
     ox, oy = origin
@@ -245,6 +248,7 @@ def find_accessible_tangent_points(origin, fmin, step=10):
 #
 # Use RK4 and periodically "project" back to the level set to prevent drift.
 
+
 def project_to_level(x, y, fmin):
     """Project (x,y) to the level set h(x,y)=fmin using a few Newton steps."""
     for _ in range(3):
@@ -270,6 +274,7 @@ def tangent_unit(x, y, fmin, direction):
 
 def rk4_step(x, y, fmin, ds, direction):
     """One RK4 step along the contour with step size ds (arc length)."""
+
     def f(xx, yy):
         return tangent_unit(xx, yy, fmin, direction)
 
@@ -283,7 +288,9 @@ def rk4_step(x, y, fmin, ds, direction):
     return project_to_level(xn, yn, fmin)
 
 
-def walk_to_target(start, target, fmin, direction, ds_init=0.1, max_len=20000.0, tol=1e-10):
+def walk_to_target(
+    start, target, fmin, direction, ds_init=0.1, max_len=20000.0, tol=1e-10
+):
     """
     Follow the contour from 'start' toward 'target' in the given direction.
     Uses adaptive step reduction when close to the target.
@@ -321,6 +328,7 @@ def walk_to_target(start, target, fmin, direction, ds_init=0.1, max_len=20000.0,
 
 # ---------- Solve ----------
 
+
 def solve() -> str:
     y_hi, fmin = compute_f_min()
 
@@ -347,7 +355,11 @@ def solve() -> str:
                 continue
             arc = min(arc1, arc2)
 
-            total = math.hypot(p[0] - A[0], p[1] - A[1]) + arc + math.hypot(q[0] - B[0], q[1] - B[1])
+            total = (
+                math.hypot(p[0] - A[0], p[1] - A[1])
+                + arc
+                + math.hypot(q[0] - B[0], q[1] - B[1])
+            )
             if total < best:
                 best = total
 
@@ -359,4 +371,3 @@ def solve() -> str:
 
 if __name__ == "__main__":
     print(solve())
-

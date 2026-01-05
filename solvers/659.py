@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00659%20-%20Largest%20Prime.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00659%20-%20Largest%20Prime.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Tue Jun 29 20:39:22 2021
@@ -7,7 +7,7 @@ Created on Tue Jun 29 20:39:22 2021
 @author: igorvanloo
 """
 
-'''
+"""
 Project Euler Problem 659
 
 Consider the sequence  $n^2+3$ with $n \ge 1$.
@@ -31,54 +31,55 @@ so q will be the largest prime factor of 4k^2 + 1
 
 Using Sieve like algorithm to quickly find largest prime factor of 4k^2 + 1
 
-'''
+"""
 
 
-def compute1(L): #First version got correct anwser in ~1050 seconds
-    f = [0]+[int(4*(x**2)+1) for x in range(1, L+1)]
-    maxelem = [0] + [0]*(L)
-    for x in range(1,len(f)):
-        #print("x ", str(x))
-        list_max1 = int((L-x)/f[x])
-        for k in range(0,list_max1+1):
-            #print("k ", str(k))
-            while f[x + k*f[x]] % f[x] == 0:
-                if f[x + k*f[x]] / f[x] == 1:
-                    
-                    if maxelem[x + k*f[x]] < f[x]:
-                        maxelem[x + k*f[x]] = f[x]
-                        
+def compute1(L):  # First version got correct anwser in ~1050 seconds
+    f = [0] + [int(4 * (x**2) + 1) for x in range(1, L + 1)]
+    maxelem = [0] + [0] * (L)
+    for x in range(1, len(f)):
+        # print("x ", str(x))
+        list_max1 = int((L - x) / f[x])
+        for k in range(0, list_max1 + 1):
+            # print("k ", str(k))
+            while f[x + k * f[x]] % f[x] == 0:
+                if f[x + k * f[x]] / f[x] == 1:
+
+                    if maxelem[x + k * f[x]] < f[x]:
+                        maxelem[x + k * f[x]] = f[x]
+
                     break
-                f[x + k*f[x]] /= f[x]
-                
-                if maxelem[x + k*f[x]] < f[x]:
-                    maxelem[x + k*f[x]] = f[x]
-                    
-                f[x + k*f[x]] = int(f[x + k*f[x]])
-       
-        list_max2 = int((L+x)/f[x])
-        for k in range(0,list_max2+1):
-            while f[-x + k*f[x]] % f[x] == 0:
-                if f[-x + k*f[x]] / f[x] == 1:
-                    
-                    if maxelem[-x + k*f[x]] < f[x]:
-                        maxelem[-x + k*f[x]] = f[x]
-                        
+                f[x + k * f[x]] /= f[x]
+
+                if maxelem[x + k * f[x]] < f[x]:
+                    maxelem[x + k * f[x]] = f[x]
+
+                f[x + k * f[x]] = int(f[x + k * f[x]])
+
+        list_max2 = int((L + x) / f[x])
+        for k in range(0, list_max2 + 1):
+            while f[-x + k * f[x]] % f[x] == 0:
+                if f[-x + k * f[x]] / f[x] == 1:
+
+                    if maxelem[-x + k * f[x]] < f[x]:
+                        maxelem[-x + k * f[x]] = f[x]
+
                     break
-                
-                f[-x + k*f[x]] /= f[x]
-                
-                if maxelem[-x + k*f[x]] < f[x]:
-                    maxelem[-x + k*f[x]] = f[x]
-                    
-                f[-x + k*f[x]] = int(f[-x + k*f[x]])
-                
+
+                f[-x + k * f[x]] /= f[x]
+
+                if maxelem[-x + k * f[x]] < f[x]:
+                    maxelem[-x + k * f[x]] = f[x]
+
+                f[-x + k * f[x]] = int(f[-x + k * f[x]])
+
     return sum(maxelem) % 10**18
 
-def compute(limit): #Final version, gets anwser in ~ 40 seconds
-    f = [int(4*(x**2)+1) for x in range(limit+1)]
-    maxelem = [0]*(limit+1)
-    for x in range(1,len(f)):
+
+def compute(limit):  # Final version, gets anwser in ~ 40 seconds
+    f = [int(4 * (x**2) + 1) for x in range(limit + 1)]
+    maxelem = [0] * (limit + 1)
+    for x in range(1, len(f)):
         div = f[x]
         if div > 1:
             curr1 = x % div
@@ -88,7 +89,7 @@ def compute(limit): #Final version, gets anwser in ~ 40 seconds
                     while f[curr1] % div == 0:
                         f[curr1] //= div
                 curr1 += div
-            
+
             curr2 = -x % div
             while curr2 <= limit:
                 if f[curr2] % div == 0:
@@ -97,6 +98,7 @@ def compute(limit): #Final version, gets anwser in ~ 40 seconds
                         f[curr2] //= div
                 curr2 += div
     return sum(maxelem) % 10**18
+
 
 if __name__ == "__main__":
     print(compute(10**7))

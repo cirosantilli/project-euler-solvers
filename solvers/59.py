@@ -39,9 +39,32 @@ def build_scoring_tables() -> Tuple[List[bool], List[int]]:
 
     # Letter frequency inspired weights (rough heuristic)
     freq = {
-        "e": 6, "t": 5, "a": 5, "o": 5, "i": 4, "n": 4, "s": 4, "h": 4, "r": 4,
-        "d": 3, "l": 3, "u": 2, "c": 2, "m": 2, "w": 2, "f": 2, "g": 2,
-        "y": 2, "p": 2, "b": 1, "v": 1, "k": 1, "j": 0, "x": 0, "q": 0, "z": 0,
+        "e": 6,
+        "t": 5,
+        "a": 5,
+        "o": 5,
+        "i": 4,
+        "n": 4,
+        "s": 4,
+        "h": 4,
+        "r": 4,
+        "d": 3,
+        "l": 3,
+        "u": 2,
+        "c": 2,
+        "m": 2,
+        "w": 2,
+        "f": 2,
+        "g": 2,
+        "y": 2,
+        "p": 2,
+        "b": 1,
+        "v": 1,
+        "k": 1,
+        "j": 0,
+        "x": 0,
+        "q": 0,
+        "z": 0,
     }
     for ch, val in freq.items():
         w[ord(ch)] = val
@@ -85,7 +108,7 @@ def best_key_and_sum(cipher: bytes) -> Tuple[bytes, int]:
                         p = c ^ key2
 
                     if not printable[p]:
-                        score = -10**18
+                        score = -(10**18)
                         break
                     s += p
                     score += weights[p]

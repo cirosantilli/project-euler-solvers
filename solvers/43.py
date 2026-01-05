@@ -71,7 +71,7 @@ def solve() -> int:
         # exactly one digit remains
         if remaining_mask == 0 or (remaining_mask & (remaining_mask - 1)) != 0:
             continue
-        d1 = (remaining_mask.bit_length() - 1)
+        d1 = remaining_mask.bit_length() - 1
         if d1 == 0:
             continue  # leading digit cannot be 0
         num = d1
@@ -81,7 +81,6 @@ def solve() -> int:
 
     # Problem statement example check
     assert is_pandigital_substring_property(1406357289)
-
 
     return total
 

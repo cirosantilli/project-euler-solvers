@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00779%20-%20Prime%20Factor%20and%20Exponent.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00779%20-%20Prime%20Factor%20and%20Exponent.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Mon Mar  7 10:43:32 2022
@@ -7,7 +7,7 @@ Created on Mon Mar  7 10:43:32 2022
 @author: igorvanloo
 """
 
-'''
+"""
 Project Euler Problem 779
 
 In a range of n numbers
@@ -56,65 +56,72 @@ and sum_{K = 1 -> inf} (1/(p_i^(K+1)) = 1/(p_i(p_i - 1)), therefore
 sum_{K = 1 -> inf} bar(f_K) = sum_{p_i in primes} (1 - 1/2)(1 - 1/3)(1 - 1/5)...(1 - 1/(p_i - 1)) * (1/(p_i(p_i - 1)^2))
 
 
-'''
+"""
 
 import math
 
+
 def min_prime_factor(n):
-    result = [0]*(n+1)
-    result[0] = [0,0]
-    result[1] = [0,0]
+    result = [0] * (n + 1)
+    result[0] = [0, 0]
+    result[1] = [0, 0]
     for x in range(2, n + 1):
         if result[x] == 0:
             for y in range(x, n + 1, x):
                 if result[y] == 0:
-                    
+
                     power = 1
-                    while y % x**(power +1) == 0:
+                    while y % x ** (power + 1) == 0:
                         power += 1
-                    
+
                     result[y] = [x, power]
     return result
+
 
 def estimate(K, number):
     values = min_prime_factor(number)
     total = 0
-    
+
     for x in range(2, number):
         smallest_prime, p_adic_order = values[x]
-        total += (p_adic_order - 1)/(smallest_prime**K)
-    
-    return total/number
+        total += (p_adic_order - 1) / (smallest_prime**K)
+
+    return total / number
+
 
 def list_primality(n):
-	result = [True] * (n + 1)
-	result[0] = result[1] = False
-	for i in range(int(math.sqrt(n)) + 1):
-		if result[i]:
-			for j in range(2 * i, len(result), i):
-				result[j] = False
-	return result
+    result = [True] * (n + 1)
+    result[0] = result[1] = False
+    for i in range(int(math.sqrt(n)) + 1):
+        if result[i]:
+            for j in range(2 * i, len(result), i):
+                result[j] = False
+    return result
+
 
 def list_primes(n):
-	return [i for (i, isprime) in enumerate(list_primality(n)) if isprime]
+    return [i for (i, isprime) in enumerate(list_primality(n)) if isprime]
+
 
 def f(K):
     primes = list_primes(10**6)
     total = 0
     curr = 1
     for p in primes:
-        total += curr*(1/((p**(K+1))*(p-1)))
-        curr *= (p - 1)/p
-    return round(total, 12)    
+        total += curr * (1 / ((p ** (K + 1)) * (p - 1)))
+        curr *= (p - 1) / p
+    return round(total, 12)
+
 
 def sum_f():
     primes = list_primes(10**6)
     total = 0
     curr = 1
     for p in primes:
-        total += curr*(1/((p*(p-1)**2)))
-        curr *= (p - 1)/p
-    return round(total, 12) 
+        total += curr * (1 / ((p * (p - 1) ** 2)))
+        curr *= (p - 1) / p
+    return round(total, 12)
+
 
 if __name__ == "__main__":
     assert f(1) == 0.282419756159

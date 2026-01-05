@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00479%20-%20Roots%20on%20the%20Rise.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00479%20-%20Roots%20on%20the%20Rise.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Mon Dec 20 00:14:34 2021
@@ -7,7 +7,7 @@ Created on Mon Dec 20 00:14:34 2021
 @author: igorvanloo
 """
 
-'''
+"""
 Project Euler Problem 479
 
 1/x = (k/x)^2*(k+x^2 - kx) => kx^3 - k^2x^2 + x - k^3 = 0 => x^3 - kx^2 + x/k - k^2 = 0
@@ -34,25 +34,27 @@ S - (1-k^2)S = (1- k^2) - (1-k^2)^(n+1)
 
 Now this is simple to solve using modular division
 
-'''
+"""
 import math
 
-def ModDivision(a,b,m):
+
+def ModDivision(a, b, m):
     a = a % m
-    inv = pow(b,-1,m)
-    if(inv == -1):
+    inv = pow(b, -1, m)
+    if inv == -1:
         return "Division not defined"
     else:
-        return (inv*a) % m
-        
+        return (inv * a) % m
+
+
 def compute(n):
     total = 0
     mod = 1000000007
     for k in range(2, n + 1):
-        t = 1 - k*k
-        total += (1 - pow(t, n, mod)) * ModDivision(t, 1 - t, mod)        
+        t = 1 - k * k
+        total += (1 - pow(t, n, mod)) * ModDivision(t, 1 - t, mod)
     return total % mod
-            
+
 
 if __name__ == "__main__":
     assert compute(4) == 51160

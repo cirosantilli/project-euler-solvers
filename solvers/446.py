@@ -47,9 +47,36 @@ def primes_upto(limit: int) -> list[int]:
 # For primes p ≡ 1 (mod 4), sqrt(-1) exists mod p.
 # If g is a quadratic non-residue mod p, then g^((p-1)/4)^2 = g^((p-1)/2) ≡ -1 (mod p).
 _NONRES_CANDIDATES = (
-    2, 3, 5, 7, 11, 13, 17, 19, 23, 29,
-    31, 37, 41, 43, 47, 53, 59, 61, 67, 71,
-    73, 79, 83, 89, 97, 101, 103, 107, 109, 113,
+    2,
+    3,
+    5,
+    7,
+    11,
+    13,
+    17,
+    19,
+    23,
+    29,
+    31,
+    37,
+    41,
+    43,
+    47,
+    53,
+    59,
+    61,
+    67,
+    71,
+    73,
+    79,
+    83,
+    89,
+    97,
+    101,
+    103,
+    107,
+    109,
+    113,
 )
 
 
@@ -107,7 +134,7 @@ def F_exact_small(N: int) -> int:
     for k in range(K + 1):
         prod = 1
         for pe in _prime_powers_small(C[k]):
-            prod *= (1 + pe)
+            prod *= 1 + pe
         P[k] = prod
 
     total = 0
@@ -121,7 +148,7 @@ def F_exact_small(N: int) -> int:
             pm = (P[left_k] // 3) * (P[right_k] // 3) * (1 + 4)
         else:
             pm = P[left_k] * P[right_k]
-        total += (pm - m)
+        total += pm - m
     return total
 
 
@@ -175,9 +202,9 @@ def solve(N: int = 10_000_000) -> int:
         R = min(k_max + 1, L + block_size)
         size = R - L
 
-        rem = array("Q", [0]) * size         # remaining unfactored part of C_k
-        prod = array("I", [1]) * size        # P_k mod MOD
-        cmod = array("I", [0]) * size        # C_k mod MOD
+        rem = array("Q", [0]) * size  # remaining unfactored part of C_k
+        prod = array("I", [1]) * size  # P_k mod MOD
+        cmod = array("I", [0]) * size  # C_k mod MOD
 
         # Fill rem and cmod for k in [L, R)
         k = L

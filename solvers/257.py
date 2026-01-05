@@ -66,7 +66,16 @@ def solve(limit: int = 100_000_000) -> int:
     # Coprime (x,y) with x < y <= floor(sqrt(3)*x).
     # Minimal scaling factor g0 can be computed from parity and divisibility by 3,
     # avoiding extra gcds.
-    x_max = int(math.sqrt(N * 3 / (1 + (1 + math.sqrt(3)) / 2 + (3 + math.sqrt(3)) / (2 * math.sqrt(3))))) + 10
+    x_max = (
+        int(
+            math.sqrt(
+                N
+                * 3
+                / (1 + (1 + math.sqrt(3)) / 2 + (3 + math.sqrt(3)) / (2 * math.sqrt(3)))
+            )
+        )
+        + 10
+    )
     for x in range(2, x_max + 1):
         y_max = isqrt(3 * x * x)
         x_odd = x & 1

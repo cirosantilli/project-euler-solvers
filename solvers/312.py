@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00312%20-%20Cyclic%20paths%20on%20Sierpinski%20graphs.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00312%20-%20Cyclic%20paths%20on%20Sierpinski%20graphs.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Wed Jun  8 11:58:20 2022
 
 @author: igorvanloo
 """
-'''
+"""
 Project Euler Problem 312
 
 https://oeis.org/A246959
@@ -36,9 +36,10 @@ C(10 000) % 6*13**4 = C(10 000 % 6*13**2) % 6*13**4
 
 10 000 % 6*13**2 = 874
 
-'''
+"""
 
-def C(n, mod=None): #Explicit formula
+
+def C(n, mod=None):  # Explicit formula
     if n == 1 or n == 2:
         return 1
     if n == 3:
@@ -47,9 +48,10 @@ def C(n, mod=None): #Explicit formula
     if mod is None:
         return 8 * pow(12, exponent)
     return 8 * pow(12, exponent, mod) % mod
-    
-def C1(n, mod = None): #Recursive defintion
-    #Used this function to finds periods
+
+
+def C1(n, mod=None):  # Recursive defintion
+    # Used this function to finds periods
     if n == 1 or n == 2:
         return 1
     if n == 3:
@@ -58,23 +60,25 @@ def C1(n, mod = None): #Recursive defintion
         return 13824
     c1 = 13824
     c = [1, 1, 8, 13824 % mod]
-    
+
     for _ in range(n - 4):
-        cn = pow(3*c1, 3, mod)
+        cn = pow(3 * c1, 3, mod)
         c1 = cn
         if c1 in c:
-            return (len(c) - c.index(c1))
+            return len(c) - c.index(c1)
         c.append(c1)
 
+
 def compute():
-    x1 = 10000 % (6*13**2)
+    x1 = 10000 % (6 * 13**2)
     print(x1)
-    x2 = C(x1, (6*13**4))
+    x2 = C(x1, (6 * 13**4))
     print(x2)
-    x3 = C(x2, (6*13**6))
+    x3 = C(x2, (6 * 13**6))
     print(x3)
     x4 = C(x3, (13**8))
     return x4
+
 
 if __name__ == "__main__":
     assert C(1) == 1
@@ -83,4 +87,4 @@ if __name__ == "__main__":
     assert C(5) == 71328803586048
     assert C(10000, 10**8) == 37652224
     assert C(10000, 13**8) == 617720485
-    print(C(C(C(10000 % (6*13**2), (6*13**4)), (6*13**6)), (13**8)))
+    print(C(C(C(10000 % (6 * 13**2), (6 * 13**4)), (6 * 13**6)), (13**8)))

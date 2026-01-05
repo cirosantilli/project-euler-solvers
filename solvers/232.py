@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0232.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0232.cpp"""
 WIN1 = 0.5
 LOSE1 = 0.5
 
@@ -44,9 +44,9 @@ def two_wins(need_one: int, need_two: int, max_score: int, cache: list) -> float
 def solve(max_score: int) -> float:
     cache = [-1.0] * (max_score * max_score)
 
-    result = WIN1 * two_wins(max_score - 1, max_score, max_score, cache) + LOSE1 * two_wins(
-        max_score, max_score, max_score, cache
-    )
+    result = WIN1 * two_wins(
+        max_score - 1, max_score, max_score, cache
+    ) + LOSE1 * two_wins(max_score, max_score, max_score, cache)
 
     return result
 

@@ -34,6 +34,7 @@ from typing import Dict, List, Tuple
 
 # ---------- small helpers (tests) ----------
 
+
 def _trial_factorize(n: int) -> Dict[int, int]:
     """Trial division factorization. Fast enough for the problem statement asserts."""
     factors: Dict[int, int] = {}
@@ -67,7 +68,7 @@ def _R_from_factors(factors: Dict[int, int]) -> int:
         if p == 3:
             continue
         if p % 3 == 1:
-            r *= (e + 1)
+            r *= e + 1
         else:
             # p % 3 == 2
             if e & 1:
@@ -111,6 +112,7 @@ def _self_test() -> None:
 
 # ---------- core solution ----------
 
+
 def _int_nth_root(n: int, k: int) -> int:
     """Return floor(n^(1/k)) for integers n>=0, k>=1 (binary search, exact)."""
     if n < 2:
@@ -122,7 +124,7 @@ def _int_nth_root(n: int, k: int) -> int:
     lo = 1
     while lo + 1 < hi:
         mid = (lo + hi) // 2
-        if mid ** k <= n:
+        if mid**k <= n:
             lo = mid
         else:
             hi = mid

@@ -57,7 +57,6 @@ def _tests() -> None:
     assert minimal_pell_x(13) == 649
 
 
-
 def main() -> None:
     _tests()
     print(solve(1000))

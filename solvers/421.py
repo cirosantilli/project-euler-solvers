@@ -19,6 +19,7 @@ from math import isqrt
 # Small helpers for asserts
 # ---------------------------
 
+
 def _primes_upto_small(limit: int) -> list[int]:
     """Simple sieve for small limits (used only for problem-statement asserts)."""
     if limit < 2:
@@ -54,6 +55,7 @@ assert _s_statement(10, 1000) == 483
 # Prime generation up to 1e8
 # ---------------------------
 
+
 def iter_odd_primes_upto(limit: int):
     """
     Yield all odd primes <= limit using an odd-only sieve.
@@ -84,7 +86,33 @@ def iter_odd_primes_upto(limit: int):
 # Generator finding for d in {3,5,15}
 # ---------------------------
 
-_SMALL_BASES = (2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97)
+_SMALL_BASES = (
+    2,
+    3,
+    5,
+    7,
+    11,
+    13,
+    17,
+    19,
+    23,
+    29,
+    31,
+    37,
+    41,
+    43,
+    47,
+    53,
+    59,
+    61,
+    67,
+    71,
+    73,
+    79,
+    83,
+    89,
+    97,
+)
 
 
 def _is_order_15(g: int, p: int) -> bool:
@@ -147,6 +175,7 @@ def find_generator_of_subgroup(p: int, d: int) -> int:
 # ---------------------------
 # Main solver
 # ---------------------------
+
 
 def solve(L: int = 10**11, M: int = 10**8) -> int:
     """

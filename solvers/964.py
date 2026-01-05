@@ -9,14 +9,16 @@ from decimal import Decimal, getcontext
 
 # --- Partition utilities -----------------------------------------------------
 
+
 def hook_partition(n, m):
     """Return the hook partition (n-m, 1^m)."""
     return (n - m,) + (1,) * m if m > 0 else (n,)
 
+
 @lru_cache(None)
 def count_removal_paths(start, target):
     """Count number of ways to remove boxes from partition 'start'
-       to reach 'target' by successively removing corner boxes."""
+    to reach 'target' by successively removing corner boxes."""
     if start == target:
         return 1
     if sum(start) < sum(target):
@@ -47,16 +49,21 @@ def count_removal_paths(start, target):
             total += count_removal_paths(new, target)
     return total
 
+
 def multiplicity(lambda_part, i):
     """Multiplicity m_{λ,i}: number of ways to reduce λ to (i)."""
     return count_removal_paths(lambda_part, (i,))
 
+
 def dim_hook(n, m):
     """Dimension of hook partition (n-m, 1^m) = C(n-1, m)."""
     from math import comb
+
     return comb(n - 1, m)
 
+
 # --- Probability computation -------------------------------------------------
+
 
 def compute_P(k):
     """Compute P(k) as described in Project Euler 964."""
@@ -80,6 +87,7 @@ def compute_P(k):
     P = total / nfact
     return P
 
+
 # --- Main --------------------------------------------------------------------
 
 P_frac = compute_P(7)
@@ -89,6 +97,6 @@ getcontext().prec = 60
 dec = Decimal(P_frac.numerator) / Decimal(P_frac.denominator)
 exp = dec.adjusted()
 mant = dec.scaleb(-exp)
-mant_rounded = +mant.quantize(Decimal('1.' + '0' * 10))
+mant_rounded = +mant.quantize(Decimal("1." + "0" * 10))
 sci = f"{mant_rounded}e{exp}"
 print(sci)

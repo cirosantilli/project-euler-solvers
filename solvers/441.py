@@ -31,7 +31,7 @@ def brute_S(n: int) -> float:
 
 def mobius_sieve(limit: int) -> array:
     """Return Möbius mu[0..limit] as array('b') using a linear sieve."""
-    mu = array('b', [0]) * (limit + 1)
+    mu = array("b", [0]) * (limit + 1)
     mu[1] = 1
 
     is_comp = bytearray(limit + 1)
@@ -67,11 +67,11 @@ def harmonic_arrays(n: int) -> tuple[array, array]:
     naive summation accumulates enough rounding error to shift the final answer in
     the 4th decimal place, while compensation keeps the result stable.
     """
-    H = array('d', [0.0]) * (n + 1)
-    H2 = array('d', [0.0]) * (n + 1)
+    H = array("d", [0.0]) * (n + 1)
+    H2 = array("d", [0.0]) * (n + 1)
 
     h = 0.0
-    c = 0.0   # compensation for H
+    c = 0.0  # compensation for H
     h2 = 0.0
     c2 = 0.0  # compensation for H2
 

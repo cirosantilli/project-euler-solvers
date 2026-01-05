@@ -7,25 +7,29 @@
 # It is written to be reasonably efficient in CPython.
 
 import bisect, sys
+
 sys.setrecursionlimit(10000)
 
+
 def primes_upto(B):
-    sieve = bytearray(b'\x01')*(B+1)
-    sieve[0:2] = b'\x00\x00'
-    for i in range(2, int(B**0.5)+1):
+    sieve = bytearray(b"\x01") * (B + 1)
+    sieve[0:2] = b"\x00\x00"
+    for i in range(2, int(B**0.5) + 1):
         if sieve[i]:
             step = i
-            start = i*i
-            sieve[start:B+1:step] = b'\x00'*(((B - start)//step) + 1)
-    return [p for p in range(2, B+1) if sieve[p]]
+            start = i * i
+            sieve[start : B + 1 : step] = b"\x00" * (((B - start) // step) + 1)
+    return [p for p in range(2, B + 1) if sieve[p]]
+
 
 def extend_vec_mod3(cls, s0, s1, s2):
     # cls is prime % 3: 1 or 2
-    a,b,c = s0, s1, s2
+    a, b, c = s0, s1, s2
     if cls == 1:
         return a - c, b - a, c - b
     else:
         return a - b, b - c, c - a
+
 
 def gen_half(primes, N):
     # Enumerate squarefree products <= N from this list of primes.
@@ -43,8 +47,9 @@ def gen_half(primes, N):
                 # since primes is ascending, further j will only be larger
                 break
             ns0, ns1, ns2 = extend_vec_mod3(p % 3, s0, s1, s2)
-            stack.append((j+1, np, -t, ns0, ns1, ns2))
+            stack.append((j + 1, np, -t, ns0, ns1, ns2))
     return out
+
 
 def solve(N, B):
     allp = primes_upto(B)
@@ -59,20 +64,20 @@ def solve(N, B):
     Bv.sort(key=lambda x: x[0])
     bp = [x[0] for x in Bv]
     m = len(Bv)
-    pref0 = [0] * (m+1)
-    pref1 = [0] * (m+1)
-    pref2 = [0] * (m+1)
-    for i,(prod,t,s0,s1,s2) in enumerate(Bv, start=1):
-        pref0[i] = pref0[i-1] + t * s0
-        pref1[i] = pref1[i-1] + t * s1
-        pref2[i] = pref2[i-1] + t * s2
+    pref0 = [0] * (m + 1)
+    pref1 = [0] * (m + 1)
+    pref2 = [0] * (m + 1)
+    for i, (prod, t, s0, s1, s2) in enumerate(Bv, start=1):
+        pref0[i] = pref0[i - 1] + t * s0
+        pref1[i] = pref1[i - 1] + t * s1
+        pref2[i] = pref2[i - 1] + t * s2
 
     def sum_range(l, r):
         return (pref0[r] - pref0[l], pref1[r] - pref1[l], pref2[r] - pref2[l])
 
     ans = 0
     for a_prod, a_t, a_s0, a_s1, a_s2 in A:
-        if a_prod > N: 
+        if a_prod > N:
             continue
         limit = N // a_prod
         # find number of right items with b <= limit
@@ -90,6 +95,7 @@ def solve(N, B):
             ans += a_t * v * comb
             i = j
     return ans
+
 
 if __name__ == "__main__":
     assert solve(10, 4) == 5

@@ -65,7 +65,7 @@ def compute_C(n: int) -> int:
 
     U = array("I", [BIAS])  # u_0/2
     V = array("I", [BIAS])  # v_0/2
-    start_w = array("I")     # start weights per prefix
+    start_w = array("I")  # start weights per prefix
     end_w = array("I", [0])  # end weights per squarefree index (0 unused)
 
     min_vk = BIAS

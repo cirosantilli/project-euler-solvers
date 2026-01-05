@@ -6,7 +6,9 @@ from typing import List, Tuple
 MOD = 10**9
 
 
-def build_transitions(k: int, mod: int) -> Tuple[List[List[Tuple[int, int, bool]]], int]:
+def build_transitions(
+    k: int, mod: int
+) -> Tuple[List[List[Tuple[int, int, bool]]], int]:
     # States are (a, c) where a is count of paths with offset 0, c with offset 2.
     # b is implied by k - a - c.
     idx = {}

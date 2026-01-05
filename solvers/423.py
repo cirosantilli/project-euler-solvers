@@ -50,7 +50,7 @@ def pi_small(n: int) -> int:
         if sieve[p]:
             step = p
             start = p * p
-            sieve[start:n + 1:step] = [False] * (((n - start) // step) + 1)
+            sieve[start : n + 1 : step] = [False] * (((n - start) // step) + 1)
     return sum(1 for i in range(2, n + 1) if sieve[i])
 
 
@@ -103,10 +103,10 @@ def solve(L: int = 50_000_000) -> int:
     inv5 = pow(5, mod - 2, mod)
 
     # State at n=1
-    C = 6          # C(1)
-    b = 6          # sequences with exactly pi(1)=0 matches
-    k = 0          # pi(1)
-    d = 1          # d = n - k
+    C = 6  # C(1)
+    b = 6  # sequences with exactly pi(1)=0 matches
+    k = 0  # pi(1)
+    d = 1  # d = n - k
     S = C % mod
 
     if L == 1:
@@ -114,10 +114,10 @@ def solve(L: int = 50_000_000) -> int:
 
     # Step to n=2 (prime)
     # extra term A_1(1) is 0 because n-1-k = 0
-    C = 36         # all sequences allowed
-    b = 6          # exactly 1 match at n=2: both throws equal
-    k = 1          # pi(2)
-    d = 1          # 2 - 1
+    C = 36  # all sequences allowed
+    b = 6  # exactly 1 match at n=2: both throws equal
+    k = 1  # pi(2)
+    d = 1  # 2 - 1
     S = (S + C) % mod
 
     if L == 2:

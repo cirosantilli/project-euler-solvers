@@ -14,12 +14,15 @@ import heapq
 from typing import List, Tuple
 
 Vec = Tuple[float, float]
-Node = Tuple[Vec, Vec, Vec, float]  # (origin p, base vector u, outward vector v, side length s)
+Node = Tuple[
+    Vec, Vec, Vec, float
+]  # (origin p, base vector u, outward vector v, side length s)
 
 
 # ----------------------------
 # Basic 2D vector operations
 # ----------------------------
+
 
 def add(a: Vec, b: Vec) -> Vec:
     return (a[0] + b[0], a[1] + b[1])
@@ -103,7 +106,7 @@ def children(node: Node) -> Tuple[Node, Node]:
     p, u, v, _s = node
 
     # Top edge endpoints
-    A = add(p, v)          # top-left
+    A = add(p, v)  # top-left
     B = add(add(p, u), v)  # top-right
 
     # Right-angle vertex C of the 3-4-5 triangle
@@ -188,10 +191,10 @@ def compute_bounding_box(eps: float = 1e-12) -> Tuple[float, float, float, float
 
         # If this subtree can't improve any bound, skip it.
         if (
-            cx + rad <= xmax + eps and
-            cx - rad >= xmin - eps and
-            cy + rad <= ymax + eps and
-            cy - rad >= ymin - eps
+            cx + rad <= xmax + eps
+            and cx - rad >= xmin - eps
+            and cy + rad <= ymax + eps
+            and cy - rad >= ymin - eps
         ):
             continue
 

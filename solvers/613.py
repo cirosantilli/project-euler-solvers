@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0613.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0613.cpp"""
 import math
 
 A = 3.0
@@ -22,7 +22,9 @@ def get_probability(x, y):
 
 
 def solve():
-    result = 0.5 + math.log((pow(2, 16) * pow(3, 4) * math.sqrt(3.0 / 5)) / pow(5, 12)) / (12 * PI)
+    result = 0.5 + math.log(
+        (pow(2, 16) * pow(3, 4) * math.sqrt(3.0 / 5)) / pow(5, 12)
+    ) / (12 * PI)
     return result
 
 

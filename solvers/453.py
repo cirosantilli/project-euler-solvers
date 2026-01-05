@@ -87,7 +87,9 @@ def Q(m: int, n: int) -> int:
             y = v // (u // k)
 
             if x == y:
-                res -= G(k, x, a, b) * (_sum_pows(u // k, a + b) - _sum_pows(u // (k + 1), a + b))
+                res -= G(k, x, a, b) * (
+                    _sum_pows(u // k, a + b) - _sum_pows(u // (k + 1), a + b)
+                )
             else:
                 lo = max(u // (k + 1), v // (x + 1))
                 hi = min(u // k, v // x)
@@ -98,7 +100,9 @@ def Q(m: int, n: int) -> int:
                     lo2 = max(u // (k + 1), v // (y + 1))
                     hi2 = min(u // k, v // y)
                     if hi2 > lo2:
-                        res -= G(k, y, a, b) * (_sum_pows(hi2, a + b) - _sum_pows(lo2, a + b))
+                        res -= G(k, y, a, b) * (
+                            _sum_pows(hi2, a + b) - _sum_pows(lo2, a + b)
+                        )
 
         return res
 
@@ -121,18 +125,24 @@ def Q(m: int, n: int) -> int:
             y = n // (m // k)
 
             if x == y:
-                res += G(k, x, a, b) * (_sum_pows(m // k, a + b + c) - _sum_pows(m // (k + 1), a + b + c))
+                res += G(k, x, a, b) * (
+                    _sum_pows(m // k, a + b + c) - _sum_pows(m // (k + 1), a + b + c)
+                )
             else:
                 lo = max(m // (k + 1), n // (x + 1))
                 hi = min(m // k, n // x)
                 if hi > lo:
-                    res += G(k, x, a, b) * (_sum_pows(hi, a + b + c) - _sum_pows(lo, a + b + c))
+                    res += G(k, x, a, b) * (
+                        _sum_pows(hi, a + b + c) - _sum_pows(lo, a + b + c)
+                    )
 
                 if y:
                     lo2 = max(m // (k + 1), n // (y + 1))
                     hi2 = min(m // k, n // y)
                     if hi2 > lo2:
-                        res += G(k, y, a, b) * (_sum_pows(hi2, a + b + c) - _sum_pows(lo2, a + b + c))
+                        res += G(k, y, a, b) * (
+                            _sum_pows(hi2, a + b + c) - _sum_pows(lo2, a + b + c)
+                        )
 
         return res
 
@@ -157,12 +167,30 @@ def Q(m: int, n: int) -> int:
 
     # Precompute the specific moments needed by the closed-form combination.
     need = [
-        (0, 0, 1), (0, 1, 1), (1, 0, 1), (1, 1, 1),
-        (0, 0, 2), (0, 1, 2), (1, 0, 2), (1, 1, 2),
-        (0, 0, 0), (0, 1, 0), (1, 0, 0), (1, 1, 0),
-        (3, 3, 0), (3, 2, 0), (2, 3, 0), (2, 2, 0),
-        (3, 1, 0), (2, 1, 0), (3, 0, 0), (2, 0, 0),
-        (1, 3, 0), (1, 2, 0), (0, 3, 0), (0, 2, 0),
+        (0, 0, 1),
+        (0, 1, 1),
+        (1, 0, 1),
+        (1, 1, 1),
+        (0, 0, 2),
+        (0, 1, 2),
+        (1, 0, 2),
+        (1, 1, 2),
+        (0, 0, 0),
+        (0, 1, 0),
+        (1, 0, 0),
+        (1, 1, 0),
+        (3, 3, 0),
+        (3, 2, 0),
+        (2, 3, 0),
+        (2, 2, 0),
+        (3, 1, 0),
+        (2, 1, 0),
+        (3, 0, 0),
+        (2, 0, 0),
+        (1, 3, 0),
+        (1, 2, 0),
+        (0, 3, 0),
+        (0, 2, 0),
     ]
     vals = {t: f(*t) for t in need}
 
@@ -203,14 +231,19 @@ def Q(m: int, n: int) -> int:
 
     # c3 corresponds to L3 in the referenced derivation.
     c3 = (
-        2 * (
+        2
+        * (
             (s010 - s011) * (m + 1)
             + (s100 - s101) * (n + 1)
             - (s000 - s001) * (m + 1) * (n + 1)
             - (s110 - s111)
         )
-        + s020 - (n + 2) * s010 + (n + 1) * s000
-        + s200 - (m + 2) * s100 + (m + 1) * s000
+        + s020
+        - (n + 2) * s010
+        + (n + 1) * s000
+        + s200
+        - (m + 2) * s100
+        + (m + 1) * s000
     )
 
     # c4 is 2*L4 in the referenced derivation (hence later //2).
@@ -219,18 +252,18 @@ def Q(m: int, n: int) -> int:
         + (s110 * 4 - s111 * 6 + s112 * 2)
         - (s100 * 4 - s101 * 6 + s102 * 2) * (n + 1)
         - (s010 * 4 - s011 * 6 + s012 * 2) * (m + 1)
-        + s030 - (n + 4) * s020 + (3 * n + 5) * s010 - 2 * (n + 1) * s000
-        + s300 - (m + 4) * s200 + (3 * m + 5) * s100 - 2 * (m + 1) * s000
+        + s030
+        - (n + 4) * s020
+        + (3 * n + 5) * s010
+        - 2 * (n + 1) * s000
+        + s300
+        - (m + 4) * s200
+        + (3 * m + 5) * s100
+        - 2 * (m + 1) * s000
     )
 
     # Final closed form.
-    return (
-        math.comb(P, 4)
-        - math.comb(P, 3)
-        + s // 3
-        + (7 - 2 * P) * c3
-        + 7 * (c4 // 2)
-    )
+    return math.comb(P, 4) - math.comb(P, 3) + s // 3 + (7 - 2 * P) * c3 + 7 * (c4 // 2)
 
 
 def euler453() -> int:

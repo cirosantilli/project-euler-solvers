@@ -156,4 +156,3 @@ def _run_tests():
 if __name__ == "__main__":
     _run_tests()
     print(solve(10**11, MOD))
-

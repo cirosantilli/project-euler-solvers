@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00862%20-%20Larger%20Digit%20Permutation.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00862%20-%20Larger%20Digit%20Permutation.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Sat Dec 21 21:28:11 2024
 
 @author: Igor Van Loo
 """
-'''
+"""
 Project Euler Problem 862
 
 Copying from problem 885
@@ -38,20 +38,23 @@ that is n - 1 C d_0
 total is (d_1 + ... d _9)!/ prod d_i! * n - 1 C d_0 = (n - d_0)! * (n - 1)! / (n - 1 - d_0)! / prod d_i!
 
     6111397420909321590
-'''
+"""
 
 import math, itertools
+
 
 def T(n):
     l = sorted([int("".join(y)) for y in set(itertools.permutations(str(n)))])
     v = len(l) - l.index(n) - 1
     return v
-    
+
+
 def brute_S(n):
     total = 0
-    for x in range(10**(n - 1), 10**n):
+    for x in range(10 ** (n - 1), 10**n):
         total += T(x)
     return total
+
 
 def S(n):
     total = 0
@@ -60,10 +63,11 @@ def S(n):
         t = math.factorial(n - 1)
         for v in range(10):
             t //= math.factorial(d[v])
-        t *= (n - d[0])
-        total += t*(t - 1)//2
+        t *= n - d[0]
+        total += t * (t - 1) // 2
     return total
-        
+
+
 if __name__ == "__main__":
     assert T(2302) == 4
     assert S(3) == 1701

@@ -43,9 +43,9 @@ def _precompute_counts_by_distinct_values(max_k: int = 18) -> list[int]:
     """
     # Wins are integers in [0..36], but we only care whether > 18.
     # Cap at 19 (meaning ">= 19") to shrink state space.
-    W = 20          # 0..19
+    W = 20  # 0..19
     WSIZE = W * W * W  # 8000
-    ABC = 7 * 7 * 7     # (a_used,b_used,c_used), each in 0..6
+    ABC = 7 * 7 * 7  # (a_used,b_used,c_used), each in 0..6
     TOTAL = ABC * WSIZE
 
     # Decode win-index (0..7999) to (wBA,wCB,wAC)
@@ -87,7 +87,9 @@ def _precompute_counts_by_distinct_values(max_k: int = 18) -> list[int]:
     #   wins(B>A) increases by db * a_used
     #   wins(C>B) increases by dc * b_used
     #   wins(A>C) increases by da * c_used
-    trans = [None] * ABC  # list of lists: for each abc, entries (base_offset, dBA, dCB, dAC)
+    trans = [
+        None
+    ] * ABC  # list of lists: for each abc, entries (base_offset, dBA, dCB, dAC)
     for abc in range(ABC):
         c_used = abc % 7
         tmp = abc // 7
@@ -121,7 +123,7 @@ def _precompute_counts_by_distinct_values(max_k: int = 18) -> list[int]:
         trans[abc] = lst
 
     # Goal state: all dice filled and each required win-count is >=19.
-    goal_abc = (6 * 7 + 6) * 7 + 6   # 342
+    goal_abc = (6 * 7 + 6) * 7 + 6  # 342
     goal_widx = (19 * W + 19) * W + 19  # 7999
     goal = goal_abc * WSIZE + goal_widx
 

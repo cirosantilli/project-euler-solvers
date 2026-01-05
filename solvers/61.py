@@ -35,8 +35,12 @@ def build_prefix_map(nums: List[int]) -> Dict[int, List[int]]:
 
 def find_cycle_sum() -> int:
     types = [3, 4, 5, 6, 7, 8]
-    nums_by_type: Dict[int, List[int]] = {t: generate_4digit_polygonals(t) for t in types}
-    pref_map: Dict[int, Dict[int, List[int]]] = {t: build_prefix_map(nums_by_type[t]) for t in types}
+    nums_by_type: Dict[int, List[int]] = {
+        t: generate_4digit_polygonals(t) for t in types
+    }
+    pref_map: Dict[int, Dict[int, List[int]]] = {
+        t: build_prefix_map(nums_by_type[t]) for t in types
+    }
 
     Path = List[Tuple[int, int]]  # (number, type)
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0348.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0348.cpp"""
 import heapq
 
 
@@ -26,7 +26,9 @@ def find_palindromes(max_found):
         push(square + 1, cube)
         push(square, cube + 1)
 
-        while heap and heap[0][0] == value and heap[0][1] == cube and heap[0][2] == square:
+        while (
+            heap and heap[0][0] == value and heap[0][1] == cube and heap[0][2] == square
+        ):
             heapq.heappop(heap)
 
         num_same = 1
@@ -36,7 +38,12 @@ def find_palindromes(max_found):
             push(same_square + 1, same_cube)
             push(same_square, same_cube + 1)
 
-            while heap and heap[0][0] == same_value and heap[0][1] == same_cube and heap[0][2] == same_square:
+            while (
+                heap
+                and heap[0][0] == same_value
+                and heap[0][1] == same_cube
+                and heap[0][2] == same_square
+            ):
                 heapq.heappop(heap)
 
         if num_same == 4:

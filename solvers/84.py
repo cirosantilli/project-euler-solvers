@@ -79,16 +79,16 @@ def resolve_landing(square: Square) -> Dict[Tuple[Square, SentToJail], float]:
 
         # 10 movement cards, each 1/16
         p = 1.0 / 16.0
-        add_move(0, p)          # GO
+        add_move(0, p)  # GO
         dist[(JAIL, True)] = dist.get((JAIL, True), 0.0) + p  # JAIL (forced)
-        add_move(11, p)         # C1
-        add_move(24, p)         # E3
-        add_move(39, p)         # H2
-        add_move(5, p)          # R1
+        add_move(11, p)  # C1
+        add_move(24, p)  # E3
+        add_move(39, p)  # H2
+        add_move(5, p)  # R1
         add_move(next_railway(square), p)  # next R
         add_move(next_railway(square), p)  # next R
         add_move(next_utility(square), p)  # next U
-        add_move((square - 3) % 40, p)     # back 3 squares
+        add_move((square - 3) % 40, p)  # back 3 squares
 
         return dist
 

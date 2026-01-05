@@ -66,7 +66,7 @@ def chocolate_volume(a: float, b: float, t: float = 1.0) -> float:
     if abs(a - b) < 1e-14:
         S = 4.0 * pi * a * a
         M = 4.0 * pi * a
-        return S * t + M * t * t + (4.0 * pi / 3.0) * t ** 3
+        return S * t + M * t * t + (4.0 * pi / 3.0) * t**3
 
     # Use A=equatorial radius, C=polar radius (z-axis)
     A, C = a, b
@@ -94,7 +94,7 @@ def chocolate_volume(a: float, b: float, t: float = 1.0) -> float:
         # M = 2π C + (2π A^2/(C e)) * atanh(e)
         M = 2.0 * pi * C + (2.0 * pi * A * A / (C * e)) * math.atanh(e)
 
-    return S * t + M * t * t + (4.0 * pi / 3.0) * t ** 3
+    return S * t + M * t * t + (4.0 * pi / 3.0) * t**3
 
 
 def solve() -> str:

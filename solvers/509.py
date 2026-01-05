@@ -22,7 +22,9 @@ def _counts_v2_upto(n: int) -> list[int]:
     if n <= 0:
         return [0]
     max_k = n.bit_length() - 1  # max v2 among 1..n occurs at highest power of 2 <= n
-    size = 1 if max_k == 0 else (1 << max_k.bit_length())  # power-of-two for XOR indexing
+    size = (
+        1 if max_k == 0 else (1 << max_k.bit_length())
+    )  # power-of-two for XOR indexing
     f = [0] * size
     for k in range(max_k + 1):
         # count of numbers divisible by 2^k minus those divisible by 2^(k+1)

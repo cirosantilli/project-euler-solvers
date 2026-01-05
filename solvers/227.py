@@ -39,7 +39,9 @@ from decimal import Decimal, ROUND_HALF_UP, localcontext
 from typing import List
 
 
-def _gaussian_elimination_solve(A: List[List[Decimal]], b: List[Decimal]) -> List[Decimal]:
+def _gaussian_elimination_solve(
+    A: List[List[Decimal]], b: List[Decimal]
+) -> List[Decimal]:
     """Solve A x = b using Gaussian elimination with partial pivoting."""
 
     n = len(A)

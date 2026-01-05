@@ -35,9 +35,9 @@ def _build_transition_matrix(mod: int = MOD):
 
     # f(n+1) = (f(n) + ... + f(n-8)) + (1*g(n) + 2*g(n-1) + ... + 9*g(n-8))
     for j in range(9):
-        M[9][j] = j + 1          # coefficients for g(n), g(n-1), ...
+        M[9][j] = j + 1  # coefficients for g(n), g(n-1), ...
     for j in range(9):
-        M[9][9 + j] = 1          # coefficients for f(n), f(n-1), ...
+        M[9][9 + j] = 1  # coefficients for f(n), f(n-1), ...
 
     # shift f
     for i in range(10, 18):
@@ -79,6 +79,7 @@ def _mat_vec(A, v, mod: int = MOD):
 
 class _RecurrenceSolver:
     """Precomputes powers of the transition matrix to answer f(n) quickly."""
+
     __slots__ = ("powers", "v0", "mod")
 
     def __init__(self, mod: int = MOD):
@@ -115,7 +116,7 @@ def euler377() -> int:
 
     total = 0
     for i in range(1, 18):
-        total = (total + solver.f(13 ** i)) % MOD
+        total = (total + solver.f(13**i)) % MOD
     return total
 
 
@@ -125,4 +126,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

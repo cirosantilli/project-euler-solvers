@@ -33,6 +33,7 @@ This script computes F_90 and adds the known excess(90).
 No external libraries are used.
 """
 
+
 def fib(n: int) -> int:
     """Fibonacci with F_1=F_2=1."""
     if n < 1:

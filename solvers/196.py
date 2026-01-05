@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0196.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0196.cpp"""
 import math
 
 sieve = bytearray()
@@ -93,7 +93,9 @@ def process_line(line: int) -> int:
         at_least_three = False
         for dx in range(-1, 2):
             for dy in range(-1, 2):
-                at_least_three |= three_plus[get_number(x + dx, line + dy) - segment_start]
+                at_least_three |= three_plus[
+                    get_number(x + dx, line + dy) - segment_start
+                ]
 
         if at_least_three:
             total += current

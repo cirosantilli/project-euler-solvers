@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00340%20-%20Crazy%20Function.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00340%20-%20Crazy%20Function.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Tue Dec 21 15:55:34 2021
 
 @author: igorvanloo
 """
-'''
+"""
 Project Euler Problem 340
 
 It is clear that recursion will not work, we need to somehow simplify F(n) and S(n)
@@ -45,27 +45,35 @@ S(a, b, c) = sum_{k = 0 to b/a} a*(4(k + 1)a - (3k + 4)c) + 1/2(a + 1)(2ak + a -
 
 sum_{k = 0 to b/a} a*(4(k + 1)a - (3k + 4)c) = sum_{k = 0 to b/a} 4kaa + 4aa - 3kac - 4ac
 
-'''
+"""
 import math
+
 
 def S(a, b, c, mod):
     if c > a:
-      return "a must be greater than c"
-    k = b//a
+        return "a must be greater than c"
+    k = b // a
     a %= mod
     b %= mod
     c %= mod
-    total = (((b + 1)*b)//2) % mod #Sum of all n
-    total += (((((k - 1)*k)//2)*(4*a*a - 3*a*c) % mod) + (4*a*k*(a-c) % mod)) % mod #sum_{k = 0 to b/a} a*(4(k + 1)a - (3k + 4)c)
-    total += (b - k*a + 1)*(4*(k + 1)*a - (3*k + 4)*c) % mod #Sum of the remaining terms
+    total = (((b + 1) * b) // 2) % mod  # Sum of all n
+    total += (
+        ((((k - 1) * k) // 2) * (4 * a * a - 3 * a * c) % mod)
+        + (4 * a * k * (a - c) % mod)
+    ) % mod  # sum_{k = 0 to b/a} a*(4(k + 1)a - (3k + 4)c)
+    total += (
+        (b - k * a + 1) * (4 * (k + 1) * a - (3 * k + 4) * c) % mod
+    )  # Sum of the remaining terms
     return total % mod
+
 
 def F(n, a, b, c):
     if n > b:
         return n - c
     k = (b - n) // a
-    return 4*(k + 1)*a + n - (3*k + 4)*c
- 
+    return 4 * (k + 1) * a + n - (3 * k + 4) * c
+
+
 if __name__ == "__main__":
     assert F(0, 50, 2000, 40) == 3240
     assert F(2000, 50, 2000, 40) == 2040

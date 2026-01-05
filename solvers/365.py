@@ -70,7 +70,7 @@ def precompute_inverses(primes: list[int]) -> list[array]:
     Stored as array('H') because values < 5000.
     """
     L = len(primes)
-    inv_rows: list[array] = [array('H') for _ in range(L)]
+    inv_rows: list[array] = [array("H") for _ in range(L)]
     for i, p in enumerate(primes):
         row = inv_rows[i]
         for j in range(i + 1, L):

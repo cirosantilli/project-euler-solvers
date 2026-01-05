@@ -88,7 +88,9 @@ def count_diamond(u0: int, u1: int, v0: int, v1: int) -> int:
     return eu * ev + ou * ov
 
 
-def rect_to_diamond_bounds(x0: int, x1: int, y0: int, y1: int, r: int) -> tuple[int, int, int, int]:
+def rect_to_diamond_bounds(
+    x0: int, x1: int, y0: int, y1: int, r: int
+) -> tuple[int, int, int, int]:
     """Preimage of rectangle under z = (i-1)q + r, expressed as a diamond in q-space.
 
     If q = A + Bi, define u = A+B and v = A-B.
@@ -106,7 +108,9 @@ def rect_to_diamond_bounds(x0: int, x1: int, y0: int, y1: int, r: int) -> tuple[
     return u0, u1, v0, v1
 
 
-def diamond_to_rect_bounds(u0: int, u1: int, v0: int, v1: int, r: int) -> tuple[int, int, int, int]:
+def diamond_to_rect_bounds(
+    u0: int, u1: int, v0: int, v1: int, r: int
+) -> tuple[int, int, int, int]:
     """Preimage of a diamond (u,v)-box under z=(i-1)q+r, as a rectangle in q-space.
 
     For q = A + Bi, and z = (i-1)q + r:

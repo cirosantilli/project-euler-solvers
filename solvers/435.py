@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00435%20-%20Polynomials%20of%20Fibonacci%20Numbers.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00435%20-%20Polynomials%20of%20Fibonacci%20Numbers.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Wed Mar 16 15:58:29 2022
@@ -7,7 +7,7 @@ Created on Wed Mar 16 15:58:29 2022
 @author: igorvanloo
 """
 
-'''
+"""
 Project Euler Problem 435
 
 F_n(x) = (f_{n+1}x^{n+1} + f_nx^{n+2} - x)/(x^2 + x - 1)
@@ -20,34 +20,46 @@ Proof:
 
 a/b = x (mod m) <=> a/b = my + x< => a = bx + bmy <=> a = bx (mod bm)
 
-'''
+"""
 
 import math
-    
-def fibonnaci_mod(n, mod): #Finds the nth fibonnaci number
-    v1, v2, v3 = 1, 1, 0    # initialise a matrix [[1,1],[1,0]]
+
+
+def fibonnaci_mod(n, mod):  # Finds the nth fibonnaci number
+    v1, v2, v3 = 1, 1, 0  # initialise a matrix [[1,1],[1,0]]
     count = 0
-    for rec in bin(n)[3:]:  # perform fast exponentiation of the matrix (quickly raise it to the nth power)
+    for rec in bin(n)[
+        3:
+    ]:  # perform fast exponentiation of the matrix (quickly raise it to the nth power)
         calc = pow(v2, 2, mod)
-        v1, v2, v3 = (pow(v1, 2, mod)+calc) % mod, ((v1+v3)*v2) % mod, (calc+pow(v3, 2, mod)) % mod
-        if rec=='1':
-            v1, v2, v3 = v1+v2 % mod, v1 % mod, v2 % mod
+        v1, v2, v3 = (
+            (pow(v1, 2, mod) + calc) % mod,
+            ((v1 + v3) * v2) % mod,
+            (calc + pow(v3, 2, mod)) % mod,
+        )
+        if rec == "1":
+            v1, v2, v3 = v1 + v2 % mod, v1 % mod, v2 % mod
         count += 1
     return v2 % mod
 
+
 def F(n, x, mod):
-    den = (x*x + x - 1)
-    fn = fibonnaci_mod(n, mod*den)
-    fn1 = fibonnaci_mod(n+1, mod*den)
-    num = (fn*pow(x, n+2, mod*den) + fn1*pow(x, n+1, mod*den) - x) % (mod*den)
-    return num//den
-    
+    den = x * x + x - 1
+    fn = fibonnaci_mod(n, mod * den)
+    fn1 = fibonnaci_mod(n + 1, mod * den)
+    num = (fn * pow(x, n + 2, mod * den) + fn1 * pow(x, n + 1, mod * den) - x) % (
+        mod * den
+    )
+    return num // den
+
+
 def compute(n, limit, mod):
     total = 0
     for x in range(limit + 1):
         total += F(n, x, mod)
     return total % mod
-    
+
+
 if __name__ == "__main__":
     mod = math.factorial(15)
     assert F(7, 11, 10**12) == 268357683

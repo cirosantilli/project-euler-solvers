@@ -170,7 +170,7 @@ def solve(N: int) -> int:
     zero_count = 0  # how many factors (1+p^e) are 0 mod MOD
 
     mid = N // 2
-    even = (N % 2 == 0)
+    even = N % 2 == 0
 
     sum_sigma = 0
 

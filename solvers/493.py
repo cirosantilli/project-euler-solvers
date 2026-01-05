@@ -36,7 +36,9 @@ def comb(n: int, k: int) -> int:
     return num // den
 
 
-def expected_distinct_colors(colors: int = 7, per_color: int = 10, draws: int = 20) -> Decimal:
+def expected_distinct_colors(
+    colors: int = 7, per_color: int = 10, draws: int = 20
+) -> Decimal:
     """
     Expected #distinct colors in `draws` draws from `colors` groups of size `per_color`.
 

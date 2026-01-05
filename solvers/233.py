@@ -29,7 +29,7 @@ def iroot(n: int, k: int) -> int:
     # fix rounding errors
     while (x + 1) ** k <= n:
         x += 1
-    while x ** k > n:
+    while x**k > n:
         x -= 1
     return x
 
@@ -106,7 +106,7 @@ def f(N: int) -> int:
                 n //= p
                 e += 1
             if (p & 3) == 1:
-                prod *= (2 * e + 1)
+                prod *= 2 * e + 1
         p += 2
 
     if n > 1 and (n & 3) == 1:

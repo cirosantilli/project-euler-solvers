@@ -32,7 +32,9 @@ def next_chef(i: int, mask: int) -> int:
     return (mask & -mask).bit_length() - 1  # wrap to smallest set bit
 
 
-def solve_game(skills: list[float]) -> tuple[list[list[list[float]]], list[list[float]], int]:
+def solve_game(
+    skills: list[float],
+) -> tuple[list[list[list[float]]], list[list[float]], int]:
     """
     Solve the game for the given skill probabilities.
 
@@ -64,13 +66,15 @@ def solve_game(skills: list[float]) -> tuple[list[list[list[float]]], list[list[
         for mask in masks_by_size[size]:
             chefs = [i for i in range(n) if (mask >> i) & 1]
             m = len(chefs)
-            pos = {chef: idx for idx, chef in enumerate(chefs)}  # for tie-break distances
+            pos = {
+                chef: idx for idx, chef in enumerate(chefs)
+            }  # for tie-break distances
 
             # For each current chef i, decide which chef to eliminate on a favourable rating,
             # based on maximizing i's own future winning probability.
-            a = [0.0] * m                     # a[t] = 1 - S[chef_t]
+            a = [0.0] * m  # a[t] = 1 - S[chef_t]
             b = [[0.0] * n for _ in range(m)]  # b[t] = S[i] * W_small_vector
-            c = [0.0] * m                     # c[t] = S[i] * E_small_scalar
+            c = [0.0] * m  # c[t] = S[i] * E_small_scalar
 
             for t, i in enumerate(chefs):
                 p = skills[i]
@@ -97,12 +101,14 @@ def solve_game(skills: list[float]) -> tuple[list[list[list[float]]], list[list[
                     # Tie-break: eliminate the chef whose turn comes next-closest after i
                     # in the CURRENT mask's cyclic order.
                     pi = pos[i]
+
                     def dist(j: int) -> int:
                         pj = pos[j]
                         d = pj - pi
                         if d <= 0:
                             d += m
                         return d  # in 1..m-1
+
                     jstar = min(tied, key=dist)
 
                 mask2 = mask & ~(1 << jstar)
@@ -122,7 +128,7 @@ def solve_game(skills: list[float]) -> tuple[list[list[list[float]]], list[list[
             # We compute expressions W_t = A_t * W_0 + B_t, and similarly for E_t, then solve W_0.
 
             # --- Win probability vectors ---
-            A = [0.0] * m          # scalar coefficient for W0
+            A = [0.0] * m  # scalar coefficient for W0
             B = [[0.0] * n for _ in range(m)]  # vector constant
 
             A_next = 1.0

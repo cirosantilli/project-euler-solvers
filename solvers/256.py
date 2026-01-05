@@ -26,8 +26,8 @@ from typing import List, Tuple
 
 
 S_MAX = 100_000_000  # search bound used by common reference solutions
-P_NUM = 1300         # number of primes to precompute (enough for S_MAX)
-F_NUM = 10           # max number of distinct primes tracked in the DFS
+P_NUM = 1300  # number of primes to precompute (enough for S_MAX)
+F_NUM = 10  # max number of distinct primes tracked in the DFS
 
 
 def _first_n_primes(n: int) -> List[int]:

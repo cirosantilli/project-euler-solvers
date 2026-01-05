@@ -176,7 +176,11 @@ def _sum_perimeters(limit_p: int) -> tuple[float, int]:
                 if n > r2_max + 1e-9:
                     continue
 
-                per = hypot(ax - bx, ay - by) + hypot(bx - cx, by - cy) + hypot(cx - ax, cy - ay)
+                per = (
+                    hypot(ax - bx, ay - by)
+                    + hypot(bx - cx, by - cy)
+                    + hypot(cx - ax, cy - ay)
+                )
                 if per > limit_p + 1e-9:
                     continue
 

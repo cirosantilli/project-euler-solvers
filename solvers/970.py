@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 
-'''
+"""
 By GPT-5. Instant solution on pypy3.
-'''
+"""
 
 import mpmath as mp
+
 
 def first_eight_non6_digits(n: int, dps: int = 200) -> str:
     """
@@ -65,9 +66,12 @@ def first_eight_non6_digits(n: int, dps: int = 200) -> str:
         frac -= d
 
     if len(res) < 8:
-        raise RuntimeError("Did not collect 8 non-6 digits; increase precision or loop bound.")
+        raise RuntimeError(
+            "Did not collect 8 non-6 digits; increase precision or loop bound."
+        )
 
     return "".join(res)
+
 
 if __name__ == "__main__":
     # Example calls (H(2) and H(3) values in the problem statement are *not* from the asymptotic;

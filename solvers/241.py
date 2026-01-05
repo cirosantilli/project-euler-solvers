@@ -33,7 +33,7 @@ def sigma(n: int) -> int:
             result *= term
         p += 1 if p == 2 else 2  # 2 then odds
     if x > 1:
-        result *= (1 + x)
+        result *= 1 + x
     return result
 
 
@@ -78,4 +78,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

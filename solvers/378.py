@@ -48,7 +48,9 @@ def _build_divisor_counts(limit: int) -> array:
                     spf_odd[idx] = p
 
     tau = array("H", [0]) * (limit + 1)
-    exp = array("B", [0]) * (limit + 1)  # exponent of smallest prime factor in factorization
+    exp = array("B", [0]) * (
+        limit + 1
+    )  # exponent of smallest prime factor in factorization
 
     tau[1] = 1
     for x in range(2, limit + 1):
@@ -96,7 +98,9 @@ def _dT(n: int, tau: array) -> int:
     return tau[n] * tau[(n + 1) >> 1]
 
 
-def triangle_triples(n: int, *, checkpoints: set[int] | None = None) -> tuple[int, dict[int, int]]:
+def triangle_triples(
+    n: int, *, checkpoints: set[int] | None = None
+) -> tuple[int, dict[int, int]]:
     """
     Return (Tr(n), checkpoint_values). checkpoint_values maps each checkpoint m to Tr(m).
 

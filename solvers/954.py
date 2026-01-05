@@ -137,4 +137,3 @@ if __name__ == "__main__":
     assert C_power10(2) == 74
     assert C_power10(4) == 3737
     print(C_power10(13))
-

@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0135.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0135.cpp"""
+
+
 def build_solutions(limit: int) -> list[int]:
     solutions = [0] * (limit + 1)
     for a in range(1, limit + 1):

@@ -38,9 +38,9 @@ def max_adjacent_product(grid: List[List[int]], k: int = 4) -> int:
     m = len(grid[0]) if n else 0
 
     directions: List[Tuple[int, int]] = [
-        (0, 1),   # right
-        (1, 0),   # down
-        (1, 1),   # down-right
+        (0, 1),  # right
+        (1, 0),  # down
+        (1, 1),  # down-right
         (1, -1),  # down-left
     ]
 

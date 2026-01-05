@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00561%20-%20Divisor%20Pairs.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00561%20-%20Divisor%20Pairs.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Mon Jun 12 23:34:05 2023
 
 @author: igorvanloo
 """
-'''
+"""
 Project Euler Problem 721
 
 p_m# = p_1*p_2*...*p_m so it will have 2^m divisors
@@ -45,7 +45,8 @@ using this I get Q(8) = 2714883 which is 3 off and Q(10**12) = 45248049998823550
 I'm forgetting about the case n = 4k
 More in depth in problem explanation on website as it was getting messy without proper writing
 
-'''
+"""
+
 
 def divisors(n):
     pf = {}
@@ -78,11 +79,13 @@ def S_P_brute_force(m, n):
                 t += 1
         total += t
     return total
-    
+
+
 def Q(n):
     m = 904961
-    c = (n - 3)//4 + 1
-    return (2*(n//4) - bin(n//4).count("1")) + m*(2*c - bin(c).count("1")) 
+    c = (n - 3) // 4 + 1
+    return (2 * (n // 4) - bin(n // 4).count("1")) + m * (2 * c - bin(c).count("1"))
+
 
 if __name__ == "__main__":
     print(Q(10**12))

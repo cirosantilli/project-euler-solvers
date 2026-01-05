@@ -6,11 +6,56 @@ from typing import Dict, Iterable, List, Set, Tuple
 
 
 EMBEDDED_KEYLOG: List[str] = [
-    "319", "680", "180", "690", "129", "620", "762", "689", "762", "318",
-    "368", "710", "720", "710", "629", "168", "160", "689", "716", "731",
-    "736", "729", "316", "729", "729", "710", "769", "290", "719", "680",
-    "318", "389", "162", "289", "162", "718", "729", "319", "790", "680",
-    "890", "362", "319", "760", "316", "729", "380", "319", "728", "716",
+    "319",
+    "680",
+    "180",
+    "690",
+    "129",
+    "620",
+    "762",
+    "689",
+    "762",
+    "318",
+    "368",
+    "710",
+    "720",
+    "710",
+    "629",
+    "168",
+    "160",
+    "689",
+    "716",
+    "731",
+    "736",
+    "729",
+    "316",
+    "729",
+    "729",
+    "710",
+    "769",
+    "290",
+    "719",
+    "680",
+    "318",
+    "389",
+    "162",
+    "289",
+    "162",
+    "718",
+    "729",
+    "319",
+    "790",
+    "680",
+    "890",
+    "362",
+    "319",
+    "760",
+    "316",
+    "729",
+    "380",
+    "319",
+    "728",
+    "716",
 ]
 
 
@@ -21,7 +66,9 @@ def load_attempts() -> List[str]:
         os.path.join("resources", "documents", "0079_keylog.txt"),
         os.path.join(os.path.dirname(__file__), "keylog.txt"),
         os.path.join(os.path.dirname(__file__), "0079_keylog.txt"),
-        os.path.join(os.path.dirname(__file__), "resources", "documents", "0079_keylog.txt"),
+        os.path.join(
+            os.path.dirname(__file__), "resources", "documents", "0079_keylog.txt"
+        ),
     ]
     for p in candidate_paths:
         if os.path.exists(p) and os.path.isfile(p):
@@ -32,7 +79,9 @@ def load_attempts() -> List[str]:
     return EMBEDDED_KEYLOG[:]
 
 
-def build_graph(attempts: Iterable[str]) -> Tuple[Set[str], Dict[str, Set[str]], Dict[str, int]]:
+def build_graph(
+    attempts: Iterable[str],
+) -> Tuple[Set[str], Dict[str, Set[str]], Dict[str, int]]:
     nodes: Set[str] = set()
     adj: Dict[str, Set[str]] = {}
     indeg: Dict[str, int] = {}

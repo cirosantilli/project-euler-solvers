@@ -17,6 +17,7 @@ MOD = 10**8
 # Small brute-force support (only for base range and asserts)
 # ------------------------------------------------------------
 
+
 def A(n: int) -> int:
     """
     A(n) = number of occupants that will end up seated in a free edge segment
@@ -84,6 +85,7 @@ for n in range(1, BASE + 1):
 # Fast individual f(N) for large N (recurrence by leading bits)
 # ------------------------------------------------------------
 
+
 def f_fast(N: int) -> int:
     """
     Compute f(N) for any N using derived binary-block recurrences:
@@ -130,7 +132,7 @@ def f_fast(N: int) -> int:
     if k >= 4:
         u0 = half - (half >> 2) + 1  # 3/4*half + 1
         if u >= u0:
-            mapped += (half - u)
+            mapped += half - u
     return mapped
 
 
@@ -139,6 +141,7 @@ def f_fast(N: int) -> int:
 # ------------------------------------------------------------
 
 SUM_MEMO = {}
+
 
 def prefix_sum_11_block(half: int, length: int) -> int:
     """
@@ -211,7 +214,7 @@ def sum_upto(N: int) -> int:
     if N in SUM_MEMO:
         return SUM_MEMO[N]
 
-    pow2 = 1 << (N.bit_length() - 1)   # highest power of 2 <= N
+    pow2 = 1 << (N.bit_length() - 1)  # highest power of 2 <= N
     if N == pow2 - 1:
         # pure power block endpoint can be memoized naturally
         pass
@@ -277,6 +280,7 @@ def sum_upto(N: int) -> int:
 # Main execution + asserts from statement
 # ------------------------------------------------------------
 
+
 def main():
     # Problem statement test asserts:
     assert f_fast(1) == 1
@@ -295,4 +299,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

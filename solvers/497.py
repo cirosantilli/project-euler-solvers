@@ -47,7 +47,7 @@ def _init_counts(mod: Optional[int]):
     We keep only directed transitions between distinct rods; 'start==from' adds
     no segment for the initial pickup.
     """
-    dp = [[[ [0] * 6 for _ in range(3)] for _ in range(3)] for _ in range(3)]
+    dp = [[[[0] * 6 for _ in range(3)] for _ in range(3)] for _ in range(3)]
     for fr in range(3):
         for to in range(3):
             if fr == to:
@@ -65,7 +65,7 @@ def _init_counts(mod: Optional[int]):
 
 def _step_counts(dp, mod: Optional[int]):
     """Advance the counts DP from n-1 to n using the Hanoi recursion."""
-    new = [[[ [0] * 6 for _ in range(3)] for _ in range(3)] for _ in range(3)]
+    new = [[[[0] * 6 for _ in range(3)] for _ in range(3)] for _ in range(3)]
     for fr in range(3):
         for to in range(3):
             if fr == to:
@@ -76,7 +76,7 @@ def _step_counts(dp, mod: Optional[int]):
                 v2 = dp[aux][to][to]  # move n-1 disks: aux -> to, starting at 'to'
                 vec = [v1[i] + v2[i] for i in range(6)]
                 vec[EDGE_IDX[(aux, fr)]] += 1  # go aux -> fr to pick up largest disk
-                vec[EDGE_IDX[(fr, to)]] += 1   # go fr  -> to to drop it
+                vec[EDGE_IDX[(fr, to)]] += 1  # go fr  -> to to drop it
                 if mod is not None:
                     vec = [x % mod for x in vec]
                 new[fr][to][st] = vec
@@ -86,8 +86,12 @@ def _step_counts(dp, mod: Optional[int]):
 def expected_distance_exact(n: int, k: int, a: int, b: int, c: int) -> int:
     """Exact E(n,k,a,b,c) for small inputs (used for problem statement asserts)."""
     pos = {0: a, 1: b, 2: c}
-    d = {(u, v): expected_steps_reflecting(pos[u], pos[v], k)
-         for u in range(3) for v in range(3) if u != v}
+    d = {
+        (u, v): expected_steps_reflecting(pos[u], pos[v], k)
+        for u in range(3)
+        for v in range(3)
+        if u != v
+    }
 
     dp = _init_counts(mod=None)
     for _ in range(2, n + 1):
@@ -128,12 +132,12 @@ def solve(limit: int = 10_000) -> int:
             dp = _step_counts(dp, mod=MOD)
 
         # For these inputs, ordering is always a < b < c < 10^n.
-        d01 = _dist_mod_i_lt_j(a, b)      # A -> B
-        d02 = _dist_mod_i_lt_j(a, c)      # A -> C
-        d10 = _dist_mod_i_gt_j(b, a, k)   # B -> A
-        d12 = _dist_mod_i_lt_j(b, c)      # B -> C
-        d20 = _dist_mod_i_gt_j(c, a, k)   # C -> A
-        d21 = _dist_mod_i_gt_j(c, b, k)   # C -> B
+        d01 = _dist_mod_i_lt_j(a, b)  # A -> B
+        d02 = _dist_mod_i_lt_j(a, c)  # A -> C
+        d10 = _dist_mod_i_gt_j(b, a, k)  # B -> A
+        d12 = _dist_mod_i_lt_j(b, c)  # B -> C
+        d20 = _dist_mod_i_gt_j(c, a, k)  # C -> A
+        d21 = _dist_mod_i_gt_j(c, b, k)  # C -> B
         d = [d01, d02, d10, d12, d20, d21]
 
         counts = dp[0][2][1]

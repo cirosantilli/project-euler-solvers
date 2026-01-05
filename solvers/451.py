@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00451%20-%20Modular%20Inverses.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00451%20-%20Modular%20Inverses.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Sat Dec 31 16:22:57 2022
 
 @author: igorvanloo
 """
-'''
+"""
 Project Euler Problem 451
 
 Consider the number 15.
@@ -65,9 +65,10 @@ using solutions 2^2 +- 1 we get no solutions
 
 So we can find I(n) now
 
-'''
+"""
 import math
 from functools import cache
+
 
 def prime_factors(n):
     factors = {}
@@ -87,6 +88,7 @@ def prime_factors(n):
             break
     return factors
 
+
 def solve(p, e):
     if p == 2:
         if e == 1:
@@ -94,15 +96,17 @@ def solve(p, e):
         elif e == 2:
             return [1, 3]
         else:
-            x = p**(e - 1)
-            return [1, x - 1, x + 1, 2*x - 1]
+            x = p ** (e - 1)
+            return [1, x - 1, x + 1, 2 * x - 1]
     else:
         return [1, p**e - 1]
+
 
 @cache
 def chinese_remainder_theorem(a1, a2, n1, n2):
     p, q = pow(n1, -1, n2), pow(n2, -1, n1)
-    return (a1*q*n2+ a2*p*n1) % (n1*n2)
+    return (a1 * q * n2 + a2 * p * n1) % (n1 * n2)
+
 
 def I(n):
     pf = prime_factors(n)
@@ -120,21 +124,24 @@ def I(n):
         curr_num *= num
     return sorted(curr_sols)[-2]
 
+
 def spf_sieve(N):
-    #smallest prime factor sieve
+    # smallest prime factor sieve
     spf = [i for i in range(N + 1)]
-    
+
     for i in range(2, int(math.sqrt(N)) + 1):
         if spf[i] == i:
-            for j in range(i*i, N + 1, i):
+            for j in range(i * i, N + 1, i):
                 if spf[j] == j:
                     spf[j] = i
     return spf
+
 
 @cache
 def crt(n1, n2):
     p, q = pow(n1, -1, n2), pow(n2, -1, n1)
     return p, q
+
 
 def get_exp(n, p):
     e = 0
@@ -142,6 +149,7 @@ def get_exp(n, p):
         n //= p
         e += 1
     return n, e
+
 
 def compute(n):
     spf = spf_sieve(n)
@@ -158,13 +166,14 @@ def compute(n):
                 for z in solve(p, e):
                     w = x // t
                     a, b = crt(t, w)
-                    v = (y*b*w + z*a*t) % (x)
+                    v = (y * b * w + z * a * t) % (x)
                     sols.append(v)
             sols = sorted(sols)
-        if x <= n//2:
+        if x <= n // 2:
             I.append(sols)
         total += sols[-2]
     return total
 
+
 if __name__ == "__main__":
-    print(compute(2*10**7))
+    print(compute(2 * 10**7))

@@ -70,7 +70,7 @@ def compute_T(n: int) -> int:
         total += 2 * lsum * sum_g  # gamma = +/- i
 
     n_max = 2 * int((n // 3) ** 0.5) + 2
-    lim = int(n_max ** 0.5) + 2
+    lim = int(n_max**0.5) + 2
     pairs: List[Tuple[int, int, int]] = []
     for a in range(1, lim):
         for b in range(1, lim):

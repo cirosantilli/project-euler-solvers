@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0306.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0306.cpp"""
+
 
 def brute_force(num_squares, occupied_mask=0):
     for pos in range(num_squares - 1):

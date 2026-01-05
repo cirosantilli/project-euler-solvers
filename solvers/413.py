@@ -13,7 +13,7 @@ def v_factor(n: int, p: int) -> int:
 
 def precompute_counts(m: int) -> Tuple[List[List[int]], List[List[int]]]:
     """Return (count_val, inc_code) for base-3 encoded counts of size m."""
-    total = 3 ** m
+    total = 3**m
     pow3 = [1] * (m + 1)
     for i in range(1, m + 1):
         pow3[i] = pow3[i - 1] * 3
@@ -89,7 +89,7 @@ def count_one_child_coprime(d: int) -> int:
 def count_one_child_with_t(d: int) -> int:
     a = v_factor(d, 2)
     b = v_factor(d, 5)
-    t = (2 ** a) * (5 ** b)
+    t = (2**a) * (5**b)
     m = d // t
     L = max(a, b)
 
@@ -128,7 +128,7 @@ def count_one_child_with_t(d: int) -> int:
             dp = next_dp
         return sum(dp[1].values())
 
-    mod10L = 10 ** L
+    mod10L = 10**L
     next_tail = [[0] * 10 for _ in range(mod10L)]
     short_mask = [0] * mod10L
     long_ok = [False] * mod10L
@@ -136,7 +136,7 @@ def count_one_child_with_t(d: int) -> int:
     for i in range(1, L + 1):
         pow10[i] = pow10[i - 1] * 10
     for tail in range(mod10L):
-        long_ok[tail] = (tail % t == 0)
+        long_ok[tail] = tail % t == 0
         mask = 0
         for l in range(1, L):
             if (tail % pow10[l]) % t == 0:

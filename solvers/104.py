@@ -35,12 +35,13 @@ def is_1_to_9_pandigital_first9(x_first9: int) -> bool:
 
 def fib_fast_doubling(n: int) -> int:
     """Return F_n exactly (F_0=0, F_1=1)."""
+
     def rec(k: int) -> Tuple[int, int]:
         if k == 0:
             return 0, 1
-        a, b = rec(k >> 1)          # (F_m, F_{m+1})
-        c = a * (2 * b - a)         # F_{2m}
-        d = a * a + b * b           # F_{2m+1}
+        a, b = rec(k >> 1)  # (F_m, F_{m+1})
+        c = a * (2 * b - a)  # F_{2m}
+        d = a * a + b * b  # F_{2m+1}
         if k & 1:
             return d, c + d
         return c, d
@@ -83,7 +84,7 @@ def find_k() -> int:
 
     # Iterate Fibonacci numbers modulo 1e9 for last 9 digits.
     f_prev = 1  # F_1
-    f_cur = 1   # F_2
+    f_cur = 1  # F_2
     n = 2
 
     while True:

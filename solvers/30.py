@@ -11,7 +11,7 @@ def digit_fifth_power_sum(n: int, fifth: List[int]) -> int:
 
 def solve() -> int:
     # Precompute fifth powers of digits 0..9
-    fifth = [d ** 5 for d in range(10)]
+    fifth = [d**5 for d in range(10)]
 
     # Upper bound reasoning:
     # For a number with k digits, the maximum sum of fifth powers is k * 9^5.

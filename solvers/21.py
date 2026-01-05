@@ -50,7 +50,7 @@ def proper_divisor_sum_factorization(n: int) -> int:
 
     # remaining prime factor
     if n > 1:
-        sigma *= (1 + n)
+        sigma *= 1 + n
 
     return sigma - original
 

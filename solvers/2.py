@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+
 def sum_even_fibonacci(limit: int) -> int:
     """
     Returns the sum of even Fibonacci numbers not exceeding `limit`,

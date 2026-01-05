@@ -141,7 +141,9 @@ def co(n: int) -> int:
 
     sqrt_n = int(math.isqrt(n))
     small = [p for p in primes if p <= sqrt_n]
-    big = [p for p in primes if p > sqrt_n and p <= n // 2]  # primes > n/2 can't pair with any >=2
+    big = [
+        p for p in primes if p > sqrt_n and p <= n // 2
+    ]  # primes > n/2 can't pair with any >=2
 
     s = len(small)
     t = len(big)

@@ -1,11 +1,31 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0268.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0268.cpp"""
 PRIMES = [
-    2, 3, 5, 7, 11,
-    13, 17, 19, 23, 29,
-    31, 37, 41, 43, 47,
-    53, 59, 61, 67, 71,
-    73, 79, 83, 89, 97,
+    2,
+    3,
+    5,
+    7,
+    11,
+    13,
+    17,
+    19,
+    23,
+    29,
+    31,
+    37,
+    41,
+    43,
+    47,
+    53,
+    59,
+    61,
+    67,
+    71,
+    73,
+    79,
+    83,
+    89,
+    97,
 ]
 
 

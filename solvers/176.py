@@ -62,7 +62,7 @@ def tau_of_square(n: int) -> int:
             while x % p == 0:
                 x //= p
                 e += 1
-            prod *= (2 * e + 1)
+            prod *= 2 * e + 1
         p = 3 if p == 2 else p + 2
     if x > 1:
         prod *= 3
@@ -138,4 +138,3 @@ def _assert_examples() -> None:
 if __name__ == "__main__":
     _assert_examples()
     print(solve())
-

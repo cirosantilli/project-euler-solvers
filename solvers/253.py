@@ -166,7 +166,9 @@ def max_segments_distribution(n: int) -> Dict[int, int]:
     init_trans = _initial_transitions(n)
 
     for _ in range(n):
-        nxt: DefaultDict[State, DefaultDict[int, int]] = defaultdict(lambda: defaultdict(int))
+        nxt: DefaultDict[State, DefaultDict[int, int]] = defaultdict(
+            lambda: defaultdict(int)
+        )
         for st, max_map in curr.items():
             trans = init_trans if st is None else _transitions(st)  # type: ignore[arg-type]
             for m_so_far, ways in max_map.items():
@@ -178,7 +180,9 @@ def max_segments_distribution(n: int) -> Dict[int, int]:
 
     final_state: State = (0, 0, ())
     if final_state not in curr:
-        raise RuntimeError("Did not reach the final full state; bug in transitions/state.")
+        raise RuntimeError(
+            "Did not reach the final full state; bug in transitions/state."
+        )
 
     dist = curr[final_state]
     total = sum(dist.values())
@@ -212,4 +216,3 @@ def solve() -> str:
 
 if __name__ == "__main__":
     print(solve())
-

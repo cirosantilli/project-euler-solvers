@@ -23,7 +23,7 @@ MOD = 1_000_000_000
 BASE = 23
 MAX_SUM = 23
 DEG = MAX_SUM + 1  # degrees 0..23 inclusive
-PERIOD = 22        # since 10^22 ≡ 1 (mod 23)
+PERIOD = 22  # since 10^22 ≡ 1 (mod 23)
 
 
 # A polynomial in x of degree <= 23, whose coefficients are vectors over Z_23 (remainder classes).

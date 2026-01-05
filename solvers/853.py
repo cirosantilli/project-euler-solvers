@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00853%20-%20Pisano%20Periods%201.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00853%20-%20Pisano%20Periods%201.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Wed Nov 15 22:40:53 2023
 
 @author: igorvanloo
 """
-'''
+"""
 Project Euler Problem 853
 
 https://en.wikipedia.org/wiki/Pisano_period
@@ -25,8 +25,9 @@ Therefore if n = p_1^e_1 * ... * p_k^e_k then
 3. Generate all possible multiples of this primes up to their multiplicities 
 4. sum all values such that π(n) = 120
 
-'''
+"""
 import math
+
 
 def prime_factors(n):
     factors = {}
@@ -46,26 +47,28 @@ def prime_factors(n):
             break
     return factors
 
-def fibonacci(n, m = None):
+
+def fibonacci(n, m=None):
 
     if type(n) != int:
         return "n must be an integer"
-    
+
     if m != None:
         f2, f1, f0 = 1, 1, 0
         for bit in bin(n)[3:]:
-            v = (f1*f1) % m
+            v = (f1 * f1) % m
             f2, f1, f0 = (f2 * f2 + v) % m, ((f2 + f0) * f1) % m, (v + f0 * f0) % m
-            if bit == '1':
-                f2, f1, f0 = f2 + f1, f2, f1 
+            if bit == "1":
+                f2, f1, f0 = f2 + f1, f2, f1
     else:
         f2, f1, f0 = 1, 1, 0
         for bit in bin(n)[3:]:
-            v = f1*f1
+            v = f1 * f1
             f2, f1, f0 = f2 * f2 + v, (f2 + f0) * f1, v + f0 * f0
-            if bit == '1':
-                f2, f1, f0 = f2 + f1, f2, f1   
+            if bit == "1":
+                f2, f1, f0 = f2 + f1, f2, f1
     return f1
+
 
 def lcm(*numbers):  # Returns lcm of a list of numbers
     n = sorted(numbers)
@@ -75,8 +78,9 @@ def lcm(*numbers):  # Returns lcm of a list of numbers
         curr = int(abs(curr * temp) / math.gcd(curr, temp))
     return curr
 
+
 def pi(n, limit):
-    #Find period for primes
+    # Find period for primes
     f_0 = 0
     f_1 = 1
     c = 0
@@ -87,25 +91,28 @@ def pi(n, limit):
             break
         f_0 = f_1
         f_1 = f_n
-        
+
         if (f_0, f_1) == (0, 1):
             break
     return c
 
+
 def gen_multiples(primes, pivalues, multiplicities, limit):
-    #Generates all multiples of given primes up to a cetain multiplicity
-    #Extra condition to precalculate pi(n)
+    # Generates all multiples of given primes up to a cetain multiplicity
+    # Extra condition to precalculate pi(n)
     p, vpi = 1, 1
     multiples = []
     for i in range(multiplicities[0] + 1):
         if p > 1:
             multiples.append((p, vpi))
-            
+
         if len(primes) > 1:
-            for (x, xpi) in gen_multiples(primes[1:], pivalues[1:], multiplicities[1:], limit//p):
-                if p*x < limit:
-                    multiples.append((p*x, lcm(vpi, xpi)))
-        
+            for x, xpi in gen_multiples(
+                primes[1:], pivalues[1:], multiplicities[1:], limit // p
+            ):
+                if p * x < limit:
+                    multiples.append((p * x, lcm(vpi, xpi)))
+
         if i == 0:
             p *= primes[0]
             vpi *= pivalues[0]
@@ -113,6 +120,7 @@ def gen_multiples(primes, pivalues, multiplicities, limit):
             p *= primes[0]
             vpi *= primes[0]
     return multiples
+
 
 def compute(n, limit):
     primes = []
@@ -132,13 +140,15 @@ def compute(n, limit):
     multiples = gen_multiples(primes, pivalues, multiplicities, limit)
     return sum(x for (x, y) in multiples if y == n)
 
+
 def sum_with_pisano(target, limit):
     total = 0
     for n in range(2, limit):
         if pi(n, target * 10) == target:
             total += n
     return total
-    
+
+
 if __name__ == "__main__":
     assert sum_with_pisano(18, 50) == 57
     print(compute(120, 10**9))

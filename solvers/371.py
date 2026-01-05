@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0371.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0371.cpp"""
+
+
 def search(num_plates):
     max_have = num_plates // 2 - 1
     plates = float(num_plates)
@@ -23,9 +25,9 @@ def search(num_plates):
         prob_unchanged = prob_duplicate + prob_zero
 
         have500[have] = (1.0 + prob_new * have500[have + 1]) / (1.0 - prob_unchanged)
-        no500[have] = (
-            1.0 + prob_500 * have500[have] + prob_new * no500[have + 1]
-        ) / (1.0 - prob_unchanged)
+        no500[have] = (1.0 + prob_500 * have500[have] + prob_new * no500[have + 1]) / (
+            1.0 - prob_unchanged
+        )
 
     return no500[0]
 

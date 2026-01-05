@@ -14,7 +14,7 @@ import math
 
 def power_sum_exact(k: int, n: int) -> int:
     """f_k(n) exactly, for small n (used only in asserts)."""
-    return sum(i ** k for i in range(1, n + 1))
+    return sum(i**k for i in range(1, n + 1))
 
 
 def S_exact(k: int, n: int) -> int:
@@ -22,7 +22,7 @@ def S_exact(k: int, n: int) -> int:
     fk = 0
     s = 0
     for i in range(1, n + 1):
-        fk += i ** k
+        fk += i**k
         s += fk
     return s
 
@@ -53,7 +53,7 @@ def primes_in_interval(L: int, R: int) -> list[int]:
             if p * p > x:
                 break
             if x % p == 0:
-                is_prime = (x == p)
+                is_prime = x == p
                 break
         if is_prime:
             out.append(x)
@@ -76,7 +76,9 @@ def inv_factorials_up_to(max_d: int, p: int) -> list[int]:
     return inv_fact
 
 
-def lagrange_eval_0_to_d(y: list[int], n: int, d: int, p: int, inv_fact: list[int]) -> int:
+def lagrange_eval_0_to_d(
+    y: list[int], n: int, d: int, p: int, inv_fact: list[int]
+) -> int:
     """
     Evaluate polynomial P at n modulo p, given y[i]=P(i) for i=0..d.
 
@@ -107,7 +109,9 @@ def lagrange_eval_0_to_d(y: list[int], n: int, d: int, p: int, inv_fact: list[in
     return res % p
 
 
-def prefix_power_sums_for_fk_and_fk1(k: int, d1: int, d2: int, p: int) -> tuple[list[int], list[int]]:
+def prefix_power_sums_for_fk_and_fk1(
+    k: int, d1: int, d2: int, p: int
+) -> tuple[list[int], list[int]]:
     """
     Build:
       yk[i]  = f_k(i)     for i=0..d1
@@ -120,12 +124,12 @@ def prefix_power_sums_for_fk_and_fk1(k: int, d1: int, d2: int, p: int) -> tuple[
     s0 = 0
     s1 = 0
     for i in range(1, d2 + 1):
-        pk = pow(i, k, p)              # i^k mod p
+        pk = pow(i, k, p)  # i^k mod p
         s0 = (s0 + pk) % p
         if i <= d1:
-            yk[i] = s0                 # f_k(i)
-        s1 = (s1 + (pk * i) % p) % p   # add i^(k+1)
-        yk1[i] = s1                    # f_{k+1}(i)
+            yk[i] = s0  # f_k(i)
+        s1 = (s1 + (pk * i) % p) % p  # add i^(k+1)
+        yk1[i] = s1  # f_{k+1}(i)
     return yk, yk1
 
 
@@ -168,4 +172,3 @@ def solve() -> int:
 
 if __name__ == "__main__":
     print(solve())
-

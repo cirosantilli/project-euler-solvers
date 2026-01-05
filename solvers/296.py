@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00296%20-%20Angular%20Bisector%20and%20Tangent.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00296%20-%20Angular%20Bisector%20and%20Tangent.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Thu Jun  2 11:01:11 2022
 
 @author: igorvanloo
 """
-'''
+"""
 Project Euler Problem 296
 
 Playing around with a geogebra tool https://www.geogebra.org/geometry/sbgbwtfe
@@ -31,33 +31,36 @@ Let d = gcd(AC, BC) => AC = d * AC', BC = d * BC' where gcd(AC', BC') = 1
 
 we then have that BE = AB * BC' / (AC' + BC') clearly AC' + BC' cannot divide BC' therefore AC' + BC' | AB
 
-'''
+"""
 import math
+
 
 def BruteForce(limit):
     count = 0
-    for BC in range(1, limit//3 + 1):
-        for AC in range(BC, (limit - BC)//2 + 1):
+    for BC in range(1, limit // 3 + 1):
+        for AC in range(BC, (limit - BC) // 2 + 1):
             for AB in range(AC, min(BC + AC, limit - BC - AC + 1)):
                 if BC + AC + AB <= limit:
-                    if AB*BC % (AC + BC) == 0:
+                    if AB * BC % (AC + BC) == 0:
                         count += 1
                 else:
                     break
     return count
 
+
 def compute(limit):
     count = 0
-    for BC in range(1, limit//3 + 1):
-        for AC in range(BC, (limit - BC)//2 + 1):
+    for BC in range(1, limit // 3 + 1):
+        for AC in range(BC, (limit - BC) // 2 + 1):
             d = math.gcd(BC, AC)
-            ACprime, BCprime = AC//d, BC//d
+            ACprime, BCprime = AC // d, BC // d
             cons = ACprime + BCprime
-            ABmin = math.ceil(AC/cons)*cons
-            ABmax = min(BC + AC, limit - BC - AC + 1)            
+            ABmin = math.ceil(AC / cons) * cons
+            ABmax = min(BC + AC, limit - BC - AC + 1)
             for AB in range(ABmin, ABmax, cons):
                 count += 1
     return count
-    
+
+
 if __name__ == "__main__":
     print(compute(10**5))

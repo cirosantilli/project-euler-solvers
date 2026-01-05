@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0168.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0168.cpp"""
+
+
 def search(num_digits: int, multiplier: int, last_digit: int, modulo: int) -> int:
     shift = 10
     carry = 0

@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0201.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0201.cpp"""
+
+
 def unique_sum_from_list(values: list[int], choose: int) -> int:
     reachable = []
     duplicates = []
@@ -74,5 +76,5 @@ def solve(max_set: int, choose: int) -> int:
 if __name__ == "__main__":
     example_values = [1, 3, 6, 8, 10, 11]
     # TODO extra assert
-    #assert unique_sum_from_list(example_values, 3) == 156
+    # assert unique_sum_from_list(example_values, 3) == 156
     print(solve(100, 50))

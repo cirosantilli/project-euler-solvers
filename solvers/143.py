@@ -67,4 +67,3 @@ if __name__ == "__main__":
 
     # Solve the actual problem:
     print(euler143(120000))
-

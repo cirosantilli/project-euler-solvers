@@ -1,17 +1,18 @@
 #!/usr/bin/env python
 
-'''
+"""
 By GPT-5.1. Runtime: 0m0.751s on pypy3 3.11.13, Ubuntu 25.10, Lenovo ThinkPad P14s.
-'''
+"""
 
 from math import isqrt
 from random import randrange
 from typing import Dict, List, Tuple
 
+
 def is_prime(n: int) -> bool:
     if n < 2:
         return False
-    small_primes = [2,3,5,7,11,13,17,19,23,29]
+    small_primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29]
     for p in small_primes:
         if n % p == 0:
             return n == p
@@ -20,7 +21,7 @@ def is_prime(n: int) -> bool:
     while d % 2 == 0:
         s += 1
         d //= 2
-    for a in [2,325,9375,28178,450775,9780504,1795265022]:
+    for a in [2, 325, 9375, 28178, 450775, 9780504, 1795265022]:
         if a % n == 0:
             continue
         x = pow(a, d, n)
@@ -35,6 +36,7 @@ def is_prime(n: int) -> bool:
         if composite:
             return False
     return True
+
 
 def pollards_rho(n: int) -> int:
     if n % 2 == 0:
@@ -109,7 +111,7 @@ def generate_sequence(limit_n: int) -> List[int]:
     return a
 
 
-def next_triangle_jump(a_tri: int) -> Tuple[int,int]:
+def next_triangle_jump(a_tri: int) -> Tuple[int, int]:
     M = 2 * a_tri
     for x in divisors(M):
         y = M // x
@@ -120,7 +122,8 @@ def next_triangle_jump(a_tri: int) -> Tuple[int,int]:
                 return k, new_a
     raise RuntimeError("No valid k found.")
 
-def index_of_kth_triangular_in_sequence(kth: int) -> Tuple[int,int]:
+
+def index_of_kth_triangular_in_sequence(kth: int) -> Tuple[int, int]:
     n = 0
     a = 3
     if kth == 1:
@@ -129,6 +132,7 @@ def index_of_kth_triangular_in_sequence(kth: int) -> Tuple[int,int]:
         step_k, a = next_triangle_jump(a)
         n += step_k
     return n, a
+
 
 if __name__ == "__main__":
     assert index_of_kth_triangular_in_sequence(10) == (2964, 1439056)

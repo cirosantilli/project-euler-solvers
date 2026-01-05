@@ -34,6 +34,7 @@ from math import factorial, gcd
 
 # ---------------- Integer polynomial helpers (descending coefficient order) ---------------- #
 
+
 def poly_trim(p):
     i = 0
     while i < len(p) and p[i] == 0:
@@ -107,6 +108,7 @@ def poly_primitive_by_content(p):
 
 # ---------------- Integer pseudo-remainder (PRS) ---------------- #
 
+
 def poly_prem_pos(A, B):
     """
     Pseudo-remainder of A by B, using a *positive* leading-coefficient factor.
@@ -171,6 +173,7 @@ def poly_gcd_degree_over_Q(p, q):
 
 # ---------------- Sturm chain (integer-only PRS) ---------------- #
 
+
 def sturm_sequence_int(p_int):
     """
     Build a Sturm sequence using a PRS-based remainder, avoiding Fractions.
@@ -182,11 +185,11 @@ def sturm_sequence_int(p_int):
     p1 = poly_primitive_by_content(poly_deriv_int(p0))
     seq = [p0, p1]
     while p1 != [0]:
-        r = poly_prem_pos(p0, p1)           # positive multiple of rem(p0, p1)
-        r = poly_primitive_by_content(r)    # positive scaling only
+        r = poly_prem_pos(p0, p1)  # positive multiple of rem(p0, p1)
+        r = poly_primitive_by_content(r)  # positive scaling only
         if r == [0]:
             break
-        r = [-c for c in r]                 # Sturm's required negation
+        r = [-c for c in r]  # Sturm's required negation
         r = poly_primitive_by_content(r)
         seq.append(r)
         p0, p1 = p1, r
@@ -250,6 +253,7 @@ def satisfies_floor_conditions(p_int, n):
 
 # ---------------- Build polynomial from forward differences ---------------- #
 
+
 def poly_from_forward_differences(n, b_list):
     """
     b_list holds b_m = Δ^m p(1) for m=0..n-1, with Δ^n p(1)=n! (monic).
@@ -282,6 +286,7 @@ def poly_from_forward_differences(n, b_list):
 
 
 # ---------------- Enumeration ---------------- #
+
 
 def solve_for_n(n):
     """
@@ -410,4 +415,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

@@ -48,7 +48,9 @@ def compute_S(n: int, sols: Dict[int, List[Tuple[int, int, int]]]) -> int:
     return sum(m * B[m] for m in DIVS)
 
 
-def build_coeffs(sols: Dict[int, List[Tuple[int, int, int]]]) -> List[Tuple[int, int, int, int]]:
+def build_coeffs(
+    sols: Dict[int, List[Tuple[int, int, int]]]
+) -> List[Tuple[int, int, int, int]]:
     coeffs: List[Tuple[int, int, int, int]] = []
     for r in range(24):
         vals = [compute_S(r + 24 * t, sols) for t in range(4)]
@@ -159,7 +161,9 @@ def build_aug_matrix(mono: List[List[int]]) -> List[List[int]]:
     return aug
 
 
-def precompute_powers(matrix: List[List[int]], max_bits: int, mod: int) -> List[List[List[int]]]:
+def precompute_powers(
+    matrix: List[List[int]], max_bits: int, mod: int
+) -> List[List[List[int]]]:
     powers = [matrix]
     for _ in range(1, max_bits):
         powers.append(mat_mul(powers[-1], powers[-1], mod))

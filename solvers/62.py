@@ -26,7 +26,9 @@ def smallest_cube_with_k_permutations(k: int) -> int:
         l = len(str(cube))
 
         if l > current_len:
-            candidates = [min_cube for (count, min_cube) in groups.values() if count == k]
+            candidates = [
+                min_cube for (count, min_cube) in groups.values() if count == k
+            ]
             if candidates:
                 return min(candidates)
             groups.clear()

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00731%20-%20Stoneham%20Numbers.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00731%20-%20Stoneham%20Numbers.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Wed Dec 15 00:46:30 2021
@@ -7,7 +7,7 @@ Created on Wed Dec 15 00:46:30 2021
 @author: igorvanloo
 """
 
-'''
+"""
 Project Euler Problem 731
 
 A = sum_{i=1}^inf 1/(3^i * 10^(3^i))
@@ -29,22 +29,23 @@ But 10^(n - 3^i - 1) is massive so instead we calculate 10^(n - 3^i - 1) mod 3^i
 We can do this because we have r = 10^(n - 3^i - 1)/3^i - 10^(n - 3^i - 1)//3^i = (10^(n - 3^i - 1) - 3^i*(10^(n - 3^i - 1)//3^i))/3^i
 = (10^(n - 3^i - 1) mod 3^i) / 3^i
 
-'''
+"""
 
 import math
 
+
 def compute(n):
-    limit = int(math.log(n,3))
+    limit = int(math.log(n, 3))
     total = 0
     for i in range(1, limit + 1):
         div = 3**i
         exp = n - div - 1
-        temp = pow(10,exp,div)
-        total += temp/div
+        temp = pow(10, exp, div)
+        total += temp / div
     return str((total) - (math.floor(total)))[2:12]
-    
+
+
 if __name__ == "__main__":
     assert compute(100) == "4938271604"
     assert compute(10**8) == "2584642393"
     print(compute(10**16))
-    

@@ -122,9 +122,18 @@ def _prefix_sum_b(n):
     # Initial state at i=5
     S5 = sum(_B_INIT) % MOD
     v = [
-        _B_INIT[5], _B_INIT[4], _B_INIT[3], _B_INIT[2], _B_INIT[1], _B_INIT[0],
-        pow(2, 5, MOD), pow(2, 4, MOD), pow(2, 3, MOD), pow(2, 2, MOD),
-        S5, 1,
+        _B_INIT[5],
+        _B_INIT[4],
+        _B_INIT[3],
+        _B_INIT[2],
+        _B_INIT[1],
+        _B_INIT[0],
+        pow(2, 5, MOD),
+        pow(2, 4, MOD),
+        pow(2, 3, MOD),
+        pow(2, 2, MOD),
+        S5,
+        1,
     ]
 
     M = _build_transition_matrix()

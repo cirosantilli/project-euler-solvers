@@ -80,7 +80,9 @@ def g_meet_in_middle(n: int) -> int:
                 if err < best_err - 1e-18:
                     best_err = err
                     best_g = g_val
-                elif abs(err - best_err) <= 1e-18 and (best_g is None or g_val < best_g):
+                elif abs(err - best_err) <= 1e-18 and (
+                    best_g is None or g_val < best_g
+                ):
                     best_g = g_val
 
     assert best_g is not None
@@ -108,7 +110,9 @@ def main() -> None:
     import argparse
 
     parser = argparse.ArgumentParser(description="Project Euler 461 solver")
-    parser.add_argument("--n", type=int, default=10000, help="compute g(n) (default: 10000)")
+    parser.add_argument(
+        "--n", type=int, default=10000, help="compute g(n) (default: 10000)"
+    )
     parser.add_argument(
         "--force",
         action="store_true",

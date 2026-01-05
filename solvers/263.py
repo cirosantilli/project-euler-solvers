@@ -56,7 +56,9 @@ class PrimeCache:
         self.primes = simple_sieve(self.limit)
 
 
-def segmented_primes(pc: PrimeCache, segment_span: int = 20_000_000) -> Generator[int, None, None]:
+def segmented_primes(
+    pc: PrimeCache, segment_span: int = 20_000_000
+) -> Generator[int, None, None]:
     """Infinite prime generator using a segmented sieve.
 
     segment_span is the width of each segment in integers.
@@ -89,6 +91,7 @@ def segmented_primes(pc: PrimeCache, segment_span: int = 20_000_000) -> Generato
                 yield low + 2 * i
 
         low = high
+
 
 def factorize(n: int, primes: List[int]) -> List[Tuple[int, int]]:
     """Return prime factorization of n as (prime, exponent) pairs."""
@@ -141,7 +144,9 @@ def is_practical(n: int, pc: PrimeCache, cache: Dict[int, bool]) -> bool:
     return True
 
 
-def is_engineers_paradise(n: int, pc: PrimeCache, practical_cache: Dict[int, bool]) -> bool:
+def is_engineers_paradise(
+    n: int, pc: PrimeCache, practical_cache: Dict[int, bool]
+) -> bool:
     """Check the practical-number condition for an engineers' paradise."""
     # Fast necessary condition: in this problem's setting, n must be divisible by 4.
     if n & 3:
@@ -164,7 +169,12 @@ def find_first_paradises(k: int = 4) -> List[int]:
         last.append(p)
         if len(last) > 4:
             last.pop(0)
-        if len(last) == 4 and (last[1] - last[0] == 6) and (last[2] - last[1] == 6) and (last[3] - last[2] == 6):
+        if (
+            len(last) == 4
+            and (last[1] - last[0] == 6)
+            and (last[2] - last[1] == 6)
+            and (last[3] - last[2] == 6)
+        ):
             n = last[1] + 3
             if is_engineers_paradise(n, pc, practical_cache):
                 paradises.append(n)

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0280.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0280.cpp"""
 GRID_SIZE = 5
 moved_seeds = 5
 
@@ -46,7 +46,9 @@ def solve(seeds_to_move: int) -> float:
     initial_carries = False
     initial_top = 0
     initial_bottom = all_bits
-    initial_hash = make_hash(initial_x, initial_y, initial_carries, initial_top, initial_bottom)
+    initial_hash = make_hash(
+        initial_x, initial_y, initial_carries, initial_top, initial_bottom
+    )
 
     states = {}
     for x in range(GRID_SIZE):

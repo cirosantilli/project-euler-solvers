@@ -31,7 +31,9 @@ def first_primes_and_composites(count: int) -> tuple[list[int], list[int]]:
         limit = 50
     else:
         # n (log n + log log n) is an upper bound for n-th prime for n>=6 (Dusart-like).
-        limit = int(count * (math.log(count) + math.log(math.log(count)))) + 3 * count + 100
+        limit = (
+            int(count * (math.log(count) + math.log(math.log(count)))) + 3 * count + 100
+        )
         limit = max(limit, 200_000)
 
     is_prime = bytearray(b"\x01") * (limit + 1)
@@ -41,7 +43,9 @@ def first_primes_and_composites(count: int) -> tuple[list[int], list[int]]:
         if is_prime[p]:
             start = p * p
             step = p
-            is_prime[start : limit + 1 : step] = b"\x00" * (((limit - start) // step) + 1)
+            is_prime[start : limit + 1 : step] = b"\x00" * (
+                ((limit - start) // step) + 1
+            )
 
     primes: list[int] = []
     comps: list[int] = []
@@ -118,8 +122,8 @@ def scs_value(A: list[int], B: list[int], want_string: bool = False) -> int | st
     X = A[::-1]
     Y = B[::-1]
 
-    rows = _build_lcs_rows(X, Y)       # rows[b] bitset for Y prefix length b
-    pm = _prefix_masks(n)              # pm[a] mask for X prefix length a
+    rows = _build_lcs_rows(X, Y)  # rows[b] bitset for Y prefix length b
+    pm = _prefix_masks(n)  # pm[a] mask for X prefix length a
 
     mod = 0
     out = [] if want_string else None
@@ -184,8 +188,8 @@ def main() -> None:
     N = 10_000
     primes, comps = first_primes_and_composites(N)
 
-    PD = [digital_root(p) for p in primes]   # prime digital roots
-    CD = [digital_root(c) for c in comps]    # composite digital roots
+    PD = [digital_root(p) for p in primes]  # prime digital roots
+    CD = [digital_root(c) for c in comps]  # composite digital roots
 
     # --- Tests from the problem statement ---
     assert "".join(map(str, PD[:10])) == "2357248152"

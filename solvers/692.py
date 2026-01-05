@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00692%20-%20Siegbert%20and%20Jo.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00692%20-%20Siegbert%20and%20Jo.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Mon May 17 20:18:12 2021
@@ -7,7 +7,7 @@ Created on Mon May 17 20:18:12 2021
 @author: igorvanloo
 """
 
-'''
+"""
 Project Euler Problem 692
 
 Siegbert and Jo take turns playing a game with a heap of N pebbles:
@@ -51,17 +51,20 @@ f(n) = 21
 
 We we simple iterate from the fibonnaci 23416728348467685
 
-'''
+"""
 
 
-def fibonnaci(n): #Finds the nth fibonnaci number
-    v1, v2, v3 = 1, 1, 0    # initialise a matrix [[1,1],[1,0]]
-    for rec in bin(n)[3:]:  # perform fast exponentiation of the matrix (quickly raise it to the nth power)
-        calc = v2*v2
-        v1, v2, v3 = v1*v1+calc, (v1+v3)*v2, calc+v3*v3
-        if rec=='1':
-            v1, v2, v3 = v1+v2, v1, v2
+def fibonnaci(n):  # Finds the nth fibonnaci number
+    v1, v2, v3 = 1, 1, 0  # initialise a matrix [[1,1],[1,0]]
+    for rec in bin(n)[
+        3:
+    ]:  # perform fast exponentiation of the matrix (quickly raise it to the nth power)
+        calc = v2 * v2
+        v1, v2, v3 = v1 * v1 + calc, (v1 + v3) * v2, calc + v3 * v3
+        if rec == "1":
+            v1, v2, v3 = v1 + v2, v1, v2
     return v2
+
 
 def Fibtill(x):
     fibnumbers = []
@@ -71,45 +74,49 @@ def Fibtill(x):
         n += 1
     return fibnumbers
 
+
 def ZeckendorfRepresentation(x, fibnumbers):
     rep = []
     number = x
     count = 0
     while number != 0:
-        
+
         if number - fibnumbers[count] >= 0:
             number -= fibnumbers[count]
             rep.append(fibnumbers[count])
             count += 1
         count += 1
-        
+
     return rep
 
-#fibnumbers = Fibtill(23416728348467685)
-    
+
+# fibnumbers = Fibtill(23416728348467685)
+
+
 def G1(x):
     g1 = 1
     g2 = 1
-    
+
     f1 = 1
     f2 = 1
-    
+
     count = 2
     while count != x:
         fn = f1 + f2
-        #print(fn)
-        
+        # print(fn)
+
         gn = g1 + g2 - f1 + fn
-        #print("1", gn)
+        # print("1", gn)
 
         f1 = f2
         f2 = fn
-        
+
         g1 = g2
         g2 = gn
-        
+
         count += 1
     return gn
+
 
 def H(n):
     fibs = [1, 2]
@@ -125,8 +132,10 @@ def H(n):
             break
     return min(used)
 
+
 def G(n):
     return sum(H(k) for k in range(1, n + 1))
+
 
 if __name__ == "__main__":
     assert H(1) == 1

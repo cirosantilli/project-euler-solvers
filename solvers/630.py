@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00630%20-%20Crossed%20lines.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00630%20-%20Crossed%20lines.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Tue Jun 29 00:31:01 2021
@@ -7,7 +7,7 @@ Created on Tue Jun 29 00:31:01 2021
 @author: igorvanloo
 """
 
-'''
+"""
 Project Euler Problem 630
 
 Crossed lines
@@ -38,67 +38,71 @@ Then M = sum from 1 to k (mi) and S = sum from 1 to k of mi(M-mi)
 
 (4948, 24477690)
 (3109535, )
-'''
+"""
 
 import math
 
-def LineCreator(point1,point2):
+
+def LineCreator(point1, point2):
     x1, y1 = point1
     x2, y2 = point2
-    
-    dy = y1-y2
-    dx = (x2 - x1)
-    dz = -(x2*y1-x1*y2)
-    temp = math.gcd(dy,dx)
+
+    dy = y1 - y2
+    dx = x2 - x1
+    dz = -(x2 * y1 - x1 * y2)
+    temp = math.gcd(dy, dx)
 
     if dx < 0 or dx == 0 and dy < 0:
         dy *= -1
         dx *= -1
         dz *= -1
-    return (dy/temp, dx/temp, dz/temp)
+    return (dy / temp, dx / temp, dz / temp)
+
 
 def T(pointn):
     s0 = 290797
-    
+
     count = 0
     finallist = []
-    
-    while count != 2*pointn:
-        sn = pow(s0,2,50515093)
+
+    while count != 2 * pointn:
+        sn = pow(s0, 2, 50515093)
         tn = (sn % 2000) - 1000
         finallist.append(tn)
         s0 = sn
         count += 1
     final = []
-    
-    for x in range(0,len(finallist),2):
-        final.append((finallist[x], finallist[x+1]))
-        
+
+    for x in range(0, len(finallist), 2):
+        final.append((finallist[x], finallist[x + 1]))
+
     return final
-    
+
+
 def compute(x):
     points = T(x)
     length = len(points)
-    
+
     lines = set([])
     for x in range(length):
-        for y in range(x+1,length):
-            temp = LineCreator(points[x],points[y])
+        for y in range(x + 1, length):
+            temp = LineCreator(points[x], points[y])
             lines.add(temp)
     M = len(lines)
     gradients = {}
-    
+
     for a in lines:
-        if (a[0],a[1]) in gradients:
-            gradients[(a[0],a[1])] += 1
+        if (a[0], a[1]) in gradients:
+            gradients[(a[0], a[1])] += 1
         else:
-            gradients[(a[0],a[1])] = 1
-            
+            gradients[(a[0], a[1])] = 1
+
     total = 0
     for b in gradients:
-        total += gradients[b] * (M-gradients[b])
-    
+        total += gradients[b] * (M - gradients[b])
+
     return M, total
+
 
 if __name__ == "__main__":
     assert T(3) == [(527, 144), (-488, 732), (-454, -947)]
@@ -106,4 +110,3 @@ if __name__ == "__main__":
     assert compute(100) == (4948, 24477690)
     print(compute(100))
     print(compute(1000))
-    

@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00523%20-%20First%20Sort%20I.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00523%20-%20First%20Sort%20I.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Thu Jul  6 17:41:32 2023
 
 @author: igorvanloo
 """
-'''
+"""
 Project Euler Problem 523
 
 Generate all possible permutations of [1, 2, ..., n] get values
@@ -40,8 +40,9 @@ E(n) = sum_{k = 1 to n} (2^(k - 1) - 1)/k
 
 See website for the actual proof of why
 
-'''
+"""
 from itertools import permutations
+
 
 def first_sort(L):
     steps = 0
@@ -57,16 +58,19 @@ def first_sort(L):
                 steps += 1
                 break
     return steps
-            
+
+
 def brute_E(n):
     perms = [list(x) for x in permutations([x for x in range(1, n + 1)])]
     total = 0
     for x in perms:
         total += first_sort(x)
-    return total/len(perms), total, len(perms)
-        
+    return total / len(perms), total, len(perms)
+
+
 def E(n):
-    return sum((pow(2, k - 1) - 1)/k for k in range(1, n + 1))
+    return sum((pow(2, k - 1) - 1) / k for k in range(1, n + 1))
+
 
 if __name__ == "__main__":
     assert first_sort([4, 1, 3, 2]) == 5

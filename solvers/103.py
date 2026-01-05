@@ -31,7 +31,7 @@ def is_special_sum_set(A: List[int]) -> bool:
     subset_sum = [0] * (1 << n)
     for m in masks:
         lsb = m & -m
-        i = (lsb.bit_length() - 1)
+        i = lsb.bit_length() - 1
         pm = m ^ lsb
         subset_size[m] = subset_size[pm] + 1
         subset_sum[m] = subset_sum[pm] + A[i]

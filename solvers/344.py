@@ -21,6 +21,7 @@ P2 = 1000033
 
 # ---------- Core combinatorics: count q-tuples with XOR == 0 and fixed sum ----------
 
+
 def _coeff_even_choose(q: int, mod: int) -> list[int]:
     """Return coeff[j] = C(q, 2*j) mod mod, for j=0..q//2."""
     return [math.comb(q, 2 * j) % mod for j in range(q // 2 + 1)]
@@ -79,6 +80,7 @@ def reduce_mod(arr: array, mod: int) -> array:
 
 # ---------- Binomial helpers (k is small: <= 101) ----------
 
+
 def nCk_mod_prime_smallk(n: int, k: int, p: int) -> int:
     """Compute C(n,k) mod prime p for small k via multiplicative formula."""
     if k < 0 or k > n:
@@ -104,12 +106,15 @@ def inv_table_prime(p: int, nmax: int) -> array:
 
 # ---------- Count winning configurations (even c only, which is what PE344 uses) ----------
 
+
 def W_exact_even_c(n: int, c: int) -> int:
     """
     Exact W(n,c) for even c (works fast for the small test cases in the statement).
     """
     if c % 2 != 0:
-        raise ValueError("This implementation focuses on even c (the Euler problem uses c=100).")
+        raise ValueError(
+            "This implementation focuses on even c (the Euler problem uses c=100)."
+        )
 
     p = c // 2
     m = c + 1
@@ -169,7 +174,9 @@ def W_mod_even_c(n: int, c: int) -> int:
       4) CRT to MOD.
     """
     if c % 2 != 0:
-        raise ValueError("This implementation focuses on even c (the Euler problem uses c=100).")
+        raise ValueError(
+            "This implementation focuses on even c (the Euler problem uses c=100)."
+        )
 
     p = c // 2
     m = c + 1
@@ -193,8 +200,8 @@ def W_mod_even_c(n: int, c: int) -> int:
         inv = inv_table_prime(pr, S + p)
 
         n0 = S + p
-        w_even = nCk_mod_prime_smallk(n0, p, pr)               # s = 0
-        w_odd = (w_even * (n0 - p) % pr) * inv[n0] % pr        # s = 1
+        w_even = nCk_mod_prime_smallk(n0, p, pr)  # s = 0
+        w_odd = (w_even * (n0 - p) % pr) * inv[n0] % pr  # s = 1
 
         L2 = 0
         Loth = 0

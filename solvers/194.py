@@ -5,11 +5,11 @@ MOD = 10**8
 
 
 def SA(c: int) -> int:
-    return c**5 - 9*c**4 + 34*c**3 - 69*c**2 + 77*c - 38
+    return c**5 - 9 * c**4 + 34 * c**3 - 69 * c**2 + 77 * c - 38
 
 
 def SB(c: int) -> int:
-    return c**5 - 8*c**4 + 27*c**3 - 50*c**2 + 52*c - 24
+    return c**5 - 8 * c**4 + 27 * c**3 - 50 * c**2 + 52 * c - 24
 
 
 def N(a: int, b: int, c: int, mod=None) -> int:
@@ -28,4 +28,3 @@ if __name__ == "__main__":
     assert N(0, 2, 4) == 92928
     assert N(2, 2, 3) == 20736
     print(f"{solve():08d}")
-

@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0206.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0206.cpp"""
+
+
 def match(x: int) -> bool:
     square = x * x
     right_to_left = [0, 9, 8, 7, 6, 5, 4, 3, 2, 1]

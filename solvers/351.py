@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-'''Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00351%20-%20Hexagonal%20Orchards.py'''
+"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00351%20-%20Hexagonal%20Orchards.py"""
 # -*- coding: utf-8 -*-
 """
 Created on Fri May 26 13:16:34 2023
 
 @author: igorvanloo
 """
-'''
+"""
 Project Euler Problem 351
 
 Clearly we only need to look at one section (triangle) of the hexagon and then we multiply by 6
@@ -43,23 +43,24 @@ Hence the problem is reduced to the following:
            = 3*n(n+1) - 6*sum_{i = 1}^n φ(i)
            
 https://en.wikipedia.org/wiki/Totient_summatory_function = sum_{i = 1}^n φ(i) 
-'''
+"""
 import math
-    
-def mobius_k_sieve(n, k = 2):
-    '''
+
+
+def mobius_k_sieve(n, k=2):
+    """
     I redefined the the Mobius function:
                     1 if n is k-free positive integer with even number of prime factors
         μ_{k}(n) = -1 if n is k-free positive integer with odd number of prime factors
                     0 if n has a k power factor
-    '''
-    prime = [1]*(n + 1)
+    """
+    prime = [1] * (n + 1)
     prime[0] = prime[1] = 0
-    mob = [0] + [1]*(n)
+    mob = [0] + [1] * (n)
     for p in range(2, n + 1):
         if prime[p]:
             mob[p] *= -1
-            for i in range(2*p, n + 1, p):
+            for i in range(2 * p, n + 1, p):
                 prime[i] = 0
                 mob[i] *= -1
             sq = pow(p, k)
@@ -68,49 +69,53 @@ def mobius_k_sieve(n, k = 2):
                     mob[j] = 0
     return mob
 
+
 def totient_sum_slow(n):
     mob = mobius_k_sieve(n)
     tot = 0
     for k in range(1, n + 1):
-        t = n//k
-        tot += mob[k]*t*(t + 1)
-    return tot//2
+        t = n // k
+        tot += mob[k] * t * (t + 1)
+    return tot // 2
+
 
 def totient_sum(n):
     L = int(math.sqrt(n))
-    v = [0]*(L + 1)
-    bigV = [0]*(n//L + 1)
-    
+    v = [0] * (L + 1)
+    bigV = [0] * (n // L + 1)
+
     for x in range(1, L + 1):
-        res = (x*(x + 1))//2
+        res = (x * (x + 1)) // 2
         for g in range(2, int(math.sqrt(x)) + 1):
-            res -= v[x//g]
-        
+            res -= v[x // g]
+
         for z in range(1, int(math.sqrt(x)) + 1):
-            if x//z != z:
-                res -= (x//z - x//(z + 1))*v[z]
-        
+            if x // z != z:
+                res -= (x // z - x // (z + 1)) * v[z]
+
         v[x] = res
-    
-    for x in range(n//L, 0, -1):
-        k = n//x
-        res = (k*(k + 1))//2
-        
+
+    for x in range(n // L, 0, -1):
+        k = n // x
+        res = (k * (k + 1)) // 2
+
         for g in range(2, int(math.sqrt(k)) + 1):
-            if k//g <= L:
-                res -= v[k//g]
+            if k // g <= L:
+                res -= v[k // g]
             else:
-                res -= bigV[x*g]
-        
+                res -= bigV[x * g]
+
         for z in range(1, int(math.sqrt(k)) + 1):
-            if z != k//z:
-                res -= (k//z - k//(z + 1))*v[z]
+            if z != k // z:
+                res -= (k // z - k // (z + 1)) * v[z]
         bigV[x] = res
-        
+
     return bigV[1]
 
+
 def H(n):
-    return 3*n*(n + 1) - 6*totient_sum(n)
+    return 3 * n * (n + 1) - 6 * totient_sum(n)
+
 
 if __name__ == "__main__":
     assert H(5) == 30

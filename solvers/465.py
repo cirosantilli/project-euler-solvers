@@ -56,9 +56,9 @@ def build_totient_prefix(limit: int) -> array:
       - prefix: array('Q') (8 bytes per entry)
     """
     if limit < 1:
-        return array('Q', [0])
+        return array("Q", [0])
 
-    phi = array('I', [0]) * (limit + 1)
+    phi = array("I", [0]) * (limit + 1)
     phi[1] = 1
     primes = []  # Python list is fast for iteration
 
@@ -76,7 +76,7 @@ def build_totient_prefix(limit: int) -> array:
             else:
                 phi[ip] = phi[i] * (p - 1)
 
-    pref = array('Q', [0]) * (limit + 1)
+    pref = array("Q", [0]) * (limit + 1)
     s = 0
     for i in range(1, limit + 1):
         s += phi[i]
@@ -191,7 +191,7 @@ def main() -> None:
     if len(sys.argv) >= 2 and sys.argv[1].lstrip("-").isdigit():
         n = int(sys.argv[1])
     else:
-        n = 7 ** 13
+        n = 7**13
 
     # Totient-sum precompute size:
     # Default is tuned for a reasonable memory footprint in Python.

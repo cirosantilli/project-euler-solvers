@@ -18,7 +18,7 @@ def expected_repetitions(x: float) -> float:
     Derived closed form:
         E(x) = 7/9 + (2/3) * ln(x) + 2 / (9 * x^3)
     """
-    return 7.0 / 9.0 + (2.0 / 3.0) * math.log(x) + 2.0 / (9.0 * x ** 3)
+    return 7.0 / 9.0 + (2.0 / 3.0) * math.log(x) + 2.0 / (9.0 * x**3)
 
 
 def _self_test() -> None:

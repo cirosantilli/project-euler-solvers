@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0345.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0345.cpp"""
 SIZE = 15
 MATRIX = [
     [7, 53, 183, 439, 863, 497, 383, 563, 79, 973, 287, 63, 343, 169, 583],
@@ -33,7 +33,9 @@ def search(row=0, column_mask=0, total=0, at_least=0):
         mask = 1 << column
         if column_mask & mask:
             continue
-        current = search(row + 1, column_mask | mask, total + MATRIX[row][column], at_least)
+        current = search(
+            row + 1, column_mask | mask, total + MATRIX[row][column], at_least
+        )
         if at_least < current:
             at_least = current
 
@@ -50,7 +52,9 @@ def max_sum_small(matrix):
                 if mask & (1 << col):
                     continue
                 next_mask = mask | (1 << col)
-                next_dp[next_mask] = max(next_dp.get(next_mask, 0), value + matrix[row][col])
+                next_dp[next_mask] = max(
+                    next_dp.get(next_mask, 0), value + matrix[row][col]
+                )
         dp = next_dp
     return max(dp.values()) if dp else 0
 

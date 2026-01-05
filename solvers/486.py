@@ -152,9 +152,7 @@ def solve_three(L1: int, L2: int, L3: int) -> tuple[int, int, int]:
     add5_2 = 1 if L2 >= 5 and (F5(5) % m == 0) else 0
     add5_3 = 1 if L3 >= 5 and (F5(5) % m == 0) else 0
 
-    return (add5_1 + base1 + extra1,
-            add5_2 + base2 + extra2,
-            add5_3 + base3 + extra3)
+    return (add5_1 + base1 + extra1, add5_2 + base2 + extra2, add5_3 + base3 + extra3)
 
 
 def main() -> None:

@@ -17,6 +17,7 @@ import math
 # Helpers / tests from statement
 # ----------------------------
 
+
 def has_3_equal_consecutive_digits(n: int) -> bool:
     """Return True iff decimal representation of n contains a run of >= 3 identical digits."""
     last = -1
@@ -43,8 +44,8 @@ def kempner_no_digit_9_sum() -> float:
     This is only used as a correctness assert (not needed for Euler 368 itself).
     """
     # Truncation parameters chosen to comfortably reach ~1e-9 accuracy.
-    K = 180          # highest power used in the expansion
-    MAX_LEN = 450    # enough because the count grows like 9^L
+    K = 180  # highest power used in the expansion
+    MAX_LEN = 450  # enough because the count grows like 9^L
 
     pow10inv = [0.0] * (K + 1)
     for j in range(1, K + 1):
@@ -89,9 +90,26 @@ def kempner_no_digit_9_sum() -> float:
 def run_statement_asserts() -> None:
     # Statement: out of the first 1200 terms, exactly 20 are omitted; list given.
     expected_omitted = [
-        111, 222, 333, 444, 555, 666, 777, 888, 999,
+        111,
+        222,
+        333,
+        444,
+        555,
+        666,
+        777,
+        888,
+        999,
         1000,
-        1110, 1111, 1112, 1113, 1114, 1115, 1116, 1117, 1118, 1119,
+        1110,
+        1111,
+        1112,
+        1113,
+        1114,
+        1115,
+        1116,
+        1117,
+        1118,
+        1119,
     ]
     omitted = [n for n in range(1, 1201) if has_3_equal_consecutive_digits(n)]
     assert omitted == expected_omitted, (len(omitted), omitted[:5], omitted[-5:])
@@ -104,6 +122,7 @@ def run_statement_asserts() -> None:
 # ----------------------------
 # Euler 368 solver
 # ----------------------------
+
 
 def solve() -> float:
     """

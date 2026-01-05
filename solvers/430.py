@@ -28,7 +28,7 @@ def expected_small(N: int, M: int) -> float:
         # p = 1 - P(A<i,B<i) - P(A>i,B>i)
         p = 1.0 - ((i - 1) * (i - 1) + (N - i) * (N - i)) / n2
         r = 1.0 - 2.0 * p  # E[(-1)^{flip}] per turn for this disk
-        total += 0.5 * (1.0 + (r ** M))
+        total += 0.5 * (1.0 + (r**M))
     return total
 
 
@@ -57,11 +57,7 @@ def expected_large(N: int, M: int) -> Decimal:
     # c = (2N - 1) / N^2
     # E = N/2 + 1/2 * [ N/(2M+1) - N*M*c/(2M-1) ]
     # Simplify the c-term: N*M*c = M*(2N-1)/N
-    E = (
-        Nd / 2
-        + Nd / (2 * (2 * Md + 1))
-        - (Md * (2 * Nd - 1)) / (2 * Nd * (2 * Md - 1))
-    )
+    E = Nd / 2 + Nd / (2 * (2 * Md + 1)) - (Md * (2 * Nd - 1)) / (2 * Nd * (2 * Md - 1))
     return E
 
 

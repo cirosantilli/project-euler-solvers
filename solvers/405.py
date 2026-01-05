@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Tuple
 
-MOD = 17 ** 7
+MOD = 17**7
 PHI = MOD - MOD // 17  # Euler's totient for 17^7
 INV15 = pow(15, -1, MOD)
 
@@ -34,7 +34,7 @@ def main() -> None:
     assert f_mod(4) == 82
     assert f_mod(10**9) == 126897180
 
-    k = 10 ** 18
+    k = 10**18
     result = f_mod_power10(k)
     print(result)
 

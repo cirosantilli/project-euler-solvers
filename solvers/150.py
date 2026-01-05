@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0150.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0150.cpp"""
+
+
 def lcg() -> int:
     lcg.seed = (615949 * lcg.seed + 797807) % (1 << 20)
     return lcg.seed - (1 << 19)

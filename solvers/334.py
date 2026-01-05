@@ -32,7 +32,7 @@ def generate_b(n: int):
             t //= 2
         else:
             t = (t // 2) ^ 926252
-        out.append((t % (2 ** 11)) + 1)
+        out.append((t % (2**11)) + 1)
     return out
 
 
@@ -67,7 +67,7 @@ def solve():
     S2_init = sum((i * i) * b[i] for i in range(1500))
 
     # block has N+1 positions: L..L+N, but one hole H missing
-    sumk = N * (N + 1) // 2          # Σk for k=0..N
+    sumk = N * (N + 1) // 2  # Σk for k=0..N
     sumk2 = N * (N + 1) * (2 * N + 1) // 6  # Σk^2 for k=0..N
 
     # Candidate L from inequality constraints (hole must lie within block)
@@ -97,4 +97,3 @@ if __name__ == "__main__":
     assert simulate_adjacent(289, 145) == 3419100
 
     print(solve())
-

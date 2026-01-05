@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-'''Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0290.cpp'''
+"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0290.cpp"""
 SIGNATURE = 137
 UNKNOWN = -1
 CACHE = [UNKNOWN] * ((18 + 1) * 137 * 240)
