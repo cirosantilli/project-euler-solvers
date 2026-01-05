@@ -675,7 +675,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/383.py[383.py] | link:solvers/383.md[383.md] | 0.179 |  |  |
 | link:solvers/384.py[384.py] | link:solvers/384.md[384.md] | 0.094 |  |  |
 | link:solvers/385.py[385.py] | link:solvers/385.md[385.md] | 0.134 |  |  |
-| link:solvers/386.py[386.py] | link:solvers/386.md[386.md] |  | gpt-5.2-thinking |  | error: timed out after 600.000s
+| link:solvers/386.py[386.py] | link:solvers/386.md[386.md] | 0.834 | gpt-5.2-thinking |  |
 | link:solvers/387.py[387.py] |  | 0.122 |  |  |
 | link:solvers/388.py[388.py] | link:solvers/388.md[388.md] | 0.561 |  |  |
 | link:solvers/389.py[389.py] | link:solvers/389.md[389.md] | 0.131 | gpt-5.2-thinking |  |

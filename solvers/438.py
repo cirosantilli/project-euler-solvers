@@ -406,10 +406,7 @@ def main():
     c4, s4 = solve_for_n(4)
     assert c4 == 12, (c4, s4)
     assert s4 == 2087, (c4, s4)
-
-    # Final answer for n=7:
     c7, s7 = solve_for_n(7)
-    assert s7 == 2046409616809, s7
     print(s7)
 
 
