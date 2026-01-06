@@ -1,66 +1,68 @@
-#!/usr/bin/env python
-"""Adapted from: https://github.com/stbrumme/euler/blob/b426763514558c3b39f2ec507f271d322088d28a/euler-0539.cpp"""
+#!/usr/bin/env python3
+"""
+Project Euler 539: Odd Elimination
+
+We define P(n) as the last number remaining after repeatedly eliminating every other
+number, alternating directions each pass (left-to-right, then right-to-left, ...),
+starting from the list [1, 2, ..., n].
+
+We need S(n) = sum_{k=1..n} P(k), and the problem asks for:
+S(10^18) mod 987654321
+
+No external libraries are used.
+"""
+
+from functools import lru_cache
+
+MOD = 987654321
 
 
-def brute_force_p(n):
-    numbers = list(range(1, n + 1))
-    left_to_right = True
-    while len(numbers) > 1:
-        next_numbers = []
-        if left_to_right:
-            idx = 1
-        else:
-            idx = len(numbers) % 2
-        for i in range(idx, len(numbers), 2):
-            next_numbers.append(numbers[i])
-        left_to_right = not left_to_right
-        numbers = next_numbers
-    return numbers[0]
+@lru_cache(maxsize=None)
+def P(n: int) -> int:
+    """Last remaining number for list 1..n (Elimination Game), exact integer."""
+    if n == 1:
+        return 1
+    # After a left-to-right pass, remaining numbers are 2,4,6,...,2*(n//2)
+    # Rescale by 2 and transform the next (right-to-left) elimination:
+    # P(n) = 2 * (1 + n//2 - P(n//2))
+    return 2 * (1 + n // 2 - P(n // 2))
 
 
-def brute_force_s(limit):
-    total = 0
-    for i in range(1, limit + 1):
-        total += brute_force_p(i)
-    return total
+@lru_cache(maxsize=None)
+def S(n: int) -> int:
+    """Return S(n) mod MOD, where S(n) = sum_{k=1..n} P(k). Supports n>=0."""
+    if n <= 0:
+        return 0
+    if n == 1:
+        return 1
+
+    if n & 1:
+        # n = 2q + 1
+        q = n // 2
+        # P(2m) = P(2m+1) for m>=1, and:
+        # P(2m) = 2*(m+1 - P(m))
+        # Using that, one can derive:
+        # S(2q+1) = 1 + 2*q*(q+3) - 4*S(q)
+        return (1 + (2 * q * (q + 3)) - 4 * S(q)) % MOD
+    else:
+        # n = 2q
+        q = n // 2
+        # S(2q) = 2*q^2 + 4*q - 1 - 4*S(q-1) - 2*P(q)
+        return (2 * q * q + 4 * q - 1 - 4 * S(q - 1) - 2 * (P(q) % MOD)) % MOD
 
 
-def fast_p(n):
-    cache_size = 20
-    if not hasattr(fast_p, "cache"):
-        fast_p.cache = [0] * (cache_size + 1)
-    cache = fast_p.cache
-
-    if n <= cache_size:
-        if cache[n] == 0:
-            cache[n] = brute_force_p(n)
-        return cache[n]
-
-    result = fast_p(n // 4) * 4
-    return result + (n & 2) - 2
+def solve() -> int:
+    return S(10**18) % MOD
 
 
-def slow_s(limit, modulo=987654321):
-    total = 0
-    for i in range(1, limit + 1):
-        current = fast_p(i)
-        total += current
-        if total > 10 * modulo:
-            total %= modulo
-    return total % modulo
-
-
-def fast_s(_limit, _modulo=987654321):
-    return 0
-
-
-def main():
-    assert fast_p(1) == 1
-    assert fast_p(9) == 6
-    assert fast_p(1000) == 510
-    assert slow_s(1000) == 268271
-    print(slow_s(1000000000000000000))
+def _self_test() -> None:
+    # Given test values from the problem statement
+    assert P(1) == 1
+    assert P(9) == 6
+    assert P(1000) == 510
+    assert S(1000) % MOD == 268271
 
 
 if __name__ == "__main__":
-    main()
+    _self_test()
+    print(solve())

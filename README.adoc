@@ -717,7 +717,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/425.py[425.py] |  | 4.366 |  |  |
 | link:solvers/426.py[426.py] | link:solvers/426.md[426.md] | 0.496 | gpt-5.2-thinking |  |
 | link:solvers/427.py[427.py] | link:solvers/427.md[427.md] | 3.178 |  |  |
-| 428.py |  |  |  |  | error: solver not found
+| link:solvers/428.py[428.py] | link:solvers/428.md[428.md] | 2.022 | gpt-5.2-thinking |  |
 | link:solvers/429.py[429.py] |  | 1.636 |  |  |
 | link:solvers/430.py[430.py] | link:solvers/430.md[430.md] | 0.108 |  |  |
 | link:solvers/431.py[431.py] | link:solvers/431.md[431.md] | 0.146 |  |  |
@@ -800,35 +800,35 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/508.py[508.py] | link:solvers/508.md[508.md] | 0.211 | gpt-5.2-thinking |  |
 | link:solvers/509.py[509.py] | link:solvers/509.md[509.md] | 0.107 | gpt-5.2-thinking |  |
 | link:solvers/510.py[510.py] |  | 1.384 |  |  |
-| 511.py |  |  |  |  | error: solver not found
+| link:solvers/511.py[511.py] | link:solvers/511.md[511.md] | 1.665 | gpt-5.2-thinking |  |
 | link:solvers/512.py[512.py] |  | 18.230 |  |  |
 | 513.py |  |  |  |  | error: solver not found
-| 514.py |  |  |  |  | error: solver not found
-| 515.py |  |  |  |  | error: solver not found
+| link:solvers/514.py[514.py] | link:solvers/514.md[514.md] | 0.522 | gpt-5.2-thinking |  |
+| link:solvers/515.py[515.py] | link:solvers/515.md[515.md] | 0.132 | gpt-5.2-thinking |  |
 | link:solvers/516.py[516.py] |  | 0.941 |  |  |
-| 517.py |  |  |  |  | error: solver not found
+| link:solvers/517.py[517.py] | link:solvers/517.md[517.md] | 0.705 | gpt-5.2-thinking |  |
 | link:solvers/518.py[518.py] |  | 4.163 |  |  |
-| 519.py |  |  |  |  | error: solver not found
-| 520.py |  |  |  |  | error: solver not found
-| 521.py |  |  |  |  | error: solver not found
-| 522.py |  |  |  |  | error: solver not found
+| link:solvers/519.py[519.py] | link:solvers/519.md[519.md] | 0.200 | gpt-5.2-thinking |  |
+| link:solvers/520.py[520.py] | link:solvers/520.md[520.md] | 0.108 | gpt-5.2-thinking |  |
+| link:solvers/521.py[521.py] | link:solvers/521.md[521.md] | 35.023 | gpt-5.2-thinking |  |
+| link:solvers/522.py[522.py] | link:solvers/522.md[522.md] | 2.453 | gpt-5.2-thinking |  |
 | link:solvers/523.py[523.py] |  | 0.060 |  |  |
 | 524.py |  |  |  |  | error: solver not found
-| 525.py |  |  |  |  | error: solver not found
-| 526.py |  |  |  |  | error: solver not found
-| 527.py |  |  |  |  | error: solver not found
-| 528.py |  |  |  |  | error: solver not found
-| 529.py |  |  |  |  | error: solver not found
-| 530.py |  |  |  |  | error: solver not found
+| link:solvers/525.py[525.py] | link:solvers/525.md[525.md] | 0.167 | gpt-5.2-thinking |  |
+| link:solvers/526.py[526.py] | link:solvers/526.md[526.md] | 41.979 | gpt-5.2-thinking |  |
+| link:solvers/527.py[527.py] | link:solvers/527.md[527.md] | 0.120 | gpt-5.2-thinking |  |
+| link:solvers/528.py[528.py] | link:solvers/528.md[528.md] | 0.126 | gpt-5.2-thinking |  |
+| link:solvers/529.py[529.py] | link:solvers/529.md[529.md] | 8.202 | gpt-5.2-thinking |  |
+| link:solvers/530.py[530.py] | link:solvers/530.md[530.md] | 5.856 | gpt-5.2-thinking |  |
 | link:solvers/531.py[531.py] |  | 1.608 |  |  |
-| 532.py |  |  |  |  | error: solver not found
-| 533.py |  |  |  |  | error: solver not found
+| link:solvers/532.py[532.py] | link:solvers/532.md[532.md] | 0.132 | gpt-5.2-thinking |  |
+| link:solvers/533.py[533.py] | link:solvers/533.md[533.md] | 1.071 | gpt-5.2-thinking |  |
 | 534.py |  |  |  |  | error: solver not found
 | link:solvers/535.py[535.py] | link:solvers/535.md[535.md] | 209.505 |  |  | error: expected '611778217', got '1.2759860331'
-| 536.py |  |  |  |  | error: solver not found
+| link:solvers/536.py[536.py] | link:solvers/536.md[536.md] |  | gpt-5.2-thinking |  | error: timed out after 600.000s
 | link:solvers/537.py[537.py] |  | 23.167 |  |  |
-| 538.py |  |  |  |  | error: solver not found
-| link:solvers/539.py[539.py] |  |  |  |  | error: timed out after 60.000s
+| link:solvers/538.py[538.py] | link:solvers/538.md[538.md] | 1.363 | gpt-5.2-thinking |  |
+| link:solvers/539.py[539.py] | link:solvers/539.md[539.md] | 0.104 | gpt-5.2-thinking |  |
 | link:solvers/540.py[540.py] |  | 9.710 |  |  |
 | 541.py |  |  |  |  | error: solver not found
 | 542.py |  |  |  |  | error: solver not found
