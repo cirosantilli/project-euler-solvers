@@ -15,7 +15,7 @@ This repo aims to solve ALL https://projecteuler.net[Project Euler] problems in 
 Status:
 
 * all solved up to: **350**
-* all solved up to **500** except less than 10 problems. Ctrl + F "error: " to see the first missing ones.
+* all solved up to **500** except less than 5 problems. Ctrl + F "error: " to see the first missing ones.
 
 Tested on Python 3.13.7, PyPy 7.3.20, Ubuntu 25.10.
 
@@ -642,7 +642,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/350.py[350.py] | link:solvers/350.md[350.md] | 0.192 | gpt-5.2-thinking |  |
 | link:solvers/351.py[351.py] |  | 0.095 |  |  |
 | link:solvers/352.py[352.py] | link:solvers/352.md[352.md] | 0.658 |  |  |
-| link:solvers/353.py[353.py] | link:solvers/353.md[353.md] | 21.532 | gpt-5.2-thinking |  | error: expected '1.2759860331', got '1.2761219354'
+| link:solvers/353.py[353.py] | link:solvers/353.md[353.md] | 193.097 | gpt-5.2-thinking |  |
 | link:solvers/354.py[354.py] | link:solvers/354.md[354.md] | 1.617 |  |  |
 | link:solvers/355.py[355.py] | link:solvers/355.md[355.md] | 0.720 |  |  |
 | link:solvers/356.py[356.py] | link:solvers/356.md[356.md] | 0.110 |  |  |
@@ -668,7 +668,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/376.py[376.py] | link:solvers/376.md[376.md] | 4.841 |  |  |
 | link:solvers/377.py[377.py] | link:solvers/377.md[377.md] | 0.105 |  |  |
 | link:solvers/378.py[378.py] | link:solvers/378.md[378.md] | 13.007 |  |  |
-| link:solvers/379.py[379.py] | link:solvers/379.md[379.md] |  | gpt-5.2-codex |  | error: timed out after 600.000s
+| link:solvers/379.py[379.py] | link:solvers/379.md[379.md] | 5.745 | gpt-5.2-thinking |  |
 | link:solvers/380.py[380.py] | link:solvers/380.md[380.md] | 0.098 |  |  |
 | link:solvers/381.py[381.py] |  | 2.832 |  |  |
 | link:solvers/382.py[382.py] | link:solvers/382.md[382.md] | 0.087 |  |  |
@@ -739,7 +739,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/447.py[447.py] | link:solvers/447.md[447.md] | 0.545 |  |  |
 | link:solvers/448.py[448.py] | link:solvers/448.md[448.md] | 2.785 |  |  |
 | link:solvers/449.py[449.py] | link:solvers/449.md[449.md] | 0.100 | gpt-5.2-thinking |  |
-| link:solvers/450.py[450.py] | link:solvers/450.md[450.md] | 0.238 | gpt-5.2-codex |  | error: expected '583333163984220940', got '583333163883159340'
+| link:solvers/450.py[450.py] | link:solvers/450.md[450.md] | 0.218 | gpt-5.2-codex |  | error: expected '583333163984220940', got '583333163883159340'
 | link:solvers/451.py[451.py] |  | 74.218 |  |  |
 | link:solvers/452.py[452.py] | link:solvers/452.md[452.md] | 163.850 |  |  |
 | link:solvers/453.py[453.py] | link:solvers/453.md[453.md] | 0.229 | gpt-5.2-thinking |  |
@@ -772,7 +772,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/480.py[480.py] | link:solvers/480.md[480.md] | 0.133 | gpt-5.2-thinking |  |
 | link:solvers/481.py[481.py] | link:solvers/481.md[481.md] | 0.755 | gpt-5.2-thinking |  |
 | link:solvers/482.py[482.py] | link:solvers/482.md[482.md] | 3.574 | gpt-5.2-thinking |  |
-| link:solvers/483.py[483.py] | link:solvers/483.md[483.md] |  |  |  | error: timed out after 600.000s
+| link:solvers/483.py[483.py] | link:solvers/483.md[483.md] | 8.307 | gpt-5.2-thinking |  |
 | link:solvers/484.py[484.py] | link:solvers/484.md[484.md] | 1.523 | gpt-5.2-thinking |  |
 | link:solvers/485.py[485.py] |  | 2.056 |  |  |
 | link:solvers/486.py[486.py] | link:solvers/486.md[486.md] | 0.296 | gpt-5.2-thinking |  |
@@ -824,7 +824,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | 532.py |  |  |  |  | error: solver not found
 | 533.py |  |  |  |  | error: solver not found
 | 534.py |  |  |  |  | error: solver not found
-| 535.py |  |  |  |  | error: solver not found
+| link:solvers/535.py[535.py] | link:solvers/535.md[535.md] | 209.505 |  |  | error: expected '611778217', got '1.2759860331'
 | 536.py |  |  |  |  | error: solver not found
 | link:solvers/537.py[537.py] |  | 23.167 |  |  |
 | 538.py |  |  |  |  | error: solver not found

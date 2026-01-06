@@ -1,240 +1,172 @@
 #!/usr/bin/env python3
 """
-Project Euler 483: Repeated Permutation
+Project Euler 483 - Repeated Permutation
 
-We define f(P) as the order of a permutation P (the smallest m>0 such that P^m = identity),
-and g(n) as the average of f(P)^2 over all permutations of size n.
+We use the cycle-type formula. If a permutation on n elements has a_i cycles of length i,
+then the number of such permutations is:
 
-This program computes g(350) and prints it in scientific notation with 10 significant digits.
+    n! / ∏_i (a_i! * i^{a_i})
 
-No external libraries are used (only Python standard library).
-The exact example fractions in the statement are verified with asserts.
+and its order is lcm({ i : a_i > 0 }).
 
-Important implementation notes:
-- Uses the exponential generating function for permutations by cycle lengths:
-    Product_{k>=1} exp(x^k / k)
-  and a DP that tracks total size and the LCM of chosen cycle lengths.
-- Speeds up LCM tracking by encoding LCM prime-exponent vectors into a compact bitmask,
-  where LCM becomes bitwise OR.
+After dividing by n!, the required expectation becomes:
+
+    g(n) =  Σ_{ Σ i*a_i = n }  lcm({i : a_i>0})^2  /  ∏_i (a_i! * i^{a_i})
+
+We compute this sum with dynamic programming over cycle lengths, processing lengths
+from n down to 1. To keep the LCM-state small, we "extract" prime-power contributions
+as soon as they can no longer be affected by remaining (smaller) cycle lengths.
 """
 
-from fractions import Fraction
-import math
+from __future__ import annotations
+
+from math import gcd
 
 
-# -----------------------------
-# Small exact solver (for asserts)
-# -----------------------------
-def lcm(a: int, b: int) -> int:
-    return a // math.gcd(a, b) * b
+def _lcm(a: int, b: int) -> int:
+    return a // gcd(a, b) * b
 
 
-def g_exact(n: int) -> Fraction:
+def _sieve_primes(n: int) -> list[int]:
+    if n < 2:
+        return []
+    is_prime = bytearray(b"\x01") * (n + 1)
+    is_prime[0:2] = b"\x00\x00"
+    p = 2
+    while p * p <= n:
+        if is_prime[p]:
+            step = p
+            start = p * p
+            for x in range(start, n + 1, step):
+                is_prime[x] = 0
+        p += 1
+    return [i for i in range(2, n + 1) if is_prime[i]]
+
+
+def format_sci_10(x: float) -> str:
     """
-    Exact computation of g(n) using Fractions (only feasible for small n).
-    DP over cycle lengths k with multiplicity a_k, tracking size and integer lcm.
+    Format with 10 significant digits, as in the problem statement.
+    Example: 5.166666667e0 (no '+' sign, no leading zeros in exponent).
     """
-    dp = [dict() for _ in range(n + 1)]
-    dp[0][1] = Fraction(1, 1)
-
-    for k in range(1, n + 1):
-        # coefficient for choosing a cycles of length k: 1 / (k^a * a!)
-        maxa = n // k
-        coeff = [Fraction(1, 1)]
-        c = Fraction(1, 1)
-        for a in range(1, maxa + 1):
-            c /= k * a
-            coeff.append(c)
-
-        new = [d.copy() for d in dp]
-        for size in range(n + 1):
-            if not dp[size]:
-                continue
-            maxa2 = (n - size) // k
-            if maxa2 == 0:
-                continue
-            for L, w in dp[size].items():
-                newL = lcm(L, k)
-                if newL == L:
-                    for a in range(1, maxa2 + 1):
-                        ns = size + a * k
-                        new[ns][L] = new[ns].get(L, Fraction(0, 1)) + w * coeff[a]
-                else:
-                    for a in range(1, maxa2 + 1):
-                        ns = size + a * k
-                        new[ns][newL] = new[ns].get(newL, Fraction(0, 1)) + w * coeff[a]
-        dp = new
-
-    total = Fraction(0, 1)
-    for L, w in dp[n].items():
-        total += w * (L * L)
-    return total
+    s = f"{x:.9e}"  # 10 significant digits total (1 before '.' + 9 after)
+    mant, exp = s.split("e")
+    return f"{mant}e{int(exp)}"
 
 
-# -----------------------------
-# Prime-mask LCM representation
-# -----------------------------
-def build_prime_masks(n: int):
+def g(n: int) -> float:
     """
-    Returns:
-      masks[k] = bitmask encoding prime-power content of k
-      prime_info = list of (p, emax, offset)
-    Encoding rule:
-      For prime p with max exponent emax, we reserve emax bits at some offset.
-      If number has exponent e, we set the lowest e bits in that block.
-      Then LCM corresponds to bitwise OR.
+    Compute g(n) as defined in Project Euler 483.
+
+    DP state:
+        dp[used][L] = accumulated contribution where
+          - used is the total number of elements consumed by chosen cycles so far
+          - L is a "tracked" LCM component that only keeps prime-power information
+            that can still be influenced by future (smaller) cycle lengths.
+
+    We iterate cycle lengths i from n down to 1, and choose how many i-cycles to use.
+    For multiplicity a >= 1, the weight factor is 1 / (a! * i^a).
+
+    Prime-power extraction trick:
+        When we move from length i to i-1, any prime power p^k = i can no longer appear
+        in future cycles. If the tracked LCM currently has exponent >= k (i.e. divisible
+        by p^k), we can "lock in" one factor p into the final LCM^2 by multiplying the
+        contribution by p^2 and dividing the tracked LCM by p (reducing the exponent by 1).
+        This preserves correct interactions with remaining smaller powers of p.
     """
-    spf = list(range(n + 1))
-    for i in range(2, int(n**0.5) + 1):
-        if spf[i] == i:
-            step = i
-            start = i * i
-            for j in range(start, n + 1, step):
-                if spf[j] == j:
-                    spf[j] = i
+    if n < 0:
+        raise ValueError("n must be non-negative")
+    if n == 0:
+        return 1.0
 
-    primes = [i for i in range(2, n + 1) if spf[i] == i]
+    # For each i, extract[i] contains the prime p such that i == p^k for some k>=1.
+    # (For i>=2, this list has length 1 exactly when i is a prime power, else 0.)
+    extract: list[list[int]] = [[] for _ in range(n + 1)]
+    for p in _sieve_primes(n):
+        pk = p
+        while pk <= n:
+            extract[pk].append(p)
+            pk *= p
 
-    prime_info = []
-    offset = 0
-    pinfo = {}
-    for p in primes:
-        emax = 0
-        t = p
-        while t <= n:
-            emax += 1
-            t *= p
-        prime_info.append((p, emax, offset))
-        pinfo[p] = (emax, offset)
-        offset += emax
+    # dp[used] is a dict {tracked_lcm: value}
+    dp: list[dict[int, float]] = [dict() for _ in range(n + 1)]
+    dp[0][1] = 1.0
 
-    masks = [0] * (n + 1)
-    masks[1] = 0
-    for m in range(2, n + 1):
-        x = m
-        mask = 0
-        while x > 1:
-            p = spf[x]
-            e = 0
-            while x % p == 0:
-                x //= p
-                e += 1
-            _, off = pinfo[p]
-            mask |= ((1 << e) - 1) << off
-        masks[m] = mask
+    for i in range(n, 0, -1):
+        ii = i
+        inv_i = 1.0 / ii
+        new: list[dict[int, float]] = [dict() for _ in range(n + 1)]
 
-    return masks, prime_info
-
-
-def mask_to_value(mask: int, prime_info, cache: dict) -> int:
-    """
-    Decode mask back into integer LCM value.
-    Uses cache to avoid recomputation.
-    """
-    v = cache.get(mask)
-    if v is not None:
-        return v
-    val = 1
-    for p, emax, off in prime_info:
-        block = (mask >> off) & ((1 << emax) - 1)
-        e = block.bit_count()
-        if e:
-            val *= p**e
-    cache[mask] = val
-    return val
-
-
-# -----------------------------
-# Fast approximate solver for n=350
-# -----------------------------
-def g_fast(n: int) -> float:
-    """
-    Computes g(n) using float DP with LCM masks.
-    """
-    masks, prime_info = build_prime_masks(n)
-
-    dp = [dict() for _ in range(n + 1)]
-    dp[0][0] = 1.0  # mask=0 represents LCM=1
-
-    for k in range(2, n + 1):
-        kmask = masks[k]
-        inv_k = 1.0 / k
-
-        dp2 = dp[:]  # lazy copy-on-write per size
-        copied = [False] * (n + 1)
-
-        def ensure(i: int):
-            if not copied[i] and dp2[i] is dp[i]:
-                dp2[i] = dp[i].copy()
-                copied[i] = True
-            return dp2[i]
-
-        for size in range(n + 1):
-            d = dp[size]
+        for used in range(n + 1):
+            d = dp[used]
             if not d:
                 continue
-            if size + k > n:
-                continue
+            max_a = (n - used) // ii
+            for L0, v0 in d.items():
+                # a = 0 (use no i-cycles)
+                nd0 = new[used]
+                try:
+                    nd0[L0] += v0
+                except KeyError:
+                    nd0[L0] = v0
 
-            for Lmask, w in d.items():
-                newmask = Lmask | kmask
+                if max_a == 0:
+                    continue
 
-                # add contributions for a >= 1 cycles of length k
-                term = w * inv_k
-                a = 1
-                ns = size + k
-                target = Lmask if newmask == Lmask else newmask
-                while ns <= n:
-                    dd = ensure(ns)
-                    dd[target] = dd.get(target, 0.0) + term
-                    a += 1
-                    term *= inv_k / a
-                    ns += k
+                # a >= 1 (use i-cycles); LCM changes once if we use at least one i-cycle.
+                L1 = _lcm(L0, ii)
 
-        dp = dp2
+                # t holds v0 / (a! * i^a) for current a; update iteratively for speed.
+                t = v0 * inv_i  # a = 1
+                used1 = used + ii
+                nd = new[used1]
+                try:
+                    nd[L1] += t
+                except KeyError:
+                    nd[L1] = t
 
-    # Include 1-cycles by convolving with exp(x) => coefficient 1/(m!) for m fixed points
-    inv_fact = [1.0] * (n + 1)
-    f = 1.0
-    for i in range(1, n + 1):
-        f *= i
-        inv_fact[i] = 1.0 / f
+                for a in range(2, max_a + 1):
+                    t /= (a * ii)  # now t = v0 / (a! * i^a)
+                    used1 += ii
+                    nd = new[used1]
+                    try:
+                        nd[L1] += t
+                    except KeyError:
+                        nd[L1] = t
 
-    dist = {}
-    for size in range(n + 1):
-        d = dp[size]
-        if not d:
-            continue
-        factor = inv_fact[n - size]
-        for Lmask, w in d.items():
-            dist[Lmask] = dist.get(Lmask, 0.0) + w * factor
+        # Extract prime-power information that became "too large" when stepping below i.
+        if extract[i]:
+            comp: list[dict[int, float]] = [dict() for _ in range(n + 1)]
+            div_check = i  # i == p^k
+            for used in range(n + 1):
+                d = new[used]
+                if not d:
+                    continue
+                cd = comp[used]
+                for L, v in d.items():
+                    l = L
+                    val = v
+                    for p in extract[i]:
+                        if l % div_check == 0:
+                            l //= p
+                            val *= float(p * p)
+                    try:
+                        cd[l] += val
+                    except KeyError:
+                        cd[l] = val
+            new = comp
 
-    # Expected value: sum_{mask} prob(mask) * L(mask)^2
-    val_cache = {}
-    total = 0.0
-    for m, prob in dist.items():
-        L = mask_to_value(m, prime_info, val_cache)
-        total += (L * L) * prob
+        dp = new
 
-    return total
+    return dp[n].get(1, 0.0)
 
 
-def format_sci(x: float) -> str:
-    """
-    10 significant digits scientific notation (as in statement).
-    """
-    return "{:.9e}".format(x)
+def main() -> None:
+    # Test values from the problem statement (10 significant digits).
+    assert format_sci_10(g(3)) == "5.166666667e0"
+    assert format_sci_10(g(5)) == "1.734166667e1"
+    assert format_sci_10(g(20)) == "5.106136147e3"
 
-
-def main():
-    # --- Asserts from the problem statement ---
-    assert g_exact(3) == Fraction(31, 6)
-    assert g_exact(5) == Fraction(2081, 120)
-    assert g_exact(20) == Fraction(12422728886023769167301, 2432902008176640000)
-
-    # --- Required output ---
-    ans = g_fast(350)
-    print(format_sci(ans))
+    print(format_sci_10(g(350)))
 
 
 if __name__ == "__main__":

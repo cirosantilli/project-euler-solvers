@@ -1,155 +1,139 @@
-from __future__ import annotations
+#!/usr/bin/env python3
+"""
+Project Euler 379: Least common multiple count
 
-import math
-from array import array
-from functools import lru_cache
-from typing import List
+We want g(N) = number of pairs (x, y) with 1 <= x <= y and lcm(x, y) <= N.
+
+Key identity:
+For each n, the number of ordered pairs (a,b) with lcm(a,b)=n is tau(n^2).
+Thus:
+L(N) = sum_{n<=N} tau(n^2)  counts ordered pairs (a,b) with lcm<=N.
+Then unordered with x<=y is:
+g(N) = (L(N) + N) // 2  (diagonal pairs a=b contribute N).
+
+So we need compute:
+L(N) = sum_{n<=N} tau(n^2)
+
+This is computed using a Min_25/Lucy sieve style:
+1) Lucy: compute prime counting over "key values" floor(N/i).
+2) Convert prime counts into prime-sums for f(p)=tau(p^2)=3.
+3) Un-Lucy: expand prime sums into the full multiplicative summatory for tau(n^2).
+
+No brute force over pairs.
+"""
+
+from bisect import bisect_left
+from math import isqrt
 
 
-def sieve_primes(n: int) -> List[int]:
-    sieve = bytearray(b"\x01") * (n + 1)
-    primes: List[int] = []
-    for i in range(2, n + 1):
-        if sieve[i]:
-            primes.append(i)
-            if i * i <= n:
-                step = i
-                start = i * i
-                sieve[start : n + 1 : step] = b"\x00" * ((n - start) // step + 1)
+def primes_upto(limit: int):
+    """Fast odd-only sieve producing primes <= limit."""
+    if limit < 2:
+        return []
+    size = limit // 2 + 1  # indices represent odd numbers 1..limit
+    bs = bytearray(b"\x01") * size
+    bs[0] = 0  # 1 is not prime
+    r = isqrt(limit)
+    for p in range(3, r + 1, 2):
+        if bs[p // 2]:
+            start = p * p
+            start_idx = start // 2
+            step = p
+            count = (size - start_idx - 1) // step + 1
+            bs[start_idx::step] = b"\x00" * count
+    primes = [2]
+    primes.extend(2 * i + 1 for i in range(1, size) if bs[i])
     return primes
 
 
-def build_pi_table(limit: int, sieve: bytearray) -> array:
-    pi = array("I", [0]) * (limit + 1)
-    count = 0
-    for i in range(2, limit + 1):
-        if sieve[i]:
-            count += 1
-        pi[i] = count
-    return pi
+def sum_tau_sq(n: int) -> int:
+    """
+    Returns L(n) = sum_{k<=n} tau(k^2).
+    Uses Lucy (prime sums) + un-Lucy (multiplicative expansion).
+    """
+    m = isqrt(n)
 
+    # Key values V are all distinct floor(n / i).
+    V = []
+    i = 1
+    while i <= n:
+        q = n // i
+        V.append(q)
+        i = n // q + 1
+    V.reverse()
+    L = len(V)
 
-def build_prefix_h(limit: int, primes: List[int]) -> array:
-    omega = bytearray(limit + 1)
+    # id2 maps (n//v) -> index for values v > m
+    id2 = [-1] * (m + 1)
+    for idx, v in enumerate(V):
+        if v > m:
+            id2[n // v] = idx
+
+    # Lucy initialization for prime counting:
+    # S[v] = v - 1  (counts integers >=2 up to v)
+    S = [v - 1 for v in V]
+
+    primes = primes_upto(m)
+
+    # Lucy sieve: compute pi(v) for each key v
     for p in primes:
-        if p > limit:
+        p2 = p * p
+        if p2 > n:
             break
-        for j in range(p, limit + 1, p):
-            omega[j] += 1
-    pref = array("Q", [0]) * (limit + 1)
-    for i in range(1, limit + 1):
-        pref[i] = pref[i - 1] + (1 << omega[i])
-    return pref
+        sp = S[p - 2]  # pi(p-1)
+        start = bisect_left(V, p2)
+        j = L - 1
+        while j >= start:
+            v = V[j]
+            u = v // p
+            Sj = S[u - 1] if u <= m else S[id2[n // u]]
+            S[j] -= (Sj - sp)
+            j -= 1
+
+    # Convert pi(v) into prime sum for f(p)=tau(p^2)=3:
+    # sum_{p<=v} f(p) = 3*pi(v)
+    for j in range(L):
+        S[j] *= 3
+
+    # Un-Lucy: expand to full multiplicative summatory
+    # f(p^e)=tau((p^e)^2)=2e+1
+    for p in reversed(primes):
+        p2 = p * p
+        if p2 > n:
+            continue
+        sp = S[p - 1]  # sum_{q<=p prime} f(q)
+        start = bisect_left(V, p2)
+        j = L - 1
+        while j >= start:
+            v = V[j]
+            u = v // p
+            e = 1
+            while u >= p:
+                Sj = S[u - 1] if u <= m else S[id2[n // u]]
+                # Add numbers with smallest prime factor exactly p, exponent e
+                S[j] += (2 * e + 1) * (Sj - sp) + (2 * (e + 1) + 1)
+                e += 1
+                u //= p
+            j -= 1
+
+    # S[-1] is sum_{2<=k<=n} tau(k^2), so add tau(1^2)=1
+    return S[-1] + 1
 
 
-def compute_g(n: int) -> int:
-    limit = int(math.isqrt(n))
-    sieve = bytearray(b"\x01") * (limit + 1)
-    primes: List[int] = []
-    for i in range(2, limit + 1):
-        if sieve[i]:
-            primes.append(i)
-            if i * i <= limit:
-                step = i
-                start = i * i
-                sieve[start : limit + 1 : step] = b"\x00" * (
-                    (limit - start) // step + 1
-                )
-
-    pi_small = build_pi_table(limit, sieve)
-
-    # Precompute prefix sum of h(n)=2^omega(n) up to sqrt(n).
-    pref_h = build_prefix_h(limit, primes)
-
-    # Precompute phi table for small x and s to speed Lehmer pi.
-    phi_n = 200_000
-    phi_m = 100
-    phi = [[0] * (phi_m + 1) for _ in range(phi_n + 1)]
-    for x in range(phi_n + 1):
-        phi[x][0] = x
-    for s in range(1, phi_m + 1):
-        p = primes[s - 1]
-        for x in range(phi_n + 1):
-            phi[x][s] = phi[x][s - 1] - phi[x // p][s - 1]
-
-    @lru_cache(None)
-    def phi_big(x: int, s: int) -> int:
-        if s == 0:
-            return x
-        if s <= phi_m and x <= phi_n:
-            return phi[x][s]
-        return phi_big(x, s - 1) - phi_big(x // primes[s - 1], s - 1)
-
-    @lru_cache(None)
-    def pi_lehmer(x: int) -> int:
-        if x <= limit:
-            return pi_small[x]
-        x14 = int(x**0.25)
-        while (x14 + 1) ** 4 <= x:
-            x14 += 1
-        while x14**4 > x:
-            x14 -= 1
-        x13 = int(round(x ** (1.0 / 3.0)))
-        while (x13 + 1) ** 3 <= x:
-            x13 += 1
-        while x13**3 > x:
-            x13 -= 1
-        a = pi_lehmer(x14)
-        b = pi_lehmer(int(math.isqrt(x)))
-        c = pi_lehmer(x13)
-        res = phi_big(x, a) + (b + a - 2) * (b - a + 1) // 2
-        for i in range(a + 1, b + 1):
-            w = x // primes[i - 1]
-            res -= pi_lehmer(w)
-            if i <= c:
-                lim = pi_lehmer(int(math.isqrt(w)))
-                for j in range(i, lim + 1):
-                    res -= pi_lehmer(w // primes[j - 1]) - (j - 1)
-        return res
-
-    @lru_cache(None)
-    def s_sum(x: int, idx: int) -> int:
-        if idx >= len(primes) or primes[idx] > x:
-            return 0
-        res = 0
-        sq = int(math.isqrt(x))
-        for i in range(idx, len(primes)):
-            p = primes[i]
-            if p > sq:
-                break
-            pe = p
-            while pe <= x:
-                res += 2 * (1 + s_sum(x // pe, i + 1))
-                if pe > x // p:
-                    break
-                pe *= p
-        start = primes[idx]
-        lo = max(start, sq + 1)
-        if lo <= x:
-            res += 2 * (pi_lehmer(x) - pi_lehmer(lo - 1))
-        return res
-
-    @lru_cache(None)
-    def h_sum(x: int) -> int:
-        if x <= limit:
-            return pref_h[x]
-        return 1 + s_sum(x, 0)
-
-    total = 0
-    l = 1
-    while l <= n:
-        q = n // l
-        r = n // q
-        total += (h_sum(r) - h_sum(l - 1)) * q
-        l = r + 1
-    return (n + total) // 2
+def g(n: int) -> int:
+    """Compute required g(n) for x<=y and lcm(x,y)<=n."""
+    L = sum_tau_sq(n)
+    return (L + n) // 2
 
 
-def main() -> None:
-    assert compute_g(10**6) == 37429395
-    result = compute_g(10**12)
-    print(result)
+def main():
+    # Test value from problem statement
+    assert g(10**6) == 37429395
+
+    # Target value (do not hardcode any known result)
+    print(g(10**12))
 
 
 if __name__ == "__main__":
     main()
+
