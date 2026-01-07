@@ -794,7 +794,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/502.py[502.py] | link:solvers/502.md[502.md] | 2.903 | gpt-5.2-thinking |  |
 | link:solvers/503.py[503.py] | link:solvers/503.md[503.md] | 0.137 | gpt-5.2-thinking |  |
 | link:solvers/504.py[504.py] |  | 0.645 |  |  |
-| link:solvers/505.py[505.py] | link:solvers/505.md[505.md] | 0.091 | gpt-5.2-thinking |  | error: expected '714591308667615832', got '739216669546875214'
+| link:solvers/505.py[505.py] | link:solvers/505.md[505.md] | 106.445 | gpt-5.2-thinking |  |
 | link:solvers/506.py[506.py] | link:solvers/506.md[506.md] | 0.101 | gpt-5.2-thinking |  |
 | link:solvers/507.py[507.py] | link:solvers/507.md[507.md] | 177.141 | gpt-5.2-thinking |  |
 | link:solvers/508.py[508.py] | link:solvers/508.md[508.md] | 0.211 | gpt-5.2-thinking |  |
@@ -813,7 +813,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/521.py[521.py] | link:solvers/521.md[521.md] | 35.023 | gpt-5.2-thinking |  |
 | link:solvers/522.py[522.py] | link:solvers/522.md[522.md] | 2.453 | gpt-5.2-thinking |  |
 | link:solvers/523.py[523.py] |  | 0.060 |  |  |
-| 524.py |  |  |  |  | error: solver not found
+| link:solvers/524.py[524.py] | link:solvers/524.md[524.md] |  | gpt-5.2-thinking |  | error: timed out after 600.000s
 | link:solvers/525.py[525.py] | link:solvers/525.md[525.md] | 0.167 | gpt-5.2-thinking |  |
 | link:solvers/526.py[526.py] | link:solvers/526.md[526.md] | 41.979 | gpt-5.2-thinking |  |
 | link:solvers/527.py[527.py] | link:solvers/527.md[527.md] | 0.120 | gpt-5.2-thinking |  |
@@ -823,9 +823,9 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/531.py[531.py] |  | 1.608 |  |  |
 | link:solvers/532.py[532.py] | link:solvers/532.md[532.md] | 0.132 | gpt-5.2-thinking |  |
 | link:solvers/533.py[533.py] | link:solvers/533.md[533.md] | 1.071 | gpt-5.2-thinking |  |
-| 534.py |  |  |  |  | error: solver not found
+| link:solvers/534.py[534.py] | link:solvers/534.md[534.md] | 51.208 | gpt-5.2-thinking |  |
 | link:solvers/535.py[535.py] | link:solvers/535.md[535.md] | 209.505 |  |  | error: expected '611778217', got '1.2759860331'
-| link:solvers/536.py[536.py] | link:solvers/536.md[536.md] |  | gpt-5.2-thinking |  | error: timed out after 600.000s
+| link:solvers/536.py[536.py] | link:solvers/536.md[536.md] | 235.521 | gpt-5.2-thinking |  |
 | link:solvers/537.py[537.py] |  | 23.167 |  |  |
 | link:solvers/538.py[538.py] | link:solvers/538.md[538.md] | 1.363 | gpt-5.2-thinking |  |
 | link:solvers/539.py[539.py] | link:solvers/539.md[539.md] | 0.104 | gpt-5.2-thinking |  |
@@ -833,23 +833,23 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | 541.py |  |  |  |  | error: solver not found
 | 542.py |  |  |  |  | error: solver not found
 | link:solvers/543.py[543.py] |  | 0.706 |  |  |
-| 544.py |  |  |  |  | error: solver not found
-| 545.py |  |  |  |  | error: solver not found
-| 546.py |  |  |  |  | error: solver not found
-| 547.py |  |  |  |  | error: solver not found
-| 548.py |  |  |  |  | error: solver not found
+| link:solvers/544.py[544.py] | link:solvers/544.md[544.md] | 2.921 | gpt-5.2-thinking |  |
+| link:solvers/545.py[545.py] | link:solvers/545.md[545.md] | 0.878 | gpt-5.2-thinking |  |
+| link:solvers/546.py[546.py] | link:solvers/546.md[546.md] | 0.112 | gpt-5.2-thinking |  |
+| link:solvers/547.py[547.py] | link:solvers/547.md[547.md] | 0.543 | gpt-5.2-thinking |  |
+| link:solvers/548.py[548.py] | link:solvers/548.md[548.md] | 0.795 | gpt-5.2-thinking |  |
 | link:solvers/549.py[549.py] |  | 31.523 |  |  |
-| 550.py |  |  |  |  | error: solver not found
-| 551.py |  |  |  |  | error: solver not found
+| link:solvers/550.py[550.py] | link:solvers/550.md[550.md] | 0.692 | gpt-5.2-thinking |  |
+| link:solvers/551.py[551.py] | link:solvers/551.md[551.md] | 0.154 | gpt-5.2-thinking |  |
 | 552.py |  |  |  |  | error: solver not found
-| 553.py |  |  |  |  | error: solver not found
-| 554.py |  |  |  |  | error: solver not found
+| link:solvers/553.py[553.py] | link:solvers/553.md[553.md] | 0.891 | gpt-5.2-thinking |  |
+| link:solvers/554.py[554.py] | link:solvers/554.md[554.md] | 0.791 | gpt-5.2-thinking |  |
 | link:solvers/555.py[555.py] |  | 0.273 |  |  |
-| 556.py |  |  |  |  | error: solver not found
+| link:solvers/556.py[556.py] | link:solvers/556.md[556.md] | 1.137 | gpt-5.2-thinking |  |
 | 557.py |  |  |  |  | error: solver not found
 | 558.py |  |  |  |  | error: solver not found
-| 559.py |  |  |  |  | error: solver not found
-| 560.py |  |  |  |  | error: solver not found
+| link:solvers/559.py[559.py] | link:solvers/559.md[559.md] | 3.744 | gpt-5.2-thinking |  |
+| link:solvers/560.py[560.py] | link:solvers/560.md[560.md] | 0.397 | gpt-5.2-thinking |  |
 | link:solvers/561.py[561.py] |  | 0.065 |  |  |
 | 562.py |  |  |  |  | error: solver not found
 | link:solvers/563.py[563.py] |  | 4.428 |  |  |
