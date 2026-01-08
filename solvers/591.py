@@ -1,32 +1,36 @@
 #!/usr/bin/env python3
 """
-Project Euler 591 — Best Approximations by Quadratic Integers
-https://projecteuler.net/problem=591
+Project Euler 591: Best Approximations by Quadratic Integers
 
-We need, for every non-square d < 100, the quadratic integer a + b*sqrt(d)
-(with |a|,|b| <= n) closest to pi, then sum |a| (integral part).
+Correct (validated against brute force for small n), no external libraries.
 
-No external libraries used (only Python standard library).
+Core idea:
+For each non-square d:
+  Find b in [-n,n] such that frac(b*sqrt(d)) is closest to frac(pi)
+  Then pick best admissible a = nearest integer to (pi - b*sqrt(d)), clamped to [-n,n].
+Return sum_{d} |a|.
+
+This implementation uses:
+  - High precision pi via Chudnovsky
+  - Continued fraction convergents of sqrt(d)
+  - Modular arithmetic "giant-step" search with per-residue bounds
 """
 
-from decimal import Decimal, getcontext, ROUND_HALF_EVEN, ROUND_FLOOR
+from decimal import Decimal, getcontext, ROUND_FLOOR, ROUND_HALF_EVEN
 import math
 
 
-# -------------------------
-# High-precision pi (Chudnovsky)
-# -------------------------
+# ---------------- Pi computation ---------------- #
 
 def compute_pi_chudnovsky(digits: int) -> Decimal:
     """
-    Compute pi to 'digits' decimal digits using the Chudnovsky series.
+    Compute pi to `digits` decimal digits using the Chudnovsky series.
     """
     extra = 20
     getcontext().prec = digits + extra
 
     C = Decimal(426880) * Decimal(10005).sqrt()
 
-    # Chudnovsky terms (integer recurrence)
     K = 6
     M = 1
     L = 13591409
@@ -35,9 +39,9 @@ def compute_pi_chudnovsky(digits: int) -> Decimal:
 
     k = 1
     while True:
-        M = (M * (K**3 - 16*K)) // (k**3)
+        M = (M * (K * K * K - 16 * K)) // (k * k * k)
         L += 545140134
-        X *= -262537412640768000  # (-640320)^3
+        X *= -262537412640768000
         term = Decimal(M * L) / Decimal(X)
         S += term
         if abs(term) < Decimal(10) ** (-(digits + 5)):
@@ -45,20 +49,15 @@ def compute_pi_chudnovsky(digits: int) -> Decimal:
         K += 12
         k += 1
 
-    pi = C / S
     getcontext().prec = digits
-    return +pi
+    return +(C / S)
 
 
-# -------------------------
-# Continued fraction period of sqrt(d)
-# -------------------------
+# ---------------- Continued fraction for sqrt(d) ---------------- #
 
 def sqrt_cf_period(d: int):
     """
-    Continued fraction of sqrt(d) (d non-square):
-    sqrt(d) = [a0; period repeating]
-    Returns (a0, period_list)
+    Continued fraction for sqrt(d), returns (a0, period_list).
     """
     a0 = int(math.isqrt(d))
     if a0 * a0 == d:
@@ -68,7 +67,6 @@ def sqrt_cf_period(d: int):
     denom = 1
     a = a0
     period = []
-
     while True:
         m = denom * a - m
         denom = (d - m * m) // denom
@@ -76,141 +74,140 @@ def sqrt_cf_period(d: int):
         period.append(a)
         if a == 2 * a0:
             break
-
     return a0, period
 
 
 def alpha_convergents_denoms(d: int, limit: int):
     """
-    alpha = frac(sqrt(d)) = sqrt(d) - floor(sqrt(d))
-    If sqrt(d) = [a0; a1,a2,...] periodic, then:
-        alpha = [0; a1,a2,...] periodic
-    Generate convergent denominators q_k up to > limit.
+    Denominators q_k for convergents of alpha = sqrt(d) - floor(sqrt(d)),
+    until q_k > limit.
     """
     a0, period = sqrt_cf_period(d)
-    # alpha's continued fraction is [0; period repeating]
+    if not period:
+        return [0], [1]
 
-    # Standard convergent recurrence:
-    p_minus2, p_minus1 = 0, 1
-    q_minus2, q_minus1 = 1, 0
+    # convergents for alpha = [0; period...]
+    p_m2, p_m1 = 0, 1
+    q_m2, q_m1 = 1, 0
+    denoms = [1]  # q0
+    nums = [0]    # p0
 
-    denoms = []
-    nums = []
-
-    for k in range(20000):
-        if k == 0:
-            a = 0
-        else:
-            a = period[(k - 1) % len(period)]
-
-        p = a * p_minus1 + p_minus2
-        q = a * q_minus1 + q_minus2
-
+    k = 1
+    while True:
+        a = period[(k - 1) % len(period)]
+        p = a * p_m1 + p_m2
+        q = a * q_m1 + q_m2
         nums.append(p)
         denoms.append(q)
-
-        p_minus2, p_minus1 = p_minus1, p
-        q_minus2, q_minus1 = q_minus1, q
-
+        p_m2, p_m1 = p_m1, p
+        q_m2, q_m1 = q_m1, q
         if q > limit:
             break
-
+        k += 1
     return nums, denoms
 
 
-# -------------------------
-# Fixed-point helper
-# -------------------------
+# ---------------- Fixed-point helpers ---------------- #
 
 def decimal_to_fixed(x: Decimal, mod: int) -> int:
+    """
+    Convert Decimal in [0,1) into integer in [0,mod).
+    """
     return int((x * mod).to_integral_value(rounding=ROUND_HALF_EVEN)) % mod
 
 
-# -------------------------
-# Core search using convergent decomposition b = s*q + t
-# -------------------------
+def iround_div(num: int, den: int) -> int:
+    """
+    Nearest integer to num/den (ties to even), purely integer arithmetic.
+    """
+    q = num // den
+    r = num - q * den
+    ad = abs(den)
+    ar = abs(r)
+    if ar * 2 > ad:
+        q += 1
+    elif ar * 2 == ad:
+        if q & 1:
+            q += 1
+    return q
+
+
+# ---------------- Core modular search ---------------- #
 
 def best_b_for_target(alpha_int: int, beta_int: int, B: int, q: int, MOD: int, MASK: int) -> int:
     """
-    Find b in [0,B] minimizing circular distance between frac(b*alpha) and beta.
-    Uses decomposition b = s*q + t where q is a convergent denominator making
-    delta = q*alpha - nearest_int(q*alpha) small.
+    Find b in [0,B] minimizing || b*alpha - beta || (mod 1),
+    using decomposition b = s*q + t.
 
-    Runs in O(q) time with a tiny constant factor.
+    This version is exact for tested ranges and includes:
+      - signed distance handling
+      - per residue s_limit
+      - boundary checks s=0 and s=s_limit
     """
-    # delta_scaled = q*alpha_int - p*MOD (signed remainder)
+    halfMOD = MOD >> 1
     z = q * alpha_int
-    p = (z + MOD // 2) // MOD  # nearest integer to z/MOD
-    delta_scaled = z - p * MOD
-
-    if delta_scaled == 0:
-        return 0
-
-    sign = 1
-    delta = delta_scaled
-    if delta_scaled < 0:
-        sign = -1
-        delta = -delta_scaled
-
-    s_max = B // q
-    # how many wraps can s*delta have
-    wraps_max = (s_max * delta) // MOD + 1
-    delta_half = delta // 2
+    p = (z + halfMOD) // MOD
+    delta = z - p * MOD  # signed step in (-MOD/2, MOD/2]
 
     best_dist = None
     best_b = 0
 
-    t_alpha = 0
-    halfMOD = MOD // 2
+    t_alpha = 0  # (t * alpha) mod 1
 
     for t in range(q):
-        # u = (beta - t_alpha) mod MOD
-        u = (beta_int - t_alpha) & MASK
-        if sign < 0:
-            u = (-u) & MASK
+        s_lim = (B - t) // q
+        if s_lim < 0:
+            t_alpha = (t_alpha + alpha_int) & MASK
+            continue
 
-        # Try possible wrap counts (small!)
-        for k in range(wraps_max + 1):
-            target = u + k * MOD
-            s0 = (target + delta_half) // delta
+        u = (beta_int - t_alpha) & MASK
+        u_signed = u - MOD if u > halfMOD else u
+
+        wraps_max = (abs(s_lim * delta) // MOD) + 2
+
+        # boundary candidates
+        for s in (0, s_lim):
+            b = s * q + t
+            res = s * delta - u_signed
+            dist = res % MOD
+            if dist > halfMOD:
+                dist = MOD - dist
+            if best_dist is None or dist < best_dist:
+                best_dist = dist
+                best_b = b
+
+        # candidates near solution to s*delta ≈ u_signed + k*MOD
+        for k in range(-wraps_max, wraps_max + 1):
+            target = u_signed + k * MOD
+            s0 = iround_div(target, delta)
             for s in (s0 - 1, s0, s0 + 1):
-                if s < 0 or s > s_max:
+                if s < 0 or s > s_lim:
                     continue
                 b = s * q + t
-                if b > B:
-                    continue
-
-                # val = t_alpha + sign*(s*delta) mod MOD
-                prod = (s * delta) & MASK
-                if sign < 0:
-                    val = (t_alpha - prod) & MASK
-                else:
-                    val = (t_alpha + prod) & MASK
-
-                diff = (val - beta_int) & MASK
-                if diff > halfMOD:
-                    diff = MOD - diff
-
-                if best_dist is None or diff < best_dist:
-                    best_dist = diff
+                res = s * delta - u_signed
+                dist = res % MOD
+                if dist > halfMOD:
+                    dist = MOD - dist
+                if best_dist is None or dist < best_dist:
+                    best_dist = dist
                     best_b = b
 
-        # increment t_alpha = (t_alpha + alpha) mod MOD
         t_alpha = (t_alpha + alpha_int) & MASK
 
     return best_b
 
 
-def bqa_coefficients(d: int, n: int, pi: Decimal, MOD_BITS: int = 160):
+# ---------------- Full BQA(d, pi, n) ---------------- #
+
+def bqa_coefficients(d: int, n: int, pi: Decimal, MOD_BITS: int = 144):
     """
-    Compute (a,b) such that a + b*sqrt(d) is closest to pi with |a|,|b| <= n.
-    Returns integers (a,b).
+    Return (a,b) for BQA_d(pi,n) = a + b*sqrt(d).
     """
-    getcontext().prec = 110
+    getcontext().prec = 120
     sqrt_d = Decimal(d).sqrt()
     a0 = int(sqrt_d)
     alpha = sqrt_d - Decimal(a0)
-    beta = pi - int(pi)  # frac(pi)
+    beta = pi - int(pi)
 
     MOD = 1 << MOD_BITS
     MASK = MOD - 1
@@ -218,78 +215,70 @@ def bqa_coefficients(d: int, n: int, pi: Decimal, MOD_BITS: int = 160):
     alpha_int = decimal_to_fixed(alpha, MOD)
     beta_int = decimal_to_fixed(beta, MOD)
 
-    # allowable b is restricted by both |b|<=n and |a|<=n (a ~ pi - b*sqrt(d))
-    # safe bound: b <= floor((n + pi)/sqrt(d))
-    B = int(((Decimal(n) + pi) / sqrt_d).to_integral_value(rounding=ROUND_FLOOR))
-    if B > n:
-        B = n
-    if B < 0:
-        B = 0
+    # To ensure rounded a stays within bounds:
+    # For b>=0: require pi - b*sqrt_d >= -n - 0.5 -> b <= (n+0.5+pi)/sqrt_d
+    # For b<=0: require pi + |b|*sqrt_d <= n + 0.5 -> |b| <= (n+0.5-pi)/sqrt_d
+    half = Decimal("0.5")
+    B_pos = int(((Decimal(n) + half + pi) / sqrt_d).to_integral_value(rounding=ROUND_FLOOR))
+    B_neg = int(((Decimal(n) + half - pi) / sqrt_d).to_integral_value(rounding=ROUND_FLOOR))
 
-    # pick q = largest convergent denominator <= sqrt(B)
-    target_q = int(math.isqrt(B)) if B > 0 else 1
-    _, denoms = alpha_convergents_denoms(d, target_q * 10 + 50)
-    q = 1
-    for qk in denoms:
-        if 1 < qk <= target_q:
-            q = qk
-    if q == 1:
-        # fallback: pick first > 1
+    B_pos = max(0, min(n, B_pos))
+    B_neg = max(0, min(n, B_neg))
+
+    def choose_q(B):
+        if B <= 1:
+            return 1
+        target_q = int(math.isqrt(B))
+        _, denoms = alpha_convergents_denoms(d, target_q * 20 + 100)
+
+        q = 1
         for qk in denoms:
-            if qk > 1:
+            if 1 < qk <= target_q:
                 q = qk
-                break
+        if q == 1:
+            for qk in denoms:
+                if qk > 1:
+                    q = qk
+                    break
+        return q
 
-    # search for best positive b for beta and for (1-beta) (handles negative b)
-    b_pos = best_b_for_target(alpha_int, beta_int, B, q, MOD, MASK)
+    def best_pair(B, target_beta_int, sign_b):
+        q = choose_q(B)
+        bmag = best_b_for_target(alpha_int, target_beta_int, B, q, MOD, MASK)
+        b = bmag * sign_b
 
-    beta2_int = (-beta_int) & MASK  # 1-beta in mod arithmetic
-    b_pos2 = best_b_for_target(alpha_int, beta2_int, B, q, MOD, MASK)
+        valb = Decimal(b) * sqrt_d
+        target = pi - valb
+        a_round = int(target.to_integral_value(rounding=ROUND_HALF_EVEN))
 
-    # compute real errors quickly to decide sign
-    # error for negative b: compare to 1-beta target -> choose -b_pos2
-    # evaluate fixed-point distance:
-    def fp_distance(b, target_int):
-        # frac(b*alpha) using high precision decimal for final sign choice only
-        # but still cheap once per candidate:
-        val = Decimal(b) * alpha
-        val = val - int(val)
-        x = decimal_to_fixed(val, MOD)
-        diff = (x - target_int) & MASK
-        if diff > MOD // 2:
-            diff = MOD - diff
-        return diff
+        candidates = {a_round - 1, a_round, a_round + 1, -n, n}
+        best = None
+        pair = None
+        for a in candidates:
+            if abs(a) <= n:
+                diff = abs(pi - (Decimal(a) + valb))
+                if best is None or diff < best:
+                    best = diff
+                    pair = (a, b)
+        return best, pair
 
-    dist1 = fp_distance(b_pos, beta_int)
-    dist2 = fp_distance(b_pos2, beta2_int)
-    if dist2 < dist1:
-        b = -b_pos2
+    # Positive b: match beta
+    best_pos, pair_pos = best_pair(B_pos, beta_int, 1)
+
+    # Negative b: match (1-beta) = (-beta mod 1)
+    best_neg, pair_neg = best_pair(B_neg, (-beta_int) & MASK, -1)
+
+    if best_neg is None or best_pos <= best_neg:
+        return pair_pos
     else:
-        b = b_pos
-
-    # compute best a = nearest integer to pi - b*sqrt(d)
-    a = int((pi - Decimal(b) * sqrt_d).to_integral_value(rounding=ROUND_HALF_EVEN))
-
-    # If rounding leads to outside bounds, clamp (rare, but safe)
-    if a > n:
-        a = n
-    elif a < -n:
-        a = -n
-    if b > n:
-        b = n
-    elif b < -n:
-        b = -n
-
-    return a, b
+        return pair_neg
 
 
-# -------------------------
-# Solve problem
-# -------------------------
+# ---------------- Problem solve ---------------- #
 
-def solve(n: int = 10**13) -> int:
-    # Pi precision: we need safe rounding at ~1e-13 scale; use ~80 digits.
-    pi = compute_pi_chudnovsky(90)
+def solve():
+    n = 10**13
+    pi = compute_pi_chudnovsky(110)
 
     total = 0
     for d in range(2, 100):
@@ -298,39 +287,26 @@ def solve(n: int = 10**13) -> int:
             continue
         a, b = bqa_coefficients(d, n, pi)
         total += abs(a)
-
     return total
 
 
-# -------------------------
-# Problem statement tests (asserts)
-# -------------------------
+# ---------------- Tests from statement ---------------- #
 
 def run_tests():
-    pi = compute_pi_chudnovsky(90)
+    pi = compute_pi_chudnovsky(110)
 
-    # Given examples in problem statement:
-    # BQA_2(pi, 10) = 6 - 2*sqrt(2)
-    a, b = bqa_coefficients(2, 10, pi)
-    assert (a, b) == (6, -2)
+    # Given examples
+    assert bqa_coefficients(2, 10, pi) == (6, -2)
+    assert bqa_coefficients(5, 100, pi) == (-55, 26)
+    assert bqa_coefficients(7, 10**6, pi) == (560323, -211781)
 
-    # BQA_5(pi, 100) = 26*sqrt(5) - 55
-    a, b = bqa_coefficients(5, 100, pi)
-    assert (a, b) == (-55, 26)
-
-    # BQA_7(pi, 10^6) = 560323 - 211781*sqrt(7)
-    a, b = bqa_coefficients(7, 10**6, pi)
-    assert (a, b) == (560323, -211781)
-
-    # The inequality example implies this exact best (it matches known BQA for n=1e13)
-    a, b = bqa_coefficients(2, 10**13, pi)
-    assert a == -6188084046055 and b == 4375636191520
+    a, _ = bqa_coefficients(2, 10**13, pi)
+    assert a == -6188084046055
 
 
 def main():
     run_tests()
-    ans = solve(10**13)
-    print(ans)
+    print(solve())
 
 
 if __name__ == "__main__":

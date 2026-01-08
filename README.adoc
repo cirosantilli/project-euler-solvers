@@ -867,7 +867,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/575.py[575.py] | link:solvers/575.md[575.md] | 0.072 | gpt-5.2-thinking |  |
 | link:solvers/576.py[576.py] | link:solvers/576.md[576.md] | 6.163 | gpt-5.2-thinking |  |
 | link:solvers/577.py[577.py] |  | 0.105 |  |  |
-| link:solvers/578.py[578.py] | link:solvers/578.md[578.md] | 0.236 | gpt-5.2-thinking |  | error: failed (exit 1)
+| link:solvers/578.py[578.py] | link:solvers/578.md[578.md] | 24.776 | gpt-5.2-thinking |  |
 | 579.py |  |  |  |  | error: solver not found
 | link:solvers/580.py[580.py] | link:solvers/580.md[580.md] | 3.210 | gpt-5.2-thinking |  |
 | link:solvers/581.py[581.py] |  | 0.167 |  |  | error: expected '2227616372734', got '2886773027'
@@ -878,7 +878,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | 586.py |  |  |  |  | error: solver not found
 | link:solvers/587.py[587.py] |  | 0.075 |  |  |
 | link:solvers/588.py[588.py] | link:solvers/588.md[588.md] | 0.102 | gpt-5.2-thinking |  |
-| 589.py |  |  |  |  | error: solver not found
+| link:solvers/589.py[589.py] | link:solvers/589.md[589.md] | 3.219 | gpt-5.2-thinking |  |
 | link:solvers/590.py[590.py] | link:solvers/590.md[590.md] | 0.263 | gpt-5.2-thinking |  |
 | link:solvers/591.py[591.py] | link:solvers/591.md[591.md] | 0.124 | gpt-5.2-thinking |  | error: failed (exit 1)
 | link:solvers/592.py[592.py] | link:solvers/592.md[592.md] | 0.168 | gpt-5.2-thinking |  |
@@ -891,27 +891,27 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/599.py[599.py] | link:solvers/599.md[599.md] | 0.099 | gpt-5.2-thinking |  |
 | link:solvers/600.py[600.py] | link:solvers/600.md[600.md] | 0.084 | gpt-5.2-thinking |  |
 | link:solvers/601.py[601.py] |  | 0.056 |  |  |
-| 602.py |  |  |  |  | error: solver not found
-| 603.py |  |  |  |  | error: solver not found
+| link:solvers/602.py[602.py] | link:solvers/602.md[602.md] | 0.797 | gpt-5.2-thinking |  |
+| link:solvers/603.py[603.py] | link:solvers/603.md[603.md] | 0.352 | gpt-5.2-thinking |  |
 | 604.py |  |  |  |  | error: solver not found
-| 605.py |  |  |  |  | error: solver not found
+| link:solvers/605.py[605.py] | link:solvers/605.md[605.md] | 0.093 | gpt-5.2-thinking |  |
 | 606.py |  |  |  |  | error: solver not found
 | link:solvers/607.py[607.py] |  | 0.088 |  |  |
 | 608.py |  |  |  |  | error: solver not found
 | link:solvers/609.py[609.py] |  | 13.965 |  |  |
-| link:solvers/610.py[610.py] |  |  |  |  | error: timed out after 60.000s
+| link:solvers/610.py[610.py] | link:solvers/610.md[610.md] | 0.173 | gpt-5.2-thinking |  |
 | link:solvers/611.py[611.py] |  |  |  |  | error: timed out after 60.000s
-| link:solvers/612.py[612.py] |  | 3.677 |  |  | error: expected '819963842', got '730342616'
+| link:solvers/612.py[612.py] | link:solvers/612.md[612.md] | 0.122 | gpt-5.2-thinking |  |
 | link:solvers/613.py[613.py] |  | 0.061 |  |  |
-| 614.py |  |  |  |  | error: solver not found
+| link:solvers/614.py[614.py] | link:solvers/614.md[614.md] | 0.066 | gpt-5.2-thinking |  |
 | link:solvers/615.py[615.py] |  | 0.098 |  |  | error: failed (exit 1)
 | 616.py |  |  |  |  | error: solver not found
 | 617.py |  |  |  |  | error: solver not found
-| link:solvers/618.py[618.py] |  |  |  |  | error: untested
+| link:solvers/618.py[618.py] |  | 0.616 |  |  |
 | 619.py |  |  |  |  | error: solver not found
 | 620.py |  |  |  |  | error: solver not found
 | 621.py |  |  |  |  | error: solver not found
-| link:solvers/622.py[622.py] |  |  |  |  | error: untested
+| link:solvers/622.py[622.py] |  | 2.659 |  |  |
 | 623.py |  |  |  |  | error: solver not found
 | 624.py |  |  |  |  | error: solver not found
 | 625.py |  |  |  |  | error: solver not found
@@ -919,11 +919,11 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | 627.py |  |  |  |  | error: solver not found
 | 628.py |  |  |  |  | error: solver not found
 | 629.py |  |  |  |  | error: solver not found
-| link:solvers/630.py[630.py] |  |  |  |  | error: untested
+| link:solvers/630.py[630.py] |  | 0.827 |  |  | error: expected '9669182880384', got '(498512, 248513046656)'
 | 631.py |  |  |  |  | error: solver not found
-| link:solvers/632.py[632.py] |  |  |  |  | error: untested
+| link:solvers/632.py[632.py] |  | 5.178 |  |  | error: expected '728378714', got '974068984'
 | 633.py |  |  |  |  | error: solver not found
-| link:solvers/634.py[634.py] |  | 0.842 |  |  | error: expected '4019680944', got '4019680946'
+| link:solvers/634.py[634.py] |  | 0.368 |  |  | error: expected '4019680944', got '4019680946'
 | 635.py |  |  |  |  | error: solver not found
 | 636.py |  |  |  |  | error: solver not found
 | 637.py |  |  |  |  | error: solver not found
@@ -936,10 +936,10 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | 644.py |  |  |  |  | error: solver not found
 | 645.py |  |  |  |  | error: solver not found
 | 646.py |  |  |  |  | error: solver not found
-| link:solvers/647.py[647.py] |  |  |  |  | error: untested
+| link:solvers/647.py[647.py] |  | 0.119 |  |  |
 | 648.py |  |  |  |  | error: solver not found
 | 649.py |  |  |  |  | error: solver not found
-| link:solvers/650.py[650.py] |  |  |  |  | error: untested
+| link:solvers/650.py[650.py] |  | 30.908 |  |  |
 | 651.py |  |  |  |  | error: solver not found
 | 652.py |  |  |  |  | error: solver not found
 | 653.py |  |  |  |  | error: solver not found
@@ -948,7 +948,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | 656.py |  |  |  |  | error: solver not found
 | 657.py |  |  |  |  | error: solver not found
 | 658.py |  |  |  |  | error: solver not found
-| link:solvers/659.py[659.py] |  |  |  |  | error: untested
+| link:solvers/659.py[659.py] |  | 1.456 |  |  |
 | 660.py |  |  |  |  | error: solver not found
 | 661.py |  |  |  |  | error: solver not found
 | 662.py |  |  |  |  | error: solver not found
@@ -957,14 +957,14 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | 665.py |  |  |  |  | error: solver not found
 | 666.py |  |  |  |  | error: solver not found
 | 667.py |  |  |  |  | error: solver not found
-| link:solvers/668.py[668.py] |  |  |  |  | error: untested
-| link:solvers/669.py[669.py] |  |  |  |  | error: untested
+| link:solvers/668.py[668.py] |  | 33.420 |  |  | error: expected '2811077773', got '2811077708'
+| link:solvers/669.py[669.py] |  | 0.095 |  |  |
 | 670.py |  |  |  |  | error: solver not found
 | 671.py |  |  |  |  | error: solver not found
 | 672.py |  |  |  |  | error: solver not found
 | 673.py |  |  |  |  | error: solver not found
 | 674.py |  |  |  |  | error: solver not found
-| link:solvers/675.py[675.py] |  |  |  |  | error: untested
+| link:solvers/675.py[675.py] |  | 46.059 |  |  |
 | 676.py |  |  |  |  | error: solver not found
 | 677.py |  |  |  |  | error: solver not found
 | 678.py |  |  |  |  | error: solver not found
@@ -975,21 +975,21 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | 683.py |  |  |  |  | error: solver not found
 | link:solvers/684.py[684.py] |  | 0.100 |  |  |
 | 685.py |  |  |  |  | error: solver not found
-| link:solvers/686.py[686.py] |  |  |  |  | error: untested
+| link:solvers/686.py[686.py] |  | 0.718 |  |  |
 | 687.py |  |  |  |  | error: solver not found
 | 688.py |  |  |  |  | error: solver not found
 | 689.py |  |  |  |  | error: solver not found
 | 690.py |  |  |  |  | error: solver not found
 | 691.py |  |  |  |  | error: solver not found
-| link:solvers/692.py[692.py] |  |  |  |  | error: untested
+| link:solvers/692.py[692.py] |  | 0.069 |  |  | error: expected '842043391019219959', got '5994872684942036'
 | 693.py |  |  |  |  | error: solver not found
-| link:solvers/694.py[694.py] |  |  |  |  | error: untested
+| link:solvers/694.py[694.py] |  | 0.592 |  |  |
 | 695.py |  |  |  |  | error: solver not found
 | 696.py |  |  |  |  | error: solver not found
 | link:solvers/697.py[697.py] |  | 0.113 |  |  |
 | 698.py |  |  |  |  | error: solver not found
 | 699.py |  |  |  |  | error: solver not found
-| link:solvers/700.py[700.py] |  |  |  |  | error: untested
+| link:solvers/700.py[700.py] |  | 1.238 |  |  |
 | 701.py |  |  |  |  | error: solver not found
 | 702.py |  |  |  |  | error: solver not found
 | 703.py |  |  |  |  | error: solver not found
