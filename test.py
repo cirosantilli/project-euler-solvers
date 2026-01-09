@@ -10,6 +10,7 @@ import time
 from dataclasses import dataclass
 from pathlib import Path
 
+import lint
 import summary
 ROOT = Path(__file__).resolve().parent
 SOLUTIONS_PATH = ROOT / "data/projecteuler-solutions/Solutions.md"
@@ -799,6 +800,53 @@ def main() -> None:
         target_ids = sorted(solver_targets)
     if not target_ids:
         print("No solvers found.", file=sys.stderr)
+        sys.exit(1)
+
+    lint_paths: set[Path] = set()
+    for pid in target_ids:
+        override_paths = path_overrides.get(pid)
+        targets = solver_targets.get(pid, [])
+        if override_paths:
+            for path in override_paths:
+                language = detect_language(path)
+                if language is None:
+                    continue
+                lint_paths.add(source_from_target(path, language))
+        else:
+            for target in targets:
+                lint_paths.add(source_from_target(target.path, target.language))
+
+    violations = lint.lint_paths(sorted(path for path in lint_paths if path.exists()))
+    if violations:
+        for line in lint.format_violations(violations, root=ROOT):
+            print(line, file=sys.stderr)
+        lint_results: list[Result] = []
+        for violation in violations:
+            language = detect_language(violation.path)
+            lint_results.append(
+                Result(
+                    violation.puzzle_id,
+                    correct=False,
+                    elapsed=None,
+                    model=None,
+                    output_tokens=None,
+                    message="lint failed",
+                    language=language,
+                    source_path=violation.path,
+                )
+            )
+        print("\n|===")
+        print("| ID | Explanation | Runtime (s) | Model | Out Tokens | Error")
+        for res in sorted(lint_results, key=lambda r: (r.puzzle_id, r.language or "")):
+            print(format_row(res))
+        print("|===")
+        if args.autoupdate:
+            update_readme(lint_results)
+            try:
+                summary.autoupdate_readme()
+            except (OSError, ValueError) as exc:
+                print(f"summary update failed: {exc}", file=sys.stderr)
+                sys.exit(2)
         sys.exit(1)
 
     results: list[Result] = []
