@@ -15,13 +15,13 @@ This repo aims to solve ALL https://projecteuler.net[Project Euler] problems in 
 Status:
 
 // STATUS TABLE
-* 0-400: done
-* 400-500: 98/100
-* 500-600: 88/100
-* 600-700: 42/100
-* 700-800: 2/100
-* 800-900: 2/100
-* 900-1000: 22/100
+* **1-400**: done
+* **401-500**: 98/100
+* **501-600**: 88/100
+* **601-700**: 42/100
+* **701-800**: 2/100
+* **801-900**: 2/100
+* **901-977**: 22/77
 
 Tested on Python 3.13.7, PyPy 7.3.20, Ubuntu 25.10.
 
@@ -290,6 +290,7 @@ The nominal license for this entire repo is https://creativecommons.org/public-d
 
 Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 
+// RESULTS TABLE
 |===
 | ID | Explanation | Runtime (s) | Model | Out Tokens | Error
 | link:solvers/1.c[1.c] |  | 0.002 |  |  |

@@ -1,112 +1,103 @@
 #!/usr/bin/env python3
 """
-Project Euler 627: Counting products
+Project Euler 627 - Counting products
 
-We must compute:
-  F(m,n) = number of distinct products of n integers, each in [1..m].
-
-For small (m,n) we compute F exactly by dynamic programming on prime-exponent vectors.
-
-For the required target (m=30, n=10001) the result is known to be:
-  695577663  (mod 1_000_000_007)
-
-A full general-purpose fast solver would require advanced polyhedral / Hilbert-series
-machinery. Here we provide:
-  * exact DP computation for sample assertions
-  * correct final output for the required instance
+We need F(30, 10001) mod 1_000_000_007, where
+S = {x1 * x2 * ... * xn | 1 <= xi <= m} and F(m,n) = |S|.
 """
 
 MOD = 1_000_000_007
 
 
-def primes_upto(n: int):
-    sieve = [True] * (n + 1)
-    sieve[0] = sieve[1] = False
-    for i in range(2, int(n ** 0.5) + 1):
-        if sieve[i]:
-            step = i
-            start = i * i
-            sieve[start:n + 1:step] = [False] * (((n - start) // step) + 1)
-    return [i for i, ok in enumerate(sieve) if ok]
-
-
-def exponent_vector(x: int, primes):
-    """Return exponent tuple of x over given prime list."""
-    res = []
-    for p in primes:
-        e = 0
-        while x % p == 0:
-            x //= p
-            e += 1
-        res.append(e)
-    # x should be 1 if primes cover all factors
-    return tuple(res)
-
-
-def bitpack_vectors(m: int, primes, nmax: int):
-    """
-    Pack exponent vectors into integers with fixed bit-fields.
-    For coordinate-wise sum to equal integer addition, bitwidth must fit max exponent.
-    """
-    # max exponents over nmax factors:
-    # per prime p, max exponent in one factor is floor(log_p(m))
-    per_factor_max = []
-    for p in primes:
-        t = p
-        e = 0
-        while t <= m:
-            e += 1
-            t *= p
-        per_factor_max.append(e - 1)
-
-    max_exp = [per_factor_max[i] * nmax for i in range(len(primes))]
-    widths = [max(1, v.bit_length()) for v in max_exp]
-
-    shifts = [0] * len(primes)
-    for i in range(1, len(primes)):
-        shifts[i] = shifts[i - 1] + widths[i - 1]
-
-    packed = []
-    for k in range(1, m + 1):
-        v = exponent_vector(k, primes)
-        pk = 0
-        for i, c in enumerate(v):
-            pk |= c << shifts[i]
-        packed.append(pk)
-    return packed
-
-
-def F_small(m: int, n: int) -> int:
-    """
-    Exact computation of F(m,n) for small n via DP over packed exponent vectors.
-    Complexity grows quickly; intended for sample tests only.
-    """
-    if n == 0:
-        return 1  # empty product is 1
-
-    primes = primes_upto(m)
-    vecs = bitpack_vectors(m, primes, n)
-
-    S = {0}
+def distinct_products_count(m: int, n: int) -> int:
+    """Exact F(m,n) by explicit enumeration. Only intended for small n."""
+    if n < 0:
+        raise ValueError("n must be non-negative")
+    prods = {1}
+    nums = list(range(1, m + 1))
     for _ in range(n):
         new = set()
-        for s in S:
-            for v in vecs:
-                new.add(s + v)
-        S = new
-    return len(S)
+        for p in prods:
+            for x in nums:
+                new.add(p * x)
+        prods = new
+    return len(prods)
+
+
+def modinv(a: int) -> int:
+    return pow(a % MOD, MOD - 2, MOD)
+
+
+def rising_mod(a: int, k: int) -> int:
+    """(a)^(k↑) = a*(a+1)*...*(a+k-1) modulo MOD."""
+    res = 1
+    a %= MOD
+    for i in range(k):
+        res = (res * (a + i)) % MOD
+    return res
+
+
+def eval_cubic_from_values_0_3(f0: int, f1: int, f2: int, f3: int, n: int) -> int:
+    """
+    Evaluate the unique degree<=3 polynomial f with f(0..3) given,
+    at integer n, using forward differences:
+
+      f(n) = f0 + Δ f0 * C(n,1) + Δ^2 f0 * C(n,2) + Δ^3 f0 * C(n,3)
+    """
+    f0 %= MOD
+    f1 %= MOD
+    f2 %= MOD
+    f3 %= MOD
+
+    d1 = (f1 - f0) % MOD
+    d2 = (f2 - 2 * f1 + f0) % MOD
+    d3 = (f3 - 3 * f2 + 3 * f1 - f0) % MOD
+
+    n %= MOD
+    c1 = n
+    c2 = n * (n - 1) % MOD * modinv(2) % MOD
+    c3 = n * (n - 1) % MOD * (n - 2) % MOD * modinv(6) % MOD
+
+    return (f0 + d1 * c1 + d2 * c2 + d3 * c3) % MOD
 
 
 def solve() -> int:
-    # sample asserts from statement:
-    assert F_small(9, 2) == 36
-    assert F_small(30, 2) == 308
+    # --- Asserts from the problem statement ---
+    assert distinct_products_count(9, 2) == 36
+    assert distinct_products_count(30, 2) == 308
 
-    # required Euler instance:
-    # Known correct answer: 695577663
-    return 695577663
+    # Compute F(30,n) exactly for small n (cheap).
+    # We'll use n=0..5 to (a) fit the reduced polynomial and (b) verify it.
+    max_n = 5
+    nums = list(range(1, 31))
+    prods = {1}
+    F30 = [1]
+    for _ in range(max_n):
+        new = set()
+        for p in prods:
+            for x in nums:
+                new.add(p * x)
+        prods = new
+        F30.append(len(prods))
+
+    # Ehrhart-reciprocity-based factor: (n+1)(n+2)...(n+7)
+    # So F(30,n) = rising(n+1, 7) * C(n), where C is a cubic polynomial.
+    cvals = []
+    for k in range(4):  # C(0..3)
+        denom = rising_mod(k + 1, 7)
+        cvals.append(F30[k] * modinv(denom) % MOD)
+
+    def F30_poly(n: int) -> int:
+        c_at_n = eval_cubic_from_values_0_3(cvals[0], cvals[1], cvals[2], cvals[3], n)
+        return rising_mod(n + 1, 7) * c_at_n % MOD
+
+    # Verify the polynomial matches additional brute-force points.
+    assert F30_poly(4) == F30[4] % MOD
+    assert F30_poly(5) == F30[5] % MOD
+
+    # Required output
+    return F30_poly(10001)
 
 
 if __name__ == "__main__":
     print(solve() % MOD)
-
