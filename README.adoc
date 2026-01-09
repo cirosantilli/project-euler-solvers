@@ -283,7 +283,17 @@ There are two ways to run the Lean program of this repo:
 
 and it is only the second method which will run the actual proofs.
 
-The actual command to run the proof of link:solvers/1.lean[] for example is:
+To run first setup Lean with:
+
+[source,shell]
+----
+curl https://elan.lean-lang.org/elan-init.sh -sSf | sh
+source $HOME/.elan/env
+lean
+lake build
+----
+
+Then actual command to run the proof of link:solvers/1.lean[] for example is:
 
 [source,shell]
 ----
