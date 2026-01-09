@@ -56,6 +56,8 @@ We are focusing on Python solutions at first because this is the language that L
 
 Each solution file should be completely self contained and have no dependencies outside of the Python standard library.
 
+We are initially striving strongly for a 10 minute maximum runtime of each solution. This number is semi arbitrary, but it feels like a ridiculously high ceiling above which a non-bruteforce algorithm with the key insight should never ever go above, and we are yet to see a compelling case of the contrary. A few seconds is much much more common and pleasant. One minute starts to feel bad. Five is already basically hopeless. So ten feels like beyond reasonable.
+
 == Status
 
 Right now this project is simply blocked on cost/efficiency issues, there's nothing fundamentally intelligent missing as far as we know:
@@ -203,6 +205,17 @@ Solvers that fail to terminated under that time fail with something like:
 ....
 | link:solvers/141.py[141] |  |  |  | timed out after 60.000s
 ....
+
+One extremely convenient automation to `./test.py` is the -A --autoupdate flag which automatically updates this README with updated results as tests are run, saving you a lot of copy paste:
+
+....
+| link:solvers/141.py[141] |  |  |  | timed out after 60.000s
+....
+
+[source,shell]
+----
+./test.py -A -t60 400-410
+----
 
 === Linting
 
