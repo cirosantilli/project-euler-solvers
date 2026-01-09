@@ -41,7 +41,7 @@ We also have https://github.com/lucky-bai/projecteuler-solutions which contains 
 
 But with the advent of https://matharena.ai/?comp=euler--euler&task=4&model=GPT-5+%28high%29&view=problem&run=1[LLMs being able to solve a large number of them], this has become a possibility.
 
-At least initially, we are not going to restrict ourselves only to LLM solutions, or attempt to carefully benchmark LLM capability with this repo. If one problem is hard and we manually find a solution, it is fine to add it manually. The initial goal is just to have all solvers with as little effort and money as possible. Editing LLM output to make it work in any way is also OK.
+At least initially, we are not going to restrict ourselves only to LLM solutions, or attempt to carefully benchmark LLM capability with this repo. If one problem is hard and we manually find a solution, it is fine to add it manually. It is also fine to raid the private Project Euler forums to understand the key tricks and feed them to LLMs (though we must never ever touch code from there), since mathematical ideas themselves cannot be copyrighted. The initial goal is just to have all solvers legally with as little effort and money as possible. Editing LLM output to make it work in any way is also OK.
 
 The main reasons for creating this repo are:
 
