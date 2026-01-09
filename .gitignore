@@ -1,4 +1,5 @@
 *.out
+README.html
 .venv
 __pycache__
 tmp

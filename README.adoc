@@ -278,6 +278,16 @@ Run only the selected languages with the `-l` flag:
 }
 ....
 
+== Build README locally
+
+Install the Asciidoctor gem via Bundler and generate HTML:
+
+[source,shell]
+----
+bundle install
+bundle exec asciidoctor README.adoc -o README.html
+----
+
 == License
 
 The nominal license for this entire repo is https://creativecommons.org/public-domain/cc0/[CC0] (public domain) with the following caveats:
