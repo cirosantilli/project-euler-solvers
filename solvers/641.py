@@ -1,170 +1,199 @@
-#!/usr/bin/env python
-"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00641%20-%20A%20long%20row%20of%20Dice.py"""
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 """
-Created on Sun Dec  4 18:19:54 2022
+Project Euler 641 - A Long Row of Dice
 
-@author: igorvanloo
+We have n dice in a row, all showing 1.
+For k = 2..n we "turn" every k-th die, increasing its face by 1 (wrapping 6->1).
+Let f(n) be the number of dice showing 1 at the end. Compute f(10^36).
+
+This solution is self-contained and uses only the Python standard library.
 """
-"""
-Project Euler Problem 641
 
-start with a row of n dice showing 1,
-increase every dice divisible by 2 by 1
-increase every dice divisible by 3 by 1
-increase every dice divisible by 4 = 2^2 by 1
-...
-increase every dice divisible by n by 1
+from __future__ import annotations
 
-if a dice shows 6 and is increased it is reverted to 1
-f(n) = #of dice showing a 1 after the process
-f(100) = 2
-f(10^8) = 69
-
-It is easy enough to see that the nth dice will show σ_0(n) without subtracting 6, 
-that is the nth dice will show the number of divisors it has
-
-Therefore the problem is asking how many k are there such that k <= n and σ_0(k) = 1 mod (6)
-
-σ_0(k) = prod_{i = 1 to r} (e_i + 1) where k = p_1^e_1...p_r^e_r
-
-We need σ_0(k) to first of all be odd, therefore e_i cannot be odd, since then e_i + 1 = 2l and then σ_0(k) will be even
-
-e_i cannot be odd means that e_i is even therefore e_i = 2a_i and hence k must be a perfect square
-
-Given n, we can construct a sieve of length sqrt(n), array, 
-and then for each prime p|x multiply array[x] *= (2*c + 1) where x = p^c * k where p does not divide k
-This way we directly compute the number of divisors of perfect squares, like this we get f(10^14) in 12 seconds
-
-Investigating the actual numbers such that σ_0(k) = 1 (mod 6) I can see that the prime factorizations
-always have order have some patterns, most importantly every k will have a prime factor with exponenent >= 4
-Why?
-Suppose k = p^2 * k_1 where p does not divide k_1 then σ_0(k) = 3σ_0(k_1) 
-we then require 3σ_0(k_1) = 1 (mod 6) which has no solutions! therefore we need only primes <= n^(1/4)
-
-I also notice, and it is clear that if k = p^l then σ_0(k) = l + 1 and therefore 6|l (then σ_0(k) = 1 (mod 6))
-so our largest solo prime must be less than n^(1/6)
-
-Take the largest prime possible p, then minimally k = p^4 * k_1 where p does not divide k_1
-σ_0(k) = 5σ_0(k_1) therefore we require σ_0(k_1) = 5l => we have another prime factor with exponenent 4,
-the smallest such is 2, therefore our largest prime factor possible is n^(1/4)/2
-
-Furthermore, all our prime exponenents are even, therefore all of our contributions are odd as needed
-if we have 
-1. σ_0(k) = l, that is, we have a prime with exponent 6k + 1, then we only have l = 1 (mod 6) if l = 6k + 1
-    l = 6k + 1 => we have a prime factor with exponent = 6k
-    
-2. σ_0(k) = 3l, then 3l = 1 (mod 6) has no solutions
-
-3. σ_0(k) = 5l, then 5l = 1 (mod 6) only has a solution if l = 6k + 5
-    l = 6k + 5 => we have a prime factor with exponent = 6k + 4
-    
-We can also notice that if we have a prime factor with exponenent of the form 6k + 4, we need another one!
-All of our numbers are represented as n = a^6 * b^4
-
-    f(10**24) = 788749
-    f(10**28) = 7915837
-    f(10**30) = 25055676
-    f(10**32) = 79290673
-
-"""
 import math
 
 
-def Segmented_Prime_Sieve(limit, block_size=0):
-    primes = []
-    sqrtN = int(math.sqrt(limit))
-    result = [True] * (sqrtN + 2)
-    for i in range(2, sqrtN + 1):
-        if result[i]:
+def icbrt(n: int) -> int:
+    """Integer floor cube root: largest x with x^3 <= n."""
+    if n < 0:
+        raise ValueError("icbrt() argument must be non-negative")
+    if n < 2:
+        return n
+    # Upper bound based on bit-length: (2^k)^3 = 2^(3k)
+    hi = 1 << ((n.bit_length() + 2) // 3)
+    lo = hi >> 1
+    while lo + 1 < hi:
+        mid = (lo + hi) >> 1
+        m3 = mid * mid * mid
+        if m3 <= n:
+            lo = mid
+        else:
+            hi = mid
+    return lo
+
+
+def mobius_sieve(limit: int) -> list[int]:
+    """
+    Linear sieve for Möbius function μ(1..limit).
+    μ(n)=0 if n has a squared prime factor, else (-1)^(number of prime factors).
+    """
+    mu = [0] * (limit + 1)
+    mu[1] = 1
+    primes: list[int] = []
+    is_comp = bytearray(limit + 1)
+
+    for i in range(2, limit + 1):
+        if not is_comp[i]:
             primes.append(i)
-            for j in range(2 * i, sqrtN + 1, i):
-                result[j] = False
-
-    # Now we have generated all primes under sqrt(n), this is all we need to mark the other primes
-    all_primes = []
-    marker = [0] * len(primes)
-
-    if block_size == 0:
-        block_size = sqrtN
-
-    for k in range(1, limit // block_size):
-        if k % 100 == 0:
-            print("%s percent done" % (k / (limit // block_size)))
-        block_start = k * block_size + 1
-        block_end = (k + 1) * block_size
-        curr_result = [True] * block_size
-
-        if k == 1:
-            for p_index, p in enumerate(primes):
-                count = 0
-                while (block_start + count) % p != 0:
-                    count += 1
-
-                for j in range(block_start + count, block_end + 1, p):
-                    curr_result[j - block_start] = False
-                    marker[p_index] = j
-        else:
-            for p_index, p in enumerate(primes):
-                for j in range(marker[p_index] + p, block_end + 1, p):
-                    curr_result[j - block_start] = False
-                    marker[p_index] = j
-
-        all_primes += [
-            block_start + i for (i, isprime) in enumerate(curr_result) if isprime
-        ]
-
-    return primes + all_primes
-
-
-def f(n):
-    upper_bound = int((n ** (1 / 4)) / 2) + 20000
-    primes = Segmented_Prime_Sieve(upper_bound)
-    print("Primes Generated")
-
-    l = len(primes)
-
-    def generate(curr, primeIndex, needAnotherPF4):
-        # Depending on needAnotherPF4 we have found a candidate
-        if needAnotherPF4:
-            total = 0
-        else:
-            total = 1
-        # Now we go through all of the future primes
-        for i in range(primeIndex, l):
-            p = primes[i]
-            # If needAnotherPF4 then we set exp to 4, else 6
-            if needAnotherPF4:
-                exp = 4
-            else:
-                exp = 6
-
-            if curr * pow(p, exp) > n:
+            mu[i] = -1
+        for p in primes:
+            ip = i * p
+            if ip > limit:
                 break
-            # Go through every exponent which is a multiple of 6, that is Case 1
-            else:
-                t = 6
-                while True:
-                    v = curr * pow(p, t)
-                    if v > n:
-                        break
-                    # We continue the process with the next prime, and we keep the status of needAnotherPF4
-                    total += generate(v, i + 1, needAnotherPF4)
-                    t += 6
-                # Go through every exponent which is a multiple of 6, that is Case 3
-                t = 4
-                while True:
-                    v = curr * pow(p, t)
-                    if v > n:
-                        break
-                    # We continue the process with the next prime, and we change the status of
-                    # needAnotherPF4 because we've added a prime factor with exponent 4
-                    total += generate(v, i + 1, not needAnotherPF4)
-                    t += 6
-        return total
+            is_comp[ip] = 1
+            if i % p == 0:
+                mu[ip] = 0
+                break
+            mu[ip] = -mu[i]
+    return mu
 
-    return generate(1, 0, False)
+
+def count_f(n: int) -> int:
+    """
+    Compute f(n) for the dice process described in the problem.
+    """
+    # A die at position i is turned once for each divisor k >= 2 of i,
+    # hence exactly τ(i) - 1 times where τ is the divisor-count function.
+    # The final face is 1 iff τ(i) ≡ 1 (mod 6).
+    #
+    # τ(i) ≡ 1 (mod 6) implies τ(i) is odd => i is a perfect square: i = x^2.
+    # Writing x = ∏ p^b, then τ(x^2) = ∏ (2b+1).
+    # Modulo 3: 2b+1 ≡ 1-b (mod 3), so b ≡ 1 (mod 3) is forbidden (would give 0 mod 3),
+    # and b ≡ 2 (mod 3) contributes -1; we need an even number of such primes.
+    #
+    # Unique factorization: x = y^3 * z^2 where z is squarefree and primes in z are exactly
+    # those with exponent b ≡ 2 (mod 3). Parity condition: z has an even number of primes.
+    #
+    # Therefore f(n) = #{ x <= floor(sqrt(n)) : x = y^3 z^2, z squarefree, ω(z) even }.
+    M = math.isqrt(n)  # x <= M
+
+    # We will sum over z using Möbius:
+    # For squarefree z, μ(z) = (-1)^ω(z). Indicator[ω(z) even AND squarefree] = (μ(z)^2 + μ(z)) / 2.
+    # Let t(z) = floor( (M / z^2)^(1/3) ). Then:
+    #   f(n) = (S0 + S1) / 2
+    # where
+    #   S0 = sum_z μ(z)^2 * t(z)    (counts squarefree z)
+    #   S1 = sum_z μ(z)    * t(z)    (alternating by parity of ω(z))
+    #
+    # Group by y = t(z):
+    # y is in [1 .. floor(cuberoot(M))].
+    # For fixed y:
+    #   y <= (M / z^2)^(1/3) < y+1
+    #   => sqrt(M / (y+1)^3) < z <= sqrt(M / y^3)
+    # Define:
+    #   R(y) = floor_sqrt(M / y^3)
+    #   L(y) = floor_sqrt(M / (y+1)^3)
+    # Then z in (L(y), R(y)] have t(z)=y.
+    #
+    # So we need prefix sums:
+    #   Q(n) = sum_{k<=n} μ(k)^2  (number of squarefree <= n)
+    #   M(n) = sum_{k<=n} μ(k)    (Mertens function)
+    # to answer interval queries quickly.
+
+    # Max z queried is R(1) = floor_sqrt(M)
+    z_max = math.isqrt(M)
+
+    # For Mertens recursion up to z_max, precompute μ and prefix sums up to about z_max^(2/3).
+    c = icbrt(z_max)           # floor(z_max^(1/3))
+    limit = max(c * c + 10, math.isqrt(z_max) + 10, 1000)
+
+    mu = mobius_sieve(limit)
+
+    mertens_small = [0] * (limit + 1)
+    sqfree_small = [0] * (limit + 1)
+    s = 0
+    q = 0
+    for i in range(1, limit + 1):
+        s += mu[i]
+        mertens_small[i] = s
+        if mu[i] != 0:
+            q += 1
+        sqfree_small[i] = q
+
+    mertens_cache: dict[int, int] = {}
+
+    def mertens(n_: int) -> int:
+        """M(n)=sum_{k<=n} μ(k), using recursion + quotient grouping."""
+        if n_ <= limit:
+            return mertens_small[n_]
+        v = mertens_cache.get(n_)
+        if v is not None:
+            return v
+        res = 1
+        i = 2
+        while i <= n_:
+            q_ = n_ // i
+            j = n_ // q_
+            res -= (j - i + 1) * mertens(q_)
+            i = j + 1
+        mertens_cache[n_] = res
+        return res
+
+    sqfree_cache: dict[int, int] = {}
+
+    def squarefree_count(n_: int) -> int:
+        """
+        Q(n)=sum_{k<=n} μ(k)^2, i.e. count of squarefree numbers <= n.
+        Uses: Q(n) = sum_{d<=sqrt(n)} μ(d) * floor(n/d^2)
+        with grouping by constant floor(n/d^2).
+        """
+        if n_ <= 0:
+            return 0
+        if n_ <= limit:
+            return sqfree_small[n_]
+        v = sqfree_cache.get(n_)
+        if v is not None:
+            return v
+
+        m = math.isqrt(n_)  # only up to sqrt(1e9)=31623 for this problem
+        res = 0
+        d = 1
+        # d_max <= m <= sqrt(n_) <= sqrt(z_max) <= limit (by construction)
+        while d <= m:
+            k = n_ // (d * d)
+            d_max = math.isqrt(n_ // k)
+            res += (mertens_small[d_max] - mertens_small[d - 1]) * k
+            d = d_max + 1
+
+        sqfree_cache[n_] = res
+        return res
+
+    Y = icbrt(M)
+
+    S0 = 0
+    S1 = 0
+    for y in range(1, Y + 1):
+        y3 = y * y * y
+        R = math.isqrt(M // y3)
+        yp1 = y + 1
+        yp13 = yp1 * yp1 * yp1
+        L = math.isqrt(M // yp13) if yp13 <= M else 0
+        if R == L:
+            continue
+        S0 += y * (squarefree_count(R) - squarefree_count(L))
+        S1 += y * (mertens(R) - mertens(L))
+
+    return (S0 + S1) // 2
+
+
+def main() -> None:
+    # Problem statement test values
+    assert count_f(100) == 2
+    assert count_f(10**8) == 69
+
+    print(count_f(10**36))
 
 
 if __name__ == "__main__":
-    print(f(10**36))
+    main()

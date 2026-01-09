@@ -18,7 +18,7 @@ Status:
 * **1-400**: done
 * **401-500**: 98/100
 * **501-600**: 89/100
-* **601-700**: 42/100
+* **601-700**: 47/100
 * **701-800**: 2/100
 * **801-900**: 2/100
 * **901-977**: 22/77
@@ -960,7 +960,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/638.py[638.py] | link:solvers/638.md[638.md] | 0.270 | gpt-5.2-thinking |  |
 | link:solvers/639.py[639.py] | link:solvers/639.md[639.md] | 4.653 | gpt-5.2-thinking |  |
 | link:solvers/640.py[640.py] | link:solvers/640.md[640.md] | 1.630 | gpt-5.2-thinking |  |
-| link:solvers/641.py[641.py] |  |  |  |  | error: timed out after 300.000s
+| link:solvers/641.py[641.py] | link:solvers/641.md[641.md] | 1.280 | gpt-5.2-thinking |  |
 | link:solvers/642.py[642.py] |  | 47.987 |  |  |
 | 643.py |  |  |  |  | error: solver not found
 | 644.py |  |  |  |  | error: solver not found
@@ -968,14 +968,14 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | 646.py |  |  |  |  | error: solver not found
 | link:solvers/647.py[647.py] |  | 0.119 |  |  |
 | 648.py |  |  |  |  | error: solver not found
-| 649.py |  |  |  |  | error: solver not found
+| link:solvers/649.py[649.py] | link:solvers/649.md[649.md] | 0.146 | gpt-5.2-thinking |  |
 | link:solvers/650.py[650.py] |  | 30.908 |  |  |
-| 651.py |  |  |  |  | error: solver not found
-| 652.py |  |  |  |  | error: solver not found
+| link:solvers/651.py[651.py] | link:solvers/651.md[651.md] | 0.202 | gpt-5.2-thinking |  |
+| link:solvers/652.py[652.py] | link:solvers/652.md[652.md] | 0.081 | gpt-5.2-thinking |  |
 | 653.py |  |  |  |  | error: solver not found
 | 654.py |  |  |  |  | error: solver not found
 | link:solvers/655.py[655.py] |  |  |  |  | error: timed out after 300.000s
-| 656.py |  |  |  |  | error: solver not found
+| link:solvers/656.py[656.py] | link:solvers/656.md[656.md] | 0.107 | gpt-5.2-thinking |  |
 | 657.py |  |  |  |  | error: solver not found
 | 658.py |  |  |  |  | error: solver not found
 | link:solvers/659.py[659.py] |  | 1.456 |  |  |
