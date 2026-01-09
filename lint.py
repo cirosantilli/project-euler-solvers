@@ -133,7 +133,7 @@ def c_line_hits(text: str, answer: str) -> list[int]:
 
 def main() -> int:
     answers = load_reference_answers()
-    violations: list[tuple[int, Path, str]] = []
+    violations: list[tuple[int, Path, str, list[tuple[int, str]]]] = []
     for path in iter_solver_sources():
         pid = parse_solver_id(path)
         if pid is None:
@@ -153,16 +153,25 @@ def main() -> int:
             line_hits = c_comment_hits(text, answer)
             line_hits += c_line_hits(text, answer)
         if line_hits:
-            violations.append((pid, path, answer))
+            lines = text.splitlines()
+            hit_lines = sorted(set(line_hits))
+            context = [
+                (line_no, lines[line_no - 1].rstrip())
+                for line_no in hit_lines
+                if 0 < line_no <= len(lines)
+            ]
+            violations.append((pid, path, answer, context))
 
     if not violations:
         print("ok: no reference answers found in solver sources.")
         return 0
 
     print("error: reference answers found in solver sources:")
-    for pid, path, answer in violations:
+    for pid, path, answer, context in violations:
         rel = path.relative_to(ROOT)
         print(f"- {pid}: {rel} contains {answer!r}")
+        for line_no, line in context:
+            print(f"  line {line_no}: {line}")
     return 1
 
 

@@ -846,12 +846,12 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/554.py[554.py] | link:solvers/554.md[554.md] | 0.791 | gpt-5.2-thinking |  |
 | link:solvers/555.py[555.py] |  | 0.273 |  |  |
 | link:solvers/556.py[556.py] | link:solvers/556.md[556.md] | 1.137 | gpt-5.2-thinking |  |
-| link:solvers/557.py[557.py] | link:solvers/557.md[557.md] |  | gpt-5.2-thinking |  | error: timed out after 600.000s
+| link:solvers/557.py[557.py] | link:solvers/557.md[557.md] | 13.987 | gpt-5.2-thinking |  |
 | 558.py |  |  |  |  | error: solver not found
 | link:solvers/559.py[559.py] | link:solvers/559.md[559.md] | 3.744 | gpt-5.2-thinking |  |
 | link:solvers/560.py[560.py] | link:solvers/560.md[560.md] | 0.397 | gpt-5.2-thinking |  |
 | link:solvers/561.py[561.py] |  | 0.065 |  |  |
-| 562.py |  |  |  |  | error: solver not found
+| link:solvers/562.py[562.py] | link:solvers/562.md[562.md] | 0.948 | gpt-5.2-thinking |  | error: expected '51208732914368', got '75325157143932'
 | link:solvers/563.py[563.py] |  | 4.428 |  |  |
 | link:solvers/564.py[564.py] | link:solvers/564.md[564.md] | 2.307 | gpt-5.2-thinking |  |
 | link:solvers/565.py[565.py] |  | 16.009 |  |  |
@@ -868,13 +868,13 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/576.py[576.py] | link:solvers/576.md[576.md] | 6.163 | gpt-5.2-thinking |  |
 | link:solvers/577.py[577.py] |  | 0.105 |  |  |
 | link:solvers/578.py[578.py] | link:solvers/578.md[578.md] | 24.776 | gpt-5.2-thinking |  |
-| 579.py |  |  |  |  | error: solver not found
+| link:solvers/579.py[579.py] | link:solvers/579.md[579.md] | 0.101 | gpt-5.2-thinking |  | error: failed (exit 1)
 | link:solvers/580.py[580.py] | link:solvers/580.md[580.md] | 3.210 | gpt-5.2-thinking |  |
 | link:solvers/581.py[581.py] |  | 0.167 |  |  | error: expected '2227616372734', got '2886773027'
 | link:solvers/582.py[582.py] | link:solvers/582.md[582.md] | 0.159 | gpt-5.2-thinking |  |
 | link:solvers/583.py[583.py] | link:solvers/583.md[583.md] | 25.482 | gpt-5.2-thinking |  |
-| 584.py |  |  |  |  | error: solver not found
-| 585.py |  |  |  |  | error: solver not found
+| link:solvers/584.py[584.py] | link:solvers/584.md[584.md] | 0.795 | gpt-5.2-thinking |  | error: expected '32.83822408', got '31.70898626'
+| link:solvers/585.py[585.py] | link:solvers/585.md[585.md] | 0.523 | gpt-5.2-thinking |  |
 | 586.py |  |  |  |  | error: solver not found
 | link:solvers/587.py[587.py] |  | 0.075 |  |  |
 | link:solvers/588.py[588.py] | link:solvers/588.md[588.md] | 0.102 | gpt-5.2-thinking |  |
@@ -910,26 +910,26 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/618.py[618.py] |  | 0.616 |  |  |
 | link:solvers/619.py[619.py] | link:solvers/619.md[619.md] | 0.526 | gpt-5.2-thinking |  |
 | 620.py |  |  |  |  | error: solver not found
-| 621.py |  |  |  |  | error: solver not found
+| link:solvers/621.py[621.py] | link:solvers/621.md[621.md] | 0.303 | gpt-5.2-thinking |  |
 | link:solvers/622.py[622.py] |  | 2.659 |  |  |
-| 623.py |  |  |  |  | error: solver not found
+| link:solvers/623.py[623.py] | link:solvers/623.md[623.md] | 8.766 | gpt-5.2-thinking |  |
 | link:solvers/624.py[624.py] | link:solvers/624.md[624.md] | 0.127 | gpt-5.2-thinking |  |
-| 625.py |  |  |  |  | error: solver not found
+| 625.py | link:solvers/625.md[625.md] |  |  |  | error: solver not found
 | link:solvers/626.py[626.py] | link:solvers/626.md[626.md] | 0.216 | gpt-5.2-thinking |  |
-| 627.py |  |  |  |  | error: solver not found
+| link:solvers/627.py[627.py] | link:solvers/627.md[627.md] | 0.093 | gpt-5.2-thinking |  | error: failed (exit 1)
 | 628.py |  |  |  |  | error: solver not found
-| 629.py |  |  |  |  | error: solver not found
+| link:solvers/629.py[629.py] | link:solvers/629.md[629.md] | 0.164 | gpt-5.2-thinking |  |
 | link:solvers/630.py[630.py] | link:solvers/630.md[630.md] | 1.051 | gpt-5.2-thinking |  |
 | 631.py |  |  |  |  | error: solver not found
-| link:solvers/632.py[632.py] |  | 5.178 |  |  | error: expected '728378714', got '974068984'
+| link:solvers/632.py[632.py] | link:solvers/632.md[632.md] | 5.078 | gpt-5.2-thinking |  |
 | link:solvers/633.py[633.py] | link:solvers/633.md[633.md] | 0.246 | gpt-5.2-thinking |  |
 | link:solvers/634.py[634.py] | link:solvers/634.md[634.md] | 0.213 | gpt-5.2-thinking |  |
 | 635.py |  |  |  |  | error: solver not found
-| 636.py |  |  |  |  | error: solver not found
+| link:solvers/636.py[636.py] | link:solvers/636.md[636.md] | 3.425 | gpt-5.2-thinking |  |
 | 637.py |  |  |  |  | error: solver not found
 | link:solvers/638.py[638.py] | link:solvers/638.md[638.md] | 0.270 | gpt-5.2-thinking |  |
-| 639.py |  |  |  |  | error: solver not found
-| 640.py |  |  |  |  | error: solver not found
+| link:solvers/639.py[639.py] | link:solvers/639.md[639.md] | 4.653 | gpt-5.2-thinking |  |
+| link:solvers/640.py[640.py] | link:solvers/640.md[640.md] | 1.630 | gpt-5.2-thinking |  |
 | link:solvers/641.py[641.py] |  |  |  |  | error: timed out after 300.000s
 | link:solvers/642.py[642.py] |  | 47.987 |  |  |
 | 643.py |  |  |  |  | error: solver not found

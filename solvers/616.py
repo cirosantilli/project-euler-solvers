@@ -90,14 +90,6 @@ def solve():
     return total_pp - total_primeprime - 16
 
 
-def main():
-    ans = solve()
-    # No explicit sample numeric tests exist in the problem statement.
-    # But we assert the final known correct answer.
-    assert ans == 310884668312456458
-    print(ans)
-
-
 if __name__ == "__main__":
-    main()
+    print(solve())
 
