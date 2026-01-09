@@ -103,6 +103,20 @@ def update_readme_status(lines: list[str], summary_lines: list[str]) -> list[str
     raise ValueError("STATUS TABLE marker not found or malformed")
 
 
+def compute_summary_lines(lines: list[str]) -> list[str]:
+    rows = iter_table_rows(lines)
+    solved_by_group, max_pid = parse_rows(rows)
+    return build_summary(solved_by_group, max_pid)
+
+
+def autoupdate_readme(readme_path: Path = README_PATH) -> list[str]:
+    lines = readme_path.read_text().splitlines()
+    summary_lines = compute_summary_lines(lines)
+    updated_lines = update_readme_status(lines, summary_lines)
+    readme_path.write_text("\n".join(updated_lines) + "\n")
+    return summary_lines
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Summarize solved Project Euler problems.")
     parser.add_argument(
@@ -119,9 +133,7 @@ def main() -> int:
         print(f"error: failed to read {README_PATH}: {exc}", file=sys.stderr)
         return 2
 
-    rows = iter_table_rows(lines)
-    solved_by_group, max_pid = parse_rows(rows)
-    summary_lines = build_summary(solved_by_group, max_pid)
+    summary_lines = compute_summary_lines(lines)
     if args.autoupdate:
         try:
             updated_lines = update_readme_status(lines, summary_lines)

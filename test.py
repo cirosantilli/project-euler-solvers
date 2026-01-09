@@ -10,6 +10,7 @@ import time
 from dataclasses import dataclass
 from pathlib import Path
 
+import summary
 ROOT = Path(__file__).resolve().parent
 SOLUTIONS_PATH = ROOT / "data/projecteuler-solutions/Solutions.md"
 SOLVERS_DIR = ROOT / "solvers"
@@ -938,6 +939,11 @@ def main() -> None:
 
     if args.autoupdate:
         update_readme(results)
+        try:
+            summary.autoupdate_readme()
+        except (OSError, ValueError) as exc:
+            print(f"summary update failed: {exc}", file=sys.stderr)
+            sys.exit(2)
 
 
 if __name__ == "__main__":

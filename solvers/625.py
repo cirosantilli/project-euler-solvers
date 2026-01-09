@@ -1,42 +1,57 @@
 #!/usr/bin/env python3
-"""
-Project Euler 625 — Gcd Sum
+"""Project Euler 625 — Gcd Sum
 
-G(N) = sum_{j=1..N} sum_{i=1..j} gcd(i, j)
+Compute:
+    G(N) = \sum_{j=1..N} \sum_{i=1..j} gcd(i, j)
 
-We need G(10^11) mod 998244353.
+Required:
+    G(10^11) mod 998244353
 
-No external libraries are used (only Python standard library).
+Fast pure-Python approach:
+  - Reduce to a single sum with Euler's totient.
+  - Use quotient grouping so the outer sum has ~2*sqrt(N) terms.
+  - Compute the summatory totient Phi(n)=\sum_{k<=n} phi(k) using a
+    Dujiao-style recursion with quotient grouping + memoization.
+
+No external libraries are used.
 """
 
 from __future__ import annotations
 
 import sys
-import math
 from array import array
 
 MOD = 998244353
-INV2 = (MOD + 1) // 2
 
 
 def tri_mod(n: int) -> int:
-    """n*(n+1)/2 (mod MOD)."""
-    n %= MOD
-    return (n * (n + 1) % MOD) * INV2 % MOD
+    """T(n) = n(n+1)/2 (mod MOD), computed without modular inverse."""
+    a = n
+    b = n + 1
+    if (a & 1) == 0:
+        a //= 2
+    else:
+        b //= 2
+    return (a % MOD) * (b % MOD) % MOD
 
 
-def sieve_phi(limit: int) -> array:
+def build_phi_prefix(limit: int) -> array:
+    """Return pref array where pref[n] = sum_{k<=n} phi(k) (mod MOD) for n<=limit.
+
+    Uses a linear sieve to compute phi up to `limit`, then converts in-place to
+    prefix sums modulo MOD.
+
+    The returned value is an array('I') of length limit+1.
     """
-    Linear sieve for Euler's totient up to `limit`.
-    Returns an array('I') phi where phi[i] fits in 32 bits for i<=limit.
-    """
+    if limit <= 0:
+        return array("I", [0])
+
+    # phi will be overwritten with prefix sums at the end.
     phi = array("I", [0]) * (limit + 1)
     is_comp = bytearray(limit + 1)
     primes = array("I")
 
-    if limit >= 1:
-        phi[1] = 1
-
+    phi[1] = 1
     for i in range(2, limit + 1):
         if not is_comp[i]:
             primes.append(i)
@@ -52,127 +67,86 @@ def sieve_phi(limit: int) -> array:
             else:
                 phi[v] = phi[i] * (p - 1)
 
+    # In-place prefix sums mod MOD.
+    # We keep limit < MOD in this program (default limit=5e6), so phi[i] < MOD.
+    s = 0
+    for i in range(1, limit + 1):
+        s += phi[i]
+        if s >= MOD:
+            s -= MOD
+        phi[i] = s
+
     return phi
 
 
-def gcd_sum_prefix(N: int, sieve_limit: int = 10_000_000) -> int:
-    """
-    Compute G(N) modulo MOD.
+def gcd_sum(N: int) -> int:
+    """Compute G(N) mod MOD."""
+    if N <= 0:
+        return 0
 
-    `sieve_limit` is a speed/space tuning parameter: larger limits reduce recursion.
-    10,000,000 is a good default for N=10^11.
-    """
-    # Ensure we have phi up to sqrt(N) because the final hyperbola split uses those values directly.
-    sieve_limit = max(sieve_limit, math.isqrt(N) + 2)
+    # Sieve limit trade-off: larger is faster for Phi(n) but costs more memory/time to sieve.
+    # 5e6 is a good sweet spot for N=1e11 in pure Python.
+    LIMIT = 5_000_000
+    if N < LIMIT:
+        LIMIT = N
 
-    phi = sieve_phi(sieve_limit)
-
-    # Prefix sums of phi modulo MOD: Phi(n) = sum_{k<=n} phi(k) (mod MOD) for n<=sieve_limit.
-    cphi = array("I", [0]) * (sieve_limit + 1)
-    s = 0
-    for i in range(1, sieve_limit + 1):
-        s += phi[i]
-        # keep `s` small-ish without doing an expensive modulo each iteration
-        if s >= MOD:
-            s %= MOD
-        cphi[i] = s
-    s %= MOD
+    pref = build_phi_prefix(LIMIT)
 
     memo: dict[int, int] = {}
-    sys.setrecursionlimit(1_000_000)
-
-    # Local bindings for speed
-    isqrt = math.isqrt
+    memo_get = memo.get
     MOD_ = MOD
     tri = tri_mod
-    cphi_ = cphi
-    phi_ = phi
-    memo_get = memo.get
-    memo_set = memo.__setitem__
-    lim = sieve_limit
+    LIM = LIMIT
+    pref_ = pref
 
     def Phi(n: int) -> int:
-        """
-        Summatory totient: sum_{k<=n} phi(k) (mod MOD).
-
-        Uses a hyperbola-method recursion that only needs exact values up to `lim`,
-        and memoizes the remaining queries.
-        """
-        if n <= lim:
-            return cphi_[n]
+        """Phi(n) = sum_{k<=n} phi(k) (mod MOD) with Dujiao recursion."""
+        if n <= 0:
+            return 0
+        if n <= LIM:
+            return pref_[n]
         cached = memo_get(n)
         if cached is not None:
             return cached
 
-        sq = isqrt(n)
-        k = n // sq  # roughly sqrt(n)
+        # Dujiao recursion (grouped by constant floor(n/l)):
+        # Phi(n) = T(n) - sum_{l=2..n} (r-l+1) * Phi(n//l)
+        res = tri(n)
+        l = 2
+        while l <= n:
+            q = n // l
+            r = n // q
+            res = (res - ((r - l + 1) % MOD_) * Phi(q)) % MOD_
+            l = r + 1
 
-        # Start from T(n) = n(n+1)/2 = sum_{d<=n} d
-        ans = tri(n)
+        memo[n] = res
+        return res
 
-        # First correction term (uses small prefix sums only)
-        sub = 0
-        for m in range(1, k):
-            sub += (n // m - n // (m + 1)) * cphi_[m]
-        ans -= sub % MOD_
+    # G(N) = sum_{k=1..N} phi(k) * T(N//k)
+    # Group k by constant q = N//k:
+    ans = 0
+    l = 1
+    while l <= N:
+        q = N // l
+        r = N // q
+        sum_phi = (Phi(r) - Phi(l - 1)) % MOD_
+        ans = (ans + sum_phi * tri(q)) % MOD_
+        l = r + 1
 
-        # Second correction term: split recursion so we only recurse when n//m > lim
-        thresh = n // lim
-        if thresh > sq:
-            thresh = sq
-
-        sub2 = 0
-        for m in range(2, thresh + 1):
-            sub2 += Phi(n // m)
-        if thresh < sq:
-            for m in range(thresh + 1, sq + 1):
-                sub2 += cphi_[n // m]
-
-        ans -= sub2 % MOD_
-        ans %= MOD_
-
-        memo_set(n, ans)
-        return ans
-
-    def G(n: int) -> int:
-        """
-        Compute G(n) = sum_{j<=n} sum_{i<=j} gcd(i,j) (mod MOD),
-        using a sqrt(n) hyperbola split.
-        """
-        sq = isqrt(n)
-
-        # Hyperbola method:
-        # G(n) = sum_{k<=n} phi(k) * T(floor(n/k)).
-        # Split at k<=sq and use Phi(·) for the rest.
-        ans = (-tri(sq) * Phi(sq)) % MOD_
-
-        tmp = 0
-        for i in range(1, sq + 1):
-            tmp += Phi(n // i) * i
-        ans = (ans + tmp) % MOD_
-
-        tmp = 0
-        for i in range(1, sq + 1):
-            tmp += phi_[i] * tri(n // i)
-        ans = (ans + tmp) % MOD_
-
-        return ans
-
-    return G(N)
+    return ans
 
 
 def main() -> None:
-    # Default: the actual Project Euler input
     N = 10**11
 
     data = sys.stdin.read().strip()
     if data:
         N = int(data)
 
-    # Problem statement test value:
-    assert gcd_sum_prefix(10, sieve_limit=100_000) == 122 % MOD
+    # Test value from the problem statement:
+    assert gcd_sum(10) == 122 % MOD
 
-    print(gcd_sum_prefix(N))
+    print(gcd_sum(N))
 
 
 if __name__ == "__main__":

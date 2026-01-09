@@ -303,12 +303,12 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 // RESULTS TABLE
 |===
 | ID | Explanation | Runtime (s) | Model | Out Tokens | Error
-| link:solvers/1.c[1.c] |  | 0.002 |  |  |
-| link:solvers/1.cpp[1.cpp] |  | 0.003 |  |  |
-| link:solvers/1.lean[1.lean] |  | 0.007 |  |  |
-| link:solvers/1.py[1.py] |  | 0.093 |  |  |
-| link:solvers/2.lean[2.lean] | link:solvers/2.md[2.md] | 0.042 |  |  |
-| link:solvers/2.py[2.py] | link:solvers/2.md[2.md] | 0.087 | gpt-5.2-2025-12-11 | 432 |
+| link:solvers/1.c[1.c] |  | 0.010 |  |  |
+| link:solvers/1.cpp[1.cpp] |  | 0.006 |  |  |
+| link:solvers/1.lean[1.lean] |  | 0.029 |  |  |
+| link:solvers/1.py[1.py] |  | 0.097 |  |  |
+| link:solvers/2.lean[2.lean] | link:solvers/2.md[2.md] | 0.027 |  |  |
+| link:solvers/2.py[2.py] | link:solvers/2.md[2.md] | 0.061 | gpt-5.2-2025-12-11 | 432 |
 | link:solvers/3.py[3.py] | link:solvers/3.md[3.md] | 0.084 | gpt-5.2-2025-12-11 | 585 |
 | link:solvers/4.py[4.py] | link:solvers/4.md[4.md] | 0.077 | gpt-5.2-2025-12-11 | 992 |
 | link:solvers/5.py[5.py] | link:solvers/5.md[5.md] | 0.080 | gpt-5.2-2025-12-11 | 458 |
