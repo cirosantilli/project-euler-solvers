@@ -1,0 +1,6 @@
+{
+  "interface": "webui",
+  "model": "gpt-5.2-thinking",
+  "reasoning_effort": "extended",
+  "input_prompt": "Solve project euler 616 in file main.py. Don't use any external libraries. Add asserts to any test values given in the problem statement. Also produce a markdown summary of the main techniques used as README.md. Provide the two files both inline here and with download links."
+}

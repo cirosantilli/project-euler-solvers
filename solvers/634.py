@@ -1,92 +1,179 @@
-#!/usr/bin/env python
-"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00634%20-%20Numbers%20of%20the%20form%20a^2b^3.py"""
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 """
-Created on Wed Dec  7 11:27:09 2022
+Project Euler 634 - Numbers of the Form a^2 b^3
 
-@author: igorvanloo
+Count integers x <= n that can be written as x = a^2 * b^3 with a,b > 1.
+
+No external libraries are used (standard library only).
 """
-"""
-Project Euler Problem 634
 
-F(n) = #x <= n such that x = a^2b^3, a, b > 1
-F(100) = 2, F(2 * 10^4) = 130, F(3 * 10^6) = 2014
+from __future__ import annotations
 
-https://oeis.org/A001694 - 2-powerful numbers are of the form a^2b^3, however a,b can be 1
-https://en.wikipedia.org/wiki/Powerful_number
-
-We want all numbers a^2b^3 such that a, b not equal to 1
-
-Suppose x = a^2b^3 is not square, this can be uniquely represented when b >= 2 and is squarefree, and a >= 2
-
-Given that a >= 2, 4b^3 <= n => b <= (n/4)^(1/3)
-For a given b, if we ensure that b is squarefree, then a <= sqrt(n/b^3) with the only restriction being a >= 1
-Therefore for each squarefree b <= (n/4)^(1/3) we add floor(sqrt(n/b^3)) - 1 to a total
-
-Suppose x is a square, then x = a^2b^6 and a is cubefree is unique, note that if b is prime, then this means a >= 2
-For a given b, a <= sqrt(n/b^6) and a has to be cubefree, therefore we count all cubefree numbers less than this
-If b is prime then we subtract 1 extra
-
-For some reason I cannot fix the issue of being 1 off
-"""
 import math
 
 
-def mobius_k_sieve(n, k):
-    isprime = [1] * (n + 1)
-    isprime[0] = isprime[1] = 0
-    mob = [0] + [1] * (n)
-    for p in range(2, n + 1):
-        if isprime[p]:
-            mob[p] *= -1
-            for i in range(2 * p, n + 1, p):
-                isprime[i] = 0
-                mob[i] *= -1
-            sq = pow(p, k)
-            if sq <= n:
-                for j in range(sq, n + 1, sq):
-                    mob[j] = 0
-    return isprime, mob
-
-
-def count_kfree(n, k):
-    """
-    I re-defined the the Mobius function:
-                    1 if n is kpower-free positive integer with even number of prime factors
-        μ_{k}(n) = -1 if n is kpower-free positive integer with odd number of prime factors
-                    0 if n has a k power factor
-
-    Computes the number of integers x <= n such that x is k-free, denote this as S(n)
-    We use the fact that S(n) = sum_{d = 1}^n |μ_k(d)| = sum_{d = 1}^{floor{n^(1/k)}} μ_{k}(d)*floor{n/d^k}
-    """
-    sq = math.floor(n ** (1 / k))
-    _, mobius_k = mobius_k_sieve(sq, 2)
-    return sum([mobius_k[i] * (n // pow(i, k)) for i in range(1, sq + 1)])
-
-
-def F(n):
-    isprime, mob = mobius_k_sieve(int(pow(n / 4, 1 / 3)), 2)
-    total = 0
-    b = 2
-    while pow(b, 3) * 4 <= n:
-        total += pow(mob[b], 2) * (math.floor(math.sqrt(n / pow(b, 3))) - 1)
-        b += 1
-
-    b = 2
-    while pow(b, 6) <= n:
-        v = math.floor(math.sqrt(n) / pow(b, 3))
-        if isprime[b]:
-            total += count_kfree(v, 3) - 1
+def iroot(n: int, k: int) -> int:
+    """Return floor(n^(1/k)) for integers n>=0, k>=1 using integer binary search."""
+    if n < 2:
+        return n
+    # Exponential search for an upper bound
+    hi = 1
+    while hi ** k <= n:
+        hi <<= 1
+    lo = hi >> 1
+    # Binary search in [lo, hi)
+    while lo + 1 < hi:
+        mid = (lo + hi) >> 1
+        if mid ** k <= n:
+            lo = mid
         else:
-            total += count_kfree(v, 3)
-        b += 1
+            hi = mid
+    return lo
 
+
+def squarefree_sieve(m: int) -> bytearray:
+    """
+    is_sqfree[x] == 1 iff x is squarefree, for 0 <= x <= m.
+    Uses marking multiples of p^2 for primes p <= sqrt(m).
+    """
+    is_sqfree = bytearray(b"\x01") * (m + 1)
+    if m >= 0:
+        is_sqfree[0] = 0
+
+    limit = math.isqrt(m)
+    # sieve primes up to limit
+    is_prime = bytearray(b"\x01") * (limit + 1)
+    if limit >= 0:
+        is_prime[0:2] = b"\x00\x00"
+    root = math.isqrt(limit)
+    for p in range(2, root + 1):
+        if is_prime[p]:
+            start = p * p
+            step = p
+            cnt = ((limit - start) // step) + 1
+            is_prime[start : limit + 1 : step] = b"\x00" * cnt
+
+    for p in range(2, limit + 1):
+        if is_prime[p]:
+            sq = p * p
+            start = sq
+            step = sq
+            cnt = ((m - start) // step) + 1
+            is_sqfree[start : m + 1 : step] = b"\x00" * cnt
+
+    return is_sqfree
+
+
+def mobius_upto(n: int) -> list[int]:
+    """Compute Möbius function mu[0..n] with a linear sieve."""
+    mu = [0] * (n + 1)
+    if n >= 1:
+        mu[1] = 1
+    primes: list[int] = []
+    is_comp = [False] * (n + 1)
+
+    for i in range(2, n + 1):
+        if not is_comp[i]:
+            primes.append(i)
+            mu[i] = -1
+        for p in primes:
+            v = i * p
+            if v > n:
+                break
+            is_comp[v] = True
+            if i % p == 0:
+                mu[v] = 0
+                break
+            mu[v] = -mu[i]
+    return mu
+
+
+def count_primes_upto(n: int) -> int:
+    """Count primes <= n with a simple sieve (n is small here: <= ~2000)."""
+    if n < 2:
+        return 0
+    sieve = bytearray(b"\x01") * (n + 1)
+    sieve[0:2] = b"\x00\x00"
+    for p in range(2, math.isqrt(n) + 1):
+        if sieve[p]:
+            start = p * p
+            step = p
+            cnt = ((n - start) // step) + 1
+            sieve[start : n + 1 : step] = b"\x00" * cnt
+    return int(sum(sieve))
+
+
+def count_cubefree(R: int) -> int:
+    """
+    Count cubefree integers <= R.
+
+    Uses Möbius inversion:
+      cubefree_count(R) = sum_{k>=1} mu(k) * floor(R / k^3),
+    where the sum only needs k <= floor(R^(1/3)).
+    """
+    kmax = iroot(R, 3)
+    mu = mobius_upto(kmax)
+    total = 0
+    for k in range(1, kmax + 1):
+        mk = mu[k]
+        if mk:
+            k3 = k * k * k
+            total += mk * (R // k3)
     return total
 
 
-if __name__ == "__main__":
+def powerful_count_and_squarefree(n: int) -> tuple[int, bytearray, int]:
+    """
+    Count powerful numbers <= n (including 1), using the unique representation:
+        x = a^2 * b^3  with b squarefree, a >= 1.
+    Then:
+        powerful_count(n) = sum_{squarefree b <= n^(1/3)} floor(sqrt(n / b^3)).
+    Returns (P, is_sqfree, m) where m = floor(n^(1/3)).
+    """
+    m = iroot(n, 3)
+    is_sqfree = squarefree_sieve(m)
+    isqrt = math.isqrt
+    total = 0
+    for b in range(1, m + 1):
+        if is_sqfree[b]:
+            b3 = b * b * b
+            total += isqrt(n // b3)
+    return total, is_sqfree, m
+
+
+def F(n: int) -> int:
+    """
+    Compute F(n) for the problem.
+
+    Let P be the number of powerful numbers <= n (including 1).
+    The only powerful numbers that cannot be written with a,b > 1 are:
+      X1: numbers whose prime exponents are all in {0,2,4}  (i.e. squares of cubefree integers)
+      X2: numbers whose prime exponents are all in {0,3}    (i.e. cubes of squarefree integers)
+      X3: prime sixth powers p^6
+    X1 and X2 overlap only at 1, and X3 is disjoint from both.
+
+    Therefore:
+      F(n) = P - |X1| - |X2| - |X3| + 1
+    """
+    P, is_sqfree, _m = powerful_count_and_squarefree(n)
+
+    R = math.isqrt(n)
+    X1 = count_cubefree(R)              # includes 1
+    X2 = int(sum(is_sqfree))            # squarefree numbers <= floor(n^(1/3)), includes 1
+    X3 = count_primes_upto(iroot(n, 6)) # primes p with p^6 <= n
+
+    return P - X1 - X2 - X3 + 1
+
+
+def solve() -> None:
+    # Test values from the statement
     assert F(100) == 2
     assert F(2 * 10**4) == 130
-    # TODO extra assert
-    # assert F(3 * 10**6) == 2014
-    print(F(9 * 10**18))
+    assert F(3 * 10**6) == 2014
+
+    n = 9 * 10**18
+    print(F(n))
+
+
+if __name__ == "__main__":
+    solve()
