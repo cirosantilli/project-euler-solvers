@@ -1,0 +1,14 @@
+name = "ProjectEulerSolvers"
+version = "0.1.0"
+defaultTargets = ["projecteulersolvers"]
+
+[[lean_lib]]
+name = "ProjectEulerSolvers"
+
+[[require]]
+name = "ProjectEulerStatements"
+path = "data/project-euler-statements/data/lean"
+
+[[lean_exe]]
+name = "projecteulersolvers"
+root = "Main"

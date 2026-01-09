@@ -229,11 +229,15 @@ Currently the only thing that this script does it to check that the output answe
 
 Note that this linting does not affect languages where you can actually formally prove your algorithm such as Lean. That's their beauty!
 
+The functionality of link:lint.py[] is automatically called from link:test.py[] and tests just fail if the output string is present in them.
+
+Of course, this does not rule out malice entirely, an evil LLM could simply obfuscate the cheating with string concatenation or addition. But this already greatly reduces the chances. There is only one solution to this problem: <<lean>> or other formal proof systems.
+
 === Multilanguage support
 
 We have basic support for solvers written in multiple languages.
 
-While the main goal of the repository is to have Python solutions, we couldn't resist generalizing things a bit for Lean. But it is also interesting to have multilanguage support to compare implementation speed across different languages.
+While the main goal of the repository is to have Python solutions, we couldn't resist generalizing things a bit for <<lean>>. But it is also interesting to have multilanguage support to compare implementation speed across different languages.
 
 For compiled languages such as C and C++, you first have to compile the examples. From inside link:solvers/[]:
 
@@ -261,6 +265,32 @@ Run only the selected languages with the `-l` flag:
 ----
 ./test.py -l c -l py 1
 ----
+
+==== Lean
+
+One massive stretch goal of this project is to have formal lean proofs of the Lean solutions.
+
+Lean is an automated theorem checker that doubles as a programming language, so as long as we get the formalization of the problem statement right, Lean will ensure that the final algorithm is correct. Notably this ensures that the LLM didn't cheat and found a flawed algorithm which happens to work by chance or malice only on certain cases. 
+
+Probably the proofs will come down to proofs that the bruteforce solution function is equivalent to the insight-optimized one that you need to have reasonable runtime, but we will see how it goes.
+
+The plan is to vibe-translate Python to lean without proof initially, and then starting adding proofs little by little. We need to see get a feel for how automatable that will be! There are a bunch of autoformalizatoin and automatic proof companies out there right now, so this will be a perfect chance to try them out.
+
+There are two ways to run the Lean program of this repo:
+
+* you can convert them to executables just as for .c or .cpp files
+* or you can run them directly with lean
+
+and it is only the second method which will run the actual proofs.
+
+The actual command to run the proof of link:solvers/1.lean[] for example is:
+
+[source,shell]
+----
+lake env lean solvers/1.lean
+----
+
+The way things work is that link:data/project-euler-statements[] will contain a Lean formalization of each problem statement.
 
 == Folders
 
