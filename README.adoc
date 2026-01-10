@@ -17,7 +17,7 @@ Status:
 // STATUS TABLE
 * **1-500**: done
 * **501-600**: 97/100
-* **601-700**: 84/100
+* **601-700**: 85/100
 * **701-800**: 2/100
 * **801-900**: 2/100
 * **901-977**: 22/77
@@ -1052,7 +1052,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/685.py[685.py] | link:solvers/685.md[685.md] | 0.272 | gpt-5.2-thinking |  |
 | link:solvers/686.py[686.py] |  | 0.718 |  |  |
 | link:solvers/687.py[687.py] | link:solvers/687.md[687.md] | 0.108 | gpt-5.2-thinking |  |
-| link:solvers/688.py[688.py] | link:solvers/688.md[688.md] | 0.073 | gpt-5.2-thinking |  | error: failed (exit 1)
+| link:solvers/688.py[688.py] | link:solvers/688.md[688.md] | 6.874 | gpt-5.2-thinking |  |
 | link:solvers/689.py[689.py] | link:solvers/689.md[689.md] | 0.195 | gpt-5.2-thinking |  |
 | link:solvers/690.py[690.py] | link:solvers/690.md[690.md] | 0.185 | gpt-5.2-thinking |  |
 | link:solvers/691.py[691.py] | link:solvers/691.md[691.md] | 2.168 | gpt-5.2-thinking |  |
