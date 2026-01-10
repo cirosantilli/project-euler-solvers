@@ -17,8 +17,8 @@ Status:
 // STATUS TABLE
 * **1-400**: done
 * **401-500**: 98/100
-* **501-600**: 96/100
-* **601-700**: 82/100
+* **501-600**: 95/100
+* **601-700**: 83/100
 * **701-800**: 2/100
 * **801-900**: 2/100
 * **901-977**: 22/77
@@ -888,7 +888,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/526.py[526.py] | link:solvers/526.md[526.md] | 41.979 | gpt-5.2-thinking |  |
 | link:solvers/527.py[527.py] | link:solvers/527.md[527.md] | 0.120 | gpt-5.2-thinking |  |
 | link:solvers/528.py[528.py] | link:solvers/528.md[528.md] | 0.126 | gpt-5.2-thinking |  |
-| link:solvers/529.py[529.py] | link:solvers/529.md[529.md] | 8.202 | gpt-5.2-thinking |  |
+| link:solvers/529.py[529.py] | link:solvers/529.md[529.md] | 0.070 | gpt-5.2-thinking |  | error: failed (exit 1)
 | link:solvers/530.py[530.py] | link:solvers/530.md[530.md] | 5.856 | gpt-5.2-thinking |  |
 | link:solvers/531.py[531.py] |  | 1.608 |  |  |
 | link:solvers/532.py[532.py] | link:solvers/532.md[532.md] | 0.132 | gpt-5.2-thinking |  |
@@ -1014,7 +1014,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/652.py[652.py] | link:solvers/652.md[652.md] | 0.081 | gpt-5.2-thinking |  |
 | link:solvers/653.py[653.py] | link:solvers/653.md[653.md] | 0.148 | gpt-5.2-thinking |  |
 | link:solvers/654.py[654.py] | link:solvers/654.md[654.md] | 1.801 | gpt-5.2-thinking |  |
-| link:solvers/655.py[655.py] | link:solvers/655.md[655.md] | 231.661 | gpt-5.2-thinking |  | error: expected '2000008332', got '11541685709674'
+| link:solvers/655.py[655.py] | link:solvers/655.md[655.md] | 227.438 | gpt-5.2-thinking |  |
 | link:solvers/656.py[656.py] | link:solvers/656.md[656.md] | 0.107 | gpt-5.2-thinking |  |
 | link:solvers/657.py[657.py] | link:solvers/657.md[657.md] | 0.089 | gpt-5.2-thinking |  |
 | link:solvers/658.py[658.py] | link:solvers/658.md[658.md] | 1.087 | gpt-5.2-thinking |  |
