@@ -54,9 +54,13 @@ Of course, it can be argued that https://github.com/eth-sri/matharena infrastruc
 
 We are focusing on Python solutions at first because this is the language that LLMs seems to speak better. It is also cute and avoid compilation overhead. Also pypy3 does a lot to bring runtime closer to that of compiled languages. We are not against adding solutions in every single language in existence in the future, but that is becoming increasingly cheap and easy with vibe translation with Codex CLI, so we are not too concerned either.
 
-Each solution file should be completely self contained and have no dependencies outside of the Python standard library.
+=== Solution guidelines
+
+Each Python solution file should be completely self contained and have no dependencies outside of the Python standard library.
 
 We are initially striving strongly for a 10 minute maximum runtime of each solution. This number is semi arbitrary, but it feels like a ridiculously high ceiling above which a non-bruteforce algorithm with the key insight should never ever go above, and we are yet to see a compelling case of the contrary. A few seconds is much much more common and pleasant. One minute starts to feel bad. Five is already basically hopeless. So ten feels like beyond reasonable.
+
+We want to avoid any magic pre-computed constants used as intermediate results as much as possible, and especially large precomputed number tables. Ideally the program should compute anything it needs from scratch. Well known mathematical constants that appear in the Python stlib like Pi are fine though. This is hard to enforce automatically except in the case where large precomputed tables are present and the file becomes huge. But we will do our best.
 
 == Status
 
