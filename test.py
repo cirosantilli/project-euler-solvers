@@ -994,6 +994,9 @@ def main() -> None:
             print(f"summary update failed: {exc}", file=sys.stderr)
             sys.exit(2)
 
+    if any(not res.correct for res in results):
+        sys.exit(1)
+
 
 if __name__ == "__main__":
     main()
