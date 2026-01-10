@@ -1022,7 +1022,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/660.py[660.py] | link:solvers/660.md[660.md] |  | gpt-5.2-thinking |  | error: timed out after 600.000s
 | link:solvers/661.py[661.py] | link:solvers/661.md[661.md] | 0.063 | gpt-5.2-thinking |  |
 | 662.py |  |  |  |  | error: solver not found
-| link:solvers/663.py[663.py] | link:solvers/663.md[663.md] | 2.467 | gpt-5.2-thinking |  |
+| link:solvers/663.py[663.py] | link:solvers/663.md[663.md] | 2.688 | gpt-5.2-thinking |  |
 | link:solvers/664.py[664.py] | link:solvers/664.md[664.md] | 0.115 | gpt-5.2-thinking |  |
 | 665.py |  |  |  |  | error: solver not found
 | link:solvers/666.py[666.py] | link:solvers/666.md[666.md] | 0.121 | gpt-5.2-thinking |  |

@@ -1,267 +1,249 @@
 #!/usr/bin/env python3
-"""Project Euler 663: Sums of Subarrays
-
-This script prints the answer to:
-  S(10_000_003, 10_200_000) - S(10_000_003, 10_000_000)
-
-It also asserts all test values given in the problem statement.
-
-No external (third‑party) libraries are used.
 """
+Project Euler 663: Sums of Subarrays
 
-from __future__ import annotations
+We maintain an array A_n that receives point updates. After each update, M_n(i) is the
+maximum sum over all contiguous subarrays. We need:
+
+S(n, 10_200_000) - S(n, 10_000_000) = sum_{i=10_000_001..10_200_000} M_n(i)
+
+Key idea: we only need M_n(i) for the last 200,000 steps, so we:
+1) Apply the first 10,000,000 updates directly to A (no queries).
+2) Build a block-based segment tree once from A.
+3) For the next 200,000 steps, after each point update:
+   - recompute the updated block summary by scanning that block,
+   - update the segment tree over blocks,
+   - add the root's maximum subarray sum to the answer.
+
+No external libraries are used (only Python standard library).
+"""
 
 from array import array
 
 
-# Must fit in signed 64-bit for array('q')
-NEG_INF = -(10**18)
+NEG_INF = -10**18  # safely below any achievable subarray sum magnitude in this problem
 
 
-def add_mod3(a: int, b: int, c: int, mod: int) -> int:
-    """Return (a+b+c) % mod, assuming 0 <= a,b,c < mod.
+def max_subarray_kadane(arr):
+    """Maximum subarray sum for a non-empty array (Kadane's algorithm)."""
+    cur = best = arr[0]
+    for x in arr[1:]:
+        s = cur + x
+        cur = x if s < x else s
+        best = best if best > cur else cur
+    return best
 
-    Since a+b+c < 3*mod, we can reduce using a few subtractions.
+
+def compute_S_bruteforce(n, l):
     """
-    s = a + b + c
-    if s >= mod:
-        s -= mod
-    if s >= mod:
-        s -= mod
-    if s >= mod:
-        s -= mod
-    return s
-
-
-def _block_summary(A: array, start: int, end: int) -> tuple[int, int, int, int]:
-    """Return (tot, pref, suff, best) for A[start:end] (non-empty subarrays)."""
-    tot = 0
-    pref = NEG_INF
-    best = NEG_INF
-    cur = NEG_INF
-
-    for i in range(start, end):
-        x = A[i]
-        tot += x
-        if tot > pref:
-            pref = tot
-        if cur == NEG_INF:
-            cur = x
-        else:
-            y = cur + x
-            cur = x if y < x else y
-        if cur > best:
-            best = cur
-
-    suff = NEG_INF
-    s = 0
-    for i in range(end - 1, start - 1, -1):
-        s += A[i]
-        if s > suff:
-            suff = s
-
-    return tot, pref, suff, best
-
-
-class MaxSubarrayByBlocks:
-    """Maintain max subarray sum with point updates using block summaries + segment tree."""
-
-    __slots__ = ("A", "n", "B", "nb", "base", "tot", "pref", "suff", "best")
-
-    def __init__(self, A: array, B: int = 128):
-        self.A = A
-        self.n = len(A)
-        self.B = B
-        self.nb = (self.n + B - 1) // B
-        self.base = 1 << (self.nb - 1).bit_length()
-
-        size = 2 * self.base
-        self.tot = array("q", [0]) * size
-        self.pref = array("q", [0]) * size
-        self.suff = array("q", [0]) * size
-        self.best = array("q", [0]) * size
-
-        # Initialize padding leaves as neutral elements
-        # (won't affect combining for non-empty subarrays)
-        for pos in range(self.base, self.base + self.base):
-            self.pref[pos] = NEG_INF
-            self.suff[pos] = NEG_INF
-            self.best[pos] = NEG_INF
-
-        # Fill real leaves with block summaries
-        for bi in range(self.nb):
-            start = bi * B
-            end = start + B
-            if end > self.n:
-                end = self.n
-            t, p, s, b = _block_summary(A, start, end)
-            pos = self.base + bi
-            self.tot[pos] = t
-            self.pref[pos] = p
-            self.suff[pos] = s
-            self.best[pos] = b
-
-        # Build internal nodes
-        for i in range(self.base - 1, 0, -1):
-            self._pull(i)
-
-    def _pull(self, i: int) -> None:
-        l = i * 2
-        r = l + 1
-
-        totL = self.tot[l]
-        totR = self.tot[r]
-        self.tot[i] = totL + totR
-
-        prefL = self.pref[l]
-        prefR = self.pref[r]
-        x = totL + prefR
-        self.pref[i] = prefL if prefL > x else x
-
-        suffL = self.suff[l]
-        suffR = self.suff[r]
-        x = totR + suffL
-        self.suff[i] = suffR if suffR > x else x
-
-        bestL = self.best[l]
-        bestR = self.best[r]
-        cross = suffL + prefR
-        m = bestL if bestL > bestR else bestR
-        self.best[i] = m if m > cross else cross
-
-    def point_add(self, idx: int, delta: int) -> None:
-        """A[idx] += delta and update structure."""
-        A = self.A
-        A[idx] += delta
-
-        B = self.B
-        bi = idx // B
-        start = bi * B
-        end = start + B
-        if end > self.n:
-            end = self.n
-        t, p, s, b = _block_summary(A, start, end)
-
-        pos = self.base + bi
-        self.tot[pos] = t
-        self.pref[pos] = p
-        self.suff[pos] = s
-        self.best[pos] = b
-
-        pos //= 2
-        while pos:
-            self._pull(pos)
-            pos //= 2
-
-    def max_subarray_sum(self) -> int:
-        return int(self.best[1])
-
-
-def simulate_small_S(n: int, l: int) -> int:
-    """Direct simulation for small n,l.
-
-    Keeps full array and runs Kadane each step (O(n*l)).
-    Used only for asserts from the problem statement.
+    Brute force S(n,l) for small n,l: maintain A explicitly and run Kadane each step.
+    Used only for the test values from the problem statement.
     """
     A = [0] * n
-
-    a = 0
-    b = 0
-    c = 1 % n
-
-    def step(idx: int, odd: int) -> int:
-        A[idx] += 2 * odd - n + 1
-        best = NEG_INF
-        cur = NEG_INF
-        for x in A:
-            if cur == NEG_INF:
-                cur = x
-            else:
-                y = cur + x
-                cur = x if y < x else y
-            if cur > best:
-                best = cur
-        return best
+    u0, u1, u2 = 0, 0, 1 % n  # t_k mod n in a rolling window for k = 2i-2, 2i-1, 2i
 
     total = 0
+    for _ in range(l):
+        idx = u0
+        delta = (u1 << 1) - n + 1
+        A[idx] += delta
+        total += max_subarray_kadane(A)
 
-    # i = 1 uses (t0,t1) = (a,b)
-    total += step(a, b)
-
-    # shift once -> state for i=2 has (a,b,c) = (t1,t2,t3)
-    d = add_mod3(a, b, c, n)
-    a, b, c = b, c, d
-
-    for _ in range(2, l + 1):
-        total += step(b, c)
-        # advance 2 tribonacci steps
-        d = add_mod3(a, b, c, n)
-        a, b, c = b, c, d
-        d = add_mod3(a, b, c, n)
-        a, b, c = b, c, d
+        # advance tribonacci by two steps (mod n)
+        t3 = u0 + u1 + u2
+        if t3 >= n:
+            t3 -= n
+        if t3 >= n:
+            t3 -= n
+        t4 = u1 + u2 + t3
+        if t4 >= n:
+            t4 -= n
+        if t4 >= n:
+            t4 -= n
+        u0, u1, u2 = u2, t3, t4
 
     return total
 
 
-def solve() -> int:
-    # --- Asserts from the statement ---
-    assert simulate_small_S(5, 6) == 32
-    assert simulate_small_S(5, 100) == 2416
-    assert simulate_small_S(14, 100) == 3881
-    assert simulate_small_S(107, 1000) == 1618572
+def block_summary(A, start, end):
+    """
+    Compute (sum, max_prefix, max_suffix, best_subarray) for A[start:end].
+    All values correspond to non-empty subarrays/prefixes/suffixes.
+    """
+    r = 0
+    max_pref = NEG_INF
+    min_pref_best = 0  # min prefix sum so far (includes empty prefix)
+    best = NEG_INF
 
-    # --- Main computation ---
+    # For max suffix, we need min prefix among positions 0..len-1 (exclude full length)
+    min_pref_suff = 0
+    last = end - 1
+
+    for k in range(start, end):
+        r += A[k]
+
+        if r > max_pref:
+            max_pref = r
+
+        cand = r - min_pref_best
+        if cand > best:
+            best = cand
+        if r < min_pref_best:
+            min_pref_best = r
+
+        if k != last and r < min_pref_suff:
+            min_pref_suff = r
+
+    total = r
+    max_suff = total - min_pref_suff
+    return total, max_pref, max_suff, best
+
+
+def build_block_tree(A, n, B):
+    """
+    Build an iterative segment tree over block summaries.
+    Node stores: sum, max_prefix, max_suffix, best_subarray.
+    """
+    m = (n + B - 1) // B
+    size = 1
+    while size < m:
+        size <<= 1
+
+    total = array("q", [0]) * (2 * size)
+    pref = array("q", [NEG_INF]) * (2 * size)
+    suff = array("q", [NEG_INF]) * (2 * size)
+    best = array("q", [NEG_INF]) * (2 * size)
+
+    # leaves
+    for b in range(m):
+        s = b * B
+        e = min(n, s + B)
+        ts, tp, tu, tb = block_summary(A, s, e)
+        pos = size + b
+        total[pos] = ts
+        pref[pos] = tp
+        suff[pos] = tu
+        best[pos] = tb
+
+    # internal nodes
+    for pos in range(size - 1, 0, -1):
+        l = pos * 2
+        r = l + 1
+
+        ts = total[l] + total[r]
+        total[pos] = ts
+
+        v1 = pref[l]
+        v2 = total[l] + pref[r]
+        pref[pos] = v1 if v1 >= v2 else v2
+
+        v1 = suff[r]
+        v2 = total[r] + suff[l]
+        suff[pos] = v1 if v1 >= v2 else v2
+
+        v = best[l]
+        br = best[r]
+        if br > v:
+            v = br
+        cross = suff[l] + pref[r]
+        if cross > v:
+            v = cross
+        best[pos] = v
+
+    return m, size, total, pref, suff, best
+
+
+def update_block(tree, A, n, B, b):
+    """Recompute a single block's summary and update the segment tree path to the root."""
+    m, size, total, pref, suff, best = tree  # noqa: F841 (m kept for clarity)
+    s = b * B
+    e = min(n, s + B)
+    ts, tp, tu, tb = block_summary(A, s, e)
+
+    pos = size + b
+    total[pos] = ts
+    pref[pos] = tp
+    suff[pos] = tu
+    best[pos] = tb
+
+    pos //= 2
+    while pos:
+        l = pos * 2
+        r = l + 1
+
+        ts = total[l] + total[r]
+        total[pos] = ts
+
+        v1 = pref[l]
+        v2 = total[l] + pref[r]
+        pref[pos] = v1 if v1 >= v2 else v2
+
+        v1 = suff[r]
+        v2 = total[r] + suff[l]
+        suff[pos] = v1 if v1 >= v2 else v2
+
+        v = best[l]
+        br = best[r]
+        if br > v:
+            v = br
+        cross = suff[l] + pref[r]
+        if cross > v:
+            v = cross
+        best[pos] = v
+
+        pos //= 2
+
+
+def solve():
+    # Asserts for test values from the problem statement
+    assert compute_S_bruteforce(5, 6) == 32
+    assert compute_S_bruteforce(5, 100) == 2416
+    assert compute_S_bruteforce(14, 100) == 3881
+    assert compute_S_bruteforce(107, 1000) == 1618572
+
     n = 10_000_003
-    l1 = 10_000_000
-    l2 = 10_200_000
+    start = 10_000_000
+    end = 10_200_000
 
-    # Build A after l1 steps, without maintaining M_n(i)
+    # Block size: scanning a block is done only for the final 200k updates.
+    B = 256
+
     A = array("q", [0]) * n
 
-    a = 0
-    b = 0
-    c = 1
+    # tribonacci mod n window for k = 2i-2, 2i-1, 2i
+    u0, u1, u2 = 0, 0, 1 % n
 
-    # i = 1 (uses t0,t1)
-    A[a] += 2 * b - n + 1
+    tree = None
+    ans = 0
 
-    # shift once => state for i=2: (a,b,c) = (t1,t2,t3)
-    d = add_mod3(a, b, c, n)
-    a, b, c = b, c, d
+    for i in range(1, end + 1):
+        idx = u0
+        delta = (u1 << 1) - n + 1
+        A[idx] += delta
 
-    for _ in range(2, l1 + 1):
-        A[b] += 2 * c - n + 1
-        # advance two tribonacci steps
-        d = add_mod3(a, b, c, n)
-        a, b, c = b, c, d
-        d = add_mod3(a, b, c, n)
-        a, b, c = b, c, d
+        if i == start:
+            # Build structure once, right after step 'start'
+            tree = build_block_tree(A, n, B)
+        elif i > start:
+            # Maintain structure only for the final segment
+            update_block(tree, A, n, B, idx // B)
+            ans += tree[5][1]  # root best_subarray is M_n(i)
 
-    # Now (b,c) correspond to (t_{2*l1} mod n, t_{2*l1+1} mod n),
-    # i.e. the pair needed for step l1+1.
+        # advance tribonacci by two steps (mod n), using fast reduction (sum < 3n)
+        t3 = u0 + u1 + u2
+        if t3 >= n:
+            t3 -= n
+        if t3 >= n:
+            t3 -= n
+        t4 = u1 + u2 + t3
+        if t4 >= n:
+            t4 -= n
+        if t4 >= n:
+            t4 -= n
+        u0, u1, u2 = u2, t3, t4
 
-    # Data structure for M_n(i) (point updates)
-    ds = MaxSubarrayByBlocks(A, B=128)
-
-    total = 0
-    for _ in range(l1 + 1, l2 + 1):
-        idx = b
-        delta = 2 * c - n + 1
-        ds.point_add(idx, delta)
-        total += ds.max_subarray_sum()
-
-        # advance two tribonacci steps
-        d = add_mod3(a, b, c, n)
-        a, b, c = b, c, d
-        d = add_mod3(a, b, c, n)
-        a, b, c = b, c, d
-
-    return total
-
-
-def main() -> None:
-    print(solve())
+    return ans
 
 
 if __name__ == "__main__":
-    main()
+    print(solve())
