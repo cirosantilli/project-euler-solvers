@@ -1,147 +1,137 @@
-#!/usr/bin/env python
-"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00668%20-%20Square%20root%20smooth%20numbers.py"""
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 """
-Created on Wed Jun 30 13:02:30 2021
+Project Euler 668: Square root smooth numbers
 
-@author: igorvanloo
-"""
+A positive integer is called square root smooth if all of its prime factors are
+strictly less than its square root.
 
-"""
-Project Euler Problem 668
-
-A positive integer is called square root smooth if all of its prime factors are strictly less than its square root.
 Including the number 1, there are 29 square root smooth numbers not exceeding 100.
 
-How many square root smooth numbers are there not exceeding 10 000 000 000?
+How many square root smooth numbers are there not exceeding 10,000,000,000?
 
-Reasoning
-
-If we find the greatest prime factor of a number we can easily decide whether it is square root smooth, The essence of the
-problem is to do it efficiently as 10**10 is too large
-
-I believe a quadratic sieve is the way too go but I dont know how to do it
-
-https://oeis.org/A063539
-https://oeis.org/A064775 - I found something interesting from this one
-
-Theorem: a(n) = n - Sum_{i=1..floor(sqrt(n))} (pi(floor(n/i)) - pi(i)), which isn't too difficult 
-
-x is not square-root-smooth iff x = py where p is a prime and y ≤ p
-Reason: x = py ≤ p^2 => sqrt(x) ≤ p 
-
-Now we want to find all non-square-root-smooth numbers x ≤ n
-The range for y is 1 ≤ y ≤ sqrt(n) because if y > sqrt(n) then p ≥ sqrt(n) => py = n > n which is absurd
-
-Now given a y, then p = x/y therefore there are π(n/y) primes that are possible, however there are π(y-1) primes
-that are not allowed because these primes would be less than y, which is not allowed
-
-So therefore we have the number of non-square-root-smooth numbers x ≤ n = sum_{y=1 to sqrt(n)} π(n/y) - π(y-1)
-
+This solution uses only the Python standard library.
 """
 
+from __future__ import annotations
+
 import math
-
-# from sympy import primepi
-
-
-def prime_sieve(limit, values=True):
-    result = [True] * (limit + 1)
-    result[0] = result[1] = False
-    for i in range(int(math.sqrt(limit)) + 1):
-        if result[i]:
-            for j in range(2 * i, len(result), i):
-                result[j] = False
-    if values:
-        return [i for (i, isprime) in enumerate(result) if isprime]
-    else:
-        return result
+from typing import Dict, List, Tuple
 
 
-def primepiarray(limit):  # Returns an array such that array[x] = number of primes < x
-    prime_gen = prime_sieve(limit + 50, values=False)
-    primes = [x for x in range(len(prime_gen)) if prime_gen[x]]
-    array = [0] * (limit + 1)
-    p_index = 0
-    for x in range(1, limit + 1):
-        while True:
-            if primes[p_index] > x:
-                array[x] = p_index
-                break
-            p_index += 1
-    return array
+def sieve_primes_upto(n: int) -> List[int]:
+    """Return list of all primes <= n."""
+    if n < 2:
+        return []
+    is_prime = bytearray(b"\x01") * (n + 1)
+    is_prime[:2] = b"\x00\x00"
+    r = int(n ** 0.5)
+    for p in range(2, r + 1):
+        if is_prime[p]:
+            step = p
+            start = p * p
+            is_prime[start : n + 1 : step] = b"\x00" * (((n - start) // step) + 1)
+    return [i for i in range(2, n + 1) if is_prime[i]]
 
 
-def primePi(x):
-    limit = int(math.sqrt(x))
-    primes = prime_sieve(limit + 1000)
-    array = primepiarray(limit + 1000)
+def build_pi_table(n: int) -> Tuple[int, int, Dict[int, int], List[int], List[int]]:
+    """
+    Build a prime-counting table for π(x) on the specific set of values needed here.
 
-    phiCache = {}
+    Returns (root, small_max, pos, vals, pi_vals).
 
-    def phi(x, a):
-        if (x, a) in phiCache:
-            return phiCache[(x, a)]
-        if a == 0:
-            return int(x)
-        if a == 1:
-            return int(x) - x // 2
-        result = phi(x, a - 1) - phi(int(x / primes[a - 1]), a - 1)
-        phiCache[(x, a)] = result
-        return result
+    Query π(x):
+      - if x <= 1: π(x) = 0
+      - elif x <= small_max: π(x) = pi_vals[offset + (small_max - x)]
+      - else: π(x) = pi_vals[pos[x]]
+    """
+    root = math.isqrt(n)
+    primes = sieve_primes_upto(root)
 
-    piCache = {}
+    # Distinct values of floor(n / i) for i=1..root (descending).
+    large: List[int] = []
+    last = -1
+    for i in range(1, root + 1):
+        v = n // i
+        if v != last:
+            large.append(v)
+            last = v
 
-    def pi(x):
-        if int(x) in piCache:
-            return piCache[int(x)]
+    # Include all small integers down to 1, without duplicating `root` if it already appears in `large`.
+    small_max = root if large[-1] != root else root - 1
+    vals = large + list(range(small_max, 0, -1))
+    offset = len(large)
 
-        if x <= limit:
-            return array[math.floor(x)]
+    pos: Dict[int, int] = {v: i for i, v in enumerate(large)}
+    pi_vals = [v - 1 for v in vals]
 
-        a = pi(pow(x, 1 / 4))
-        b = pi(pow(x, 1 / 2))
-        c = pi(pow(x, 1 / 3))
-        result = phi(int(x), int(a)) + ((b + a - 2) * (b - a + 1)) // 2
-        for i in range(a + 1, b + 1):
-            w = x / primes[i - 1]
-            result -= pi(w)
-            if i <= c:
-                bi = pi(int(math.sqrt(w)))
-                for j in range(i, bi + 1):
-                    result -= pi(w / primes[j - 1]) - j + 1
-        piCache[int(x)] = result
-        return int(result)
+    end = len(vals)
+    for p in primes:
+        p2 = p * p
+        if p2 > vals[0]:
+            break
+        while end and vals[end - 1] < p2:
+            end -= 1
 
-    return int(pi(x))
+        # π(p-1) is in the small tail.
+        pi_p_minus_1 = pi_vals[offset + (small_max - (p - 1))]
 
+        for j in range(end):
+            v = vals[j]
+            x = v // p
+            if x <= small_max:
+                pi_vals[j] -= pi_vals[offset + (small_max - x)] - pi_p_minus_1
+            else:
+                pi_vals[j] -= pi_vals[pos[x]] - pi_p_minus_1
 
-def max_prime_factor(n):  # https://oeis.org/A006530
-    result = [1] * (n + 1)
-    result[0] = result[1] = 0
-    for x in range(2, n + 1):
-        if result[x] == 1:
-            for y in range(x, n + 1, x):
-                result[y] = max(result[y], x)
-    return result
-
-
-def compute1(limit):  # Worked up to 10^7 then became too slow
-    Sieve = max_prime_factor(limit)
-    total = 0
-    for x in range(len(Sieve)):
-        y = Sieve[x]
-        if y * y < x:
-            total += 1
-    return total
+    return root, small_max, pos, vals, pi_vals
 
 
-def compute(n):
-    total = 0
-    for i in range(1, int(math.sqrt(n))):
-        total += primePi(int(math.floor(n / i))) - primePi(i - 1)
-    return n - total
+def count_square_root_smooth(N: int) -> int:
+    """
+    Count square root smooth numbers <= N.
+
+    Non-smooth numbers correspond bijectively to pairs (p, m) with p prime and
+    1 <= m <= min(p, floor(N/p)). Thus:
+
+      non_smooth(N) = sum_{p <= r} p  +  sum_{p > r} floor(N/p),  where r=floor(sqrt(N))
+      smooth(N)     = N - non_smooth(N)
+    """
+    if N <= 0:
+        return 0
+    if N == 1:
+        return 1
+
+    r, small_max, pos, vals, pi_vals = build_pi_table(N)
+    primes_up_to_r = sieve_primes_upto(r)
+    sum_small_primes = sum(primes_up_to_r)
+
+    # small tail is exactly [small_max, ..., 1] of length small_max
+    offset = len(vals) - small_max
+
+    def pi(x: int) -> int:
+        if x <= 1:
+            return 0
+        if x <= small_max:
+            return pi_vals[offset + (small_max - x)]
+        return pi_vals[pos[x]]
+
+    qmax = N // (r + 1)
+    sum_large = 0
+    for q in range(1, qmax + 1):
+        hi = N // q
+        lo = N // (q + 1)
+        cnt = pi(hi) - pi(lo)
+        sum_large += q * cnt
+
+    non_smooth = sum_small_primes + sum_large
+    return N - non_smooth
+
+
+def main() -> None:
+    # Test value given in the problem statement
+    assert count_square_root_smooth(100) == 29
+    print(count_square_root_smooth(10_000_000_000))
 
 
 if __name__ == "__main__":
-    print(compute(10**10))
+    main()

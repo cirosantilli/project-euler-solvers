@@ -1,0 +1,1 @@
+Formalize the following problem in Lean 4.26.0. Create the simplest function you can find which matches the problem description and name it "def p1def". Don't try to find an efficient implementation.

@@ -2,309 +2,255 @@
 """
 Project Euler 579: Lattice Points in Lattice Cubes
 
-We count all lattice cubes whose vertices lie in the box [0..n]^3 and sum the
-number of lattice points in each cube.
+We count all lattice cubes whose vertices lie in [0,n]^3 and compute:
+  C(n) = number of such cubes
+  S(n) = sum of lattice points contained in each cube
 
-Key ideas implemented:
-- Parametrise lattice cube orientations using integer quaternions (Euler–Rodrigues).
-- For each cube orientation (edge vectors u,v,w), number of translations in box is:
-      (n - span_x + 1)(n - span_y + 1)(n - span_z + 1)
-  where span_x = |u_x|+|v_x|+|w_x| etc.
-- Lattice point count in cube (including boundary) for side length m and column gcds g1,g2,g3:
-      m^3 + (m+1)(g1+g2+g3) + 1
-- Enumerate "primary" primitive quaternions for odd norms, which gives one representative per
-  right-unit orbit for odd norms (standard quaternion arithmetic result).
-- Deduplicate orientations defensively (hash of canonicalised |u|,|v|,|w|).
-
-The required output is S(5000) mod 1e9.
+We use quaternion parametrization (Euler-Rodrigues) to enumerate primitive cube
+orientations uniquely via primary quaternions (Kiss-Kutas definition).
+Then we sum over integer scale factors using polynomial summation with precomputed
+power sums.
 """
 
 from math import gcd, isqrt
 
+
 MOD = 10**9
 
 
-# ---------- power sums up to k=6 (Faulhaber closed forms) ----------
-def power_sums_upto_6(n: int):
-    """Return list S[k] = sum_{t=1..n} t^k for k=0..6."""
-    if n <= 0:
-        return [0] * 7
-    nn = n
-    n1 = nn + 1
-    s0 = nn
-    s1 = nn * n1 // 2
-    s2 = nn * n1 * (2 * nn + 1) // 6
-    s3 = s1 * s1
-    s4 = nn * n1 * (2 * nn + 1) * (3 * nn * nn + 3 * nn - 1) // 30
-    s5 = nn * nn * n1 * n1 * (2 * nn * nn + 2 * nn - 1) // 12
-    # sum t^6 = n(n+1)(2n+1)(3n^4+6n^3-3n+1)/42
-    s6 = nn * n1 * (2 * nn + 1) * (3 * nn**4 + 6 * nn**3 - 3 * nn + 1) // 42
-    return [s0, s1, s2, s3, s4, s5, s6]
-
-
-# ---------- quaternion -> orthogonal integer matrix ----------
-def cube_matrix_from_quaternion(a: int, b: int, c: int, d: int):
+def _power_sums(N, K):
     """
-    Euler–Rodrigues construction:
-    For quaternion q = a + bi + cj + dk, norm m = a^2+b^2+c^2+d^2.
-    The 3x3 matrix has columns u,v,w that are pairwise orthogonal
-    and each has squared length m^2 (so cube side length is m).
+    Returns sums[k][t] = sum_{i=1..t} i^k for k=0..K, t=0..N.
+    sums[0][t] = t.
     """
-    aa = a * a
-    bb = b * b
-    cc = c * c
-    dd = d * d
-
-    u0 = aa + bb - cc - dd
-    u1 = 2 * (b * c - a * d)
-    u2 = 2 * (b * d + a * c)
-
-    v0 = 2 * (b * c + a * d)
-    v1 = aa - bb + cc - dd
-    v2 = 2 * (c * d - a * b)
-
-    w0 = 2 * (b * d - a * c)
-    w1 = 2 * (c * d + a * b)
-    w2 = aa - bb - cc + dd
-
-    return (u0, u1, u2), (v0, v1, v2), (w0, w1, w2)
+    sums = [[0] * (N + 1) for _ in range(K + 1)]
+    for t in range(1, N + 1):
+        sums[0][t] = t
+        p = t
+        sums[1][t] = sums[1][t - 1] + p
+        for k in range(2, K + 1):
+            p *= t
+            sums[k][t] = sums[k][t - 1] + p
+    return sums
 
 
-def global_gcd_9(u, v, w):
-    g = 0
-    for x in u:
-        g = gcd(g, abs(x))
-    for x in v:
-        g = gcd(g, abs(x))
-    for x in w:
-        g = gcd(g, abs(x))
-    return g
-
-
-def col_gcd(vec):
-    return gcd(gcd(abs(vec[0]), abs(vec[1])), abs(vec[2]))
-
-
-# ---------- canonical orientation key (defensive dedupe) ----------
-def canonical_orientation_key(u, v, w):
+def solve(n, mod=None):
     """
-    Canonicalise an orientation by:
-    - take abs of all entries (sign doesn't affect placement spans or gcds)
-    - sort columns lexicographically
-    This is enough to avoid accidental duplicates in enumeration.
+    Returns (C(n), S(n)) if mod is None (exact integer),
+    otherwise returns (C(n) % mod, S(n) % mod).
     """
-    cols = [
-        (abs(u[0]), abs(u[1]), abs(u[2])),
-        (abs(v[0]), abs(v[1]), abs(v[2])),
-        (abs(w[0]), abs(w[1]), abs(w[2])),
-    ]
-    cols.sort()
-    return tuple(cols[0] + cols[1] + cols[2])
+    # Degree: translation polynomial is degree 3, lattice-point polynomial is degree 3,
+    # product degree is 6 => need power sums up to 6.
+    K = 6
+    sums = _power_sums(n, K)
 
+    A = n + 1
+    A2 = A * A
+    A3 = A2 * A
 
-# ---------- enumerate primary primitive quaternions (odd norms) ----------
-def generate_primary_odd_quaternions(max_norm: int):
-    """
-    Generate all primary primitive integer quaternions (a,b,c,d) with odd norm <= max_norm.
+    totalC = 0
+    totalS = 0
 
-    For odd norm:
-      - if norm ≡ 1 (mod 4), quaternion has exactly one odd coordinate.
-      - if norm ≡ 3 (mod 4), quaternion has exactly one even coordinate.
-    Primary condition for S1-type (real part parity differs from others) is:
-      - norm ≡ 1 (mod 4): a odd, b,c,d even
-      - norm ≡ 3 (mod 4): a even, b,c,d odd
-    Plus primary selector: a+b+c+d ≡ 1 (mod 4)
-    Plus primitive: gcd(a,b,c,d)=1
-    """
-    limit = isqrt(max_norm)
+    B = isqrt(n)  # max abs coordinate for quaternion component
 
-    # Precompute relevant ordered pairs by parity classes.
-    ab1 = []  # a odd, b even
-    cd1 = []  # c even, d even
-    ab3 = []  # a even, b odd
-    cd3 = []  # c odd, d odd
+    # Correct even/odd ranges in [-B..B]
+    start_even = -B if (B & 1) == 0 else -B + 1
+    start_odd = -B if (B & 1) == 1 else -B + 1
+    even_vals = list(range(start_even, B + 1, 2))
+    odd_vals = list(range(start_odd, B + 1, 2))
 
-    for x in range(-limit, limit + 1):
-        x2 = x * x
-        for y in range(-limit, limit + 1):
-            s = x2 + y * y
-            if s > max_norm:
-                continue
-            xo = x & 1
-            yo = y & 1
-            if xo == 1 and yo == 0:
-                ab1.append((x, y, s))
-            if xo == 0 and yo == 1:
-                ab3.append((x, y, s))
-            if xo == 0 and yo == 0:
-                cd1.append((x, y, s))
-            if xo == 1 and yo == 1:
-                cd3.append((x, y, s))
+    # Precompute all candidate 'a' values by:
+    # - parity (0 even, 1 odd)
+    # - residue mod 4
+    # - max absolute value
+    maxA = B
+    a_lists = [[[[] for _ in range(maxA + 1)] for _ in range(4)] for _ in range(2)]
+    for max_a in range(0, maxA + 1):
+        for a in range(-max_a, max_a + 1):
+            a_lists[a & 1][a & 3][max_a].append(a)
 
-    ab1.sort(key=lambda t: t[2])
-    ab3.sort(key=lambda t: t[2])
-    cd1.sort(key=lambda t: t[2])
-    cd3.sort(key=lambda t: t[2])
+    abs_ = abs
 
-    # Case norm ≡ 1 (mod 4)
-    for a, b, s in ab1:
-        for c, d, t in cd1:
-            m = s + t
-            if m > max_norm:
-                break
-            if ((a + b + c + d) & 3) != 1:
-                continue
-            if gcd(gcd(a, b), gcd(c, d)) != 1:
-                continue
-            yield a, b, c, d, m
+    def gcd3(x, y, z):
+        return gcd(gcd(abs_(x), abs_(y)), abs_(z))
 
-    # Case norm ≡ 3 (mod 4)
-    for a, b, s in ab3:
-        for c, d, t in cd3:
-            m = s + t
-            if m > max_norm:
-                break
-            if ((a + b + c + d) & 3) != 1:
-                continue
-            if gcd(gcd(a, b), gcd(c, d)) != 1:
-                continue
-            yield a, b, c, d, m
+    # Enumerate primary quaternions in S1:
+    # Case 1: a odd, b,c,d even (N ≡ 1 mod 4)
+    # Case 2: a even, b,c,d odd (N ≡ 3 mod 4)
+    cases = (
+        (even_vals, 1, n - 1),  # bcd even, a odd, need s <= n-1 because a^2>=1
+        (odd_vals, 0, n),       # bcd odd, a even
+    )
 
+    for bcd_vals, a_parity, s_limit in cases:
+        for b in bcd_vals:
+            bb = b * b
+            for c in bcd_vals:
+                cc = c * c
+                bc2 = bb + cc
+                for d in bcd_vals:
+                    dd = d * d
+                    s = bc2 + dd
+                    if s > s_limit:
+                        continue
 
-# ---------- main solver for given n ----------
-def compute_C_S(n: int):
-    """
-    Compute C(n) and S(n) exactly (big integers).
-    """
-    seen = set()  # defensive dedupe of orientations
+                    rem = n - s
+                    max_a = isqrt(rem)
 
-    C_total = 0
-    S_total = 0
+                    # primary condition: a + b + c + d ≡ 1 (mod 4)
+                    sum_bcd_mod4 = (b + c + d) & 3
+                    a_res = (1 - sum_bcd_mod4) & 3
 
-    N1 = n + 1
+                    g_bcd = gcd3(b, c, d)
 
-    for a, b, c, d, m in generate_primary_odd_quaternions(n):
-        # Build orientation
-        u, v, w = cube_matrix_from_quaternion(a, b, c, d)
+                    for a in a_lists[a_parity][a_res][max_a]:
+                        if gcd(g_bcd, abs_(a)) != 1:
+                            continue
 
-        # Reduce by global gcd (some quaternions produce scaled matrices)
-        g = global_gcd_9(u, v, w)
-        if g != 1:
-            u = (u[0] // g, u[1] // g, u[2] // g)
-            v = (v[0] // g, v[1] // g, v[2] // g)
-            w = (w[0] // g, w[1] // g, w[2] // g)
-            m0 = m // g
-        else:
-            m0 = m
+                        aa = a * a
+                        m = aa + s  # quaternion norm = cube side length for primitive orientation
 
-        # Side length must be <= n to fit anything
-        if m0 > n:
-            continue
+                        # Euler-Rodrigues / Euler matrix columns (u,v,w):
+                        # (same as rotating i,j,k by quaternion)
+                        u0 = aa + bb - cc - dd
+                        u1 = 2 * (b * c - a * d)
+                        u2 = 2 * (b * d + a * c)
 
-        # Canonical key to avoid duplicates
-        key = canonical_orientation_key(u, v, w)
-        if key in seen:
-            continue
-        seen.add(key)
+                        v0 = 2 * (b * c + a * d)
+                        v1 = aa - bb + cc - dd
+                        v2 = 2 * (c * d - a * b)
 
-        sx = abs(u[0]) + abs(v[0]) + abs(w[0])
-        sy = abs(u[1]) + abs(v[1]) + abs(w[1])
-        sz = abs(u[2]) + abs(v[2]) + abs(w[2])
+                        w0 = 2 * (b * d - a * c)
+                        w1 = 2 * (c * d + a * b)
+                        w2 = aa - bb - cc + dd
 
-        max_span = sx
-        if sy > max_span:
-            max_span = sy
-        if sz > max_span:
-            max_span = sz
+                        # coordinate spans (extent along each axis is sum of abs components)
+                        sx = abs_(u0) + abs_(v0) + abs_(w0)
+                        sy = abs_(u1) + abs_(v1) + abs_(w1)
+                        sz = abs_(u2) + abs_(v2) + abs_(w2)
 
-        if max_span > n:
-            continue
+                        T = n // sx
+                        ty = n // sy
+                        if ty < T:
+                            T = ty
+                        tz = n // sz
+                        if tz < T:
+                            T = tz
+                        if T == 0:
+                            continue
 
-        # Column gcds (for lattice point formula)
-        gsum = col_gcd(u) + col_gcd(v) + col_gcd(w)
+                        # Translation count polynomial:
+                        # (A - sx*t)(A - sy*t)(A - sz*t)
+                        s1 = sx + sy + sz
+                        s2 = sx * sy + sy * sz + sz * sx
+                        s3 = sx * sy * sz
 
-        # Scaling factor t can be applied: edges -> t*edges
-        # Valid t: t*max_span <= n
-        T = n // max_span
-        if T <= 0:
-            continue
+                        t0 = A3
+                        t1 = -A2 * s1
+                        t2 = A * s2
+                        t3 = -s3
 
-        # placements(t) = (N1 - sx*t)(N1 - sy*t)(N1 - sz*t)
-        ssum = sx + sy + sz
-        spair = sx * sy + sx * sz + sy * sz
-        strip = sx * sy * sz
+                        # Lattice point count inside a parallelepiped has Ehrhart polynomial:
+                        # L(t) = 1 + t*sum(gcd(edges)) + t^2*sum(gcd(face normals)) + t^3*det
+                        # For cubes produced by Euler matrices:
+                        # det = m^3 and sum(gcd(face normals)) = m * sum(gcd(edges)).
+                        gU = gcd(abs_(u0), gcd(abs_(u1), abs_(u2)))
+                        gV = gcd(abs_(v0), gcd(abs_(v1), abs_(v2)))
+                        gW = gcd(abs_(w0), gcd(abs_(w1), abs_(w2)))
+                        G1 = gU + gV + gW
 
-        c0 = N1 * N1 * N1
-        c1 = - (N1 * N1 * ssum)
-        c2 = N1 * spair
-        c3 = - strip
+                        p0 = 1
+                        p1 = G1
+                        p2 = m * G1
+                        p3 = m * m * m
 
-        # points(t) = (m0^3)*t^3 + (gsum*m0)*t^2 + gsum*t + 1
-        m0_2 = m0 * m0
-        m0_3 = m0_2 * m0
-        p0 = 1
-        p1 = gsum
-        p2 = gsum * m0
-        p3 = m0_3
+                        s0 = T
+                        S1p = sums[1][T]
+                        S2p = sums[2][T]
+                        S3p = sums[3][T]
+                        S4p = sums[4][T]
+                        S5p = sums[5][T]
+                        S6p = sums[6][T]
 
-        # Convolution to degree 6
-        # coeff[k] for t^k
-        coeff0 = c0 * p0
-        coeff1 = c0 * p1 + c1 * p0
-        coeff2 = c0 * p2 + c1 * p1 + c2 * p0
-        coeff3 = c0 * p3 + c1 * p2 + c2 * p1 + c3 * p0
-        coeff4 = c1 * p3 + c2 * p2 + c3 * p1
-        coeff5 = c2 * p3 + c3 * p2
-        coeff6 = c3 * p3
+                        if mod is None:
+                            # Count cubes
+                            totalC += t0 * s0 + t1 * S1p + t2 * S2p + t3 * S3p
 
-        S = power_sums_upto_6(T)
-        # sum t^0 is T, we treat as S0 already
-        sumC = c0 * S[0] + c1 * S[1] + c2 * S[2] + c3 * S[3]
-        sumS = (
-            coeff0 * S[0] +
-            coeff1 * S[1] +
-            coeff2 * S[2] +
-            coeff3 * S[3] +
-            coeff4 * S[4] +
-            coeff5 * S[5] +
-            coeff6 * S[6]
-        )
+                            # Sum lattice points: convolution of degree 3 polynomials => degree 6
+                            D0 = t0
+                            D1 = t0 * p1 + t1
+                            D2 = t0 * p2 + t1 * p1 + t2
+                            D3 = t0 * p3 + t1 * p2 + t2 * p1 + t3
+                            D4 = t1 * p3 + t2 * p2 + t3 * p1
+                            D5 = t2 * p3 + t3 * p2
+                            D6 = t3 * p3
 
-        C_total += sumC
-        S_total += sumS
+                            totalS += (
+                                D0 * s0 +
+                                D1 * S1p +
+                                D2 * S2p +
+                                D3 * S3p +
+                                D4 * S4p +
+                                D5 * S5p +
+                                D6 * S6p
+                            )
+                        else:
+                            M = mod
 
-    return C_total, S_total
+                            # reduce coefficients mod M
+                            t0m = t0 % M
+                            t1m = t1 % M
+                            t2m = t2 % M
+                            t3m = t3 % M
 
+                            totalC = (
+                                totalC +
+                                t0m * (s0 % M) +
+                                t1m * (S1p % M) +
+                                t2m * (S2p % M) +
+                                t3m * (S3p % M)
+                            ) % M
 
-def solve(n: int):
-    _, s = compute_C_S(n)
-    return s % MOD
+                            p1m = p1 % M
+                            p2m = p2 % M
+                            p3m = p3 % M
+
+                            D0 = t0m
+                            D1 = (t0m * p1m + t1m) % M
+                            D2 = (t0m * p2m + t1m * p1m + t2m) % M
+                            D3 = (t0m * p3m + t1m * p2m + t2m * p1m + t3m) % M
+                            D4 = (t1m * p3m + t2m * p2m + t3m * p1m) % M
+                            D5 = (t2m * p3m + t3m * p2m) % M
+                            D6 = (t3m * p3m) % M
+
+                            totalS = (
+                                totalS +
+                                D0 * (s0 % M) +
+                                D1 * (S1p % M) +
+                                D2 * (S2p % M) +
+                                D3 * (S3p % M) +
+                                D4 * (S4p % M) +
+                                D5 * (S5p % M) +
+                                D6 * (S6p % M)
+                            ) % M
+
+    return totalC, totalS
 
 
 def _run_asserts():
-    # Asserts from the problem statement
-    C1, S1 = compute_C_S(1)
-    assert C1 == 1 and S1 == 8
+    # Given test values from problem statement
+    testC = {1: 1, 2: 9, 4: 100, 5: 229, 10: 4469, 50: 8154671}
+    testS = {1: 8, 2: 91, 4: 1878, 5: 5832, 10: 387003, 50: 29948928129}
 
-    C2, S2 = compute_C_S(2)
-    assert C2 == 9 and S2 == 91
-
-    C4, S4 = compute_C_S(4)
-    assert C4 == 100 and S4 == 1878
-
-    C5, S5 = compute_C_S(5)
-    assert C5 == 229 and S5 == 5832
-
-    C10, S10 = compute_C_S(10)
-    assert C10 == 4469 and S10 == 387003
-
-    C50, S50 = compute_C_S(50)
-    assert C50 == 8154671 and S50 == 29948928129
+    for n in sorted(testC.keys()):
+        Cn, Sn = solve(n)
+        assert Cn == testC[n], (n, Cn, testC[n])
+        assert Sn == testS[n], (n, Sn, testS[n])
 
 
 def main():
     _run_asserts()
-    print(solve(5000))
+    print(solve(5000, mod=MOD)[1])
 
 
 if __name__ == "__main__":
