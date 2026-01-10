@@ -1,114 +1,119 @@
+#!/usr/bin/env python3
+"""
+Project Euler 460: An Ant on the Move
+
+We compute F(10000) (rounded to 9 decimal places).
+
+Key idea: the given "constant velocity" on a straight segment is the logarithmic mean,
+so the travel time equals the integral of (ds / y) along that straight segment.
+That allows a symmetry + dynamic-programming reduction to a 1D DP over heights.
+
+No third-party libraries are used.
+"""
+
+from __future__ import annotations
+
 import math
 from typing import List
 
 
-def _build_band(d: int, half: int, band: int) -> List[List[int]]:
-    k = math.sqrt((d / 2) ** 2 + 1.0)
-    ys: List[List[int]] = []
-    for x in range(half + 1):
-        y_c = math.sqrt(max(0.0, k * k - (x - d / 2) ** 2))
-        lo = max(1, int(math.floor(y_c)) - band)
-        hi = int(math.ceil(y_c)) + band
-        ylist = list(range(lo, hi + 1))
-        if x == 0 and 1 not in ylist:
-            ylist.append(1)
-        ylist.sort()
-        ys.append(ylist)
-    return ys
+def _min_step_excess(y0: int, y1: int, h: int, logs: List[float]) -> float:
+    """
+    Minimal excess cost to go from height y0 to y1 (y1>y0) during the "climb",
+    where excess is: time(step) - (dx / h).
+
+    We optimize over integer dx >= 0. The continuous optimum is attained at
+    dx* = dy * L / sqrt(h^2 - L^2) where L is the logarithmic mean of y0,y1.
+    Because the objective is convex in dx, the best integer dx is near dx*,
+    so checking floor(dx*) and ceil(dx*) suffices.
+    """
+    dy = y1 - y0
+    # Logarithmic mean (y1-y0)/(ln y1 - ln y0)
+    v = dy / (logs[y1] - logs[y0])  # v < h always when y1 <= h and y0 < y1
+    denom = math.sqrt(h * h - v * v)
+    dx_star = dy * v / denom
+
+    best = float("inf")
+    k = int(dx_star)
+    for dx in (k, k + 1):
+        if dx < 0:
+            continue
+        # time(step) - saved cruising time
+        val = math.hypot(dx, dy) / v - dx / h
+        if val < best:
+            best = val
+    return best
 
 
-def _compute_half_time(d: int, band: int, max_dx: int) -> float:
-    assert d % 2 == 0
-    half = d // 2
-    ys = _build_band(d, half, band)
-    max_y = max(max(lst) for lst in ys)
+def _best_climb_excess(h: int, window_const: int = 64) -> float:
+    """
+    Compute dp[h] where dp[y] is minimal excess cost to climb from y=1 to y,
+    with cruising speed fixed at v_cruise = h.
 
-    ln = [0.0] * (max_y + 1)
-    inv_y = [0.0] * (max_y + 1)
-    for y in range(1, max_y + 1):
-        ln[y] = math.log(y)
-        inv_y[y] = 1.0 / y
+    To make it fast, we only consider y0 in [y - M, y), where
+    M = O(h/y). This matches the fact that the optimal path is close to the
+    hyperbolic geodesic (a semicircle), where typical vertical step sizes
+    shrink like ~h/y as y grows.
+    """
+    logs = [0.0] * (h + 1)
+    for y in range(1, h + 1):
+        logs[y] = math.log(y)
 
-    ln_lists: List[List[float]] = [[ln[y] for y in ylist] for ylist in ys]
+    dp = [float("inf")] * (h + 1)
+    dp[1] = 0.0
 
-    max_dx = min(max_dx, half)
-    sqrt_table = [[0.0] * (max_dx + 1) for _ in range(max_y + 1)]
-    for dy in range(max_y + 1):
-        row = sqrt_table[dy]
-        for dx in range(1, max_dx + 1):
-            row[dx] = math.hypot(dx, dy)
+    for y in range(2, h + 1):
+        # Empirically/provably-safe window around y, shrinking as y increases.
+        M = int(window_const * h / y) + 2
+        y0_min = 1 if y - M < 1 else y - M
 
-    inf = 1e100
-    dp: List[List[float]] = [[inf] * len(ylist) for ylist in ys]
+        best = float("inf")
+        for y0 in range(y0_min, y):
+            cand = dp[y0] + _min_step_excess(y0, y, h, logs)
+            if cand < best:
+                best = cand
+        dp[y] = best
 
-    # Start at (0, 1).
-    idx_start = ys[0].index(1)
-    dp[0][idx_start] = 0.0
-
-    for x in range(half + 1):
-        ylist = ys[x]
-        lnlist = ln_lists[x]
-        arr = dp[x]
-        n = len(ylist)
-
-        # Vertical relaxation within the same x (adjacent y moves).
-        for i in range(1, n):
-            cost = lnlist[i] - lnlist[i - 1]
-            alt = arr[i - 1] + cost
-            if alt < arr[i]:
-                arr[i] = alt
-        for i in range(n - 2, -1, -1):
-            cost = lnlist[i + 1] - lnlist[i]
-            alt = arr[i + 1] + cost
-            if alt < arr[i]:
-                arr[i] = alt
-
-        # Forward moves to x+dx.
-        for dx in range(1, max_dx + 1):
-            x1 = x + dx
-            if x1 > half:
-                break
-            ylist1 = ys[x1]
-            lnlist1 = ln_lists[x1]
-            dp1 = dp[x1]
-            n1 = len(ylist1)
-            for i in range(n):
-                y0 = ylist[i]
-                ln0 = lnlist[i]
-                t0 = arr[i]
-                inv_y0 = inv_y[y0]
-                for j in range(n1):
-                    y1 = ylist1[j]
-                    dy = y1 - y0
-                    if dy == 0:
-                        inv_l = inv_y0
-                        ady = 0
-                    else:
-                        inv_l = (lnlist1[j] - ln0) / dy
-                        ady = abs(dy)
-                    nt = t0 + inv_l * sqrt_table[ady][dx]
-                    if nt < dp1[j]:
-                        dp1[j] = nt
-
-    return min(dp[half])
+    return dp[h]
 
 
-def compute_f(d: int) -> float:
-    # Empirical safe bounds for the optimal path band and step size.
-    band = 10
-    max_dx = int(0.8 * math.sqrt(d)) + 5
-    half_time = _compute_half_time(d, band, max_dx)
-    return 2.0 * half_time
+def F(d: int) -> float:
+    """
+    Compute F(d): the minimal travel time from (0,1) to (d,1).
+
+    For even d (the case needed for the problem), the optimal path is symmetric and
+    reaches its maximum height at y = d/2. Then
+        F(d) = 2*E + d/h,  where h=d/2 and E is the minimal climb excess to reach h.
+
+    For odd d, we try both neighboring heights floor(d/2) and ceil(d/2) and take min.
+    """
+    if d < 1:
+        raise ValueError("d must be a positive integer")
+
+    # Candidate top heights near d/2.
+    h0 = d // 2
+    candidates = [h0] if d % 2 == 0 else [h0, h0 + 1]
+    best = float("inf")
+    for h in candidates:
+        if h < 1:
+            continue
+        E = _best_climb_excess(h)
+        total = 2.0 * E + d / h
+        if total < best:
+            best = total
+    return best
 
 
-def main() -> None:
-    assert abs(compute_f(4) - 2.960516287) < 5e-9
-    assert abs(compute_f(10) - 4.668187834) < 5e-9
-    assert abs(compute_f(100) - 9.217221972) < 5e-9
+def solve() -> str:
+    # Asserts for the verification values given in the problem statement.
+    # Compare on the 9-decimal rounding requested/used by the statement.
+    assert f"{F(4):.9f}" == "2.960516287"
+    assert f"{F(10):.9f}" == "4.668187834"
+    assert f"{F(100):.9f}" == "9.217221972"
 
-    result = compute_f(10000)
-    print(f"{result:.9f}")
+    ans = F(10000)
+    return f"{ans:.9f}"
 
 
 if __name__ == "__main__":
-    main()
+    print(solve())

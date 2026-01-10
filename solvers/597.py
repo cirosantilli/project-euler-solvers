@@ -1,85 +1,102 @@
-"""Project Euler 597 - Torpids
+#!/usr/bin/env python3
+"""
+Project Euler 597 - Torpids
 
-This repository is set up in the common "single-instance" Project Euler style:
-`main.py` prints the value requested by the problem (p(13, 1800) rounded to
-10 decimal places).
+We compute p(n, L): the probability that the final ordering is an even permutation.
 
-The full analytic computation of p(n, L) for general (n, L) involves a
-continuous collision process and a large amount of exact piecewise
-integration. That full derivation is intentionally not reproduced here.
+Key trick:
+Let each boat i have speed V_i ~ Exp(1) (because V_i = -log(U_i), U_i uniform).
+For a "target" located at coordinate t (in boat-index units), boat i's "relative speed"
+to that target is W_i = V_i / (t - i).  Then W_i ~ Exp(rate = t - i).
 
-Instead, this solution returns the known values needed for:
-- the examples in the problem statement, and
-- the final required input (13, 1800).
+The slowest boat relative to the current target is the one with minimal W_i.
+That boat cannot bump anyone and becomes the lowest boat in the resulting order.
+Conditioning on which boat is minimal allows a recursive decomposition of the race.
 
-All arithmetic uses only Python's standard library.
+We only track the *parity* of the final permutation using the expected sign (+1 even, -1 odd).
 """
 
 from __future__ import annotations
 
-from decimal import Decimal, ROUND_HALF_UP, localcontext
+from fractions import Fraction
+from functools import lru_cache
+from typing import Tuple
 
 
-_D10 = Decimal("0.0000000001")
-
-
-def p(n: int, L: int) -> Decimal:
-    """Return p(n, L): probability that the final ordering is an even permutation.
-
-    The problem statement uses boats spaced 40m apart. L is in meters.
-
-    Notes
-    -----
-    - The example p(3, 160) is given exactly as 56/135.
-    - The example p(4, 400) is given to 10 d.p.
-    - The required output is p(13, 1800) to 10 d.p.
-
-    This implementation returns those known values.
+def _round_fraction(x: Fraction, digits: int) -> str:
     """
+    Round a non-negative Fraction to `digits` digits after the decimal point
+    using standard half-up rounding, returning a decimal string.
+    """
+    assert digits >= 0
+    num, den = x.numerator, x.denominator
+    # Work with one extra digit for rounding
+    scale = 10 ** (digits + 1)
+    q, r = divmod(num * scale, den)  # floor(x * 10^(digits+1))
+    last = q % 10
+    q //= 10  # now q = floor(x * 10^digits)
+    if last >= 5:
+        q += 1
+    int_part = q // (10 ** digits)
+    frac_part = q % (10 ** digits)
+    if digits == 0:
+        return str(int_part)
+    return f"{int_part}.{frac_part:0{digits}d}"
 
-    if (n, L) == (3, 160):
-        # Exact value stated in the problem.
-        return Decimal(56) / Decimal(135)
 
-    if (n, L) == (4, 400):
-        # Problem statement gives this rounded to 10 decimal places.
-        return Decimal("0.5107843137")
+def probability_even(n: int, L: int, spacing: int = 40) -> Fraction:
+    """
+    Return p(n, L) exactly as a Fraction.
 
-    if (n, L) == (13, 1800):
-        # Required output, rounded to 10 decimal places.
-        return Decimal("0.5001817828")
+    Boats are 1..n (1 is lowest). Finish line is L metres upstream from boat 1's start.
+    Adjacent starts are `spacing` metres apart.
+    """
+    if n <= 0:
+        raise ValueError("n must be positive")
+    if L <= 0 or spacing <= 0:
+        raise ValueError("L and spacing must be positive")
+    alpha = Fraction(L, spacing)  # finish line coordinate in "gap" units
+    t0 = alpha + 1  # target coordinate: distance for boat i is (t0 - i)
 
-    raise NotImplementedError(
-        "This Project Euler script is implemented for the statement examples and the"
-        " required input only: (3,160), (4,400), and (13,1800)."
-    )
+    @lru_cache(maxsize=None)
+    def expected_sign(l: int, r: int, t: Fraction) -> Fraction:
+        """
+        Expected permutation sign (+1 even, -1 odd) produced by boats [l..r]
+        when the current target coordinate is t (> r).
+        """
+        if l >= r:
+            return Fraction(1, 1)  # empty or single boat -> even
 
+        # S = sum_{j=l}^r (t - j)
+        count = r - l + 1
+        sum_j = (l + r) * count // 2  # arithmetic progression sum (integer)
+        S = Fraction(count, 1) * t - sum_j
 
-def _run_asserts() -> None:
-    # Use a slightly higher precision context so the Decimal division in the exact
-    # example is consistent and stable.
-    with localcontext() as ctx:
-        ctx.prec = 80
-        assert p(3, 160) == (Decimal(56) / Decimal(135))
+        total = Fraction(0, 1)
+        for m in range(l, r + 1):
+            pm = (t - m) / S  # probability m is the (unique) minimum
+            sign_flip = -1 if ((m - l) & 1) else 1  # moving m to the front swaps (m-l) times
 
-    # Rounding example.
-    with localcontext() as ctx:
-        ctx.prec = 50
-        got = p(4, 400).quantize(_D10, rounding=ROUND_HALF_UP)
-        assert got == Decimal("0.5107843137")
+            left = expected_sign(l, m - 1, Fraction(m, 1))      # target becomes boat m
+            right = expected_sign(m + 1, r, t)                  # target unchanged
+            total += pm * sign_flip * left * right
+        return total
+
+    e = expected_sign(1, n, t0)
+    return (Fraction(1, 1) + e) / 2
 
 
 def solve() -> str:
-    with localcontext() as ctx:
-        ctx.prec = 50
-        ans = p(13, 1800).quantize(_D10, rounding=ROUND_HALF_UP)
-    return f"{ans:.10f}"
+    p = probability_even(13, 1800)
+    return _round_fraction(p, 10)
 
 
-def main() -> None:
-    _run_asserts()
-    print(solve())
+def _self_test() -> None:
+    # From the problem statement:
+    assert probability_even(3, 160) == Fraction(56, 135)
+    assert _round_fraction(probability_even(4, 400), 10) == "0.5107843137"
 
 
 if __name__ == "__main__":
-    main()
+    _self_test()
+    print(solve())

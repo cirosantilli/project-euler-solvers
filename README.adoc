@@ -15,10 +15,9 @@ This repo aims to solve ALL https://projecteuler.net[Project Euler] problems in 
 Status:
 
 // STATUS TABLE
-* **1-400**: done
-* **401-500**: 98/100
-* **501-600**: 95/100
-* **601-700**: 83/100
+* **1-500**: done
+* **501-600**: 97/100
+* **601-700**: 84/100
 * **701-800**: 2/100
 * **801-900**: 2/100
 * **901-977**: 22/77
@@ -58,9 +57,11 @@ We are focusing on Python solutions at first because this is the language that L
 
 Each Python solution file should be completely self contained and have no dependencies outside of the Python standard library.
 
-We are initially striving strongly for a 10 minute maximum runtime of each solution. This number is semi arbitrary, but it feels like a ridiculously high ceiling above which a non-bruteforce algorithm with the key insight should never ever go above, and we are yet to see a compelling case of the contrary. A few seconds is much much more common and pleasant. One minute starts to feel bad. Five is already basically hopeless. So ten feels like beyond reasonable.
-
 We want to avoid any magic pre-computed constants used as intermediate results as much as possible, and especially large precomputed number tables. Ideally the program should compute anything it needs from scratch. Well known mathematical constants that appear in the Python stlib like Pi are fine though. This is hard to enforce automatically except in the case where large precomputed tables are present and the file becomes huge. But we will do our best.
+
+We are initially striving strongly for a 10 minute maximum runtime of each solution. This number is semi arbitrary, but it feels like a ridiculously high ceiling above which a non-bruteforce algorithm with the key insight should never ever go above, and we are yet to see a compelling case of the contrary. A few seconds is much much more common and pleasant. One minute starts to feel bad. Five is already basically hopeless. So ten feels like beyond reasonable. The following problems may be exceptions ot this rule as people in the forums were suffering, optimizing this would be great:
+
+* 513
 
 == Status
 
@@ -813,7 +814,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/447.py[447.py] | link:solvers/447.md[447.md] | 0.545 |  |  |
 | link:solvers/448.py[448.py] | link:solvers/448.md[448.md] | 2.785 |  |  |
 | link:solvers/449.py[449.py] | link:solvers/449.md[449.md] | 0.100 | gpt-5.2-thinking |  |
-| link:solvers/450.py[450.py] | link:solvers/450.md[450.md] | 0.218 | gpt-5.2-codex |  | error: expected '583333163984220940', got '583333163883159340'
+| link:solvers/450.py[450.py] | link:solvers/450.md[450.md] | 0.602 | gpt-5.2-thinking |  |
 | link:solvers/451.py[451.py] |  | 74.218 |  |  |
 | link:solvers/452.py[452.py] | link:solvers/452.md[452.md] | 163.850 |  |  |
 | link:solvers/453.py[453.py] | link:solvers/453.md[453.md] | 0.229 | gpt-5.2-thinking |  |
@@ -823,7 +824,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/457.py[457.py] |  | 1.024 |  |  |
 | link:solvers/458.py[458.py] |  | 0.067 |  |  |
 | link:solvers/459.py[459.py] | link:solvers/459.md[459.md] | 36.174 | gpt-5.2-thinking |  |
-| link:solvers/460.py[460.py] | link:solvers/460.md[460.md] | 1.485 | gpt-5.2-codex |  | error: expected '18.420738199', got '18.420766221'
+| link:solvers/460.py[460.py] | link:solvers/460.md[460.md] | 1.552 | gpt-5.2-thinking |  |
 | link:solvers/461.py[461.py] | link:solvers/461.md[461.md] | 0.162 | gpt-5.2-thinking |  |
 | link:solvers/462.py[462.py] | link:solvers/462.md[462.md] | 0.099 | gpt-5.2-thinking |  |
 | link:solvers/463.py[463.py] | link:solvers/463.md[463.md] | 0.127 | gpt-5.2-thinking |  |
@@ -942,9 +943,9 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/576.py[576.py] | link:solvers/576.md[576.md] | 6.163 | gpt-5.2-thinking |  |
 | link:solvers/577.py[577.py] |  | 0.105 |  |  |
 | link:solvers/578.py[578.py] | link:solvers/578.md[578.md] | 24.776 | gpt-5.2-thinking |  |
-| link:solvers/579.py[579.py] | link:solvers/579.md[579.md] | 1.738 | gpt-5.2-thinking |  |
+| link:solvers/579.py[579.py] | link:solvers/579.md[579.md] | 1.650 | gpt-5.2-thinking |  |
 | link:solvers/580.py[580.py] | link:solvers/580.md[580.md] | 3.210 | gpt-5.2-thinking |  |
-| link:solvers/581.py[581.py] |  | 0.167 |  |  | error: expected '2227616372734', got '2886773027'
+| link:solvers/581.py[581.py] | link:solvers/581.md[581.md] | 3.398 | gpt-5.2-thinking |  |
 | link:solvers/582.py[582.py] | link:solvers/582.md[582.md] | 0.159 | gpt-5.2-thinking |  |
 | link:solvers/583.py[583.py] | link:solvers/583.md[583.md] | 25.482 | gpt-5.2-thinking |  |
 | link:solvers/584.py[584.py] | link:solvers/584.md[584.md] | 1.663 | gpt-5.2-thinking |  |
@@ -960,7 +961,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/594.py[594.py] | link:solvers/594.md[594.md] | 0.178 | gpt-5.2-thinking |  |
 | link:solvers/595.py[595.py] | link:solvers/595.md[595.md] | 0.237 | gpt-5.2-thinking |  |
 | link:solvers/596.py[596.py] | link:solvers/596.md[596.md] | 5.341 | gpt-5.2-thinking |  |
-| link:solvers/597.py[597.py] | link:solvers/597.md[597.md] |  |  |  | error: lint failed
+| link:solvers/597.py[597.py] | link:solvers/597.md[597.md] | 0.117 | gpt-5.2-thinking |  |
 | link:solvers/598.py[598.py] | link:solvers/598.md[598.md] | 0.681 | gpt-5.2-thinking |  |
 | link:solvers/599.py[599.py] | link:solvers/599.md[599.md] | 0.099 | gpt-5.2-thinking |  |
 | link:solvers/600.py[600.py] | link:solvers/600.md[600.md] | 0.084 | gpt-5.2-thinking |  |
@@ -1037,7 +1038,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | 671.py |  |  |  |  | error: solver not found
 | link:solvers/672.py[672.py] | link:solvers/672.md[672.md] | 0.102 | gpt-5.2-thinking |  |
 | link:solvers/673.py[673.py] | link:solvers/673.md[673.md] | 0.104 | gpt-5.2-thinking |  |
-| 674.py |  |  |  |  | error: solver not found
+| link:solvers/674.py[674.py] | link:solvers/674.md[674.md] | 1.746 | gpt-5.2-thinking |  |
 | link:solvers/675.py[675.py] |  | 46.059 |  |  |
 | link:solvers/676.py[676.py] | link:solvers/676.md[676.md] | 0.095 | gpt-5.2-thinking |  |
 | link:solvers/677.py[677.py] | link:solvers/677.md[677.md] | 2.102 | gpt-5.2-thinking |  |
@@ -1051,7 +1052,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/685.py[685.py] | link:solvers/685.md[685.md] | 0.272 | gpt-5.2-thinking |  |
 | link:solvers/686.py[686.py] |  | 0.718 |  |  |
 | link:solvers/687.py[687.py] | link:solvers/687.md[687.md] | 0.108 | gpt-5.2-thinking |  |
-| 688.py |  |  |  |  | error: solver not found
+| link:solvers/688.py[688.py] | link:solvers/688.md[688.md] | 0.073 | gpt-5.2-thinking |  | error: failed (exit 1)
 | link:solvers/689.py[689.py] | link:solvers/689.md[689.md] | 0.195 | gpt-5.2-thinking |  |
 | link:solvers/690.py[690.py] | link:solvers/690.md[690.md] | 0.185 | gpt-5.2-thinking |  |
 | link:solvers/691.py[691.py] | link:solvers/691.md[691.md] | 2.168 | gpt-5.2-thinking |  |
