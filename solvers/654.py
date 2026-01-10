@@ -37,6 +37,7 @@ class _FFTPlan:
 
     This is a plain complex FFT (Cooley-Tukey) with precomputed roots.
     """
+
     __slots__ = ("n", "rev", "roots_fwd", "roots_inv")
 
     def __init__(self, n: int):
@@ -162,11 +163,11 @@ def convolve_mod(a: List[int], b: List[int], mod: int = MOD) -> List[int]:
 
     res = [0] * need
     for i in range(need):
-        r = _iround(p[i].real)       # c00 - c11
-        mid = _iround(p[i].imag)     # c01 + c10
-        s = _iround(q[i].real)       # c00 + mid + c11
+        r = _iround(p[i].real)  # c00 - c11
+        mid = _iround(p[i].imag)  # c01 + c10
+        s = _iround(q[i].real)  # c00 + mid + c11
 
-        c00_plus_c11 = s - mid       # c00 + c11
+        c00_plus_c11 = s - mid  # c00 + c11
         c00 = (c00_plus_c11 + r) // 2
         c11 = c00_plus_c11 - c00
 
@@ -319,12 +320,11 @@ def main() -> None:
     # Problem statement test values
     assert T_mod(3, 4) == 8
     assert T_mod(5, 5) == 246
-    assert T_mod(10, 10 ** 2) == 862820094
-    assert T_mod(10 ** 2, 10) == 782136797
+    assert T_mod(10, 10**2) == 862820094
+    assert T_mod(10**2, 10) == 782136797
 
-    print(T_mod(5000, 10 ** 12))
+    print(T_mod(5000, 10**12))
 
 
 if __name__ == "__main__":
     main()
-

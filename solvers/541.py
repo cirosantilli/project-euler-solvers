@@ -43,7 +43,9 @@ class HarmonicDenominatorSolver:
     def __init__(self, p: int):
         self.p = p
         # We will need mod powers up to e+1; for p=137 this tops out at 8.
-        self.S_MAX = 12  # safe small cap; computations are tiny for p<=137 and S_MAX<=12
+        self.S_MAX = (
+            12  # safe small cap; computations are tiny for p<=137 and S_MAX<=12
+        )
 
         # Binomial coefficients up to 12 (more than enough here)
         self._binom = [[0] * (self.S_MAX + 1) for _ in range(self.S_MAX + 1)]
@@ -59,7 +61,7 @@ class HarmonicDenominatorSolver:
             row = self._prefix_pows[r]
             prev = self._prefix_pows[r - 1]
             for k in range(self.S_MAX + 1):
-                row[k] = prev[k] + (b ** k)
+                row[k] = prev[k] + (b**k)
 
         # digit_pows[k] = sum_{b=0}^{p-1} b^k
         self._digit_pows = [self._prefix_pows[self.p][k] for k in range(self.S_MAX + 1)]
@@ -93,7 +95,7 @@ class HarmonicDenominatorSolver:
         """
         if q <= 0:
             return 0
-        mod = self.p ** s
+        mod = self.p**s
         p = self.p
         if q <= p:
             return self._prefix_pows[q][m] % mod
@@ -104,14 +106,23 @@ class HarmonicDenominatorSolver:
         # Full blocks: sum_{a=0..Q-1} sum_{b=0..p-1} (a p + b)^m
         for t in range(m + 1):
             # (a p + b)^m = sum_{t} C(m,t) (a p)^t b^{m-t}
-            res = (res + self._binom[m][t] * pow(p, t, mod) *
-                   self._pow_sum(t, Q, s) * (self._digit_pows[m - t] % mod)) % mod
+            res = (
+                res
+                + self._binom[m][t]
+                * pow(p, t, mod)
+                * self._pow_sum(t, Q, s)
+                * (self._digit_pows[m - t] % mod)
+            ) % mod
 
         # Remainder: sum_{b=0..R-1} (Q p + b)^m
         base = (Q * p) % mod
         for t in range(m + 1):
-            res = (res + self._binom[m][t] * pow(base, t, mod) *
-                   (self._prefix_pows[R][m - t] % mod)) % mod
+            res = (
+                res
+                + self._binom[m][t]
+                * pow(base, t, mod)
+                * (self._prefix_pows[R][m - t] % mod)
+            ) % mod
 
         return res
 
@@ -120,7 +131,7 @@ class HarmonicDenominatorSolver:
         """
         C_m = sum_{j=1..p-1} j^{-(m+1)} modulo p^s, for m=0..s-1.
         """
-        mod = self.p ** s
+        mod = self.p**s
         p = self.p
         out = []
         for m in range(s):
@@ -142,7 +153,7 @@ class HarmonicDenominatorSolver:
         if N <= 0:
             return 0
         p = self.p
-        mod = p ** s
+        mod = p**s
         q, r = divmod(N, p)
         Cm = self._Cm(s)
 
@@ -172,7 +183,7 @@ class HarmonicDenominatorSolver:
         We use mod_power=e for membership test, and mod_power=e+1 for lifting.
         """
         p = self.p
-        mod = p ** mod_power
+        mod = p**mod_power
         val = 0
         div = 1
         for t in range(1, e + 1):
@@ -213,7 +224,7 @@ class HarmonicDenominatorSolver:
             for q in A:
                 # Need one extra p-adic digit of V_e(q) to decide children.
                 val = self.V(e, q, e + 1)  # modulo p^{e+1}
-                d = (val // (p ** e)) % p  # the (e-th) base-p digit of V_e(q)
+                d = (val // (p**e)) % p  # the (e-th) base-p digit of V_e(q)
                 target = (-d) % p
                 for a in self._ha_to_digits.get(target, []):
                     next_set.add(q * p + a)

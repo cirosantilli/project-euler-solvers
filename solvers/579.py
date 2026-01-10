@@ -79,7 +79,7 @@ def solve(n, mod=None):
     # Case 2: a even, b,c,d odd (N ≡ 3 mod 4)
     cases = (
         (even_vals, 1, n - 1),  # bcd even, a odd, need s <= n-1 because a^2>=1
-        (odd_vals, 0, n),       # bcd odd, a even
+        (odd_vals, 0, n),  # bcd odd, a even
     )
 
     for bcd_vals, a_parity, s_limit in cases:
@@ -108,7 +108,9 @@ def solve(n, mod=None):
                             continue
 
                         aa = a * a
-                        m = aa + s  # quaternion norm = cube side length for primitive orientation
+                        m = (
+                            aa + s
+                        )  # quaternion norm = cube side length for primitive orientation
 
                         # Euler-Rodrigues / Euler matrix columns (u,v,w):
                         # (same as rotating i,j,k by quaternion)
@@ -186,13 +188,13 @@ def solve(n, mod=None):
                             D6 = t3 * p3
 
                             totalS += (
-                                D0 * s0 +
-                                D1 * S1p +
-                                D2 * S2p +
-                                D3 * S3p +
-                                D4 * S4p +
-                                D5 * S5p +
-                                D6 * S6p
+                                D0 * s0
+                                + D1 * S1p
+                                + D2 * S2p
+                                + D3 * S3p
+                                + D4 * S4p
+                                + D5 * S5p
+                                + D6 * S6p
                             )
                         else:
                             M = mod
@@ -204,11 +206,11 @@ def solve(n, mod=None):
                             t3m = t3 % M
 
                             totalC = (
-                                totalC +
-                                t0m * (s0 % M) +
-                                t1m * (S1p % M) +
-                                t2m * (S2p % M) +
-                                t3m * (S3p % M)
+                                totalC
+                                + t0m * (s0 % M)
+                                + t1m * (S1p % M)
+                                + t2m * (S2p % M)
+                                + t3m * (S3p % M)
                             ) % M
 
                             p1m = p1 % M
@@ -224,14 +226,14 @@ def solve(n, mod=None):
                             D6 = (t3m * p3m) % M
 
                             totalS = (
-                                totalS +
-                                D0 * (s0 % M) +
-                                D1 * (S1p % M) +
-                                D2 * (S2p % M) +
-                                D3 * (S3p % M) +
-                                D4 * (S4p % M) +
-                                D5 * (S5p % M) +
-                                D6 * (S6p % M)
+                                totalS
+                                + D0 * (s0 % M)
+                                + D1 * (S1p % M)
+                                + D2 * (S2p % M)
+                                + D3 * (S3p % M)
+                                + D4 * (S4p % M)
+                                + D5 * (S5p % M)
+                                + D6 * (S6p % M)
                             ) % M
 
     return totalC, totalS
@@ -255,4 +257,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

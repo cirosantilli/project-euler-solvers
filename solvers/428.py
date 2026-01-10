@@ -42,12 +42,12 @@ def primes_up_to(limit: int):
         return []
     sieve = bytearray(b"\x01") * (limit + 1)
     sieve[0:2] = b"\x00\x00"
-    r = int(limit ** 0.5)
+    r = int(limit**0.5)
     for i in range(2, r + 1):
         if sieve[i]:
             step = i
             start = i * i
-            sieve[start:limit + 1:step] = b"\x00" * (((limit - start) // step) + 1)
+            sieve[start : limit + 1 : step] = b"\x00" * (((limit - start) // step) + 1)
     return [i for i in range(limit + 1) if sieve[i]]
 
 
@@ -315,9 +315,8 @@ def main():
     assert T(3000) == 438106
 
     # target
-    print(T(10 ** 9))
+    print(T(10**9))
 
 
 if __name__ == "__main__":
     main()
-

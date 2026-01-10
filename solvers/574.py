@@ -30,7 +30,9 @@ def sieve(limit: int) -> list[int]:
         if is_prime[p]:
             start = p * p
             step = p
-            is_prime[start : limit + 1 : step] = b"\x00" * (((limit - start) // step) + 1)
+            is_prime[start : limit + 1 : step] = b"\x00" * (
+                ((limit - start) // step) + 1
+            )
     return [i for i in range(2, limit + 1) if is_prime[i]]
 
 
@@ -54,7 +56,9 @@ def modinv(a: int, m: int) -> int:
 class CRTData:
     __slots__ = ("q", "primes_lt_q", "modulus", "bases")
 
-    def __init__(self, q: int, primes_lt_q: list[int], modulus: int, bases: list[int]) -> None:
+    def __init__(
+        self, q: int, primes_lt_q: list[int], modulus: int, bases: list[int]
+    ) -> None:
         self.q = q
         self.primes_lt_q = primes_lt_q
         self.modulus = modulus
@@ -266,4 +270,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

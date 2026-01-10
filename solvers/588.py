@@ -10,6 +10,7 @@ and output:
 Key idea: work mod 2 (odd/even), use Frobenius in GF(2) and a small carry automaton.
 """
 
+
 def _build_transitions(active: bool):
     """
     Build transitions for one bit-position.
@@ -42,7 +43,7 @@ def _build_transitions(active: bool):
                         s = c + d
                         if (s & 1) == bit:
                             nc = s >> 1  # 0..3
-                            next_state ^= (1 << nc)  # toggle in GF(2)
+                            next_state ^= 1 << nc  # toggle in GF(2)
             trans[bit][state] = next_state
     return trans
 

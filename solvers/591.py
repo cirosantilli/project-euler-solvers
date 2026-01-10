@@ -23,6 +23,7 @@ from typing import List, Tuple
 
 # ---------- Decimal helpers ----------
 
+
 def frac_dec(x: Decimal) -> Decimal:
     """Fractional part in [0,1) for Decimal x."""
     return x - x.to_integral_value(rounding=ROUND_FLOOR)
@@ -39,6 +40,7 @@ def nearest_int_dec(x: Decimal) -> int:
 
 
 # ---------- High-precision pi (Chudnovsky) ----------
+
 
 def chudnovsky_pi(digits: int) -> Decimal:
     """
@@ -73,6 +75,7 @@ def chudnovsky_pi(digits: int) -> Decimal:
 
 # ---------- Continued fraction of sqrt(d) ----------
 
+
 def is_square(n: int) -> bool:
     r = isqrt(n)
     return r * r == n
@@ -105,6 +108,7 @@ def sqrt_cf_period(D: int) -> Tuple[int, List[int]]:
 
 # ---------- Best b via α-numeration (Ostrowski-like) ----------
 
+
 def best_b_positive(alpha: Decimal, beta: Decimal, B: int, period: List[int]) -> int:
     """
     Return b in [0,B] that minimizes the circular distance between {b*alpha} and beta.
@@ -122,12 +126,12 @@ def best_b_positive(alpha: Decimal, beta: Decimal, B: int, period: List[int]) ->
     #   δ_k = -a_k δ_{k-1} + δ_{k-2} with δ_{-1}=1, δ_0=alpha
     #
     # We compute a few extra terms beyond the first q_k > B so we can evaluate candidate prefixes.
-    a: List[int] = [0]   # 1-indexed
-    q: List[int] = [1]   # q[0]=q_0
-    q_minus1 = 0         # q_{-1}
+    a: List[int] = [0]  # 1-indexed
+    q: List[int] = [1]  # q[0]=q_0
+    q_minus1 = 0  # q_{-1}
 
     delta: List[Decimal] = [alpha]  # delta[0]=δ_0
-    delta_minus1 = Decimal(1)       # δ_{-1}
+    delta_minus1 = Decimal(1)  # δ_{-1}
 
     k = 1
     extra = 6
@@ -274,6 +278,7 @@ def bqa_pi_d(d: int, n: int, pi: Decimal, beta_pi: Decimal) -> Tuple[int, int]:
 
 
 # ---------- Solve & tests ----------
+
 
 def solve(n: int = 10**13) -> int:
     # Precision: enough to reliably compute α-numeration digits and compare gaps (~1e-13 scale).

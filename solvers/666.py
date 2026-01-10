@@ -9,7 +9,9 @@ No external libraries are used.
 from __future__ import annotations
 
 
-def extinction_probability(k: int, m: int, eps: float = 1e-14, max_iter: int = 2_000_000) -> float:
+def extinction_probability(
+    k: int, m: int, eps: float = 1e-14, max_iter: int = 2_000_000
+) -> float:
     """
     Return P_{k,m}: probability that the population eventually dies out,
     starting from a single bacterium of type alpha_0.

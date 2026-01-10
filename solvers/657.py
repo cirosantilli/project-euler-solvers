@@ -70,7 +70,7 @@ def incomplete_words_mod_slow(alpha: int, n: int, mod: int = MOD) -> int:
         term = geometric_sum(alpha - s, n, mod)
         if s & 1:  # odd => +
             res = (res + comb * term) % mod
-        else:      # even => -
+        else:  # even => -
             res = (res - comb * term) % mod
     return res % mod
 

@@ -53,7 +53,7 @@ def solve() -> str:
     # n[m] = number of rank-strings where a fixed set of m ranks are perfect.
     # Derived formula:
     #   n[m] = (1 / 24^13) * sum_{B=0..3m} (52-B)! * coeff(Q^m, x^B)
-    denom = BASE ** RANKS  # 24^13
+    denom = BASE**RANKS  # 24^13
     n = [0] * (RANKS + 1)
     for m in range(RANKS + 1):
         coeff = Qpow[m]

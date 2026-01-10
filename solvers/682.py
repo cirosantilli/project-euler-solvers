@@ -128,10 +128,10 @@ def build_generating_function_PQ():
     Q_over_D2 = poly_mul(D1, D3)
     Q_over_D3 = poly_mul(D1, D2)
 
-    P1 = Q_over_D1                         #  1 * Q/D1
-    P2 = [0] + Q_over_D2                   #  x * Q/D2
-    P2 = [(-c) % MOD for c in P2]          # -x * Q/D2
-    P3 = [0] * 5 + Q_over_D3               #  x^5 * Q/D3
+    P1 = Q_over_D1  #  1 * Q/D1
+    P2 = [0] + Q_over_D2  #  x * Q/D2
+    P2 = [(-c) % MOD for c in P2]  # -x * Q/D2
+    P3 = [0] * 5 + Q_over_D3  #  x^5 * Q/D3
 
     # P = P1 + P2 + P3
     n = max(len(P1), len(P2), len(P3))

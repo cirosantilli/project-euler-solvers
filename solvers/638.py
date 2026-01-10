@@ -64,10 +64,12 @@ def gaussian_binom(m: int, n: int, q: int, mod: int = MOD) -> int:
     den_prod = 1
 
     qmod = q
-    pow_den = qmod               # q^1
+    pow_den = qmod  # q^1
     pow_num = pow(qmod, b + 1, mod)  # q^{b+1}
 
-    modp1 = mod + 1  # used to keep factors positive: (1 - x) mod mod == (mod+1-x) mod mod
+    modp1 = (
+        mod + 1
+    )  # used to keep factors positive: (1 - x) mod mod == (mod+1-x) mod mod
     for _ in range(n):
         num_prod = (num_prod * (modp1 - pow_num)) % mod
         den_prod = (den_prod * (modp1 - pow_den)) % mod
@@ -93,7 +95,7 @@ def solve() -> int:
 
     ans = 0
     for k in range(1, 8):
-        n = 10 ** k + k
+        n = 10**k + k
         ans = (ans + C(n, n, k)) % MOD
     return ans
 

@@ -125,7 +125,7 @@ def g(n: int) -> float:
                     nd[L1] = t
 
                 for a in range(2, max_a + 1):
-                    t /= (a * ii)  # now t = v0 / (a! * i^a)
+                    t /= a * ii  # now t = v0 / (a! * i^a)
                     used1 += ii
                     nd = new[used1]
                     try:

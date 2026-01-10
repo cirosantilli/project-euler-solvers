@@ -176,8 +176,8 @@ def compute_S2_S3(L: int, inv_block: int = 1_000_000) -> tuple[int, int]:
             S3 = (S3 + (D + 6 * i) * invp) % mod
 
         # Update to the next odd n (i -> i+1)
-        invh = inv_half_local[i + 1]     # inverse of (n+1)//2
-        invn2 = inv_odd_local[i + 1]     # inverse of (n+2) since n+2 = 2*(i+1)+1
+        invh = inv_half_local[i + 1]  # inverse of (n+1)//2
+        invn2 = inv_odd_local[i + 1]  # inverse of (n+2) since n+2 = 2*(i+1)+1
 
         # C(2(n+2), n+2) from C(2n, n) for odd n:
         # C <- C * 2*(2n+1)*(2n+3) / (((n+1)/2)*(n+2))

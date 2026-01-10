@@ -28,6 +28,7 @@ TARGET_K = 4321
 
 # ----------------------------- Number theory helpers -----------------------------
 
+
 def _egcd(a: int, b: int) -> Tuple[int, int, int]:
     if b == 0:
         return (a, 1, 0)
@@ -96,6 +97,7 @@ def divisor_residue_counts(n: int, k: int) -> List[int]:
 
 # ----------------------------- Fast cyclic convolution for k=4321 -----------------------------
 
+
 class _FFT4321:
     """
     Implements a length-4321 DFT using the Good-Thomas / Prime Factor Algorithm
@@ -153,7 +155,9 @@ class _FFT4321:
                 WT[t][j] = complex(math.cos(ang), math.sin(ang))
         return WT
 
-    def _dft_pfa(self, x: List[complex] | List[float] | List[int], inverse: bool) -> List[complex]:
+    def _dft_pfa(
+        self, x: List[complex] | List[float] | List[int], inverse: bool
+    ) -> List[complex]:
         """
         PFA DFT. If inverse=True, uses + exponent (sum-only inverse DFT, no 1/N scaling).
         """
@@ -334,6 +338,7 @@ def square_mod_4321(a: List[int]) -> List[int]:
 
 # ----------------------------- Generic cyclic convolution (naive fallback) -----------------------------
 
+
 def mul_cyclic_mod(a: List[int], b: List[int], k: int) -> List[int]:
     if k == TARGET_K:
         return mul_mod_4321(a, b)
@@ -368,6 +373,7 @@ def pow_cyclic_mod(base: List[int], exp: int, k: int) -> List[int]:
 
 
 # ----------------------------- Problem function -----------------------------
+
 
 def seq_last9(n: int, k: int) -> int:
     v = divisor_residue_counts(n, k)

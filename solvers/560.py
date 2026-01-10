@@ -72,7 +72,9 @@ def compute_L(n: int, k: int, mod: int = MOD) -> int:
     # Sieve only odds up to N to count how many numbers have each smallest odd prime factor.
     # Represent odd x as x = 2*i + 1, i = 0..(N-1)//2.
     odd_len = (N + 1) // 2  # number of odds <= N
-    spf = array("I", [0]) * odd_len  # smallest prime factor for each odd (0 = unassigned)
+    spf = (
+        array("I", [0]) * odd_len
+    )  # smallest prime factor for each odd (0 = unassigned)
 
     # counts[0] is a dummy for prime 2 (pi(2)=1 but never appears as spf of an odd).
     # For odd primes in increasing order, counts[j] = how many odd m<=N have spf == that prime,

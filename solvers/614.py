@@ -48,8 +48,8 @@ def special_partitions_up_to(limit: int) -> list[int]:
     # Allowed parts <= limit: odd parts and multiples of 4.
     # Generate in increasing order (order doesn't matter for correctness).
     parts = []
-    parts.extend(range(1, limit + 1, 2))       # odds
-    parts.extend(range(4, limit + 1, 4))       # multiples of 4
+    parts.extend(range(1, limit + 1, 2))  # odds
+    parts.extend(range(4, limit + 1, 4))  # multiples of 4
     parts.sort()
 
     for a in parts:
@@ -86,4 +86,3 @@ def main(argv: list[str] | None = None) -> None:
 
 if __name__ == "__main__":
     main()
-

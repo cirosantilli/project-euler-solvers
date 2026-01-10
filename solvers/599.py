@@ -82,11 +82,11 @@ def distinct_colourings(n: int) -> int:
             # choose which z are zeros, remaining r are in {1,2} with sum 0 mod 3
             count_vectors = comb(m, z) * B[r]
             cycles_on_stickers = m + 2 * z
-            term_m += count_vectors * (n ** cycles_on_stickers)
+            term_m += count_vectors * (n**cycles_on_stickers)
 
         numerator += c8[m] * factor * term_m
 
-    denom = factorial(8) * (3 ** 7)
+    denom = factorial(8) * (3**7)
     assert numerator % denom == 0
     return numerator // denom
 
@@ -101,4 +101,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

@@ -41,6 +41,7 @@ Point = Tuple[int, int]
 # Number theory utilities
 # ----------------------------
 
+
 def factorize(n: int) -> Dict[int, int]:
     """Trial division factorization for n <= 1e7 (fast enough)."""
     f: Dict[int, int] = {}
@@ -184,6 +185,7 @@ def circle_reps_canonical(r: int) -> List[Tuple[int, int]]:
 # ----------------------------
 # Geometry/search
 # ----------------------------
+
 
 def ceil_div(a: int, b: int) -> int:
     """Ceiling division for b>0."""

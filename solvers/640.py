@@ -69,7 +69,7 @@ def optimal_expected_turns(num_cards: int, probs, toggles):
     v = [0.0] * (1 << n)
 
     # Policy iteration parameters (tuned for N=12).
-    w = 1.35          # over-relaxation (1.0 = plain Gauss-Seidel)
+    w = 1.35  # over-relaxation (1.0 = plain Gauss-Seidel)
     eval_tol = 1e-10  # evaluation sweep stopping tolerance
     improve_eps = 1e-12
     max_outer = 80

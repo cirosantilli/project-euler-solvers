@@ -20,6 +20,7 @@ from math import isfinite
 # Small helper math routines
 # ---------------------------
 
+
 def arith_sum(a: int, b: int) -> float:
     """Sum of integers from a to b inclusive (0 if a>b)."""
     if a > b:
@@ -46,6 +47,7 @@ def expected_min_consecutive(low: int, high: int) -> float:
 # -----------------------------------------
 # Gaussian elimination for dense float system
 # -----------------------------------------
+
 
 def gauss_solve(A, b):
     """
@@ -96,6 +98,7 @@ def gauss_solve(A, b):
 # -------------------------------------------------
 # Direct solver: build linear system for C1[1..M]
 # -------------------------------------------------
+
 
 def compute_C1_direct(n: int, m: int):
     """
@@ -156,7 +159,7 @@ def compute_C1_direct(n: int, m: int):
                 if 1 <= j <= M:
                     p0[y][j] += invL
 
-        eq = (A_low <= y <= A_high)
+        eq = A_low <= y <= A_high
         # constant contribution
         q = (sum_lt_a + base_gt + (y if eq else 0.0)) * invL
         if eq:
@@ -187,7 +190,7 @@ def compute_C1_direct(n: int, m: int):
     w = [0.0] * (M + 1)  # weights (L-d)
     for d in range(1, min(L, M + 1)):
         if d <= L - 1:
-            w[d] = (L - d)
+            w[d] = L - d
 
     sum_w_q = 0.0
     for d in range(1, min(L, M + 1)):
@@ -218,7 +221,7 @@ def compute_C1_direct(n: int, m: int):
         count_gt = max(0, gt_high - gt_low + 1)
         base_gt = count_gt * t
 
-        eq = (A_low <= t <= A_high)
+        eq = A_low <= t <= A_high
 
         const1 = (sum_lt_a + base_gt + (t if eq else 0.0)) * invL
 
@@ -264,6 +267,7 @@ def compute_C1_direct(n: int, m: int):
 # -------------------------------------------------
 # Optional iterative solver (fast for wide ranges)
 # -------------------------------------------------
+
 
 def compute_C1_iterative(n: int, m: int, max_iter=2000, tol=1e-12):
     """
@@ -335,7 +339,7 @@ def compute_C1_iterative(n: int, m: int, max_iter=2000, tol=1e-12):
                 y_hi = gt_high - x
                 sum_gt_C = pref1[y_hi] - (pref1[y_lo - 1] if y_lo > 1 else 0.0)
 
-            eq = (A_low <= x <= A_high)
+            eq = A_low <= x <= A_high
             total = sum_lt_a + sum_lt_C + base_gt + sum_gt_C + (x + B0 if eq else 0.0)
             newC0[x] = total * invL
 
@@ -361,7 +365,7 @@ def compute_C1_iterative(n: int, m: int, max_iter=2000, tol=1e-12):
                 y_hi = gt_high - x
                 sum_gt_C = pref0[y_hi] - (pref0[y_lo - 1] if y_lo > 1 else 0.0)
 
-            eq = (A_low <= x <= A_high)
+            eq = A_low <= x <= A_high
             total = sum_lt_a + base_gt + sum_gt_C + (x + B1 if eq else 0.0)
             newC1[x] = total * invL
 
@@ -383,6 +387,7 @@ def compute_C1_iterative(n: int, m: int, max_iter=2000, tol=1e-12):
 # ----------------------------
 # Expected game time E(m,n)
 # ----------------------------
+
 
 def expected_game(m: int, n: int) -> float:
     """
@@ -426,6 +431,7 @@ def S(k: int) -> float:
 # Main + required asserts
 # ----------------------------
 
+
 def main():
     # tests from problem statement
     e = expected_game(60, 30)
@@ -440,4 +446,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

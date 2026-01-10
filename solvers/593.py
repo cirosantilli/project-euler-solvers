@@ -176,8 +176,8 @@ def compute_F2(n: int, k: int) -> int:
     even = (k & 1) == 0
     r1 = (k // 2) if even else ((k + 1) // 2)
 
-    m1 = 0      # current value of the r1-th order statistic
-    below = 0   # number of elements < m1 in the current window
+    m1 = 0  # current value of the r1-th order statistic
+    below = 0  # number of elements < m1 in the current window
     sum2 = 0
 
     def init_m1() -> None:
@@ -225,7 +225,7 @@ def compute_F2(n: int, k: int) -> int:
     offsets = [0] * 1002
 
     # Helpers for exponent and t without division/mod in the hot loop
-    e = 1           # idx % PHI, starts at 1 for idx=1
+    e = 1  # idx % PHI, starts at 1 for idx=1
     t = 1
     next_t = 10000  # idx at which t increments
     idx = 1
@@ -319,7 +319,7 @@ def compute_F2(n: int, k: int) -> int:
 
             i = find(1, i + 1)
 
-        low = (high | 1)
+        low = high | 1
 
     raise RuntimeError("Prime bound too small (unexpected).")
 
@@ -331,8 +331,8 @@ def run_asserts() -> None:
     assert median2_of_sorted(sorted(s2_1000[99:1000])) == 9430  # 4715.0 * 2
 
     # Example F values
-    assert compute_F2(100, 10) == 927257            # 463628.5 * 2
-    assert compute_F2(10**5, 10**4) == 1350696415   # 675348207.5 * 2
+    assert compute_F2(100, 10) == 927257  # 463628.5 * 2
+    assert compute_F2(10**5, 10**4) == 1350696415  # 675348207.5 * 2
 
 
 def main() -> None:

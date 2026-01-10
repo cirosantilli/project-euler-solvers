@@ -100,9 +100,26 @@ def solve() -> str:
     # Problem-statement checks for alpha = sqrt(31)
     _, period31 = sqrt_continued_fraction_period(31)
     expected_n20 = [
-        1, 3, 5, 7, 44, 81, 118, 273, 3158, 9201,
-        15244, 21287, 133765, 246243, 358721, 829920,
-        9600319, 27971037, 46341755, 64712473
+        1,
+        3,
+        5,
+        7,
+        44,
+        81,
+        118,
+        273,
+        3158,
+        9201,
+        15244,
+        21287,
+        133765,
+        246243,
+        358721,
+        829920,
+        9600319,
+        27971037,
+        46341755,
+        64712473,
     ]
     got_n20 = pal_prefix_lengths_from_period(period31, 20)
     assert got_n20 == expected_n20, (got_n20, expected_n20)

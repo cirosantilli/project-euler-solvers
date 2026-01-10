@@ -18,13 +18,13 @@ def iroot(n: int, k: int) -> int:
         return n
     # Exponential search for an upper bound
     hi = 1
-    while hi ** k <= n:
+    while hi**k <= n:
         hi <<= 1
     lo = hi >> 1
     # Binary search in [lo, hi)
     while lo + 1 < hi:
         mid = (lo + hi) >> 1
-        if mid ** k <= n:
+        if mid**k <= n:
             lo = mid
         else:
             hi = mid
@@ -158,9 +158,9 @@ def F(n: int) -> int:
     P, is_sqfree, _m = powerful_count_and_squarefree(n)
 
     R = math.isqrt(n)
-    X1 = count_cubefree(R)              # includes 1
-    X2 = int(sum(is_sqfree))            # squarefree numbers <= floor(n^(1/3)), includes 1
-    X3 = count_primes_upto(iroot(n, 6)) # primes p with p^6 <= n
+    X1 = count_cubefree(R)  # includes 1
+    X2 = int(sum(is_sqfree))  # squarefree numbers <= floor(n^(1/3)), includes 1
+    X3 = count_primes_upto(iroot(n, 6))  # primes p with p^6 <= n
 
     return P - X1 - X2 - X3 + 1
 

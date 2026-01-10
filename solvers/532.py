@@ -31,7 +31,9 @@ import math
 from typing import Callable, Dict
 
 RADIUS_SMALL_CIRCLE = 0.999
-Y_MAX = 0.5 * math.log((1.0 + RADIUS_SMALL_CIRCLE) / (1.0 - RADIUS_SMALL_CIRCLE))  # atanh(r)
+Y_MAX = 0.5 * math.log(
+    (1.0 + RADIUS_SMALL_CIRCLE) / (1.0 - RADIUS_SMALL_CIRCLE)
+)  # atanh(r)
 
 
 def _adaptive_simpson(
@@ -72,9 +74,9 @@ def _adaptive_simpson(
         # Richardson extrapolation improves accuracy.
         return S2 + (S2 - S) / 15.0
 
-    return _adaptive_simpson(f, a, m, eps * 0.5, fa, fm, flm, depth + 1, max_depth) + _adaptive_simpson(
-        f, m, b, eps * 0.5, fm, fb, frm, depth + 1, max_depth
-    )
+    return _adaptive_simpson(
+        f, a, m, eps * 0.5, fa, fm, flm, depth + 1, max_depth
+    ) + _adaptive_simpson(f, m, b, eps * 0.5, fm, fb, frm, depth + 1, max_depth)
 
 
 _L_CACHE: Dict[int, float] = {}

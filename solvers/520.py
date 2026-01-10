@@ -20,7 +20,13 @@ MOD = 1_000_000_123
 
 def egcd(a: int, b: int):
     while b:
-        a, b, = b, a % b
+        (
+            a,
+            b,
+        ) = (
+            b,
+            a % b,
+        )
     # This iterative form doesn't give coefficients; use recursive for inverse.
     # (Kept only as a placeholder; inverse uses recursive egcd2 below.)
     return a

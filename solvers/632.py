@@ -22,7 +22,7 @@ MOD = 1_000_000_007
 def sieve_primes_upto(n: int) -> array.array:
     """Return array('I') of all primes <= n using an odd-only sieve."""
     if n < 2:
-        return array.array('I')
+        return array.array("I")
     # Index i represents odd number (2*i + 1). Size counts odds <= n.
     size = (n + 1) // 2
     sieve = bytearray(b"\x01") * size
@@ -85,7 +85,7 @@ def kth_root_floor(n: int, k: int) -> int:
     lo, hi = 1, x
     while lo + 1 < hi:
         mid = (lo + hi) // 2
-        if mid ** k <= n:
+        if mid**k <= n:
             lo = mid
         else:
             hi = mid
@@ -115,7 +115,9 @@ def max_possible_k(sqrt_n: int, primes_small: list[int]) -> int:
     return k
 
 
-def counts_Ck(N: int, primes_full: array.array | None = None, L0_cap: int = 5_000_000) -> list[int]:
+def counts_Ck(
+    N: int, primes_full: array.array | None = None, L0_cap: int = 5_000_000
+) -> list[int]:
     """
     Return list [C_0(N), C_1(N), ..., C_kmax(N)].
 
@@ -233,14 +235,14 @@ def product_of_nonzero(values: list[int], mod: int = MOD) -> int:
 def _run_statement_asserts() -> None:
     # Values from the problem statement table:
     table = {
-        10:        [7, 3, 0, 0, 0, 0],
-        10**2:     [61, 36, 3, 0, 0, 0],
-        10**3:     [608, 343, 48, 1, 0, 0],
-        10**4:     [6083, 3363, 533, 21, 0, 0],
-        10**5:     [60794, 33562, 5345, 297, 2, 0],
-        10**6:     [607926, 335438, 53358, 3218, 60, 0],
-        10**7:     [6079291, 3353956, 533140, 32777, 834, 2],
-        10**8:     [60792694, 33539196, 5329747, 329028, 9257, 78],
+        10: [7, 3, 0, 0, 0, 0],
+        10**2: [61, 36, 3, 0, 0, 0],
+        10**3: [608, 343, 48, 1, 0, 0],
+        10**4: [6083, 3363, 533, 21, 0, 0],
+        10**5: [60794, 33562, 5345, 297, 2, 0],
+        10**6: [607926, 335438, 53358, 3218, 60, 0],
+        10**7: [6079291, 3353956, 533140, 32777, 834, 2],
+        10**8: [60792694, 33539196, 5329747, 329028, 9257, 78],
     }
     for N, expected in table.items():
         got = counts_Ck(N)

@@ -268,8 +268,8 @@ def g(n, pr, pb, py, a, b, sqA, sqB):
     sqA_n = sqA[n] if sqA[n] else _coeff_square(a, n)
     sqPY_n = _coeff_square(py, n)
 
-    A2_n = a[n // 2] if (n & 1) == 0 else 0      # A(x^2) at degree n
-    PY2_n = py[n // 2] if (n & 1) == 0 else 0    # PY(x^2) at degree n
+    A2_n = a[n // 2] if (n & 1) == 0 else 0  # A(x^2) at degree n
+    PY2_n = py[n // 2] if (n & 1) == 0 else 0  # PY(x^2) at degree n
 
     # Directed-edge-rooted: ordered pair of planted endpoints, excluding Y-Y
     D = (sqA_n - sqPY_n) % MOD

@@ -53,10 +53,13 @@ def seeds_for_k(k: int, y_max: int = 2000) -> list[tuple[int, int]]:
     # - even k: multiply/divide by (2 ± √3)
     # - odd  k: multiply/divide by (7 ± 4√3) = (2 ± √3)^2 (preserves x even, y odd)
     if k % 2 == 0:
+
         def prev(x: int, y: int) -> tuple[int, int]:
             # (x + y√3)(2 - √3) = (2x - 3y) + (2y - x)√3
             return (2 * x - 3 * y, 2 * y - x)
+
     else:
+
         def prev(x: int, y: int) -> tuple[int, int]:
             # (x + y√3)(7 - 4√3) = (7x - 12y) + (7y - 4x)√3
             return (7 * x - 12 * y, 7 * y - 4 * x)
@@ -65,7 +68,13 @@ def seeds_for_k(k: int, y_max: int = 2000) -> list[tuple[int, int]]:
     for x, y in sols:
         xp, yp = prev(x, y)
         # If predecessor exists in the same parity class, current isn't a seed.
-        if xp > 0 and yp >= 0 and ((yp - k) & 1) == 0 and (xp & 1) == 0 and xp * xp - 3 * yp * yp == k2:
+        if (
+            xp > 0
+            and yp >= 0
+            and ((yp - k) & 1) == 0
+            and (xp & 1) == 0
+            and xp * xp - 3 * yp * yp == k2
+        ):
             continue
         seeds.add((x, y))
 
@@ -83,10 +92,13 @@ def count_triangles(N: int) -> int:
         seeds = seeds_for_k(k)
 
         if k % 2 == 0:
+
             def step(x: int, y: int) -> tuple[int, int]:
                 # (x + y√3)(2 + √3) = (2x + 3y) + (x + 2y)√3
                 return (2 * x + 3 * y, x + 2 * y)
+
         else:
+
             def step(x: int, y: int) -> tuple[int, int]:
                 # (x + y√3)(7 + 4√3) = (7x + 12y) + (4x + 7y)√3
                 return (7 * x + 12 * y, 4 * x + 7 * y)

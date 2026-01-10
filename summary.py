@@ -118,7 +118,9 @@ def autoupdate_readme(readme_path: Path = README_PATH) -> list[str]:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Summarize solved Project Euler problems.")
+    parser = argparse.ArgumentParser(
+        description="Summarize solved Project Euler problems."
+    )
     parser.add_argument(
         "-A",
         "--autoupdate",

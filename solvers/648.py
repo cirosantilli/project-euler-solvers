@@ -89,7 +89,7 @@ def solve():
 
     # v_0 and v_1 for the per-square "skip probability" recurrence.
     v_prev2 = [0] * (N + 1)  # v_0
-    v_prev1 = S[:]           # v_1 = 1 - ρ
+    v_prev1 = S[:]  # v_1 = 1 - ρ
 
     # For square j^2 (j>=2), after skipping (j-1)^2 we are deterministically at (j-1)^2+1,
     # which is exactly 2(j-1) below j^2. Let b_n(ρ) be the probability of skipping
@@ -110,14 +110,16 @@ def solve():
         # Current S corresponds to "skip at least n squares", and has minimum degree n-1.
         # After multiplying by b_n (which has no constant term), S becomes "skip at least n+1 squares"
         # and its minimum degree increases by 1.
-        maxdeg_factor = N - S_offset              # maximum degree needed from b_n
-        factor = b[1:maxdeg_factor + 1]           # degrees 1..maxdeg_factor (length = maxdeg_factor)
+        maxdeg_factor = N - S_offset  # maximum degree needed from b_n
+        factor = b[
+            1 : maxdeg_factor + 1
+        ]  # degrees 1..maxdeg_factor (length = maxdeg_factor)
 
         new_offset = S_offset + 1
-        out_len = N - new_offset + 1              # number of degrees we still care about
+        out_len = N - new_offset + 1  # number of degrees we still care about
         # For degrees <= N, we only need S coefficients up to degree N-1 (relative to S_offset).
-        left = S[S_offset:S_offset + out_len]     # length out_len
-        right = factor[:out_len]                  # length out_len
+        left = S[S_offset : S_offset + out_len]  # length out_len
+        right = factor[:out_len]  # length out_len
 
         prod = mul_trunc(left, right, out_len)
 
@@ -143,7 +145,7 @@ def solve():
     assert F50 == 842418857
 
     # Requested answer
-    return sum(a[:N + 1]) % MOD
+    return sum(a[: N + 1]) % MOD
 
 
 if __name__ == "__main__":

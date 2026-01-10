@@ -136,9 +136,8 @@ def main():
     assert A(10) == (1 << 60) - 34
     assert A(1000) == 101881
 
-    print(A(10 ** 12))
+    print(A(10**12))
 
 
 if __name__ == "__main__":
     main()
-

@@ -95,7 +95,9 @@ def _moment_gamma_mean(k: int, j: int, m: int) -> float:
     return math.exp(logv)
 
 
-def winner_probability_exact(n: int, k: int, coeff_cache: Dict[int, List[float]]) -> float:
+def winner_probability_exact(
+    n: int, k: int, coeff_cache: Dict[int, List[float]]
+) -> float:
     """
     Exact P(winner = k) for small n, using the decomposition:
         P(winner=k) = (1/k) * E[ R_{n-k}( (E_1+...+E_k)/k ) ].

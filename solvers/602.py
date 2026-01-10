@@ -52,7 +52,7 @@ def eulerian_number(n: int, m: int, mod: int = MOD) -> int:
 
     # Precompute modular inverses up to M+1 using linear recurrence:
     # inv[i] = -(mod//i) * inv[mod%i] (mod mod)
-    inv = array('I', [0]) * (M + 2)
+    inv = array("I", [0]) * (M + 2)
     inv[1] = 1
     for i in range(2, M + 2):
         inv[i] = mod - (mod // i) * inv[mod % i] % mod

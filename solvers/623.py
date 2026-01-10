@@ -161,7 +161,7 @@ def compute_U0(N_symbols):
     # pad to full length maxdeg+1 if needed (should already be)
     if len(U_next) < maxdeg + 1:
         U_next += [0] * (maxdeg + 1 - len(U_next))
-    return U_next[:maxdeg + 1]
+    return U_next[: maxdeg + 1]
 
 
 def solve():
@@ -193,4 +193,3 @@ def solve():
 
 if __name__ == "__main__":
     solve()
-

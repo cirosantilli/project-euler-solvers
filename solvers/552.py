@@ -26,7 +26,7 @@ def primes_up_to(n: int) -> List[int]:
         return []
     sieve = bytearray(b"\x01") * (n + 1)
     sieve[0:2] = b"\x00\x00"
-    r = int(n ** 0.5)
+    r = int(n**0.5)
     for i in range(2, r + 1):
         if sieve[i]:
             step = i
@@ -99,7 +99,9 @@ def compute_S(limit: int, block_size: int = 64) -> int:
         return 0
 
     # Partition primes into consecutive blocks.
-    blocks: List[List[int]] = [primes[i : i + block_size] for i in range(0, m, block_size)]
+    blocks: List[List[int]] = [
+        primes[i : i + block_size] for i in range(0, m, block_size)
+    ]
     B = len(blocks)
 
     # For each block: pointer to first prime still "eligible" (> current p_n),

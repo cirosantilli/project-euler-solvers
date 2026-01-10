@@ -22,7 +22,7 @@ def sieve(limit: int) -> list[int]:
         return []
     bs = bytearray(b"\x01") * (limit + 1)
     bs[0:2] = b"\x00\x00"
-    r = int(limit ** 0.5)
+    r = int(limit**0.5)
     for i in range(2, r + 1):
         if bs[i]:
             step = i

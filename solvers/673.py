@@ -48,13 +48,13 @@ def parse_pairs(text: str) -> list[tuple[int, int]]:
         line = line.strip()
         if not line:
             continue
-        a_str, b_str = line.split(',')
+        a_str, b_str = line.split(",")
         out.append((int(a_str), int(b_str)))
     return out
 
 
 def read_text_file(path: str) -> str:
-    with open(path, 'r', encoding='utf-8') as f:
+    with open(path, "r", encoding="utf-8") as f:
         return f.read()
 
 
@@ -102,26 +102,26 @@ def count_commuting_permutations(
 
         if not has_loop:
             # Component is an even alternating cycle (no loops).
-            key = ('C', k)
+            key = ("C", k)
             aut = k
         else:
             # Component is an alternating path with loops at the endpoints
             # (or the isolated vertex with both loops).
             if k % 2 == 1:
                 # Endpoints have different loop colours (or k==1 has both loops).
-                key = ('P', k, 'BD')
+                key = ("P", k, "BD")
                 aut = 1
             else:
                 # Endpoints have the same loop colour, so reflection is allowed.
-                end_colour = 'BD'
+                end_colour = "BD"
                 for v in comp:
                     if B[v] == v and D[v] != v:
-                        end_colour = 'B'
+                        end_colour = "B"
                         break
                     if D[v] == v and B[v] != v:
-                        end_colour = 'D'
+                        end_colour = "D"
                         break
-                key = ('P', k, end_colour)
+                key = ("P", k, end_colour)
                 aut = 2
 
         type_count[key] += 1
@@ -145,6 +145,7 @@ def count_commuting_permutations(
 
 # --- Tests from the problem statement ---
 
+
 def _run_tests() -> None:
     # n=4 example
     n = 4
@@ -161,12 +162,34 @@ def _run_tests() -> None:
     # n=36 example
     n = 36
     beds = [
-        (2, 13), (4, 30), (5, 27), (6, 16), (10, 18), (12, 35), (14, 19),
-        (15, 20), (17, 26), (21, 32), (22, 33), (24, 34), (25, 28),
+        (2, 13),
+        (4, 30),
+        (5, 27),
+        (6, 16),
+        (10, 18),
+        (12, 35),
+        (14, 19),
+        (15, 20),
+        (17, 26),
+        (21, 32),
+        (22, 33),
+        (24, 34),
+        (25, 28),
     ]
     desks = [
-        (1, 35), (2, 22), (3, 36), (4, 28), (5, 25), (7, 18), (9, 23),
-        (13, 19), (14, 33), (15, 34), (20, 24), (26, 29), (27, 30),
+        (1, 35),
+        (2, 22),
+        (3, 36),
+        (4, 28),
+        (5, 25),
+        (7, 18),
+        (9, 23),
+        (13, 19),
+        (14, 33),
+        (15, 34),
+        (20, 24),
+        (26, 29),
+        (27, 30),
     ]
     assert count_commuting_permutations(n, beds, desks) == 663_552
 
@@ -188,8 +211,8 @@ def solve_from_files(beds_path: str, desks_path: str, n: int = 500) -> int:
         desks_text = read_text_file(desks_path)
     except FileNotFoundError:
         # Some mirrors bundle both lists in one file separated by a blank line.
-        normalized = beds_text.replace('\r\n', '\n')
-        parts = [p.strip() for p in normalized.split('\n\n') if p.strip()]
+        normalized = beds_text.replace("\r\n", "\n")
+        parts = [p.strip() for p in normalized.split("\n\n") if p.strip()]
         if len(parts) != 2:
             raise FileNotFoundError(
                 f"Could not open desks file '{desks_path}'. Provide it, or supply a "
@@ -205,8 +228,8 @@ def solve_from_files(beds_path: str, desks_path: str, n: int = 500) -> int:
 def main(argv: list[str]) -> None:
     _run_tests()
 
-    beds_path = '0673_beds.txt'
-    desks_path = '0673_desks.txt'
+    beds_path = "0673_beds.txt"
+    desks_path = "0673_desks.txt"
     n = 500
 
     if len(argv) >= 2:
@@ -219,5 +242,5 @@ def main(argv: list[str]) -> None:
     print(solve_from_files(beds_path, desks_path, n))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main(sys.argv)

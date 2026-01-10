@@ -170,6 +170,7 @@ def _convolution_mod(a, b, limit=None, naive_threshold=20000):
 
 # ---------- Formal power series utilities ----------
 
+
 def _poly_inv(f, deg: int):
     """Inverse of a power series f modulo x^deg, assuming f[0] != 0."""
     if deg <= 0:
@@ -224,6 +225,7 @@ def _poly_pow(a, exp: int, deg: int):
 
 
 # ---------- Problem-specific computation ----------
+
 
 def _precompute_factorials(n: int):
     fact = [1] * (n + 1)

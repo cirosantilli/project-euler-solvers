@@ -49,7 +49,7 @@ def S_fast(k: int, n: int, mod: int = MOD) -> int:
     e = (n + 1) % (mod - 1)  # Fermat reduction, since bases < mod
 
     # Modular inverses up to k+1 (needed for term update and for 1/(m-1))
-    inv = array('I', [0]) * (k + 2)
+    inv = array("I", [0]) * (k + 2)
     inv[1] = 1
     mmod = mod
     for i in range(2, k + 2):
@@ -58,8 +58,8 @@ def S_fast(k: int, n: int, mod: int = MOD) -> int:
     # Linear sieve to get smallest prime factor and all x^e mod mod for x<=limit.
     # We compute powe[x] for every x with only one multiplication per composite,
     # and only one pow() call per prime.
-    spf = array('I', [0]) * (limit + 1)
-    powe = array('I', [0]) * (limit + 1)
+    spf = array("I", [0]) * (limit + 1)
+    powe = array("I", [0]) * (limit + 1)
     powe[0] = 0
     if limit >= 1:
         powe[1] = 1
@@ -93,7 +93,7 @@ def S_fast(k: int, n: int, mod: int = MOD) -> int:
 
     # T_m = sum_{t=0..m} C(k+1,t) * (-2)^t (prefix), updated in O(1) each step.
     term = 1  # term_0
-    T = 1     # T_0
+    T = 1  # T_0
     n1 = (n + 1) % mmod
 
     ans = 0

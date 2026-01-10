@@ -23,12 +23,12 @@ def sieve_primes(n: int) -> list[int]:
         return []
     sieve = bytearray(b"\x01") * (n + 1)
     sieve[0:2] = b"\x00\x00"
-    r = int(n ** 0.5)
+    r = int(n**0.5)
     for i in range(2, r + 1):
         if sieve[i]:
             step = i
             start = i * i
-            sieve[start:n + 1:step] = b"\x00" * (((n - start) // step) + 1)
+            sieve[start : n + 1 : step] = b"\x00" * (((n - start) // step) + 1)
     return [i for i in range(n + 1) if sieve[i]]
 
 
@@ -46,7 +46,9 @@ def factorial_prime_exponents(n: int) -> tuple[list[int], dict[int, int]]:
     return primes, exps
 
 
-def choose_store_subset(primes: list[int], exps: dict[int, int], max_store: int) -> list[int]:
+def choose_store_subset(
+    primes: list[int], exps: dict[int, int], max_store: int
+) -> list[int]:
     """
     Choose a subset of primes whose divisor-count product (∏(e_p+1)) is:
       - <= max_store (memory constraint),
@@ -141,7 +143,9 @@ def gen_divisors_lists(primes: list[int], exps: dict[int, int], mod: int | None)
     return vals, coefs
 
 
-def split_loop_base(iter_primes: list[int], exps: dict[int, int], base_limit: int = 200_000):
+def split_loop_base(
+    iter_primes: list[int], exps: dict[int, int], base_limit: int = 200_000
+):
     """
     Split iter_primes into:
       - loop_primes: a few primes with largest (e+1),
@@ -172,7 +176,9 @@ def split_loop_base(iter_primes: list[int], exps: dict[int, int], base_limit: in
     return base_primes, loop_primes
 
 
-def bounded_divisor_sum_factorial(n: int, L: int, H: int, mod: int | None = None, max_store: int = 1_200_000):
+def bounded_divisor_sum_factorial(
+    n: int, L: int, H: int, mod: int | None = None, max_store: int = 1_200_000
+):
     """
     Compute S(n!, L, H) = sum_{d|n!, L<=d<=H} lambda(d)*d.
     If mod is provided, result is modulo mod.
@@ -293,6 +299,7 @@ def bounded_divisor_sum_factorial(n: int, L: int, H: int, mod: int | None = None
                     d = pref(H // v) - pref(x_low // v)
                     total = (total + coef * (d % M)) % M
     else:
+
         def rec(idx: int, v: int, c: int):
             nonlocal total
             if idx == lp:

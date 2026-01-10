@@ -131,7 +131,9 @@ def D(N: int) -> int:
     # Group by K = floor(log_u N) (max exponent available for primitive base u).
     S = 0
     for k in range(1, L + 1):
-        num_roots_with_K = P[k] - P[k + 1]  # primitive u with N^(1/(k+1)) < u <= N^(1/k)
+        num_roots_with_K = (
+            P[k] - P[k + 1]
+        )  # primitive u with N^(1/(k+1)) < u <= N^(1/k)
         coprime_pairs_upto_k = 2 * phisum[k] - 1  # #{(i,j) in [1..k]^2 : gcd(i,j)=1}
         S += num_roots_with_K * coprime_pairs_upto_k
 

@@ -34,8 +34,8 @@ A_BITS = 11
 B_BITS = 12
 D_BITS = 23
 
-B_OFFSET = 1999          # B in [-1999, 1999] -> [0, 3998]
-D_OFFSET = 4_000_000     # D in about [-4e6, 4e6] -> [0, 8e6]
+B_OFFSET = 1999  # B in [-1999, 1999] -> [0, 3998]
+D_OFFSET = 4_000_000  # D in about [-4e6, 4e6] -> [0, 8e6]
 
 
 def generate_points(n: int):

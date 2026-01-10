@@ -15,7 +15,7 @@ LIMIT = 10**12
 
 def isqrt(n: int) -> int:
     """Integer square root without math.isqrt (no external libs)."""
-    x = int(n ** 0.5)
+    x = int(n**0.5)
     while (x + 1) * (x + 1) <= n:
         x += 1
     while x * x > n:
@@ -34,7 +34,7 @@ def sieve(n: int):
         if bs[p]:
             step = p
             start = p * p
-            bs[start:n + 1:step] = b"\x00" * (((n - start) // step) + 1)
+            bs[start : n + 1 : step] = b"\x00" * (((n - start) // step) + 1)
         p += 1
     return [i for i in range(n + 1) if bs[i]]
 
@@ -51,11 +51,11 @@ def all_perfect_powers_sum(limit: int) -> int:
         base = int(limit ** (1.0 / exp))
         while (base + 1) ** exp <= limit:
             base += 1
-        while base ** exp > limit:
+        while base**exp > limit:
             base -= 1
 
         for a in range(2, base + 1):
-            seen.add(a ** exp)
+            seen.add(a**exp)
 
     return sum(seen)
 
@@ -73,13 +73,13 @@ def prime_power_prime_power_sum(limit: int) -> int:
         maxb = int(limit ** (1.0 / q))
         while (maxb + 1) ** q <= limit:
             maxb += 1
-        while maxb ** q > limit:
+        while maxb**q > limit:
             maxb -= 1
 
         for p in primes_base:
             if p > maxb:
                 break
-            seen.add(p ** q)
+            seen.add(p**q)
 
     return sum(seen)
 
@@ -92,4 +92,3 @@ def solve():
 
 if __name__ == "__main__":
     print(solve())
-

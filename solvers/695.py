@@ -19,6 +19,7 @@ from typing import List, Tuple
 
 # --- Gauss–Legendre quadrature on [0,1] (no external libs) ---
 
+
 def gauss_legendre_01(n: int) -> Tuple[List[float], List[float]]:
     """
     Nodes and weights for n-point Gauss–Legendre quadrature on [0,1].
@@ -58,7 +59,7 @@ def gauss_legendre_01(n: int) -> Tuple[List[float], List[float]]:
 
         # Symmetry on [-1,1], then map to [0,1]
         xl = (-x + 1.0) * 0.5
-        xr = ( x + 1.0) * 0.5
+        xr = (x + 1.0) * 0.5
         wl = w * 0.5
         wr = w * 0.5
 
@@ -71,6 +72,7 @@ def gauss_legendre_01(n: int) -> Tuple[List[float], List[float]]:
 
 
 # --- Core math ---
+
 
 def _median_index(a: float, b: float, c: float) -> int:
     """Return 0 if a is median, 1 if b is median, 2 if c is median."""

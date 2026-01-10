@@ -29,6 +29,7 @@ TOTAL_WEIGHT = sum(SLOT_WEIGHTS)  # 30
 # Prime sieve and valuations
 # --------------------------
 
+
 def primes_upto(n: int):
     """Return list of primes <= n using a bytearray sieve."""
     sieve = bytearray(b"\x01") * (n + 1)
@@ -38,7 +39,7 @@ def primes_upto(n: int):
         if sieve[i]:
             step = i
             start = i * i
-            sieve[start:n + 1:step] = b"\x00" * (((n - start) // step) + 1)
+            sieve[start : n + 1 : step] = b"\x00" * (((n - start) // step) + 1)
     return [i for i in range(n + 1) if sieve[i]]
 
 
@@ -66,11 +67,13 @@ def exponent_frequencies_factorial(n: int, primes):
 # Set partitions (for inclusion–exclusion)
 # ---------------------------------------
 
+
 def gen_partitions(n: int):
     """
     Generate all set partitions of {0..n-1}.
     Standard recursive construction; n=10 so it's fine.
     """
+
     def helper(i, blocks):
         if i == n:
             yield [b[:] for b in blocks]
@@ -119,6 +122,7 @@ def build_partition_coefficients():
 # Small coefficient generation
 # --------------------------
 
+
 def coeffs_up_to(key, limit):
     """
     Coefficients of:
@@ -141,6 +145,7 @@ def coeffs_up_to(key, limit):
 # --------------------------
 
 D = 30  # Always 30 because sum of weights is 30.
+
 
 def poly_Q_from_key(key):
     """
@@ -215,6 +220,7 @@ def term_from_poly(init, poly):
 # --------------------------
 # Main computation F(n!)
 # --------------------------
+
 
 def compute_F_factorial(n: int, primes, coeff_dict, cutoff=13_000) -> int:
     """
@@ -298,4 +304,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

@@ -149,7 +149,9 @@ def multipliers_prefix(qmax: int) -> list[int]:
     return W
 
 
-def build_sequences(n: int, r: int, first_split_primes: list[int]) -> list[tuple[int, ...]]:
+def build_sequences(
+    n: int, r: int, first_split_primes: list[int]
+) -> list[tuple[int, ...]]:
     """
     Build all exponent sequences (ordered for increasing primes) whose (e+1) product is 2r or 2r+1,
     and whose minimal possible core <= n.

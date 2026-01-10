@@ -13,7 +13,9 @@ import math
 from typing import List, Tuple
 
 
-Segment = Tuple[int, int, float, float]  # (start, end, slope m, intercept c) with weight = m*t + c
+Segment = Tuple[
+    int, int, float, float
+]  # (start, end, slope m, intercept c) with weight = m*t + c
 
 
 def _precompute_tables(max_n: int):
@@ -35,7 +37,9 @@ def _precompute_tables(max_n: int):
         r = math.hypot(a, b)
         # Correct closed-form:
         # ∬_{0..a,0..b} sqrt(x^2+y^2) dy dx
-        return (2.0 * a * b * r + (a ** 3) * math.asinh(b / a) + (b ** 3) * math.asinh(a / b)) / 6.0
+        return (
+            2.0 * a * b * r + (a**3) * math.asinh(b / a) + (b**3) * math.asinh(a / b)
+        ) / 6.0
 
     for x in range(-max_n, max_n + 1):
         sx = -1.0 if x < 0 else 1.0
@@ -59,7 +63,9 @@ def _precompute_tables(max_n: int):
             else:
                 r = math.hypot(a, y)
                 yy = y * y
-                F3[a][y + off] = (y * r * (2.0 * yy + 5.0 * a2) + 3.0 * a4 * math.asinh(y / a)) / 8.0
+                F3[a][y + off] = (
+                    y * r * (2.0 * yy + 5.0 * a2) + 3.0 * a4 * math.asinh(y / a)
+                ) / 8.0
 
     # P5[a][b] = (a^2 + b^2)^(5/2) for a,b >= 0
     P5 = [[0.0] * (max_n + 1) for _ in range(max_n + 1)]
@@ -80,7 +86,9 @@ def _overlap_segments(outer_len: int, inner_len: int, left: int) -> List[Segment
 
     Each segment is [start, end] with start < end and integer endpoints.
     """
-    right = outer_len - left - inner_len  # distance from inner's right edge to outer's right edge
+    right = (
+        outer_len - left - inner_len
+    )  # distance from inner's right edge to outer's right edge
     segs: List[Segment] = []
 
     # Rising edge: t in [-(left+inner), -left], overlap = t + left + inner
@@ -125,7 +133,8 @@ def _solve_S(n: int) -> float:
         a1 = abs(x1)
         a0 = abs(x0)
         return (
-            (F3[a1][y1 + off] - F3[a1][y0 + off]) - (F3[a0][y1 + off] - F3[a0][y0 + off])
+            (F3[a1][y1 + off] - F3[a1][y0 + off])
+            - (F3[a0][y1 + off] - F3[a0][y0 + off])
         ) / 3.0
 
     def Iy(x0: int, x1: int, y0: int, y1: int) -> float:
@@ -139,7 +148,9 @@ def _solve_S(n: int) -> float:
         return (P5[ax1][ay1] - P5[ax0][ay1] - P5[ax1][ay0] + P5[ax0][ay0]) / 15.0
 
     # Cross integral between outer rectangle [0..W]×[0..H] and a nested inner rectangle
-    def cross_integral(outer_w: int, outer_h: int, inner_w: int, inner_h: int, left: int, bottom: int) -> float:
+    def cross_integral(
+        outer_w: int, outer_h: int, inner_w: int, inner_h: int, left: int, bottom: int
+    ) -> float:
         xsegs = _overlap_segments(outer_w, inner_w, left)
         ysegs = _overlap_segments(outer_h, inner_h, bottom)
         total = 0.0

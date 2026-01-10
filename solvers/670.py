@@ -62,8 +62,13 @@ def _transitions(state: tuple[int, ...]) -> dict[tuple[int, ...], int]:
 
     v_prev, inT, contT, valT, inB, contB, valB = state
 
-    def add(v_cur: int, t_state: tuple[int, int, int], b_state: tuple[int, int, int], ways: int,
-            out: dict[tuple[int, ...], int]) -> None:
+    def add(
+        v_cur: int,
+        t_state: tuple[int, int, int],
+        b_state: tuple[int, int, int],
+        ways: int,
+        out: dict[tuple[int, ...], int],
+    ) -> None:
         # no-four-corners rule at the boundary between previous and current column:
         # forbidden iff both rows have a cut there (i.e. both current cells are free),
         # and neither side column is a vertical domino.
@@ -81,7 +86,9 @@ def _transitions(state: tuple[int, ...]) -> dict[tuple[int, ...], int]:
     cB = valB if inB else -1
 
     # If a row is incoming, we can already compute its contribution to the next state's row-part.
-    def next_from_incoming(incoming: int, cont: int, colour: int) -> tuple[int, int, int]:
+    def next_from_incoming(
+        incoming: int, cont: int, colour: int
+    ) -> tuple[int, int, int]:
         if incoming == 0:
             raise ValueError("called next_from_incoming for non-incoming row")
         if cont:
@@ -212,7 +219,9 @@ def build_automaton() -> tuple[list[tuple[int, ...]], list[list[tuple[int, int]]
     return states, adj
 
 
-def compute_small(n: int, states: list[tuple[int, ...]], adj: list[list[tuple[int, int]]]) -> int:
+def compute_small(
+    n: int, states: list[tuple[int, ...]], adj: list[list[tuple[int, int]]]
+) -> int:
     """Compute F(n) by straightforward DP, suitable for small n (e.g. test values)."""
 
     init = (1, 0, 0, NONE, 0, 0, NONE)

@@ -48,16 +48,18 @@ def constrained_sums(n: int, k: int, b: int, mod: int = MOD) -> int:
     reducing the budget by sum(ui+1). Apply inclusion-exclusion.
     """
     # weights wi = (upper bound + 1) for variable i (1-indexed in statement)
-    w = [pow(b, i, 1 << 63) for i in range(1, k + 1)]  # dummy mod; we need exact ints below
+    w = [
+        pow(b, i, 1 << 63) for i in range(1, k + 1)
+    ]  # dummy mod; we need exact ints below
     # The above pow with mod is just to avoid any accidental float; replace with exact pow:
-    w = [b ** i + 1 for i in range(1, k + 1)]
+    w = [b**i + 1 for i in range(1, k + 1)]
 
     # Precompute subset sums of w for all masks (0..2^k - 1)
     m = 1 << k
     shift = [0] * m
     for mask in range(1, m):
         lsb = mask & -mask
-        i = (lsb.bit_length() - 1)
+        i = lsb.bit_length() - 1
         shift[mask] = shift[mask ^ lsb] + w[i]
 
     # Precompute inv factorial for this k
@@ -81,7 +83,7 @@ def constrained_sums(n: int, k: int, b: int, mod: int = MOD) -> int:
 def solve() -> int:
     total = 0
     for k in range(10, 16):
-        total = (total + constrained_sums(10 ** k, k, k, MOD)) % MOD
+        total = (total + constrained_sums(10**k, k, k, MOD)) % MOD
     return total
 
 

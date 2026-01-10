@@ -65,7 +65,7 @@ def F(n: int, mod: int = MOD) -> int:
     # all 1..n are invertible modulo mod.
 
     # Precompute modular inverses inv[i] for 1<=i<=n in O(n), and n! mod mod.
-    inv = array('I', [0]) * (n + 1)
+    inv = array("I", [0]) * (n + 1)
     inv[1] = 1
     fact_n = 1
     for i in range(2, n + 1):

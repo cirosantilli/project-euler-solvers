@@ -15,6 +15,7 @@ import math
 #  Probability building block
 # ----------------------------
 
+
 def _q_no_adjacent_cycle(D: int, p: float) -> float:
     """
     Probability that a length-D cyclic Bernoulli(p) binary string has no adjacent 1s.
@@ -59,6 +60,7 @@ def _integrand(D: int, t: float) -> float:
 # ---------------------------------
 #  Fast Gauss–Legendre quadrature
 # ---------------------------------
+
 
 def _gauss_legendre_nodes_weights(n: int) -> tuple[list[float], list[float]]:
     """
@@ -158,7 +160,9 @@ def _self_test() -> None:
     # Test values from the problem statement
     assert abs(expected_emperors(2) - 1.0) < 1e-10
     assert abs(expected_emperors(5) - (31.0 / 6.0)) < 1e-9
-    assert abs(expected_emperors(365) - 1174.3501) < 5e-4  # statement gives an approximation
+    assert (
+        abs(expected_emperors(365) - 1174.3501) < 5e-4
+    )  # statement gives an approximation
 
 
 if __name__ == "__main__":

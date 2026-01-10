@@ -23,8 +23,8 @@ def count_square_cells_by_class(n: int):
         r = (x - 1) // n + 1
         c = (x - 1) % n + 1
 
-        is_top_or_bottom = (r == 1 or r == n)
-        is_left_or_right = (c == 1 or c == n)
+        is_top_or_bottom = r == 1 or r == n
+        is_left_or_right = c == 1 or c == n
 
         if is_top_or_bottom and is_left_or_right:
             corner += 1
@@ -69,17 +69,13 @@ def stationary_prob_square(n: int, rule: int):
     sq_i, sq_e, sq_c = count_square_cells_by_class(n)
 
     if rule == 1:
-        w_i, w_e, w_c = 5, 4, 3   # exits 4/3/2 plus 1
+        w_i, w_e, w_c = 5, 4, 3  # exits 4/3/2 plus 1
     elif rule == 2:
-        w_i, w_e, w_c = 4, 3, 2   # exits 4/3/2
+        w_i, w_e, w_c = 4, 3, 2  # exits 4/3/2
     else:
         raise ValueError("rule must be 1 or 2")
 
-    total_weight = (
-        w_i * (n - 2) * (n - 2) +
-        w_e * 4 * (n - 2) +
-        w_c * 4
-    )
+    total_weight = w_i * (n - 2) * (n - 2) + w_e * 4 * (n - 2) + w_c * 4
     square_weight = sq_i * w_i + sq_e * w_e + sq_c * w_c
 
     return reduced_fraction(square_weight, total_weight)
@@ -98,7 +94,7 @@ def format_fraction(num: int, den: int, dp: int = 12) -> str:
     """
     Formats num/den rounded to dp decimal places (half-up), using integer arithmetic.
     """
-    scale = 10 ** dp
+    scale = 10**dp
     scaled = num * scale
     q, r = divmod(scaled, den)
     if 2 * r >= den:

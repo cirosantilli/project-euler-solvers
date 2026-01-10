@@ -131,7 +131,7 @@ def solve(n: int = 123456789, sig: int = 7) -> int:
     digits = int(((mantissa + eps) * scale).to_integral_value(rounding=ROUND_FLOOR))
 
     # If rounding pushed us over the boundary (extremely unlikely), renormalize.
-    if digits >= 10 ** sig:
+    if digits >= 10**sig:
         digits //= 10
     return digits
 

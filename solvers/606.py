@@ -40,6 +40,7 @@ No external libraries used.
 # Helpers: integer cube root, sieve
 # ----------------------------------------------------------------------
 
+
 def icbrt(n: int) -> int:
     """Floor integer cube root via binary search (works for huge ints)."""
     if n < 0:
@@ -61,7 +62,7 @@ def isqrt(n: int) -> int:
     """Integer floor sqrt (no math library)."""
     if n < 0:
         raise ValueError("isqrt expects nonnegative n")
-    x = int(n ** 0.5)
+    x = int(n**0.5)
     while (x + 1) * (x + 1) <= n:
         x += 1
     while x * x > n:
@@ -80,7 +81,7 @@ def sieve_primes(limit: int):
         if bs[p]:
             step = p
             start = p * p
-            bs[start:limit + 1:step] = b"\x00" * (((limit - start) // step) + 1)
+            bs[start : limit + 1 : step] = b"\x00" * (((limit - start) // step) + 1)
         p += 1
     return [i for i in range(limit + 1) if bs[i]]
 
@@ -88,6 +89,7 @@ def sieve_primes(limit: int):
 # ----------------------------------------------------------------------
 # Brute for small N (used for asserts from statement)
 # ----------------------------------------------------------------------
+
 
 def brute_S(N: int) -> int:
     """
@@ -98,7 +100,7 @@ def brute_S(N: int) -> int:
     primes = sieve_primes(M)
     total = 0
     for i, p in enumerate(primes):
-        for q in primes[i + 1:]:
+        for q in primes[i + 1 :]:
             if p * q > M:
                 break
             total += (p * q) ** 3
@@ -117,6 +119,7 @@ def brute_S(N: int) -> int:
 #
 # The final S[v] becomes sum of prime cubes <= v (mod MOD).
 # ----------------------------------------------------------------------
+
 
 def prime_cube_sums_lucy(n: int, primes, MOD: int):
     """
@@ -208,6 +211,7 @@ def prime_cube_sums_lucy(n: int, primes, MOD: int):
 # Final computation for N=10^36
 # ----------------------------------------------------------------------
 
+
 def S_big_last9(N: int) -> int:
     """
     Compute S(N) modulo 1e9 (last nine digits), for huge N (like 10^36).
@@ -256,4 +260,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

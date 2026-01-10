@@ -34,15 +34,15 @@ def _conv_u64(a, b):
     n = len(a)
     m = len(b)
     if n == 0 or m == 0:
-        return array('Q')
+        return array("Q")
 
-    A_int = int.from_bytes(array('Q', a).tobytes(), 'little', signed=False)
-    B_int = int.from_bytes(array('Q', b).tobytes(), 'little', signed=False)
+    A_int = int.from_bytes(array("Q", a).tobytes(), "little", signed=False)
+    B_int = int.from_bytes(array("Q", b).tobytes(), "little", signed=False)
     C_int = A_int * B_int
 
     out_len = n + m - 1
-    bs = C_int.to_bytes(8 * out_len, 'little', signed=False)
-    res = array('Q')
+    bs = C_int.to_bytes(8 * out_len, "little", signed=False)
+    res = array("Q")
     res.frombytes(bs)
     return res
 

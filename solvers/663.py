@@ -21,7 +21,9 @@ No external libraries are used (only Python standard library).
 from array import array
 
 
-NEG_INF = -10**18  # safely below any achievable subarray sum magnitude in this problem
+NEG_INF = -(
+    10**18
+)  # safely below any achievable subarray sum magnitude in this problem
 
 
 def max_subarray_kadane(arr):

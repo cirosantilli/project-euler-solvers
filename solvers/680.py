@@ -21,28 +21,30 @@ def compute_R(N: int, K: int, mod: int | None = None) -> int:
     use_mod = MOD is not None
 
     # Treap arrays (index 0 is "null")
-    lch = array('I', [0])
-    rch = array('I', [0])
-    prio = array('I', [0])
+    lch = array("I", [0])
+    rch = array("I", [0])
+    prio = array("I", [0])
 
-    seg_len = array('Q', [0])     # length of the segment stored in the node
-    seg_start = array('Q', [0])   # first value of the segment (value at offset 0)
-    seg_dir = array('b', [0])     # +1 or -1
-    rev = array('b', [0])         # lazy reversal flag for subtree
-    tot_len = array('Q', [0])     # total number of elements in subtree
+    seg_len = array("Q", [0])  # length of the segment stored in the node
+    seg_start = array("Q", [0])  # first value of the segment (value at offset 0)
+    seg_dir = array("b", [0])  # +1 or -1
+    rev = array("b", [0])  # lazy reversal flag for subtree
+    tot_len = array("Q", [0])  # total number of elements in subtree
 
     if use_mod:
         # all sums fit into < 2^32 because mod=1e9
-        seg_sum = array('I', [0])     # sum of values in node segment (mod MOD)
-        seg_k = array('I', [0])       # sum of (k * value_k) within node segment (mod MOD)
-        sum_val = array('I', [0])     # subtree sum of values (mod MOD)
-        sum_pos = array('I', [0])     # subtree sum of (pos * value_pos), pos from 0 (mod MOD)
+        seg_sum = array("I", [0])  # sum of values in node segment (mod MOD)
+        seg_k = array("I", [0])  # sum of (k * value_k) within node segment (mod MOD)
+        sum_val = array("I", [0])  # subtree sum of values (mod MOD)
+        sum_pos = array(
+            "I", [0]
+        )  # subtree sum of (pos * value_pos), pos from 0 (mod MOD)
     else:
         # exact (used only for the small testcases in this script)
-        seg_sum = array('q', [0])
-        seg_k = array('q', [0])
-        sum_val = array('q', [0])
-        sum_pos = array('q', [0])
+        seg_sum = array("q", [0])
+        seg_k = array("q", [0])
+        sum_val = array("q", [0])
+        sum_pos = array("q", [0])
 
     # Fast deterministic RNG (xorshift32) for treap priorities
     seed = 2463534242
@@ -56,6 +58,7 @@ def compute_R(N: int, K: int, mod: int | None = None) -> int:
 
     # Segment sums for arithmetic progression: start + dir*k, k=0..L-1
     if use_mod:
+
         def tri_mod(L: int) -> int:
             # L*(L-1)/2 mod MOD, computed without modular inverses
             a = L
@@ -97,7 +100,9 @@ def compute_R(N: int, K: int, mod: int | None = None) -> int:
                 s = (st * Lm - tr) % MOD
                 k = (st * tr - sq) % MOD
             return s, k
+
     else:
+
         def seg_sums(L: int, start: int, direction: int) -> tuple[int, int]:
             tr = L * (L - 1) // 2
             sq = (L - 1) * L * (2 * L - 1) // 6
@@ -153,7 +158,9 @@ def compute_R(N: int, K: int, mod: int | None = None) -> int:
 
         # update subtree positional sum: reversing positions turns Σ p*v into (L-1)*Σv - Σ p*v
         if use_mod:
-            sum_pos[node] = (((tot_len[node] - 1) % MOD) * sum_val[node] - sum_pos[node]) % MOD
+            sum_pos[node] = (
+                ((tot_len[node] - 1) % MOD) * sum_val[node] - sum_pos[node]
+            ) % MOD
         else:
             sum_pos[node] = (tot_len[node] - 1) * sum_val[node] - sum_pos[node]
 
@@ -191,7 +198,9 @@ def compute_R(N: int, K: int, mod: int | None = None) -> int:
             lenL_m = lenL % MOD
             off_m = (lenL + seg_len[node]) % MOD
             sum_val[node] = (sL + segS + sR) % MOD
-            sum_pos[node] = (pL + (lenL_m * segS + segK) % MOD + pR + (off_m * sR) % MOD) % MOD
+            sum_pos[node] = (
+                pL + (lenL_m * segS + segK) % MOD + pR + (off_m * sR) % MOD
+            ) % MOD
         else:
             sum_val[node] = sL + segS + sR
             sum_pos[node] = pL + lenL * segS + segK + pR + (lenL + seg_len[node]) * sR

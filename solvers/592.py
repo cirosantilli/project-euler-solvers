@@ -71,8 +71,8 @@ def _precompute_stirling2(max_n: int) -> list[list[int]]:
     return s
 
 
-MAX_LOG = 24   # enough because 4^m / m has v2 >= 48 for m >= 25
-MAX_EXP = 60   # safe upper bound for exp series when argument is divisible by 4
+MAX_LOG = 24  # enough because 4^m / m has v2 >= 48 for m >= 25
+MAX_EXP = 60  # safe upper bound for exp series when argument is divisible by 4
 
 _STIRLING2 = _precompute_stirling2(MAX_LOG)
 
@@ -114,7 +114,9 @@ def _power_sums_upto(n: int, max_p: int = MAX_LOG) -> list[int]:
         # sum i^p = Σ_{t=0..p} S(p,t) * t! * C(n, t+1)
         for t in range(0, p + 1):
             if _STIRLING2[p][t]:
-                total = (total + (_STIRLING2[p][t] * _FACT[t] % MOD) * comb_mod[t + 1]) % MOD
+                total = (
+                    total + (_STIRLING2[p][t] * _FACT[t] % MOD) * comb_mod[t + 1]
+                ) % MOD
         sums[p] = total
     return sums
 
@@ -162,7 +164,7 @@ def _prod_first_r_odds(r: int) -> int:
     sign_flip = (r // 2) & 1  # parity of count of odd j in 0..r-1
 
     E = (r + 1) // 2  # number of even j
-    O = r // 2        # number of odd j
+    O = r // 2  # number of odd j
 
     sumsE = _power_sums_upto(E, MAX_LOG)
     sumsO = _power_sums_upto(O, MAX_LOG)

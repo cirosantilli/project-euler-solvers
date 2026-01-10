@@ -168,28 +168,28 @@ def solve(n: int):
             num = -b0
             den = A0_val
             if num % den:
-                return 'lb', num // den + 1
+                return "lb", num // den + 1
             x0 = num // den
             # tie at constant term; inspect next ε coefficient
             s = first_nonzero_sign(Bpoly, start=1)
-            return 'lb', x0 if s > 0 else x0 + 1
+            return "lb", x0 if s > 0 else x0 + 1
         else:
             # a < (B)/(-A0)
             den = -A0_val
             num = b0
             if num % den:
-                return 'ub', num // den
+                return "ub", num // den
             x0 = num // den
             s = first_nonzero_sign(Bpoly, start=1)
-            return 'ub', x0 if s > 0 else x0 - 1
+            return "ub", x0 if s > 0 else x0 - 1
 
     def bounds_for_k(k: int):
         """Intersect all (k+1) inequalities to get integer bounds for a_k."""
-        lb = -10**30
+        lb = -(10**30)
         ub = 10**30
         for m in range(1, k + 2):
             typ, bnd = bound_from_ineq(A0[(k, m)], B[(k, m)])
-            if typ == 'lb':
+            if typ == "lb":
                 if bnd > lb:
                     lb = bnd
             else:

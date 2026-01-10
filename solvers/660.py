@@ -143,7 +143,9 @@ def solve_base(n: int) -> list[tuple[int, int, int]]:
                         # Congruence coefficients mod n are constant for all higher digits:
                         alpha = X % n
                         beta = Y % n
-                        delta = (-Z) % n  # because mod equation uses -2C for the c-digit term
+                        delta = (
+                            -Z
+                        ) % n  # because mod equation uses -2C for the c-digit term
 
                         # Stack for DFS: (p, A, B, C, X, Y, Z, G, avail_mask)
                         stack = [(1, A, B, C, X, Y, Z, G, avail)]
@@ -165,7 +167,7 @@ def solve_base(n: int) -> list[tuple[int, int, int]]:
 
                             lead_a = a_act and (p == la - 1)
                             lead_b = b_act and (p == lb - 1)
-                            lead_c = (p == lc - 1)
+                            lead_c = p == lc - 1
 
                             # Right-hand side of the linear congruence:
                             # alpha*da + beta*db + delta*dc ≡ (-G) (mod n)
@@ -173,8 +175,12 @@ def solve_base(n: int) -> list[tuple[int, int, int]]:
 
                             # Candidate digit masks (apply non-leading-zero rule when needed)
                             mask_c = avail & (~1 if lead_c else full_mask)
-                            mask_a = (avail & (~1 if lead_a else full_mask)) if a_act else 0
-                            mask_b = (avail & (~1 if lead_b else full_mask)) if b_act else 0
+                            mask_a = (
+                                (avail & (~1 if lead_a else full_mask)) if a_act else 0
+                            )
+                            mask_b = (
+                                (avail & (~1 if lead_b else full_mask)) if b_act else 0
+                            )
 
                             if a_act and b_act:
                                 # 3 variables: choose which one to solve for (prefer invertible coefficient).
@@ -190,7 +196,11 @@ def solve_base(n: int) -> list[tuple[int, int, int]]:
 
                                 # Prefer variables with modular inverse (unique solution), then smaller domain.
                                 solve_name, solve_k, solve_mask = min(
-                                    cand, key=lambda x: (0 if has_inv[x[1]] else 1, x[2].bit_count())
+                                    cand,
+                                    key=lambda x: (
+                                        0 if has_inv[x[1]] else 1,
+                                        x[2].bit_count(),
+                                    ),
                                 )
 
                                 if solve_name == "c":
@@ -202,9 +212,18 @@ def solve_base(n: int) -> list[tuple[int, int, int]]:
 
                                             if has_inv[delta]:
                                                 dc = (inv[delta] * rhs) % n
-                                                if ((mask_c >> dc) & 1) and dc != da and dc != db:
+                                                if (
+                                                    ((mask_c >> dc) & 1)
+                                                    and dc != da
+                                                    and dc != db
+                                                ):
                                                     L = da * X + db * Y - dc * Z
-                                                    Q = da * da + da * db + db * db - dc * dc
+                                                    Q = (
+                                                        da * da
+                                                        + da * db
+                                                        + db * db
+                                                        - dc * dc
+                                                    )
                                                     newG = (G + L + P * Q) // n
 
                                                     newA = A + da * P
@@ -213,13 +232,36 @@ def solve_base(n: int) -> list[tuple[int, int, int]]:
                                                     newX = X + (2 * da + db) * P
                                                     newY = Y + (da + 2 * db) * P
                                                     newZ = Z + 2 * dc * P
-                                                    stack.append((p + 1, newA, newB, newC, newX, newY, newZ, newG,
-                                                                  avail1 ^ (1 << db) ^ (1 << dc)))
+                                                    stack.append(
+                                                        (
+                                                            p + 1,
+                                                            newA,
+                                                            newB,
+                                                            newC,
+                                                            newX,
+                                                            newY,
+                                                            newZ,
+                                                            newG,
+                                                            avail1
+                                                            ^ (1 << db)
+                                                            ^ (1 << dc),
+                                                        )
+                                                    )
                                             else:
-                                                cm = res_masks[delta][rhs] & mask_c & ~(1 << da) & ~(1 << db)
+                                                cm = (
+                                                    res_masks[delta][rhs]
+                                                    & mask_c
+                                                    & ~(1 << da)
+                                                    & ~(1 << db)
+                                                )
                                                 for dc in _iter_bits(cm):
                                                     L = da * X + db * Y - dc * Z
-                                                    Q = da * da + da * db + db * db - dc * dc
+                                                    Q = (
+                                                        da * da
+                                                        + da * db
+                                                        + db * db
+                                                        - dc * dc
+                                                    )
                                                     newG = (G + L + P * Q) // n
 
                                                     newA = A + da * P
@@ -228,8 +270,21 @@ def solve_base(n: int) -> list[tuple[int, int, int]]:
                                                     newX = X + (2 * da + db) * P
                                                     newY = Y + (da + 2 * db) * P
                                                     newZ = Z + 2 * dc * P
-                                                    stack.append((p + 1, newA, newB, newC, newX, newY, newZ, newG,
-                                                                  avail1 ^ (1 << db) ^ (1 << dc)))
+                                                    stack.append(
+                                                        (
+                                                            p + 1,
+                                                            newA,
+                                                            newB,
+                                                            newC,
+                                                            newX,
+                                                            newY,
+                                                            newZ,
+                                                            newG,
+                                                            avail1
+                                                            ^ (1 << db)
+                                                            ^ (1 << dc),
+                                                        )
+                                                    )
 
                                 elif solve_name == "a":
                                     for db in _iter_bits(mask_b):
@@ -240,9 +295,18 @@ def solve_base(n: int) -> list[tuple[int, int, int]]:
 
                                             if has_inv[alpha]:
                                                 da = (inv[alpha] * rhs) % n
-                                                if ((mask_a >> da) & 1) and da != db and da != dc:
+                                                if (
+                                                    ((mask_a >> da) & 1)
+                                                    and da != db
+                                                    and da != dc
+                                                ):
                                                     L = da * X + db * Y - dc * Z
-                                                    Q = da * da + da * db + db * db - dc * dc
+                                                    Q = (
+                                                        da * da
+                                                        + da * db
+                                                        + db * db
+                                                        - dc * dc
+                                                    )
                                                     newG = (G + L + P * Q) // n
 
                                                     newA = A + da * P
@@ -251,13 +315,36 @@ def solve_base(n: int) -> list[tuple[int, int, int]]:
                                                     newX = X + (2 * da + db) * P
                                                     newY = Y + (da + 2 * db) * P
                                                     newZ = Z + 2 * dc * P
-                                                    stack.append((p + 1, newA, newB, newC, newX, newY, newZ, newG,
-                                                                  avail1 ^ (1 << dc) ^ (1 << da)))
+                                                    stack.append(
+                                                        (
+                                                            p + 1,
+                                                            newA,
+                                                            newB,
+                                                            newC,
+                                                            newX,
+                                                            newY,
+                                                            newZ,
+                                                            newG,
+                                                            avail1
+                                                            ^ (1 << dc)
+                                                            ^ (1 << da),
+                                                        )
+                                                    )
                                             else:
-                                                am = res_masks[alpha][rhs] & mask_a & ~(1 << db) & ~(1 << dc)
+                                                am = (
+                                                    res_masks[alpha][rhs]
+                                                    & mask_a
+                                                    & ~(1 << db)
+                                                    & ~(1 << dc)
+                                                )
                                                 for da in _iter_bits(am):
                                                     L = da * X + db * Y - dc * Z
-                                                    Q = da * da + da * db + db * db - dc * dc
+                                                    Q = (
+                                                        da * da
+                                                        + da * db
+                                                        + db * db
+                                                        - dc * dc
+                                                    )
                                                     newG = (G + L + P * Q) // n
 
                                                     newA = A + da * P
@@ -266,8 +353,21 @@ def solve_base(n: int) -> list[tuple[int, int, int]]:
                                                     newX = X + (2 * da + db) * P
                                                     newY = Y + (da + 2 * db) * P
                                                     newZ = Z + 2 * dc * P
-                                                    stack.append((p + 1, newA, newB, newC, newX, newY, newZ, newG,
-                                                                  avail1 ^ (1 << dc) ^ (1 << da)))
+                                                    stack.append(
+                                                        (
+                                                            p + 1,
+                                                            newA,
+                                                            newB,
+                                                            newC,
+                                                            newX,
+                                                            newY,
+                                                            newZ,
+                                                            newG,
+                                                            avail1
+                                                            ^ (1 << dc)
+                                                            ^ (1 << da),
+                                                        )
+                                                    )
                                 else:  # solve_name == "b"
                                     for da in _iter_bits(mask_a):
                                         avail1 = avail ^ (1 << da)
@@ -277,9 +377,18 @@ def solve_base(n: int) -> list[tuple[int, int, int]]:
 
                                             if has_inv[beta]:
                                                 db = (inv[beta] * rhs) % n
-                                                if ((mask_b >> db) & 1) and db != da and db != dc:
+                                                if (
+                                                    ((mask_b >> db) & 1)
+                                                    and db != da
+                                                    and db != dc
+                                                ):
                                                     L = da * X + db * Y - dc * Z
-                                                    Q = da * da + da * db + db * db - dc * dc
+                                                    Q = (
+                                                        da * da
+                                                        + da * db
+                                                        + db * db
+                                                        - dc * dc
+                                                    )
                                                     newG = (G + L + P * Q) // n
 
                                                     newA = A + da * P
@@ -288,13 +397,36 @@ def solve_base(n: int) -> list[tuple[int, int, int]]:
                                                     newX = X + (2 * da + db) * P
                                                     newY = Y + (da + 2 * db) * P
                                                     newZ = Z + 2 * dc * P
-                                                    stack.append((p + 1, newA, newB, newC, newX, newY, newZ, newG,
-                                                                  avail1 ^ (1 << dc) ^ (1 << db)))
+                                                    stack.append(
+                                                        (
+                                                            p + 1,
+                                                            newA,
+                                                            newB,
+                                                            newC,
+                                                            newX,
+                                                            newY,
+                                                            newZ,
+                                                            newG,
+                                                            avail1
+                                                            ^ (1 << dc)
+                                                            ^ (1 << db),
+                                                        )
+                                                    )
                                             else:
-                                                bm = res_masks[beta][rhs] & mask_b & ~(1 << da) & ~(1 << dc)
+                                                bm = (
+                                                    res_masks[beta][rhs]
+                                                    & mask_b
+                                                    & ~(1 << da)
+                                                    & ~(1 << dc)
+                                                )
                                                 for db in _iter_bits(bm):
                                                     L = da * X + db * Y - dc * Z
-                                                    Q = da * da + da * db + db * db - dc * dc
+                                                    Q = (
+                                                        da * da
+                                                        + da * db
+                                                        + db * db
+                                                        - dc * dc
+                                                    )
                                                     newG = (G + L + P * Q) // n
 
                                                     newA = A + da * P
@@ -303,8 +435,21 @@ def solve_base(n: int) -> list[tuple[int, int, int]]:
                                                     newX = X + (2 * da + db) * P
                                                     newY = Y + (da + 2 * db) * P
                                                     newZ = Z + 2 * dc * P
-                                                    stack.append((p + 1, newA, newB, newC, newX, newY, newZ, newG,
-                                                                  avail1 ^ (1 << dc) ^ (1 << db)))
+                                                    stack.append(
+                                                        (
+                                                            p + 1,
+                                                            newA,
+                                                            newB,
+                                                            newC,
+                                                            newX,
+                                                            newY,
+                                                            newZ,
+                                                            newG,
+                                                            avail1
+                                                            ^ (1 << dc)
+                                                            ^ (1 << db),
+                                                        )
+                                                    )
 
                             elif a_act and not b_act:
                                 # 2 variables: alpha*da + delta*dc ≡ t
@@ -322,8 +467,19 @@ def solve_base(n: int) -> list[tuple[int, int, int]]:
                                             newX = X + 2 * da * P
                                             newY = Y + da * P
                                             newZ = Z + 2 * dc * P
-                                            stack.append((p + 1, newA, B, newC, newX, newY, newZ, newG,
-                                                          avail ^ (1 << dc) ^ (1 << da)))
+                                            stack.append(
+                                                (
+                                                    p + 1,
+                                                    newA,
+                                                    B,
+                                                    newC,
+                                                    newX,
+                                                    newY,
+                                                    newZ,
+                                                    newG,
+                                                    avail ^ (1 << dc) ^ (1 << da),
+                                                )
+                                            )
                                 else:
                                     for da in _iter_bits(mask_a):
                                         avail1 = avail ^ (1 << da)
@@ -340,10 +496,25 @@ def solve_base(n: int) -> list[tuple[int, int, int]]:
                                                 newX = X + 2 * da * P
                                                 newY = Y + da * P
                                                 newZ = Z + 2 * dc * P
-                                                stack.append((p + 1, newA, B, newC, newX, newY, newZ, newG,
-                                                              avail1 ^ (1 << dc)))
+                                                stack.append(
+                                                    (
+                                                        p + 1,
+                                                        newA,
+                                                        B,
+                                                        newC,
+                                                        newX,
+                                                        newY,
+                                                        newZ,
+                                                        newG,
+                                                        avail1 ^ (1 << dc),
+                                                    )
+                                                )
                                         else:
-                                            cm = res_masks[delta][rhs] & mask_c & ~(1 << da)
+                                            cm = (
+                                                res_masks[delta][rhs]
+                                                & mask_c
+                                                & ~(1 << da)
+                                            )
                                             for dc in _iter_bits(cm):
                                                 L = da * X - dc * Z
                                                 Q = da * da - dc * dc
@@ -354,8 +525,19 @@ def solve_base(n: int) -> list[tuple[int, int, int]]:
                                                 newX = X + 2 * da * P
                                                 newY = Y + da * P
                                                 newZ = Z + 2 * dc * P
-                                                stack.append((p + 1, newA, B, newC, newX, newY, newZ, newG,
-                                                              avail1 ^ (1 << dc)))
+                                                stack.append(
+                                                    (
+                                                        p + 1,
+                                                        newA,
+                                                        B,
+                                                        newC,
+                                                        newX,
+                                                        newY,
+                                                        newZ,
+                                                        newG,
+                                                        avail1 ^ (1 << dc),
+                                                    )
+                                                )
 
                             elif (not a_act) and b_act:
                                 # 2 variables: beta*db + delta*dc ≡ t
@@ -373,8 +555,19 @@ def solve_base(n: int) -> list[tuple[int, int, int]]:
                                             newX = X + db * P
                                             newY = Y + 2 * db * P
                                             newZ = Z + 2 * dc * P
-                                            stack.append((p + 1, A, newB, newC, newX, newY, newZ, newG,
-                                                          avail ^ (1 << dc) ^ (1 << db)))
+                                            stack.append(
+                                                (
+                                                    p + 1,
+                                                    A,
+                                                    newB,
+                                                    newC,
+                                                    newX,
+                                                    newY,
+                                                    newZ,
+                                                    newG,
+                                                    avail ^ (1 << dc) ^ (1 << db),
+                                                )
+                                            )
                                 else:
                                     for db in _iter_bits(mask_b):
                                         avail1 = avail ^ (1 << db)
@@ -391,10 +584,25 @@ def solve_base(n: int) -> list[tuple[int, int, int]]:
                                                 newX = X + db * P
                                                 newY = Y + 2 * db * P
                                                 newZ = Z + 2 * dc * P
-                                                stack.append((p + 1, A, newB, newC, newX, newY, newZ, newG,
-                                                              avail1 ^ (1 << dc)))
+                                                stack.append(
+                                                    (
+                                                        p + 1,
+                                                        A,
+                                                        newB,
+                                                        newC,
+                                                        newX,
+                                                        newY,
+                                                        newZ,
+                                                        newG,
+                                                        avail1 ^ (1 << dc),
+                                                    )
+                                                )
                                         else:
-                                            cm = res_masks[delta][rhs] & mask_c & ~(1 << db)
+                                            cm = (
+                                                res_masks[delta][rhs]
+                                                & mask_c
+                                                & ~(1 << db)
+                                            )
                                             for dc in _iter_bits(cm):
                                                 L = db * Y - dc * Z
                                                 Q = db * db - dc * dc
@@ -405,8 +613,19 @@ def solve_base(n: int) -> list[tuple[int, int, int]]:
                                                 newX = X + db * P
                                                 newY = Y + 2 * db * P
                                                 newZ = Z + 2 * dc * P
-                                                stack.append((p + 1, A, newB, newC, newX, newY, newZ, newG,
-                                                              avail1 ^ (1 << dc)))
+                                                stack.append(
+                                                    (
+                                                        p + 1,
+                                                        A,
+                                                        newB,
+                                                        newC,
+                                                        newX,
+                                                        newY,
+                                                        newZ,
+                                                        newG,
+                                                        avail1 ^ (1 << dc),
+                                                    )
+                                                )
 
                             else:
                                 # Only c still has digits: delta*dc ≡ t
@@ -420,8 +639,19 @@ def solve_base(n: int) -> list[tuple[int, int, int]]:
 
                                         newC = C + dc * P
                                         newZ = Z + 2 * dc * P
-                                        stack.append((p + 1, A, B, newC, X, Y, newZ, newG,
-                                                      avail ^ (1 << dc)))
+                                        stack.append(
+                                            (
+                                                p + 1,
+                                                A,
+                                                B,
+                                                newC,
+                                                X,
+                                                Y,
+                                                newZ,
+                                                newG,
+                                                avail ^ (1 << dc),
+                                            )
+                                        )
                                 else:
                                     cm = res_masks[delta][rhs] & mask_c
                                     for dc in _iter_bits(cm):
@@ -431,8 +661,19 @@ def solve_base(n: int) -> list[tuple[int, int, int]]:
 
                                         newC = C + dc * P
                                         newZ = Z + 2 * dc * P
-                                        stack.append((p + 1, A, B, newC, X, Y, newZ, newG,
-                                                      avail ^ (1 << dc)))
+                                        stack.append(
+                                            (
+                                                p + 1,
+                                                A,
+                                                B,
+                                                newC,
+                                                X,
+                                                Y,
+                                                newZ,
+                                                newG,
+                                                avail ^ (1 << dc),
+                                            )
+                                        )
 
     return sorted(sols)
 

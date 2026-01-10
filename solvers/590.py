@@ -12,9 +12,9 @@ from collections import defaultdict
 from math import gcd
 
 MOD = 10**9
-MOD2 = 2**9            # 512
-MOD5 = 5**9            # 1_953_125
-PHI5 = 4 * 5**8        # phi(5^9) = 1_562_500
+MOD2 = 2**9  # 512
+MOD5 = 5**9  # 1_953_125
+PHI5 = 4 * 5**8  # phi(5^9) = 1_562_500
 
 
 def lcm(a: int, b: int) -> int:
@@ -33,7 +33,9 @@ def sieve(limit: int) -> list[int]:
         if is_prime[p]:
             step = p
             start = p * p
-            is_prime[start : limit + 1 : step] = b"\x00" * (((limit - start) // step) + 1)
+            is_prime[start : limit + 1 : step] = b"\x00" * (
+                ((limit - start) // step) + 1
+            )
         p += 1
     return [i for i in range(limit + 1) if is_prime[i]]
 
@@ -121,7 +123,9 @@ def binom_coeffs_signed_mod(n: int, mod: int) -> list[int]:
     return coeffs
 
 
-def group_terms(exponent: int, count: int, mod_phi: int, mod_w: int) -> list[tuple[int, int]]:
+def group_terms(
+    exponent: int, count: int, mod_phi: int, mod_w: int
+) -> list[tuple[int, int]]:
     """For a prime-exponent group with exponent=a and size=count, build all choices.
 
     Selecting t primes into the squarefree divisor q contributes:
@@ -133,7 +137,9 @@ def group_terms(exponent: int, count: int, mod_phi: int, mod_w: int) -> list[tup
     out: list[tuple[int, int]] = []
     c = 1  # C(count,0)
     for t in range(count + 1):
-        mul = (pow(exponent, t, mod_phi) * pow(exponent + 1, count - t, mod_phi)) % mod_phi
+        mul = (
+            pow(exponent, t, mod_phi) * pow(exponent + 1, count - t, mod_phi)
+        ) % mod_phi
         w = c
         if t & 1:
             w = -w
@@ -171,7 +177,9 @@ def HL_50000() -> int:
 
     # Exponents in L(N): for each prime p <= N, exponent a is max with p^a <= N.
     r = 0  # number of primes with exponent 1
-    counts: dict[int, int] = defaultdict(int)  # exponent a>=2 -> how many primes have that exponent
+    counts: dict[int, int] = defaultdict(
+        int
+    )  # exponent a>=2 -> how many primes have that exponent
     for p in primes:
         a = max_power_exponent(p, N)
         if a == 1:

@@ -73,7 +73,7 @@ def maximal_area(groups: list[tuple[int, int]]) -> float:
         sum_asin_at_min += c * asin(u)
 
     # if sum_asin(maxL) >= pi then all-minor closure has a solution (possibly at boundary)
-    all_minor = (sum_asin_at_min >= pi - 1e-15)
+    all_minor = sum_asin_at_min >= pi - 1e-15
 
     if all_minor:
         # solve f(r) = sum c*asin(l/r) - pi = 0, with r in [maxL, +inf)

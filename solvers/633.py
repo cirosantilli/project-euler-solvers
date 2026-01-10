@@ -16,6 +16,7 @@ from typing import List, Tuple, Dict
 
 # --------- Basic number theory helpers ---------
 
+
 def primes_upto(n: int) -> List[int]:
     """Return all primes <= n using an odd-only sieve."""
     if n < 2:
@@ -88,6 +89,7 @@ def square_prime_factors(n: int) -> List[int]:
 
 # --------- Exact finite-N checker (used only for asserts) ---------
 
+
 def squarefree_count(M: int, mu: List[int]) -> int:
     """
     Count squarefree integers <= M using:
@@ -125,6 +127,7 @@ def Ck_counts(N: int, mu: List[int], omega: List[int], max_k: int = 10) -> List[
 
 
 # --------- Limit constant computation ---------
+
 
 def c_infty(k: int, prime_limit: int = 10_000_000) -> float:
     """
@@ -165,15 +168,15 @@ def _run_asserts() -> None:
 
     # Table values in statement for C_k(10^n), k=0..4
     table = {
-        10:       [7, 3, 0, 0, 0],
-        10**2:    [61, 36, 3, 0, 0],
-        10**3:    [608, 343, 48, 1, 0],
-        10**4:    [6083, 3363, 533, 21, 0],
-        10**5:    [60794, 33562, 5345, 297, 2],
-        10**6:    [607926, 335438, 53358, 3218, 60],
-        10**7:    [6079291, 3353956, 533140, 32777, 834],
-        10**8:    [60792694, 33539196, 5329747, 329028, 9257],
-        10**9:    [607927124, 335389706, 53294365, 3291791, 95821],
+        10: [7, 3, 0, 0, 0],
+        10**2: [61, 36, 3, 0, 0],
+        10**3: [608, 343, 48, 1, 0],
+        10**4: [6083, 3363, 533, 21, 0],
+        10**5: [60794, 33562, 5345, 297, 2],
+        10**6: [607926, 335438, 53358, 3218, 60],
+        10**7: [6079291, 3353956, 533140, 32777, 834],
+        10**8: [60792694, 33539196, 5329747, 329028, 9257],
+        10**9: [607927124, 335389706, 53294365, 3291791, 95821],
     }
     maxN = max(table)
     mu, omega = mobius_and_omega_upto(math.isqrt(maxN))

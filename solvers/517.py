@@ -34,8 +34,8 @@ def precompute_factorials(n: int) -> tuple[array, array]:
 
     Uses array('I') to store 32-bit unsigned values (MOD fits in 32-bit).
     """
-    fac = array('I', [0]) * (n + 1)
-    invfac = array('I', [0]) * (n + 1)
+    fac = array("I", [0]) * (n + 1)
+    invfac = array("I", [0]) * (n + 1)
 
     fac[0] = 1
     mod = MOD
@@ -76,7 +76,7 @@ def primes_in_open_interval(lo: int, hi: int) -> list[int]:
         if sieve[i]:
             step = i
             begin = i * i
-            sieve[begin:limit + 1:step] = b"\x00" * (((limit - begin) // step) + 1)
+            sieve[begin : limit + 1 : step] = b"\x00" * (((limit - begin) // step) + 1)
     base_primes = [i for i in range(2, limit + 1) if sieve[i]]
 
     # segmented sieve on [start, end)
@@ -132,7 +132,7 @@ def G(n: int, fac: array, invfac: array) -> int:
     # Case 1: last step is 1
     # i ranges 0 .. a_floor-1 (since i*a < n-a <=> i < sqrt(n)-1)
     for m in range(1, a_floor + 1):  # m = i+1
-        c = u[m]          # floor(n - m*a)
+        c = u[m]  # floor(n - m*a)
         i = m - 1
         ans += cmb(c + i, i, fac, invfac)
 

@@ -230,7 +230,7 @@ def count_rank2(n: int) -> int:
     T = math.isqrt(n)
     us = triples_up_to(T)
 
-    SA = 0       # u small, v satisfying constraints
+    SA = 0  # u small, v satisfying constraints
     overlap = 0  # u small AND v small (for inclusion-exclusion)
 
     for u in us:

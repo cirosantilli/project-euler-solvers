@@ -105,7 +105,7 @@ def nth_number_with_at_least_k_prime_factors(nth: int, k: int) -> int:
     while True:
         val, max_idx, base, idx = heappop(pq)
 
-        is_dup = (val == prev_val)
+        is_dup = val == prev_val
         if not is_dup:
             prev_val = val
             produced += 1

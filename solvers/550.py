@@ -84,8 +84,8 @@ def omega_counts_up_to(n: int):
     Returns: (counts, max_omega)
       counts[t] = how many m in [2..n] have Ω(m)=t
     """
-    spf = array('I', [0]) * (n + 1)   # smallest prime factor
-    omega = bytearray(n + 1)          # Ω(m) fits in one byte for n<=1e7
+    spf = array("I", [0]) * (n + 1)  # smallest prime factor
+    omega = bytearray(n + 1)  # Ω(m) fits in one byte for n<=1e7
     primes = []
 
     counts = [0] * 32  # enough for n<=1e7 (max Ω is 23)

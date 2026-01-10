@@ -87,7 +87,7 @@ def sum_tau_sq(n: int) -> int:
             v = V[j]
             u = v // p
             Sj = S[u - 1] if u <= m else S[id2[n // u]]
-            S[j] -= (Sj - sp)
+            S[j] -= Sj - sp
             j -= 1
 
     # Convert pi(v) into prime sum for f(p)=tau(p^2)=3:
@@ -136,4 +136,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

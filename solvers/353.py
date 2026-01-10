@@ -172,8 +172,7 @@ def minimal_risk(r: int, z_window: int, k_neighbors: int, k_max: int) -> float:
                     k = k_max
                 pos = bisect.bisect_left(angles, phi_i)
                 candidates = [
-                    indices[(pos + offset) % m]
-                    for offset in range(-k, k + 1)
+                    indices[(pos + offset) % m] for offset in range(-k, k + 1)
                 ]
             for j in candidates:
                 if j == i:

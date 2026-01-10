@@ -30,7 +30,9 @@ def sieve_primes(limit: int) -> list[int]:
         if is_prime[i]:
             start = i * i
             step = i
-            is_prime[start:limit + 1:step] = b"\x00" * (((limit - start) // step) + 1)
+            is_prime[start : limit + 1 : step] = b"\x00" * (
+                ((limit - start) // step) + 1
+            )
     return [i for i in range(2, limit + 1) if is_prime[i]]
 
 

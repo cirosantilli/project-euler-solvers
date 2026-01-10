@@ -84,7 +84,7 @@ def T(n: int) -> int:
     # Sum over feasible h
     limit = math.isqrt(2 * n)
     ans_row = dp[n % buf]
-    return sum(ans_row[1:limit + 1]) % MOD
+    return sum(ans_row[1 : limit + 1]) % MOD
 
 
 def solve(n: int = 20000) -> str:

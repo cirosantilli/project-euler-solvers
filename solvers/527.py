@@ -76,7 +76,11 @@ def expected_standard_binary_search(n: int) -> float:
     g = (n + 1) // 2
     left = g - 1
     right = n - g
-    return 1.0 + (left / n) * expected_standard_binary_search(left) + (right / n) * expected_standard_binary_search(right)
+    return (
+        1.0
+        + (left / n) * expected_standard_binary_search(left)
+        + (right / n) * expected_standard_binary_search(right)
+    )
 
 
 def solve() -> str:

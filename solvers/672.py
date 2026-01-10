@@ -23,6 +23,7 @@ MOD = 1_117_117_717
 # Small helpers / test g(n)
 # ----------------------------
 
+
 def g_slow(n: int) -> int:
     """Direct simulation (only for small test values)."""
     if n <= 0:
@@ -40,6 +41,7 @@ def g_slow(n: int) -> int:
 # ----------------------------
 # Matrix utilities (4x4)
 # ----------------------------
+
 
 def mat_mul(A, B, mod: int):
     """Multiply two 4x4 matrices modulo mod."""
@@ -83,6 +85,7 @@ def mat_vec(M, v, mod: int):
 # ----------------------------
 # Core mathematics
 # ----------------------------
+
 
 def one_over_11_base7_period10():
     """Return the repeating base-7 digits of 1/11 with period 10.

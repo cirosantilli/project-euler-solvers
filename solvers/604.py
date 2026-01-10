@@ -144,8 +144,8 @@ def F(N: int) -> int:
         # Need phi up to at least M+1 because we'll query t+1.
         phi = sieve_totients(M + 1)
 
-        sum_phi = 0          # sum_{s=2..t} phi(s)
-        sum_sphi = 0         # sum_{s=2..t} s*phi(s)
+        sum_phi = 0  # sum_{s=2..t} phi(s)
+        sum_sphi = 0  # sum_{s=2..t} s*phi(s)
         t = 1
         base_phi = 0
         base_sphi = 0

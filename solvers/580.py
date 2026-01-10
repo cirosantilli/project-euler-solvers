@@ -15,6 +15,7 @@ import math
 
 # ------------------------- small utilities -------------------------
 
+
 def icbrt(n: int) -> int:
     """floor(cuberoot(n)) for n>=0."""
     if n <= 0:
@@ -34,16 +35,17 @@ def primes_upto(n: int) -> list[int]:
         return []
     sieve = bytearray(b"\x01") * (n + 1)
     sieve[0:2] = b"\x00\x00"
-    r = int(n ** 0.5)
+    r = int(n**0.5)
     for p in range(2, r + 1):
         if sieve[p]:
             step = p
             start = p * p
-            sieve[start:n + 1:step] = b"\x00" * (((n - start) // step) + 1)
+            sieve[start : n + 1 : step] = b"\x00" * (((n - start) // step) + 1)
     return [i for i in range(2, n + 1) if sieve[i]]
 
 
 # ------------------------- Möbius + Mertens (Du Jiao sieve) -------------------------
+
 
 def mobius_sieve(limit: int) -> list[int]:
     """Linear sieve for Möbius function mu[0..limit]."""
@@ -72,6 +74,7 @@ class Mertens:
     Computes M(n) = sum_{k<=n} mu(k) for large n using Du Jiao sieve,
     with precomputed mu prefix up to a fixed limit.
     """
+
     __slots__ = ("limit", "mu", "prefix", "cache", "cache_odd")
 
     def __init__(self, limit: int):
@@ -125,6 +128,7 @@ class Mertens:
 
 # ------------------------- counting squarefree numbers ≡ 1 (mod 4) -------------------------
 
+
 def _C_mod4_prefix(q: int) -> int:
     """
     C(q) = sum_{m<=q} chi(m), where chi is the non-principal Dirichlet character mod 4:
@@ -166,7 +170,7 @@ def make_sq1_counter(n_max: int) -> tuple[callable, Mertens]:
             md = mu[d]
             if md:
                 q = x // (d * d)
-                O += md * ((q + 1) // 2)         # odd m <= q
+                O += md * ((q + 1) // 2)  # odd m <= q
                 T += md * _C_mod4_prefix(q)
 
         # Group the tail where q = floor(x / d^2) is small (<= x/(D+1)^2)
@@ -194,6 +198,7 @@ def make_sq1_counter(n_max: int) -> tuple[callable, Mertens]:
 
 # ------------------------- small SQ1 prefix for fast lookup (x up to ~ N^(1/3)) -------------------------
 
+
 def sq1_prefix_small(limit: int) -> list[int]:
     """
     Prefix table P where P[x] = # { n<=x : n is squarefree and n≡1 (mod 4) }.
@@ -206,7 +211,7 @@ def sq1_prefix_small(limit: int) -> list[int]:
     # Sieve out multiples of p^2
     for p in primes_upto(math.isqrt(limit)):
         sq = p * p
-        is_sqfree[sq:limit + 1:sq] = b"\x00" * (((limit - sq) // sq) + 1)
+        is_sqfree[sq : limit + 1 : sq] = b"\x00" * (((limit - sq) // sq) + 1)
 
     pref = [0] * (limit + 1)
     c = 0
@@ -218,6 +223,7 @@ def sq1_prefix_small(limit: int) -> list[int]:
 
 
 # ------------------------- segmented sieve sum over large primes -------------------------
+
 
 def segmented_prime_sum(N: int, p_min: int, sq1_small: list[int]) -> int:
     """
@@ -237,7 +243,7 @@ def segmented_prime_sum(N: int, p_min: int, sq1_small: list[int]) -> int:
 
     while low <= limit:
         high = min(limit + 1, low + 2 * seg_odds)  # [low, high)
-        size = ((high - low) + 1) // 2            # number of odd numbers in the segment
+        size = ((high - low) + 1) // 2  # number of odd numbers in the segment
         seg = bytearray(b"\x01") * size
 
         # cross out composites
@@ -270,6 +276,7 @@ def segmented_prime_sum(N: int, p_min: int, sq1_small: list[int]) -> int:
 
 
 # ------------------------- main solve -------------------------
+
 
 def solve(N: int) -> int:
     """

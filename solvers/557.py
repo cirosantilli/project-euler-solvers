@@ -30,8 +30,8 @@ def S(N: int) -> int:
 
     # s = t + a, with t <= N and a >= 1  => s <= 2N
     for s in range(3, 2 * N + 1):
-        a_min = max(1, s - N)          # ensure t=s-a <= N
-        a_max = (s - 3) // 2           # ensure b+c >=2 (since d>=1)
+        a_min = max(1, s - N)  # ensure t=s-a <= N
+        a_max = (s - 3) // 2  # ensure b+c >=2 (since d>=1)
 
         if a_min > a_max:
             continue
@@ -42,18 +42,18 @@ def S(N: int) -> int:
             if g == 1:
                 continue
 
-            step = s // g             # d must be multiple of this
+            step = s // g  # d must be multiple of this
             # Need b+c = s - 2a - d >= 2  => d <= s - 2a - 2
             max_k = (s - 2 * a - 2) // step
             if max_k <= 0:
                 continue
 
-            base_prod = a2 // g        # since bc = k * a^2/g
+            base_prod = a2 // g  # since bc = k * a^2/g
 
             for k in range(1, max_k + 1):
                 d = step * k
-                w = s - 2 * a - d      # w = b+c
-                prod = base_prod * k   # prod = bc
+                w = s - 2 * a - d  # w = b+c
+                prod = base_prod * k  # prod = bc
 
                 disc = w * w - 4 * prod
                 r = is_square(disc)
@@ -71,7 +71,7 @@ def S(N: int) -> int:
                 if b > c:
                     continue
 
-                t = s - a              # total triangle area
+                t = s - a  # total triangle area
                 total_sum += t
 
     return total_sum
@@ -106,4 +106,3 @@ def solve() -> None:
 
 if __name__ == "__main__":
     solve()
-

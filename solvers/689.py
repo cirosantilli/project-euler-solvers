@@ -121,7 +121,7 @@ def solve() -> float:
     inv2_i2 = [1.0 / (2.0 * i * i) for i in range(1, N + 1)]
 
     # Tail correction using Σ_{i>N} 1/i^4 = ζ(4) - Σ_{i<=N} 1/i^4
-    zeta4 = (math.pi ** 4) / 90.0
+    zeta4 = (math.pi**4) / 90.0
     partial4 = 0.0
     for i in range(1, N + 1):
         ii = float(i)

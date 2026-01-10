@@ -39,14 +39,18 @@ from typing import Dict, List, Tuple
 # Basic number theory helpers
 # ---------------------------
 
+
 def isqrt(n: int) -> int:
     return int(math.isqrt(n))
+
 
 def gcd(a: int, b: int) -> int:
     return math.gcd(a, b)
 
+
 def mul_mod(a: int, b: int, mod: int) -> int:
     return (a * b) % mod
+
 
 def pow_mod(a: int, e: int, mod: int) -> int:
     return pow(a, e, mod)
@@ -58,6 +62,7 @@ def pow_mod(a: int, e: int, mod: int) -> int:
 # ---------------------------
 
 _MR_BASES_64 = (2, 3, 5, 7, 11, 13, 17)
+
 
 def is_probable_prime(n: int) -> bool:
     if n < 2:
@@ -98,6 +103,7 @@ def is_probable_prime(n: int) -> bool:
 # Pollard-Rho factorization
 # ---------------------------
 
+
 def pollard_rho(n: int) -> int:
     if n % 2 == 0:
         return 2
@@ -119,6 +125,7 @@ def pollard_rho(n: int) -> int:
         if d != n:
             return d
 
+
 def factorize(n: int, out: Dict[int, int] | None = None) -> Dict[int, int]:
     if out is None:
         out = {}
@@ -132,6 +139,7 @@ def factorize(n: int, out: Dict[int, int] | None = None) -> Dict[int, int]:
     factorize(n // d, out)
     return out
 
+
 def normalize_factorization(fac: Dict[int, int]) -> Dict[int, int]:
     # Pollard recursion can add primes in any order; ensure it's merged and clean
     out: Dict[int, int] = {}
@@ -144,6 +152,7 @@ def normalize_factorization(fac: Dict[int, int]) -> Dict[int, int]:
 # Modular square roots & CRT
 # ---------------------------
 
+
 def legendre_symbol(a: int, p: int) -> int:
     """Legendre symbol (a/p) for odd prime p. Returns -1,0,1."""
     a %= p
@@ -151,6 +160,7 @@ def legendre_symbol(a: int, p: int) -> int:
         return 0
     t = pow_mod(a, (p - 1) // 2, p)
     return -1 if t == p - 1 else 1
+
 
 def tonelli_shanks(n: int, p: int) -> int | None:
     """Find r such that r^2 ≡ n (mod p), p odd prime. Return None if no root."""
@@ -192,6 +202,7 @@ def tonelli_shanks(n: int, p: int) -> int | None:
         m = i
     return r
 
+
 def hensel_lift_root(n: int, p: int, e: int, r: int) -> int:
     """
     Lift root r mod p to a root mod p^e.
@@ -202,7 +213,7 @@ def hensel_lift_root(n: int, p: int, e: int, r: int) -> int:
     for _k in range(1, e):
         # solve for t in r' = r + t*pe such that r'^2 ≡ n (mod pe*p)
         # (r^2 - n)/pe + 2r t ≡ 0 (mod p)
-        diff = (r_mod * r_mod - n)
+        diff = r_mod * r_mod - n
         rhs = (diff // pe) % p
         inv = pow((2 * r_mod) % p, -1, p)
         t = (-rhs * inv) % p
@@ -210,9 +221,10 @@ def hensel_lift_root(n: int, p: int, e: int, r: int) -> int:
         pe *= p
     return r_mod % pe
 
+
 def roots_mod_prime_power(n: int, p: int, e: int) -> List[int]:
     """All roots of x^2 ≡ n (mod p^e) for odd prime p."""
-    pe = p ** e
+    pe = p**e
     n %= pe
 
     if n % p == 0:
@@ -234,6 +246,7 @@ def roots_mod_prime_power(n: int, p: int, e: int) -> List[int]:
         return [r]
     return [r, r2]
 
+
 def crt_pair(a1: int, m1: int, a2: int, m2: int) -> Tuple[int, int]:
     """CRT combine x≡a1 (mod m1), x≡a2 (mod m2), assuming gcd(m1,m2)=1."""
     if m1 == 1:
@@ -250,9 +263,10 @@ def crt_pair(a1: int, m1: int, a2: int, m2: int) -> Tuple[int, int]:
 # Sieve for fast small factoring
 # ---------------------------
 
+
 def sieve_spf(n: int) -> List[int]:
     spf = list(range(n + 1))
-    for i in range(2, int(n ** 0.5) + 1):
+    for i in range(2, int(n**0.5) + 1):
         if spf[i] == i:
             step = i
             start = i * i
@@ -260,6 +274,7 @@ def sieve_spf(n: int) -> List[int]:
                 if spf[j] == j:
                     spf[j] = i
     return spf
+
 
 def factorize_small(x: int, spf: List[int]) -> List[Tuple[int, int]]:
     fac: List[Tuple[int, int]] = []
@@ -277,6 +292,7 @@ def factorize_small(x: int, spf: List[int]) -> List[Tuple[int, int]]:
 # Class number h(D) by counting reduced forms
 # (D negative fundamental, D ≡ 5 mod 8 for this problem)
 # ---------------------------
+
 
 def class_number(D: int) -> int:
     """
@@ -320,7 +336,7 @@ def class_number(D: int) -> int:
         mod = 1
         ok = True
         for p, e in fac_a:
-            pe = p ** e
+            pe = p**e
             rset = roots_mod_prime_power_cached(p, e)
             if not rset:
                 ok = False
@@ -369,11 +385,13 @@ def class_number(D: int) -> int:
 # Sigma and the main G(n)
 # ---------------------------
 
+
 def sigma_from_factorization(fac: Dict[int, int]) -> int:
     s = 1
     for p, e in fac.items():
         s *= (p ** (e + 1) - 1) // (p - 1)
     return s
+
 
 def G(n: int) -> int:
     N = 8 * n + 3

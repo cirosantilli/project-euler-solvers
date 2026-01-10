@@ -157,7 +157,9 @@ def expected_area(N: int) -> float:
                 cnt = counts[idx]
                 if cnt:
                     below = total_points_local - above - cnt
-                    dir_sum += qpow_local[above] * omq_local[below] * (K * p2S_local[cnt])
+                    dir_sum += (
+                        qpow_local[above] * omq_local[below] * (K * p2S_local[cnt])
+                    )
                     above += cnt
                 K -= 4
 

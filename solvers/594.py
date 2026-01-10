@@ -160,7 +160,9 @@ def count_tilings_octagon(a: int, b: int, c: int, d: int) -> int:
                 for i in range(1, b + 1):
                     row = []
                     for j in range(1, b + 1):
-                        A = (x_full[j][u] - x_full[i][u - 1]) + (y_full[j][u] - y_full[i][u - 1])
+                        A = (x_full[j][u] - x_full[i][u - 1]) + (
+                            y_full[j][u] - y_full[i][u - 1]
+                        )
                         B = (x_full[j][u] - x_full[i][u - 1]) + (j - i)
                         row.append(binom(A, B))
                     M.append(row)
@@ -177,7 +179,9 @@ def count_tilings_octagon(a: int, b: int, c: int, d: int) -> int:
                 for i in range(1, d + 1):
                     row = []
                     for j in range(1, d + 1):
-                        A = (x_full[v][j] - x_full[v - 1][i]) + (y_full[v - 1][i] - y_full[v][j])
+                        A = (x_full[v][j] - x_full[v - 1][i]) + (
+                            y_full[v - 1][i] - y_full[v][j]
+                        )
                         B = (x_full[v][j] - x_full[v - 1][i]) + (j - i)
                         row.append(binom(A, B))
                     P.append(row)

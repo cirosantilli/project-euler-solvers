@@ -20,6 +20,7 @@ import math
 
 # ---------------- Gauss–Laguerre quadrature (alpha = 0) ---------------- #
 
+
 def gauss_laguerre(n: int, eps: float = 1e-14):
     """
     n-point Gauss–Laguerre nodes x[i] and weights w[i] for:
@@ -79,6 +80,7 @@ def gauss_laguerre(n: int, eps: float = 1e-14):
 
 # ---------------- State-space (transfer matrix) ---------------- #
 
+
 def enumerate_states(window_len: int, max_total: int):
     """
     State = counts of the last (window_len - 1) days (a tuple).
@@ -126,6 +128,7 @@ def build_transitions(states, index, max_total: int):
 
 
 # ---------------- G(t) via trace(M(t)^N) ---------------- #
+
 
 def trace_power_weighted(N: int, trans, max_total: int, t: float) -> float:
     """
@@ -190,9 +193,9 @@ def expected_people(N: int, within_days: int, target_people: int, quad_n: int) -
 def main():
     # Test values given in the problem statement (assert to 8 decimals)
     wimwi = expected_people(N=10, within_days=1, target_people=3, quad_n=16)
-    joka  = expected_people(N=100, within_days=7, target_people=3, quad_n=20)
+    joka = expected_people(N=100, within_days=7, target_people=3, quad_n=20)
     assert format(wimwi, ".8f") == "5.78688636", format(wimwi, ".10f")
-    assert format(joka,  ".8f") == "8.48967364", format(joka,  ".10f")
+    assert format(joka, ".8f") == "8.48967364", format(joka, ".10f")
 
     # Earth (365-day year, 4 people within 7 days)
     # 28-point Gauss–Laguerre is enough to get the answer correct to 8 decimals.

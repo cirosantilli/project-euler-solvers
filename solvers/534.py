@@ -60,7 +60,7 @@ def _count_by_L(n: int, L: int) -> int:
     """
     if L <= 0:
         # No vertical/diagonal attack at all (only horizontal), so each row independent.
-        return n ** n
+        return n**n
     if L >= n - 1:
         # Full-range weak queen => classic queen.
         return _nqueens_count_classic(n)
@@ -99,7 +99,7 @@ def _count_by_L(n: int, L: int) -> int:
             acm = all_cols_mask
             sh = shift
             km = keep_mask
-            mask_needed = (r + 1 >= L)
+            mask_needed = r + 1 >= L
 
             for state, cnt in states.items():
                 # Build forbidden columns for row r from the previous min(L, r) queens.
@@ -171,4 +171,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

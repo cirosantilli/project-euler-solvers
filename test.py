@@ -12,6 +12,7 @@ from pathlib import Path
 
 import lint
 import summary
+
 ROOT = Path(__file__).resolve().parent
 SOLUTIONS_PATH = ROOT / "data/projecteuler-solutions/Solutions.md"
 SOLVERS_DIR = ROOT / "solvers"

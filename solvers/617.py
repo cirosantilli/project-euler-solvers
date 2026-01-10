@@ -90,7 +90,7 @@ def count_for_exponent(N: int, e: int) -> int:
     possible_bs: list[int] = []
     b = 2
     while True:
-        exp = e ** b  # exponent on t for the top term
+        exp = e**b  # exponent on t for the top term
         if exp > max_exp_for_2:
             break
         # minimal n for this b is 2 + 2^exp
@@ -105,15 +105,17 @@ def count_for_exponent(N: int, e: int) -> int:
     # Precompute all exact e-th powers up to the maximum t we'll enumerate.
     max_t_limit = 0
     for b in possible_bs:
-        exp = e ** b
+        exp = e**b
         max_t_limit = max(max_t_limit, int_nth_root(N - 2, exp))
 
     u_max = int_nth_root(max_t_limit, e)
     non_primitive = {pow(u, e) for u in range(2, u_max + 1)}
 
     for b in possible_bs:
-        exp = e ** b
-        t_limit = int_nth_root(N - 2, exp)  # ensure top term <= N-2, so sum can still be <= N
+        exp = e**b
+        t_limit = int_nth_root(
+            N - 2, exp
+        )  # ensure top term <= N-2, so sum can still be <= N
         for t in range(2, t_limit + 1):
             if t in non_primitive:
                 continue

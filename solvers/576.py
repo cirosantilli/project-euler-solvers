@@ -31,24 +31,26 @@ from array import array
 # Helpers: primes
 # ----------------------------
 
+
 def primes_up_to(n: int) -> list[int]:
     """Simple sieve of Eratosthenes."""
     if n < 2:
         return []
     sieve = bytearray(b"\x01") * (n + 1)
     sieve[0:2] = b"\x00\x00"
-    r = int(n ** 0.5)
+    r = int(n**0.5)
     for i in range(2, r + 1):
         if sieve[i]:
             step = i
             start = i * i
-            sieve[start:n + 1:step] = b"\x00" * (((n - start) // step) + 1)
+            sieve[start : n + 1 : step] = b"\x00" * (((n - start) // step) + 1)
     return [i for i in range(2, n + 1) if sieve[i]]
 
 
 # ----------------------------
 # Core math
 # ----------------------------
+
 
 def S_slow(l: float, g: float, d: float, limit: int = 5_000_000) -> float:
     """
@@ -64,7 +66,9 @@ def S_slow(l: float, g: float, d: float, limit: int = 5_000_000) -> float:
     raise RuntimeError("S_slow: did not hit gap within limit")
 
 
-def _build_piecewise_S_for_l(l: float, g: float, initial_factor: float = 1.5, max_k: int = 4_000_000) -> tuple[array, array]:
+def _build_piecewise_S_for_l(
+    l: float, g: float, initial_factor: float = 1.5, max_k: int = 4_000_000
+) -> tuple[array, array]:
     """
     Build the piecewise-constant function d -> S(l,g,d) on d in [0, 1-g).
 
@@ -130,7 +134,7 @@ def _build_piecewise_S_for_l(l: float, g: float, initial_factor: float = 1.5, ma
         # DSU structure: next unassigned cell index
         parent = list(range(num_cells + 1))
         # Using an array for values reduces memory footprint notably for large cells.
-        values = array('I', [0]) * num_cells
+        values = array("I", [0]) * num_cells
 
         def find(i: int) -> int:
             while parent[i] != i:
@@ -150,8 +154,8 @@ def _build_piecewise_S_for_l(l: float, g: float, initial_factor: float = 1.5, ma
 
         # If all cells assigned, we have K(d) for all d and thus S(d)=l*K(d)
         if find(0) == num_cells:
-            seg_ends = array('d')
-            seg_vals = array('d')
+            seg_ends = array("d")
+            seg_vals = array("d")
             curr = values[0]
             for i in range(1, num_cells):
                 if values[i] != curr:
@@ -166,7 +170,9 @@ def _build_piecewise_S_for_l(l: float, g: float, initial_factor: float = 1.5, ma
         K *= 2
 
 
-def _merge_max_sum(seg_ends_list: list[array], seg_vals_list: list[array], domain_end: float) -> float:
+def _merge_max_sum(
+    seg_ends_list: list[array], seg_vals_list: list[array], domain_end: float
+) -> float:
     """
     Given multiple piecewise-constant functions (all starting at 0 and ending at domain_end),
     compute the maximum of their sum over d.
@@ -231,6 +237,7 @@ def M(n: int, g: float) -> float:
 # ----------------------------
 # Problem-statement checks
 # ----------------------------
+
 
 def _assert_close(a: float, b: float, tol: float = 1e-4) -> None:
     assert abs(a - b) <= tol, (a, b)

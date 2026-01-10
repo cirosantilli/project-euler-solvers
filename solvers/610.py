@@ -56,7 +56,9 @@ def to_min_roman(n: int) -> str:
     return "".join(out)
 
 
-def _parse_group(s: str, idx: int, one: str, five: str, ten: str, base: int) -> Tuple[int, int]:
+def _parse_group(
+    s: str, idx: int, one: str, five: str, ten: str, base: int
+) -> Tuple[int, int]:
     """Parse one Roman 'digit' group (e.g. ones, tens, hundreds).
 
     This matches the Project Euler 'valid' rules (not necessarily minimal):

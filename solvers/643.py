@@ -33,12 +33,12 @@ def _build_totient_prefix(limit: int) -> array:
     pref[i] = sum_{k=1..i} phi(k) mod MOD.
     Returned as an array('I') (32-bit unsigned).
     """
-    phi = array('I', [0]) * (limit + 1)
+    phi = array("I", [0]) * (limit + 1)
     if limit >= 1:
         phi[1] = 1
 
     is_comp = bytearray(limit + 1)
-    primes = array('I')
+    primes = array("I")
     primes_append = primes.append
     phi_local = phi
     is_comp_local = is_comp

@@ -29,6 +29,7 @@ TARGET_N = 10**12
 # Small primes up to 1e6
 # ---------------------------
 
+
 def sieve_pi_table(limit: int):
     """Return (primes_list, pi_table, prime_prefix_sum)."""
     bs = bytearray(b"\x01") * (limit + 1)
@@ -60,6 +61,7 @@ def sieve_pi_table(limit: int):
 
 PRIMES_1E6, PI_1E6, PRIME_SUM_1E6 = sieve_pi_table(1_000_000)
 
+
 # Helper: sum of primes <= n for n <= 1e6
 def prime_sum_upto_1e6(n: int) -> int:
     if n < 2:
@@ -71,6 +73,7 @@ def prime_sum_upto_1e6(n: int) -> int:
 # ---------------------------
 # Lazy primes up to 1e8 for fast pi(x) queries
 # ---------------------------
+
 
 def simple_sieve(limit: int):
     """Plain sieve, returns list of primes <= limit."""
@@ -140,6 +143,7 @@ def segmented_primes(limit: int, seg_size: int = 1 << 22) -> array:
 
 _PRIMES_1E8: array | None = None
 
+
 def primes_upto_1e8() -> array:
     """Generate and cache primes <= 1e8 (used for fast pi(x) when x <= 1e8)."""
     global _PRIMES_1E8
@@ -160,19 +164,21 @@ def pi_upto_1e8(n: int) -> int:
 # Integer roots
 # ---------------------------
 
+
 def iroot3(n: int) -> int:
     x = int(round(n ** (1.0 / 3.0)))
     while (x + 1) ** 3 <= n:
         x += 1
-    while x ** 3 > n:
+    while x**3 > n:
         x -= 1
     return x
 
+
 def iroot4(n: int) -> int:
-    x = int(round(n ** 0.25))
+    x = int(round(n**0.25))
     while (x + 1) ** 4 <= n:
         x += 1
-    while x ** 4 > n:
+    while x**4 > n:
         x -= 1
     return x
 
@@ -185,6 +191,7 @@ BASE_PRIMES = (2, 3, 5, 7, 11, 13)
 P_BASE = 1
 for _p in BASE_PRIMES:
     P_BASE *= _p
+
 
 def _precompute_base_phi():
     ok = bytearray(b"\x01") * (P_BASE + 1)
@@ -200,7 +207,9 @@ def _precompute_base_phi():
         cnt[i] = c
     return cnt
 
+
 CNT_BASE = _precompute_base_phi()
+
 
 @lru_cache(maxsize=None)
 def phi_count(n: int, a: int) -> int:
@@ -217,7 +226,9 @@ def phi_count(n: int, a: int) -> int:
         return q * CNT_BASE[P_BASE] + CNT_BASE[r]
     return phi_count(n, a - 1) - phi_count(n // PRIMES_1E6[a - 1], a - 1)
 
+
 _LEHMER_CACHE: dict[int, int] = {}
+
 
 def lehmer_pi(n: int) -> int:
     """Prime counting function pi(n) for n up to 1e12 (fast)."""
@@ -252,6 +263,7 @@ def lehmer_pi(n: int) -> int:
 # ---------------------------
 # Min_25 sieve: sum of primes <= n (mod MOD)
 # ---------------------------
+
 
 def prime_sum_mod(n: int) -> int:
     """
@@ -330,6 +342,7 @@ def prime_sum_mod(n: int) -> int:
 # Problem-specific computation S(n)
 # ---------------------------
 
+
 def smpf_single(x: int) -> int:
     """Smallest prime factor (for tiny test values only)."""
     if x % 2 == 0:
@@ -355,8 +368,8 @@ def S(n: int) -> int:
     if n < 2:
         return 0
 
-    y1 = iroot4(n)          # floor(n^(1/4))
-    y2 = iroot3(n)          # floor(n^(1/3))
+    y1 = iroot4(n)  # floor(n^(1/4))
+    y2 = iroot3(n)  # floor(n^(1/3))
     sqrt_n = int(math.isqrt(n))
 
     primes = PRIMES_1E6
@@ -409,7 +422,11 @@ def S(n: int) -> int:
     # 4) p > sqrt_n: only primes contribute once each
     # sum_{sqrt(n) < p <= n} p = prime_sum(n) - prime_sum(sqrt(n))
     # prime_sum_upto_1e6 is correct for sqrt_n <= 1e6 (true for n <= 1e12)
-    ans = (ans + prime_sum_mod(n) - (prime_sum_upto_1e6(sqrt_n) if sqrt_n <= 1_000_000 else prime_sum_mod(sqrt_n))) % MOD
+    ans = (
+        ans
+        + prime_sum_mod(n)
+        - (prime_sum_upto_1e6(sqrt_n) if sqrt_n <= 1_000_000 else prime_sum_mod(sqrt_n))
+    ) % MOD
 
     return ans
 

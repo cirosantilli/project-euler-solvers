@@ -54,13 +54,17 @@ def odd_sieve(limit: int):
         if is_prime[p]:
             step = p * 2
             start = p * p
-            is_prime[start : limit + 1 : step] = b"\x00" * (((limit - start) // step) + 1)
+            is_prime[start : limit + 1 : step] = b"\x00" * (
+                ((limit - start) // step) + 1
+            )
 
     primes = [p for p in range(3, limit + 1, 2) if is_prime[p]]
     return primes, is_prime
 
 
-def compute_S(N: int, primes: list[int], is_prime: bytearray, pminus1: list[int], limitP: int) -> int:
+def compute_S(
+    N: int, primes: list[int], is_prime: bytearray, pminus1: list[int], limitP: int
+) -> int:
     """
     Compute S(N) using precomputed odd primes up to limitP (limitP must be >= isqrt(N+4)+5).
     """

@@ -43,7 +43,7 @@ C3_TARGET = 463_766_234  # precomputed for n = 5_000_000
 
 def totient_sieve(n: int) -> array:
     """Linear sieve for Euler's totient for 1..n. Returns array('I')."""
-    phi = array('I', [0]) * (n + 1)
+    phi = array("I", [0]) * (n + 1)
     is_comp = bytearray(n + 1)
     primes: list[int] = []
     if n >= 1:
@@ -77,7 +77,7 @@ def primitive_pair_counts(n: int) -> array:
     and u^2 + v^2 = s (these are exactly the excluded square-square pairs).
     """
     tot = totient_sieve(n)
-    phi = array('i', [0]) * (n + 1)
+    phi = array("i", [0]) * (n + 1)
     for s in range(3, n + 1):
         phi[s] = tot[s] // 2
 
@@ -95,7 +95,7 @@ def primitive_pair_counts(n: int) -> array:
 
 def prefix_sums_int64(vals: array) -> array:
     """Prefix sums in int64: S[i] = sum_{k<=i} vals[k]."""
-    S = array('q', [0]) * len(vals)
+    S = array("q", [0]) * len(vals)
     acc = 0
     for i, v in enumerate(vals):
         acc += int(v)
@@ -228,7 +228,10 @@ def compute_C3_small(n: int) -> int:
                                     b_w4 = b * w4
                                     s2 = a_w3_sq + b_w4 * w4
                                     if u_w1_sq > v_w2 * w2 and a_w3_sq > b_w4 * w4:
-                                        if gcd(u_w1, v_w2) == 1 and gcd(a_w3, b_w4) == 1:
+                                        if (
+                                            gcd(u_w1, v_w2) == 1
+                                            and gcd(a_w3, b_w4) == 1
+                                        ):
                                             cnt3 += (n // s1) // s2
                                     w4 += 1
                                 w3 += 1
@@ -267,4 +270,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

@@ -24,7 +24,7 @@ def sieve_primes_upto(n: int) -> List[int]:
         return []
     is_prime = bytearray(b"\x01") * (n + 1)
     is_prime[:2] = b"\x00\x00"
-    r = int(n ** 0.5)
+    r = int(n**0.5)
     for p in range(2, r + 1):
         if is_prime[p]:
             step = p

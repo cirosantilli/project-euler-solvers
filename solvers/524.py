@@ -21,8 +21,10 @@ from typing import Optional, Tuple
 # 1) Compute F(P) efficiently
 # ----------------------------
 
+
 class Fenwick:
     """Fenwick tree / BIT for prefix sums over 1..n."""
+
     __slots__ = ("n", "bit")
 
     def __init__(self, n: int) -> None:
@@ -73,6 +75,7 @@ def F_value(p: Tuple[int, ...]) -> int:
 # 2) Lexicographic index I_n(P) in [1..n!]
 # -----------------------------------------
 
+
 def lex_index(p: Tuple[int, ...]) -> int:
     """1-based lexicographic rank of permutation p among all permutations of 1..n."""
     n = len(p)
@@ -92,6 +95,7 @@ def lex_index(p: Tuple[int, ...]) -> int:
 # ---------------------------------------------------------
 # 3) Construct lexicographically first permutation for (n,k)
 # ---------------------------------------------------------
+
 
 def _dfs_lex_first_hard(n: int, k: int) -> Tuple[int, ...]:
     """
@@ -199,7 +203,7 @@ def lex_first_perm(n: int, k: int) -> Tuple[int, ...]:
     # (H) If k >= 2^(n-2), then bit (n-2) is set, which forces (n-1) to be last.
     high = 1 << (n - 2)
     if k >= high:
-        p = lex_first_perm(n - 1, k - high)            # perm of {1..n-1}
+        p = lex_first_perm(n - 1, k - high)  # perm of {1..n-1}
         p2 = tuple(n if v == n - 1 else v for v in p)  # map max (n-1) -> n
         return p2 + (n - 1,)
 
@@ -215,6 +219,7 @@ def lex_first_perm(n: int, k: int) -> Tuple[int, ...]:
 # -----------------------------
 # 4) Compute R(12^12)
 # -----------------------------
+
 
 def R(k: int) -> int:
     """
@@ -259,7 +264,7 @@ def _run_asserts() -> None:
 
 def main() -> None:
     _run_asserts()
-    ans = R(12 ** 12)
+    ans = R(12**12)
     print(ans)
 
 

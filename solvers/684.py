@@ -1,76 +1,77 @@
-#!/usr/bin/env python
-"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00684%20-%20Inverse%20Digit%20sum.py"""
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 """
-Created on Sun Dec 20 09:56:17 2020
+Project Euler 684 - Inverse Digit Sum
 
-@author: igorvanloo
+We need:
+  s(n): smallest non-negative integer with digit sum n
+  S(k) = sum_{n=1..k} s(n)
+  Answer = sum_{i=2..90} S(f_i) mod 1_000_000_007
+
+Key observation:
+If n = 9q + r with 0 <= r <= 8, then
+  s(n) = (r+1)*10^q - 1
+(e.g. n=10 => q=1,r=1 => 2*10 - 1 = 19)
+
+This allows a closed form for S(k) using geometric sums of powers of 10 mod MOD.
 """
 
-"""
-Project Euler Problem 684
-
-"""
-
-import math
+MOD = 1_000_000_007
 
 
-def fibonnaci(x):
-    if x == 1:
-        return 1
-    if x == 2:
-        return 1
-
-    f1 = 1
-    f2 = 1
-    fib_numbers = [0, f1, f2]
-    while len(fib_numbers) < x:
-        fn = f1 + f2
-        fib_numbers.append(fn)
-        f1 = f2
-        f2 = fn
-    return fib_numbers
-
-
-def sn(b):
-    return ((b % 9 + 1) * (pow(10, (b // 9), 1000000007)) - 1) % 1000000007
-
-
-def s(n):
+def s_small(n: int) -> int:
+    """Exact s(n) for small n (used only for asserts)."""
+    if n < 0:
+        raise ValueError("n must be non-negative")
     q, r = divmod(n, 9)
-    if r == 0:
-        return int("9" * q)
-    return int(str(r) + "9" * q)
+    return (r + 1) * (10**q) - 1  # works for n=0 too: s(0)=0
 
 
-def S(k, mod):
-    q = k // 9
-    r = k % 9
-    sum1 = (6 * (pow(10, q, mod) - 1)) - (9 * q % mod)
-    sum2 = sum([i * pow(10, q, mod) - 1 for i in range(2, r + 2)])
-    return (sum1 + sum2) % mod
+def S_mod(k: int, mod: int = MOD) -> int:
+    """
+    Compute S(k) = sum_{n=1..k} s(n) modulo mod, in O(log k) time.
+
+    Group n by q = n//9. For fixed q, r runs 0..8:
+      s(9q+r) = (r+1)*10^q - 1
+      sum_{r=0..8} s(9q+r) = 45*10^q - 9
+    Use geometric series for sum_{q} 10^q.
+    """
+    if k <= 0:
+        return 0
+
+    q, r = divmod(k, 9)
+    p10 = pow(10, q, mod)  # 10^q mod mod
+
+    # Full blocks for q' = 0..q-1:
+    # sum (45*10^{q'} - 9) = 5*(10^q - 1) - 9*q
+    part_full = (5 * (p10 - 1) - 9 * q) % mod
+
+    # Last partial block for q with r' = 0..r:
+    # sum_{t=1..r+1} (t*10^q - 1) = 10^q * (r+1)(r+2)/2 - (r+1)
+    tri = (r + 1) * (r + 2) // 2  # small integer (r<=8)
+    part_tail = (p10 * (tri % mod) - (r + 1)) % mod
+
+    return (part_full + part_tail) % mod
 
 
-def finals(k):
-    q = k // 9
-    r = k % 9
-
-    return (
-        6 * (pow(10, q, 1000000007) - 1)
-        - (9 * q % 1000000007)
-        + (r / 2) * (r * pow(10, q, 1000000007) + 3 * pow(10, q, 1000000007) - 2)
-    ) % 1000000007
-
-
-def compute1():
+def solve() -> int:
     total = 0
-    temp_list = fibonnaci(92)
-    for x in range(2, 91):
-        total += finals(temp_list[x])
-    return int(total % 1000000007)
+    f0, f1 = 0, 1  # f_0, f_1
+    for _i in range(2, 91):  # i = 2..90 inclusive
+        f0, f1 = f1, f0 + f1
+        total = (total + S_mod(f1)) % MOD
+    return total
+
+
+def _self_test() -> None:
+    # Test values given in the problem statement
+    assert s_small(10) == 19
+    assert S_mod(20) == 1074
+
+    # A couple of tiny sanity checks
+    assert S_mod(1) == 1
+    assert S_mod(9) == sum(s_small(n) for n in range(1, 10)) % MOD
 
 
 if __name__ == "__main__":
-    assert s(10) == 19
-    assert S(20, 10**18) == 1074
-    print(compute1())
+    _self_test()
+    print(solve())

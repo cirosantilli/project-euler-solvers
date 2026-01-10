@@ -21,7 +21,7 @@ def primes_upto(n: int) -> list[int]:
         return []
     sieve = bytearray(b"\x01") * (n + 1)
     sieve[0:2] = b"\x00\x00"
-    r = int(n ** 0.5)
+    r = int(n**0.5)
     for i in range(2, r + 1):
         if sieve[i]:
             step = i
@@ -105,7 +105,9 @@ def T_summatory(n: int, pref_small: list[int], B: int, cache: dict[int, int]) ->
     return res
 
 
-def gen_products_weights(primes: list[int], weights: list[int], limit: int) -> tuple[list[int], list[int]]:
+def gen_products_weights(
+    primes: list[int], weights: list[int], limit: int
+) -> tuple[list[int], list[int]]:
     """
     Enumerate all squarefree products from the given primes with product <= limit,
     along with their multiplicative weights.
@@ -129,7 +131,9 @@ def gen_products_weights(primes: list[int], weights: list[int], limit: int) -> t
     return prods, wgts
 
 
-def prefix_g_map(primes: list[int], weights: list[int], limit: int, x_values: list[int]) -> dict[int, int]:
+def prefix_g_map(
+    primes: list[int], weights: list[int], limit: int, x_values: list[int]
+) -> dict[int, int]:
     """
     Compute G(x) = sum_{q<=x} g(q) for each x in x_values, where
     g is squarefree multiplicative on the given primes with g(p)=weights[p].

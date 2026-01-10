@@ -105,7 +105,7 @@ def count_f(n: int) -> int:
     z_max = math.isqrt(M)
 
     # For Mertens recursion up to z_max, precompute μ and prefix sums up to about z_max^(2/3).
-    c = icbrt(z_max)           # floor(z_max^(1/3))
+    c = icbrt(z_max)  # floor(z_max^(1/3))
     limit = max(c * c + 10, math.isqrt(z_max) + 10, 1000)
 
     mu = mobius_sieve(limit)

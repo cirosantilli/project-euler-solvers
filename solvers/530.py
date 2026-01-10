@@ -47,10 +47,10 @@ def sieve_phi_tau(n: int) -> tuple[array, array]:
       - phi[i] = Euler totient
       - tau[i] = number of divisors
     """
-    phi = array('I', [0]) * (n + 1)
-    tau = array('H', [0]) * (n + 1)
-    lp = array('I', [0]) * (n + 1)   # least prime factor
-    exp = array('B', [0]) * (n + 1)  # exponent of lp in i
+    phi = array("I", [0]) * (n + 1)
+    tau = array("H", [0]) * (n + 1)
+    lp = array("I", [0]) * (n + 1)  # least prime factor
+    exp = array("B", [0]) * (n + 1)  # exponent of lp in i
     primes: list[int] = []
 
     phi[1] = 1
@@ -129,7 +129,7 @@ def compute_F(N: int) -> int:
     # Sieve up to k for tau and phi, then build Phi prefix sum (totient summatory).
     phi, tau = sieve_phi_tau(k)
 
-    Phi = array('Q', [0]) * (k + 1)
+    Phi = array("Q", [0]) * (k + 1)
     running = 0
     for i in range(1, k + 1):
         running += phi[i]

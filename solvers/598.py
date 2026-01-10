@@ -45,6 +45,7 @@ from collections import defaultdict
 
 # ----------------------- basic number theory helpers -----------------------
 
+
 def primes_upto(n: int) -> list[int]:
     """Simple sieve."""
     sieve = bytearray(b"\x01") * (n + 1)
@@ -91,6 +92,7 @@ def factorize_small(n: int) -> dict[int, int]:
 
 # --------------------------- brute-force for tests --------------------------
 
+
 def C_from_prime_exponents_bruteforce(exps: dict[int, int]) -> int:
     """Compute C(n) from a prime-exponent dict by enumerating all divisors.
 
@@ -119,6 +121,7 @@ def C_from_prime_exponents_bruteforce(exps: dict[int, int]) -> int:
 
 # ---------------------------- fast solver for 100! --------------------------
 
+
 def build_spf(limit: int) -> list[int]:
     """Smallest prime factor sieve."""
     spf = list(range(limit + 1))
@@ -146,7 +149,9 @@ def factor_exponents(n: int, spf: list[int]) -> dict[int, int]:
     return out
 
 
-def precompute_vectors(limit: int, primes_low: list[int], primes_high: list[int]) -> tuple[list[tuple[int, ...]], list[tuple[int, ...]], list[bool]]:
+def precompute_vectors(
+    limit: int, primes_low: list[int], primes_high: list[int]
+) -> tuple[list[tuple[int, ...]], list[tuple[int, ...]], list[bool]]:
     """For each 0..limit, precompute exponent vectors for primes_low/high.
 
     Also returns has_big[n]: True if n has any prime factor > 47.
@@ -216,7 +221,7 @@ def solve_C_100_factorial() -> int:
             opts.append((d2, d3, R))
         options_by_e[e] = opts
 
-    M: dict[tuple[int, ...], dict[tuple[int, int], int]] = { (0,)*7: {(0, 0): 1} }
+    M: dict[tuple[int, ...], dict[tuple[int, int], int]] = {(0,) * 7: {(0, 0): 1}}
 
     for e in big_es:
         opts = options_by_e[e]
@@ -237,7 +242,9 @@ def solve_C_100_factorial() -> int:
     #  - ten primes with e=1: (d2 += ±1)
     #  - four primes with e=2: (d3 += -1/0/+1)
     #  - two primes with e=3: (d2,d3) in {(-2,0),(1,-1),(-1,1),(2,0)}
-    def convolve_2d(dist: dict[tuple[int, int], int], deltas: list[tuple[int, int]]) -> dict[tuple[int, int], int]:
+    def convolve_2d(
+        dist: dict[tuple[int, int], int], deltas: list[tuple[int, int]]
+    ) -> dict[tuple[int, int], int]:
         out: dict[tuple[int, int], int] = {}
         for (a, b), c in dist.items():
             for da, db in deltas:
@@ -306,4 +313,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

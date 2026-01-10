@@ -11,8 +11,8 @@ We need:
 No external libraries are used.
 """
 
-MOD = 10 ** 16
-TARGET_N = 10 ** 16
+MOD = 10**16
+TARGET_N = 10**16
 
 
 def M_power2_bases(n: int, k: int, l: int) -> int:
@@ -46,7 +46,9 @@ def M_power2_bases(n: int, k: int, l: int) -> int:
 
     for idx, lim in enumerate(bits):
         p = B - 1 - idx  # actual bit position counted from LSB
-        c = (1 << (p % k)) - (1 << (p % l))  # contribution to (d_k - d_l) if this bit is 1
+        c = (1 << (p % k)) - (
+            1 << (p % l)
+        )  # contribution to (d_k - d_l) if this bit is 1
         w = 1 << p  # contribution to the number's value if this bit is 1
 
         new_tight = {}
@@ -101,6 +103,6 @@ if __name__ == "__main__":
     # Tests from the problem statement.
     assert M_power2_bases(10, 3, 1) == 18
     assert M_power2_bases(100, 3, 1) == 292
-    assert M_power2_bases(10 ** 6, 3, 1) == 19173952
+    assert M_power2_bases(10**6, 3, 1) == 19173952
 
     print(f"{solve():016d}")

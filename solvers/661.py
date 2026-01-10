@@ -56,7 +56,7 @@ def H(n: int) -> float:
     for k in range(3, n + 1):
         p_a = 1.0 / math.sqrt(k + 3.0)
         p_b = p_a + 1.0 / (k * k)
-        p_stop = 1.0 / (k ** 3)
+        p_stop = 1.0 / (k**3)
         total += expected_times_a_leading(p_a, p_b, p_stop)
     return total
 

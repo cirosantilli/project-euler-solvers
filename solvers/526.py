@@ -36,6 +36,7 @@ from heapq import heappush, heappop
 # Basic number theory helpers
 # ---------------------------
 
+
 def egcd(a: int, b: int):
     """Extended GCD: returns (g, x, y) with a*x + b*y = g = gcd(a,b)."""
     x0, x1 = 1, 0
@@ -67,7 +68,7 @@ def sieve_primes(limit: int):
         if bs[i]:
             start = i * i
             step = i
-            bs[start:limit + 1:step] = b"\x00" * (((limit - start) // step) + 1)
+            bs[start : limit + 1 : step] = b"\x00" * (((limit - start) // step) + 1)
         i += 1
     return [i for i in range(2, limit + 1) if bs[i]]
 
@@ -164,6 +165,7 @@ def h_small(n: int) -> int:
 # Wheel construction for t
 # ---------------------------
 
+
 def _forbidden_residues(polys, p: int):
     """
     For a polynomial a*t+b, the residue r = -b * inv(a) (mod p) makes it divisible by p.
@@ -212,6 +214,7 @@ def build_wheel_residues(polys, wheel_primes):
 # Main search for h(10^16)
 # ---------------------------
 
+
 def search_best(N: int) -> int:
     """
     Find h(N) for large N by searching for the largest k (in the two maximal residue classes)
@@ -220,15 +223,35 @@ def search_best(N: int) -> int:
     # Two optimal residue classes mod 2520, each with 9 linear expressions for the LPFs.
     classes = [
         # class A: k ≡ 311 (mod 2520)
-        (311, [
-            (2520, 311), (2520, 313), (2520, 317), (2520, 319),
-            (105, 13), (1260, 157), (8, 1), (630, 79), (420, 53),
-        ]),
+        (
+            311,
+            [
+                (2520, 311),
+                (2520, 313),
+                (2520, 317),
+                (2520, 319),
+                (105, 13),
+                (1260, 157),
+                (8, 1),
+                (630, 79),
+                (420, 53),
+            ],
+        ),
         # class B: k ≡ 2201 (mod 2520)
-        (2201, [
-            (2520, 2201), (2520, 2203), (2520, 2207), (2520, 2209),
-            (420, 367), (630, 551), (1260, 1103), (105, 92), (8, 7),
-        ]),
+        (
+            2201,
+            [
+                (2520, 2201),
+                (2520, 2203),
+                (2520, 2207),
+                (2520, 2209),
+                (420, 367),
+                (630, 551),
+                (1260, 1103),
+                (105, 92),
+                (8, 7),
+            ],
+        ),
     ]
 
     # Wheel primes: very strong pruning because we avoid divisibility for ALL 9 expressions.

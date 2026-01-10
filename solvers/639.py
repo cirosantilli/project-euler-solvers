@@ -46,6 +46,7 @@ STRIDE = MAX_PRECOMP + 1
 
 # -------------------------- prime sieve --------------------------
 
+
 def sieve_primes(limit: int):
     """Return list of all primes <= limit using an odd-only sieve."""
     if limit < 2:
@@ -65,6 +66,7 @@ def sieve_primes(limit: int):
 
 
 # -------------------------- Stirling numbers + coeffs --------------------------
+
 
 def build_stirling_and_coeff():
     """
@@ -94,6 +96,7 @@ COEFF = build_stirling_and_coeff()
 
 # -------------------------- precompute power sums for t<=1e6 --------------------------
 
+
 def build_power_sum_table():
     """
     ps[k, t] = sum_{m=1..t} m^k mod MOD for k<=50, t<=1e6.
@@ -120,6 +123,7 @@ PS_TABLE, BASES = build_power_sum_table()
 
 # -------------------------- power sum for large t (>1e6) --------------------------
 
+
 def power_sum_large(t: int, k: int, row):
     """
     Compute sum_{m<=t} m^k mod MOD using the falling-factorial formula:
@@ -137,6 +141,7 @@ def power_sum_large(t: int, k: int, row):
 
 
 # -------------------------- core computation: S_k(n) --------------------------
+
 
 def compute_Sk(n: int, k: int, primes_full, p2_full):
     """
@@ -199,6 +204,7 @@ def compute_Sk(n: int, k: int, primes_full, p2_full):
 
 
 # -------------------------- optimized total solve for k=1..50 at n=1e12 --------------------------
+
 
 def solve_total():
     """
@@ -270,6 +276,7 @@ def solve_total():
 
 # -------------------------- test helpers (for statement asserts) --------------------------
 
+
 def run_asserts():
     primes_full = sieve_primes(MAX_PRECOMP)
     p2_full = [p * p for p in primes_full]
@@ -295,4 +302,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

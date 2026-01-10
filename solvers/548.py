@@ -29,6 +29,7 @@ MAX_EXP_SUM = LIMIT.bit_length()  # 54 for 10^16
 # Small primes (sieve)
 # ---------------------------
 
+
 def primes_upto(n: int) -> List[int]:
     if n < 2:
         return []
@@ -38,7 +39,7 @@ def primes_upto(n: int) -> List[int]:
         if sieve[p]:
             step = p
             start = p * p
-            sieve[start:n + 1:step] = b"\x00" * (((n - start) // step) + 1)
+            sieve[start : n + 1 : step] = b"\x00" * (((n - start) // step) + 1)
     return [i for i in range(n + 1) if sieve[i]]
 
 
@@ -243,6 +244,7 @@ def gozinta(n: int, limit: int | None = None) -> int:
 # ---------------------------
 # Enumerate signatures that could possibly produce a solution
 # ---------------------------
+
 
 def generate_signatures(max_sum: int, limit: int) -> Tuple[int, ...]:
     """

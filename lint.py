@@ -140,7 +140,9 @@ def c_line_hits(text: str, answer: str) -> list[int]:
     return hits
 
 
-def lint_paths(paths: list[Path], answers: dict[int, str] | None = None) -> list[Violation]:
+def lint_paths(
+    paths: list[Path], answers: dict[int, str] | None = None
+) -> list[Violation]:
     if answers is None:
         answers = load_reference_answers()
     violations: list[Violation] = []

@@ -33,7 +33,7 @@ SIEVE_MAX = 1_000_000  # enough for Lehmer pi() on x <= 1e8
 def _prime_sieve(n: int) -> tuple[array, array]:
     """Return (primes, pi_small) for 0..n inclusive using an odd-only sieve."""
     if n < 2:
-        return array('I'), array('I', [0]) * (n + 1)
+        return array("I"), array("I", [0]) * (n + 1)
 
     size = n // 2  # only odds; index i represents (2*i+1)
     sieve = bytearray(b"\x01") * size
@@ -46,12 +46,12 @@ def _prime_sieve(n: int) -> tuple[array, array]:
             step = 2 * p
             sieve[start // 2 :: p] = b"\x00" * (((n - start) // step) + 1)
 
-    primes = array('I', [2])
+    primes = array("I", [2])
     for i in range(1, size):
         if sieve[i]:
             primes.append(2 * i + 1)
 
-    pi_small = array('I', [0]) * (n + 1)
+    pi_small = array("I", [0]) * (n + 1)
     cnt = 0
     for x in range(2, n + 1):
         if x == 2:
@@ -80,7 +80,7 @@ def iroot(n: int, k: int) -> int:
     x = int(n ** (1.0 / k))
     while (x + 1) ** k <= n:
         x += 1
-    while x ** k > n:
+    while x**k > n:
         x -= 1
     return x
 
@@ -190,7 +190,7 @@ def generate_patterns(limit: int) -> list[tuple[int, ...]]:
         p = base_primes[idx_prime]
         # try next exponent e <= last_exp
         for e in range(1, last_exp + 1):
-            nxt = cur_val * (p ** e)
+            nxt = cur_val * (p**e)
             if nxt > limit:
                 break
             exps.append(e)
@@ -281,7 +281,7 @@ def count_numbers_for_pattern(exps: tuple[int, ...], limit: int) -> int:
                 break
             if p in used_set:
                 continue
-            p_pow = p ** e
+            p_pow = p**e
             if p_pow > lim:
                 break
 

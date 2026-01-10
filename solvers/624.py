@@ -25,16 +25,24 @@ def mat_mul(a: Matrix2, b: Matrix2, mod: Optional[int] = None) -> Matrix2:
     """Multiply 2x2 matrices."""
     if mod is None:
         return [
-            [a[0][0] * b[0][0] + a[0][1] * b[1][0],
-             a[0][0] * b[0][1] + a[0][1] * b[1][1]],
-            [a[1][0] * b[0][0] + a[1][1] * b[1][0],
-             a[1][0] * b[0][1] + a[1][1] * b[1][1]],
+            [
+                a[0][0] * b[0][0] + a[0][1] * b[1][0],
+                a[0][0] * b[0][1] + a[0][1] * b[1][1],
+            ],
+            [
+                a[1][0] * b[0][0] + a[1][1] * b[1][0],
+                a[1][0] * b[0][1] + a[1][1] * b[1][1],
+            ],
         ]
     return [
-        [(a[0][0] * b[0][0] + a[0][1] * b[1][0]) % mod,
-         (a[0][0] * b[0][1] + a[0][1] * b[1][1]) % mod],
-        [(a[1][0] * b[0][0] + a[1][1] * b[1][0]) % mod,
-         (a[1][0] * b[0][1] + a[1][1] * b[1][1]) % mod],
+        [
+            (a[0][0] * b[0][0] + a[0][1] * b[1][0]) % mod,
+            (a[0][0] * b[0][1] + a[0][1] * b[1][1]) % mod,
+        ],
+        [
+            (a[1][0] * b[0][0] + a[1][1] * b[1][0]) % mod,
+            (a[1][0] * b[0][1] + a[1][1] * b[1][1]) % mod,
+        ],
     ]
 
 
@@ -96,7 +104,7 @@ def P_fraction(n: int) -> Fraction:
         raise ValueError("P_fraction is intended only for small n (e.g., test values).")
 
     B = mat_pow(A, n, mod=None)  # integer matrix
-    s = Fraction(1, 2 ** n)      # 2^{-n}
+    s = Fraction(1, 2**n)  # 2^{-n}
     # M = s * B in rationals
     M = [
         [Fraction(B[0][0]) * s, Fraction(B[0][1]) * s],
@@ -167,7 +175,7 @@ def main() -> None:
     assert Q_of_P(3, 109) == 46
 
     # Required output
-    n = 10 ** 18
+    n = 10**18
     p = 1_000_000_009
     print(Q_of_P(n, p))
 

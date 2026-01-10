@@ -147,7 +147,9 @@ def main():
     assert f_at[5] == 59, f"Expected f(U_5)=59, got {f_at[5]}"
     assert f_at[10] == 118, f"Expected f(U_10)=118, got {f_at[10]}"
     assert f_at[150] == 3223, f"Expected f(U_150)=3223, got {f_at[150]}"
-    assert total_150 == 234761, f"Expected sum f(U_n)=234761 for 4<=n<=150, got {total_150}"
+    assert (
+        total_150 == 234761
+    ), f"Expected sum f(U_n)=234761 for 4<=n<=150, got {total_150}"
 
     # --- Full answer ---
     ans, _ = compute_sum_f(3_000_000)

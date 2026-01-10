@@ -81,7 +81,7 @@ def center_curve_length(a, b, eps=1e-12):
         c = math.cos(t)
 
         denom = a * a * s * s + b * b * c * c  # = |p'(t)|^2
-        d = math.sqrt(denom)                  # s'(t)
+        d = math.sqrt(denom)  # s'(t)
 
         theta = math.atan2(b * c, a * s) - math.pi
         thetap = -a * b / denom

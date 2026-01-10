@@ -24,19 +24,29 @@ MOD = 1_000_000_007
 # Substring-sum monoid (digit string aggregates)
 # ---------------------------
 
+
 class Node:
-    __slots__ = ("length", "length_mod", "pow_len", "pow_sum", "val", "pre", "suf", "subs")
+    __slots__ = (
+        "length",
+        "length_mod",
+        "pow_len",
+        "pow_sum",
+        "val",
+        "pre",
+        "suf",
+        "subs",
+    )
 
     def __init__(
         self,
         length: int = 0,
         length_mod: int = 0,
-        pow_len: int = 1,   # 10^length mod MOD
-        pow_sum: int = 0,   # 10^1 + ... + 10^length mod MOD
-        val: int = 0,       # numeric value of whole string mod MOD
-        pre: int = 0,       # sum of all prefix values mod MOD
-        suf: int = 0,       # sum of all suffix values mod MOD
-        subs: int = 0,      # sum of all substring values mod MOD (this is S)
+        pow_len: int = 1,  # 10^length mod MOD
+        pow_sum: int = 0,  # 10^1 + ... + 10^length mod MOD
+        val: int = 0,  # numeric value of whole string mod MOD
+        pre: int = 0,  # sum of all prefix values mod MOD
+        suf: int = 0,  # sum of all suffix values mod MOD
+        subs: int = 0,  # sum of all substring values mod MOD (this is S)
     ) -> None:
         self.length = length
         self.length_mod = length_mod
@@ -52,7 +62,16 @@ class Node:
         return Node()
 
     def copy(self) -> "Node":
-        return Node(self.length, self.length_mod, self.pow_len, self.pow_sum, self.val, self.pre, self.suf, self.subs)
+        return Node(
+            self.length,
+            self.length_mod,
+            self.pow_len,
+            self.pow_sum,
+            self.val,
+            self.pre,
+            self.suf,
+            self.subs,
+        )
 
 
 def merge(a: Node, b: Node) -> Node:
@@ -128,6 +147,7 @@ def node_pow(base: Node, exp: int) -> Node:
 # Prime generation (odd-only sieve)
 # ---------------------------
 
+
 def nth_prime_upper_bound(n: int) -> int:
     """
     Safe upper bound for the nth prime.
@@ -181,7 +201,9 @@ def build_prime_concat_node(n_primes: int) -> Node:
 
     if count != n_primes:
         # Extremely unlikely with the chosen bound; keep a clear error.
-        raise RuntimeError("Prime upper bound too small; increase nth_prime_upper_bound margin.")
+        raise RuntimeError(
+            "Prime upper bound too small; increase nth_prime_upper_bound margin."
+        )
 
     return node
 
@@ -189,6 +211,7 @@ def build_prime_concat_node(n_primes: int) -> Node:
 # ---------------------------
 # Brute helpers for tiny asserts
 # ---------------------------
+
 
 def brute_substring_sum_decimal_string(s: str) -> int:
     tot = 0
@@ -225,6 +248,7 @@ def prime_concat_small(n: int) -> str:
 # Main
 # ---------------------------
 
+
 def main() -> None:
     # Problem statement examples
     assert brute_substring_sum_decimal_string("2024") == 2304
@@ -237,8 +261,8 @@ def main() -> None:
     n = 10**6
     k = 10**12
 
-    base = build_prime_concat_node(n)      # Node for P(10^6)
-    ans = node_pow(base, k).subs % MOD     # Node for C(n,k), take S modulo MOD
+    base = build_prime_concat_node(n)  # Node for P(10^6)
+    ans = node_pow(base, k).subs % MOD  # Node for C(n,k), take S modulo MOD
 
     print(ans)
 

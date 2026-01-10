@@ -58,10 +58,10 @@ def heap_grundy_frequencies(n: int):
     # From t >= 7 all four moves are available (no boundary checks)
     for t in range(7, n):
         mask = (
-            (1 << ring[(t - 2) & 7]) |
-            (1 << ring[(t - 3) & 7]) |
-            (1 << ring[(t - 5) & 7]) |
-            (1 << ring[(t - 7) & 7])
+            (1 << ring[(t - 2) & 7])
+            | (1 << ring[(t - 3) & 7])
+            | (1 << ring[(t - 5) & 7])
+            | (1 << ring[(t - 7) & 7])
         )
         g = _MEX[mask]
         ring[t & 7] = g
