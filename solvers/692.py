@@ -1,147 +1,104 @@
-#!/usr/bin/env python
-"""Adapted from https://github.com/igorvanloo/Project-Euler-Explained/blob/main/pe00692%20-%20Siegbert%20and%20Jo.py"""
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 """
-Created on Mon May 17 20:18:12 2021
+Project Euler 692: Siegbert and Jo
 
-@author: igorvanloo
-"""
+We define a game on a heap of N pebbles:
+- First move: take any number 1..N.
+- Later moves: take 1..min(remaining, 2 * previous_take).
+- Taking the last pebble wins.
 
-"""
-Project Euler Problem 692
+Let H(N) be the smallest first move that guarantees a win if both players
+play optimally afterwards.
+Let G(n) = sum_{k=1..n} H(k).
 
-Siegbert and Jo take turns playing a game with a heap of N pebbles:
-1. Siegbert is the first to take some pebbles. He can take as many pebbles as he wants. (Between 1 and N inclusive.)
-2. In each of the following turns the current player must take at least one pebble and at most twice the amount of pebbles 
-taken by the previous player.
-3. The player who takes the last pebble wins.
-
-Although Siegbert can always win by taking all the pebbles on his first turn, to make the game more interesting he 
-chooses to take the smallest number of pebbles that guarantees he will still win 
-(assuming both Siegbert and Jo play optimally for the rest of the game).
-
-H(N) = minimum 
-
-G(n) = sum of H(N) from 1 to n
-
-find G(23416728348467685)
-
-Fibonnaci Nim is what the game is called,
-
-It is easily solved by taken the lowest number in the zeckendorf representation of a number, and if the number is a fibonnaci
-then player 1 must take the entire pile to win
-
-Obviously adding up one by one will take forever as the number is too large, so we must think of a smarter way
-Producing the first few numbers and taking their minimum, we beging to see a pattern, that is linked to fibonnaci numbers
-
-Notice that 23416728348467685 is for some reason a fibonnaci
-
-Take N = f(n) to be a fibonnaci number
-
-We notice that G(f(n)) = G(f(n-1)) + G(f(n-2)) - f(n-2) + f(n) for fibonnnaci numbers
-
-Example
-G(21) = 79
-G(13) = 43
-G(8) = 23
-f(n-2) = 8
-f(n) = 21
-43 + 23 - 8 + 21 = 79
-
-
-We we simple iterate from the fibonnaci 23416728348467685
-
+This program computes G(23416728348467685).
 """
 
-
-def fibonnaci(n):  # Finds the nth fibonnaci number
-    v1, v2, v3 = 1, 1, 0  # initialise a matrix [[1,1],[1,0]]
-    for rec in bin(n)[
-        3:
-    ]:  # perform fast exponentiation of the matrix (quickly raise it to the nth power)
-        calc = v2 * v2
-        v1, v2, v3 = v1 * v1 + calc, (v1 + v3) * v2, calc + v3 * v3
-        if rec == "1":
-            v1, v2, v3 = v1 + v2, v1, v2
-    return v2
+from bisect import bisect_right
 
 
-def Fibtill(x):
-    fibnumbers = []
-    n = 1
-    while len(fibnumbers) != x:
-        fibnumbers.append(fibonnaci(n))
-        n += 1
-    return fibnumbers
+def build_fibs(limit: int) -> list[int]:
+    """Fibonacci numbers with F1=1, F2=2 up to the first value > limit."""
+    fib = [1, 2]
+    while fib[-1] <= limit:
+        fib.append(fib[-1] + fib[-2])
+    return fib
 
 
-def ZeckendorfRepresentation(x, fibnumbers):
-    rep = []
-    number = x
-    count = 0
-    while number != 0:
-
-        if number - fibnumbers[count] >= 0:
-            number -= fibnumbers[count]
-            rep.append(fibnumbers[count])
-            count += 1
-        count += 1
-
-    return rep
+def smallest_zeckendorf_term(n: int, fib: list[int]) -> int:
+    """
+    Return the smallest Fibonacci number in the Zeckendorf decomposition of n
+    (using Fibonacci numbers starting 1,2,...).
+    """
+    smallest = 0
+    while n:
+        i = bisect_right(fib, n) - 1
+        smallest = fib[i]
+        n -= smallest
+    return smallest
 
 
-# fibnumbers = Fibtill(23416728348467685)
+def precompute_prefix_before(fib: list[int]) -> list[int]:
+    """
+    prefix_before[i] = G(fib[i] - 1)
+
+    Recurrence (for i>=1):
+      G(F_{i+1}-1) = G(F_i-1) + H(F_i) + G(F_{i-1}-1)
+                  = prefix_before[i] + fib[i] + prefix_before[i-1]
+    """
+    prefix_before = [0] * len(fib)
+    prefix_before[0] = 0  # G(0)
+    if len(fib) > 1:
+        prefix_before[1] = 1  # G(1) = H(1) = 1
+    for i in range(1, len(fib) - 1):
+        prefix_before[i + 1] = prefix_before[i] + fib[i] + prefix_before[i - 1]
+    return prefix_before
 
 
-def G1(x):
-    g1 = 1
-    g2 = 1
-
-    f1 = 1
-    f2 = 1
-
-    count = 2
-    while count != x:
-        fn = f1 + f2
-        # print(fn)
-
-        gn = g1 + g2 - f1 + fn
-        # print("1", gn)
-
-        f1 = f2
-        f2 = fn
-
-        g1 = g2
-        g2 = gn
-
-        count += 1
-    return gn
+def H(n: int) -> int:
+    """Compute H(n)."""
+    fib = build_fibs(n)
+    return smallest_zeckendorf_term(n, fib)
 
 
-def H(n):
-    fibs = [1, 2]
-    while fibs[-1] + fibs[-2] <= n:
-        fibs.append(fibs[-1] + fibs[-2])
-    remaining = n
-    used = []
-    for f in reversed(fibs):
-        if f <= remaining:
-            remaining -= f
-            used.append(f)
-        if remaining == 0:
-            break
-    return min(used)
+def G(n: int) -> int:
+    """Compute G(n) = sum_{k=1..n} H(k) in O(log n) time."""
+    if n <= 0:
+        return 0
+
+    fib = build_fibs(n)
+    prefix_before = precompute_prefix_before(fib)
+
+    memo = {0: 0}
+
+    def rec(x: int) -> int:
+        if x in memo:
+            return memo[x]
+        i = bisect_right(fib, x) - 1  # largest fib[i] <= x
+        # G(x) = G(fib[i]-1) + H(fib[i]) + sum_{t=1..x-fib[i]} H(t)
+        #      = prefix_before[i] + fib[i] + G(x - fib[i])
+        ans = prefix_before[i] + fib[i] + rec(x - fib[i])
+        memo[x] = ans
+        return ans
+
+    return rec(n)
 
 
-def G(n):
-    return sum(H(k) for k in range(1, n + 1))
-
-
-if __name__ == "__main__":
+def _self_test() -> None:
+    # Test values from the problem statement:
     assert H(1) == 1
     assert H(4) == 1
     assert H(17) == 1
     assert H(8) == 8
     assert H(18) == 5
     assert G(13) == 43
-    print(G1(70))
+
+
+def main() -> None:
+    _self_test()
+    n = 23416728348467685
+    print(G(n))
+
+
+if __name__ == "__main__":
+    main()

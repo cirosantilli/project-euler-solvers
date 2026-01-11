@@ -1,0 +1,8 @@
+{
+  "output_tokens": null,
+  "model": "gpt-5.2-codex",
+  "interface": "codex-0.79.0",
+  "input_prompt": "INSTRUCTIONS\n\nSolve the following problem on file main.py. Test on pypy3. Add asserts for the test cases given in the problem statement if any, and a print with the final result at the end. Your code must run in a few minutes at most, usually a few seconds. Don't try to brute force the solution, only use brute forcing if needed to better understand the problem on small instances. Don't use external libraries, only the Python standard library. Don't use multithreading, only a single CPU core. Use typing for function signatures. Also produce a markdown file README.md summarizing the main ideas used. Any known final answer must not appear anywhere in the generated files, don't assert that value, only print it.\n\nPROBLEM\n\n# $10$-substrings\n\nA $10$-substring of a number is a substring of its digits that sum to $10$. For example, the $10$-substrings of the number $3523014$ are:\n\n* **352**3014\n* 3**523**014\n* 3**5230**14\n* 35**23014**\n\nA number is called $10$-substring-friendly if every one of its digits belongs to a $10$-substring. For example, $3523014$ is $10$-substring-friendly, but $28546$ is not.\n\nLet $T(n)$ be the number of $10$-substring-friendly numbers from $1$ to $10^n$ (inclusive).  \nFor example $T(2) = 9$ and $T(5) = 3492$.\n\nFind $T(10^{18}) \\bmod 1\\,000\\,000\\,007$.",
+  "generation_time_seconds": 2168.481,
+  "created_at": "2026-01-10T21:33:17Z"
+}

@@ -17,10 +17,10 @@ Status:
 // STATUS TABLE
 * **1-500**: done
 * **501-600**: 97/100
-* **601-700**: 85/100
+* **601-700**: 86/100
 * **701-800**: 2/100
 * **801-900**: 2/100
-* **901-977**: 22/77
+* **901-978**: 22/78
 
 Tested on Python 3.13.7, PyPy 7.3.20, Ubuntu 25.10.
 
@@ -877,7 +877,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/510.py[510.py] |  | 1.384 |  |  |
 | link:solvers/511.py[511.py] | link:solvers/511.md[511.md] | 1.665 | gpt-5.2-thinking |  |
 | link:solvers/512.py[512.py] |  | 18.230 |  |  |
-| 513.py |  |  |  |  | error: solver not found
+| link:solvers/513.py[513.py] | link:solvers/513.md[513.md] |  | gpt-5.2-codex |  | error: timed out after 600.000s
 | link:solvers/514.py[514.py] | link:solvers/514.md[514.md] | 0.522 | gpt-5.2-thinking |  |
 | link:solvers/515.py[515.py] | link:solvers/515.md[515.md] | 0.132 | gpt-5.2-thinking |  |
 | link:solvers/516.py[516.py] |  | 0.941 |  |  |
@@ -926,7 +926,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/559.py[559.py] | link:solvers/559.md[559.md] | 3.744 | gpt-5.2-thinking |  |
 | link:solvers/560.py[560.py] | link:solvers/560.md[560.md] | 0.397 | gpt-5.2-thinking |  |
 | link:solvers/561.py[561.py] |  | 0.065 |  |  |
-| link:solvers/562.py[562.py] | link:solvers/562.md[562.md] | 0.949 | gpt-5.2-thinking |  | error: expected '51208732914368', got '75325157143932'
+| link:solvers/562.py[562.py] | link:solvers/562.md[562.md] | 32.292 | gpt-5.2-codex |  | error: expected '51208732914368', got '66409460937607'
 | link:solvers/563.py[563.py] |  | 4.428 |  |  |
 | link:solvers/564.py[564.py] | link:solvers/564.md[564.md] | 2.307 | gpt-5.2-thinking |  |
 | link:solvers/565.py[565.py] |  | 16.009 |  |  |
@@ -1056,7 +1056,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/689.py[689.py] | link:solvers/689.md[689.md] | 0.195 | gpt-5.2-thinking |  |
 | link:solvers/690.py[690.py] | link:solvers/690.md[690.md] | 0.185 | gpt-5.2-thinking |  |
 | link:solvers/691.py[691.py] | link:solvers/691.md[691.md] | 2.168 | gpt-5.2-thinking |  |
-| link:solvers/692.py[692.py] |  | 0.069 |  |  | error: expected '842043391019219959', got '5994872684942036'
+| link:solvers/692.py[692.py] | link:solvers/692.md[692.md] | 0.077 | gpt-5.2-thinking |  |
 | 693.py |  |  |  |  | error: solver not found
 | link:solvers/694.py[694.py] |  | 0.592 |  |  |
 | link:solvers/695.py[695.py] | link:solvers/695.md[695.md] | 0.220 | gpt-5.2-thinking |  |
@@ -1342,4 +1342,5 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/975.py[975.py] |  | 17.709 |  |  | error: missing reference answer
 | link:solvers/976.py[976.py] |  | 0.721 | gpt-5.2-codex | 131264 | error: missing reference answer
 | link:solvers/977.py[977.py] | link:solvers/977.md[977.md] | 1.768 |  |  | error: missing reference answer
+| link:solvers/978.py[978.py] | link:solvers/978.md[978.md] | 0.182 | gpt-5.2-thinking |  | error: missing reference answer
 |===

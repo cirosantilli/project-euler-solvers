@@ -1,0 +1,8 @@
+{
+  "output_tokens": null,
+  "model": "gpt-5.2-codex",
+  "interface": "codex-0.79.0",
+  "input_prompt": "INSTRUCTIONS\n\nSolve the following problem on file main.py. Test on pypy3. Add asserts for the test cases given in the problem statement if any, and a print with the final result at the end. Your code must run in a few minutes at most, usually a few seconds. Don't try to brute force the solution, only use brute forcing if needed to better understand the problem on small instances. Don't use external libraries, only the Python standard library. Don't use multithreading, only a single CPU core. Use typing for function signatures. Also produce a markdown file README.md summarizing the main ideas used. Any known final answer must not appear anywhere in the generated files, don't assert that value, only print it.\n\nPROBLEM\n\n# Integral Median\n\n$ABC$ is an integral sided triangle with sides $a \\le b \\le c$.  \n$m\\_C$ is the median connecting $C$ and the midpoint of $AB$.   \n$F(n)$ is the number of such triangles with $c \\le n$ for which $m\\_C$ has integral length as well.  \n$F(10)=3$ and $F(50)=165$.\n\nFind $F(100000)$.",
+  "generation_time_seconds": 1528.134,
+  "created_at": "2026-01-10T21:20:45Z"
+}
