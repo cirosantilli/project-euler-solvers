@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Project Euler 529: 10-substrings
+"""Project Euler 529: 10-substrings.
 
 A 10-substring is a contiguous substring whose digit-sum is 10.
 A number is 10-substring-friendly if every digit lies in at least one 10-substring.
@@ -7,10 +7,10 @@ A number is 10-substring-friendly if every digit lies in at least one 10-substri
 Let T(n) be the count of 10-substring-friendly numbers from 1 to 10^n (inclusive).
 We need T(10^18) mod 1_000_000_007.
 
-This implementation contains **no precomputed tables**. It builds a DFA for
-zero-free friendly strings (digits 1..9), derives a linear recurrence using
-Berlekamp–Massey, then evaluates the binomial transform using polynomial
-exponentiation in the quotient ring.
+We count zero-free friendly strings (digits 1..9) with a small DFA that tracks the
+maximal suffix whose digit-sum is <= 10. The binomial transform accounts for
+inserting zeros, and the resulting sequence is evaluated at n via a linear
+recurrence (Berlekamp–Massey + polynomial exponentiation).
 """
 
 from __future__ import annotations
@@ -22,40 +22,28 @@ N = 10 ** 18
 
 # -------------------- DFA for zero-free friendly strings --------------------
 
-def _next_state(digs: tuple[int, ...], mask: int, d: int):
+def _next_state(digs: tuple[int, ...], sum_digs: int, uncovered: int, d: int):
     """Append digit d (1..9) to a state.
 
     State representation:
-      - digs: last m digits (oldest -> newest), where m in [0..9]
-      - mask: m-bit mask (bit 0 is newest digit) indicating which of these digits
-              are already covered by some 10-substring ending at or before the
-              current position.
+      - digs: maximal suffix with digit-sum <= 10 (oldest -> newest)
+      - uncovered: number of trailing digits not yet covered (a suffix length)
 
-    Returns (new_digs, new_mask) or None if the transition is invalid.
+    Returns (new_digs, new_uncovered) or None if the transition is invalid.
     """
-    digs2 = digs + (d,)
-    m2 = len(digs2)
-    mask2 = mask << 1  # existing digits become 1 step older; new digit has bit 0 = 0
+    new_digs = digs + (d,)
+    new_uncovered = uncovered + 1  # new digit starts uncovered
+    new_sum = sum_digs + d
 
-    # Only new 10-substrings created now are those ending at the newest digit.
-    # With digits 1..9, suffix sums strictly increase, so at most one suffix hits 10.
-    s = 0
-    for l in range(1, m2 + 1):
-        s += digs2[-l]
-        if s == 10:
-            mask2 |= (1 << l) - 1  # cover the newest l digits
-            break
-        if s > 10:
-            break
+    while new_sum > 10:
+        if len(new_digs) == new_uncovered:
+            return None  # dropping would remove an uncovered digit
+        new_sum -= new_digs[0]
+        new_digs = new_digs[1:]
 
-    if m2 == 10:
-        # Oldest digit (bit 9) must be covered now; otherwise it can never be.
-        if ((mask2 >> 9) & 1) == 0:
-            return None
-        # Drop the oldest digit, keep the newest 9.
-        return digs2[1:], mask2 & ((1 << 9) - 1)
-    else:
-        return digs2, mask2
+    if new_sum == 10:
+        new_uncovered = 0
+    return new_digs, new_uncovered
 
 
 def _build_dfa():
@@ -63,14 +51,15 @@ def _build_dfa():
     start = ((), 0)
     state_id: dict[tuple[tuple[int, ...], int], int] = {start: 0}
     states: list[tuple[tuple[int, ...], int]] = [start]
-    trans: list[list[int]] = []  # filled in later
+    trans: list[list[int]] = []
 
     q = 0
     while q < len(states):
-        digs, mask = states[q]
+        digs, uncovered = states[q]
+        sum_digs = sum(digs)
         row = [-1] * 9
         for di, digit in enumerate(range(1, 10)):
-            nxt = _next_state(digs, mask, digit)
+            nxt = _next_state(digs, sum_digs, uncovered, digit)
             if nxt is None:
                 continue
             if nxt not in state_id:
@@ -82,9 +71,8 @@ def _build_dfa():
 
     accept_ids: list[int] = []
     outs: list[list[int]] = []
-    for sid, (digs, mask) in enumerate(states):
-        m = len(digs)
-        if m > 0 and mask == (1 << m) - 1:
+    for sid, (digs, uncovered) in enumerate(states):
+        if digs and uncovered == 0:
             accept_ids.append(sid)
         out = []
         for j in trans[sid]:
@@ -151,7 +139,7 @@ def _berlekamp_massey(seq: list[int]):
 
         coef = d * pow(b, MOD - 2, MOD) % MOD
         T = C[:]
-        need = L + m
+        need = max(L + m, len(B) - 1 + m)
         if len(C) < need + 1:
             C.extend([0] * (need + 1 - len(C)))
         for i in range(len(B)):
@@ -315,8 +303,8 @@ def solve(n: int = N) -> int:
     E_init = E_terms[:L]
 
     # Problem statement checks
-    assert _binom_transform_prefix(E_init, 2) == 9
-    assert _binom_transform_prefix(E_init, 5) == 3492
+    assert _binom_transform_prefix(E_terms, 2) == 9
+    assert _binom_transform_prefix(E_terms, 5) == 3492
 
     # Compute (1+x)^n mod characteristic polynomial
     base = [0] * L

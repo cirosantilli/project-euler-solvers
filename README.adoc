@@ -16,7 +16,7 @@ Status:
 
 // STATUS TABLE
 * **1-500**: done
-* **501-600**: 97/100
+* **501-600**: 98/100
 * **601-700**: 88/100
 * **701-800**: 2/100
 * **801-900**: 2/100
@@ -893,7 +893,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/526.py[526.py] | link:solvers/526.md[526.md] | 41.979 | gpt-5.2-thinking |  |
 | link:solvers/527.py[527.py] | link:solvers/527.md[527.md] | 0.120 | gpt-5.2-thinking |  |
 | link:solvers/528.py[528.py] | link:solvers/528.md[528.md] | 0.126 | gpt-5.2-thinking |  |
-| link:solvers/529.py[529.py] | link:solvers/529.md[529.md] | 0.070 | gpt-5.2-thinking |  | error: failed (exit 1)
+| link:solvers/529.py[529.py] | link:solvers/529.md[529.md] | 9.143 | gpt-5.2-thinking |  |
 | link:solvers/530.py[530.py] | link:solvers/530.md[530.md] | 5.856 | gpt-5.2-thinking |  |
 | link:solvers/531.py[531.py] |  | 1.608 |  |  |
 | link:solvers/532.py[532.py] | link:solvers/532.md[532.md] | 0.132 | gpt-5.2-thinking |  |
@@ -926,7 +926,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/559.py[559.py] | link:solvers/559.md[559.md] | 3.744 | gpt-5.2-thinking |  |
 | link:solvers/560.py[560.py] | link:solvers/560.md[560.md] | 0.397 | gpt-5.2-thinking |  |
 | link:solvers/561.py[561.py] |  | 0.065 |  |  |
-| link:solvers/562.py[562.py] | link:solvers/562.md[562.md] | 32.292 | gpt-5.2-codex |  | error: expected '51208732914368', got '66409460937607'
+| link:solvers/562.py[562.py] | link:solvers/562.md[562.md] | 0.383 | gpt-5.2-codex |  | error: expected '51208732914368', got '15325285774764'
 | link:solvers/563.py[563.py] |  | 4.428 |  |  |
 | link:solvers/564.py[564.py] | link:solvers/564.md[564.md] | 2.307 | gpt-5.2-thinking |  |
 | link:solvers/565.py[565.py] |  | 16.009 |  |  |
@@ -1026,7 +1026,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/659.py[659.py] |  | 1.456 |  |  |
 | link:solvers/660.py[660.py] | link:solvers/660.md[660.md] |  | gpt-5.2-thinking |  | error: timed out after 600.000s
 | link:solvers/661.py[661.py] | link:solvers/661.md[661.md] | 0.063 | gpt-5.2-thinking |  |
-| 662.py |  |  |  |  | error: solver not found
+| link:solvers/662.py[662.py] | link:solvers/662.md[662.md] | 0.110 | gpt-5.2-thinking |  | error: failed (exit 1)
 | link:solvers/663.py[663.py] | link:solvers/663.md[663.md] | 2.536 | gpt-5.2-thinking |  |
 | link:solvers/664.py[664.py] | link:solvers/664.md[664.md] | 0.115 | gpt-5.2-thinking |  |
 | link:solvers/665.py[665.py] | link:solvers/665.md[665.md] |  | gpt-5.2-thinking |  | error: timed out after 600.000s

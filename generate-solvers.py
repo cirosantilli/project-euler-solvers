@@ -491,6 +491,7 @@ def codex_prompt_text(
         expect = (
             f' Ensure that "./test.py {problem_id}" passes with correct answer '
             f"{known_answer}."
+            f' You MUST make that test pass, if that would take too long then you MUST find a more efficient algorithm.'
         )
     else:
         expect = ""
@@ -785,18 +786,15 @@ def main() -> None:
                     f"{elapsed:.2f}s ({completed}/{total})"
                 )
                 continue
-            main_path = root / "main.py"
-            readme_path = root / "README.md"
-            if not main_path.exists() or not readme_path.exists():
-                print(f"Failed to find Codex output for problem {problem_id}.")
+            solver_path = solvers_dir / f"{stem}.py"
+            readme_path = solvers_dir / f"{stem}.md"
+            if not solver_path.exists() or not readme_path.exists():
+                print(f"Missing Codex output for problem {problem_id}.")
                 print(
                     f"Request for problem {problem_id} completed in "
                     f"{elapsed:.2f}s ({completed}/{total})"
                 )
                 continue
-            main_text = main_path.read_text(encoding="utf-8")
-            readme_text = readme_path.read_text(encoding="utf-8")
-            write_solver_files(solvers_dir, stem, main_text, readme_text)
             parsed_model, parsed_tokens = parse_codex_output(output)
             if model_override:
                 model = args.model
