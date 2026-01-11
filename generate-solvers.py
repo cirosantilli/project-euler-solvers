@@ -5,13 +5,15 @@ import json
 import re
 import subprocess
 import sys
-import tempfile
 import threading
 import time
 from datetime import datetime
 from pathlib import Path
 
 from openai import OpenAI, AsyncOpenAI
+
+SOLUTIONS_PATH = Path(__file__).resolve().parent / "data/projecteuler-solutions/Solutions.md"
+LINE_RE = re.compile(r"^(\d+)\.\s+(.*)$")
 
 
 def parse_args() -> argparse.Namespace:
@@ -462,85 +464,105 @@ def parse_codex_output(output: str) -> tuple[str | None, int | None]:
     return model, output_tokens
 
 
-def codex_prompt_text(instructions_path: Path, statement_path: Path) -> str:
+def load_reference_answers() -> dict[int, str]:
+    answers: dict[int, str] = {}
+    try:
+        with SOLUTIONS_PATH.open() as fh:
+            for line in fh:
+                line = line.strip()
+                match = LINE_RE.match(line)
+                if not match:
+                    continue
+                answers[int(match.group(1))] = match.group(2).strip()
+    except OSError:
+        return answers
+    return answers
+
+
+def codex_prompt_text(
+    instructions_path: Path,
+    statement_path: Path,
+    problem_id: int,
+    known_answer: str | None,
+) -> str:
     instructions = instructions_path.read_text(encoding="utf-8")
     statement = statement_path.read_text(encoding="utf-8")
+    if known_answer:
+        expect = (
+            f' Ensure that "./test.py {problem_id}" passes with correct answer '
+            f"{known_answer}."
+        )
+    else:
+        expect = ""
+    instructions = instructions.replace("{n}", str(problem_id)).replace("{expect}", expect)
     return f"{instructions}{statement}"
 
 
 def run_codex_solver(
     prompt: str,
     timeout: float | None,
-) -> tuple[str | None, str | None, str, float, int]:
+    workdir: Path,
+) -> tuple[str, float, int]:
     started_at = time.monotonic()
-    with tempfile.TemporaryDirectory() as temp_dir:
-        try:
-            proc = subprocess.Popen(
-                [
-                    "codex",
-                    "exec",
-                    "--skip-git-repo-check",
-                    "-C",
-                    ".",
-                    "-s",
-                    "workspace-write",
-                ],
-                stdin=subprocess.PIPE,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                text=True,
-                cwd=temp_dir,
-            )
-        except OSError:
-            elapsed = time.monotonic() - started_at
-            return None, None, "", elapsed, 127
-
-        stdout_parts: list[str] = []
-        stderr_parts: list[str] = []
-
-        def _read_stream(stream, sink, buffer):
-            for line in iter(stream.readline, ""):
-                buffer.append(line)
-                sink.write(line)
-                sink.flush()
-            stream.close()
-
-        stdout_thread = threading.Thread(
-            target=_read_stream,
-            args=(proc.stdout, sys.stdout, stdout_parts),
-            daemon=True,
+    try:
+        proc = subprocess.Popen(
+            [
+                "codex",
+                "exec",
+                "--skip-git-repo-check",
+                "-C",
+                ".",
+                "-s",
+                "workspace-write",
+            ],
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            cwd=workdir,
         )
-        stderr_thread = threading.Thread(
-            target=_read_stream,
-            args=(proc.stderr, sys.stderr, stderr_parts),
-            daemon=True,
-        )
-        stdout_thread.start()
-        stderr_thread.start()
-
-        if proc.stdin:
-            proc.stdin.write(prompt)
-            proc.stdin.close()
-
-        try:
-            proc.wait(timeout=timeout)
-        except subprocess.TimeoutExpired:
-            proc.kill()
-            proc.wait()
+    except OSError:
         elapsed = time.monotonic() - started_at
-        stdout_thread.join(timeout=1)
-        stderr_thread.join(timeout=1)
-        stdout = "".join(stdout_parts)
-        stderr = "".join(stderr_parts)
-        main_path = Path(temp_dir) / "main.py"
-        readme_path = Path(temp_dir) / "README.md"
-        main_text = (
-            main_path.read_text(encoding="utf-8") if main_path.exists() else None
-        )
-        readme_text = (
-            readme_path.read_text(encoding="utf-8") if readme_path.exists() else None
-        )
-        return main_text, readme_text, stdout + stderr, elapsed, proc.returncode
+        return "", elapsed, 127
+
+    stdout_parts: list[str] = []
+    stderr_parts: list[str] = []
+
+    def _read_stream(stream, sink, buffer):
+        for line in iter(stream.readline, ""):
+            buffer.append(line)
+            sink.write(line)
+            sink.flush()
+        stream.close()
+
+    stdout_thread = threading.Thread(
+        target=_read_stream,
+        args=(proc.stdout, sys.stdout, stdout_parts),
+        daemon=True,
+    )
+    stderr_thread = threading.Thread(
+        target=_read_stream,
+        args=(proc.stderr, sys.stderr, stderr_parts),
+        daemon=True,
+    )
+    stdout_thread.start()
+    stderr_thread.start()
+
+    if proc.stdin:
+        proc.stdin.write(prompt)
+        proc.stdin.close()
+
+    try:
+        proc.wait(timeout=timeout)
+    except subprocess.TimeoutExpired:
+        proc.kill()
+        proc.wait()
+    elapsed = time.monotonic() - started_at
+    stdout_thread.join(timeout=1)
+    stderr_thread.join(timeout=1)
+    stdout = "".join(stdout_parts)
+    stderr = "".join(stderr_parts)
+    return stdout + stderr, elapsed, proc.returncode
 
 
 async def _fetch_response(
@@ -739,6 +761,7 @@ def main() -> None:
             return
         version = codex_version()
         interface = f"codex-{version}" if version else "codex"
+        answers = load_reference_answers()
         total = len(paths)
         completed = 0
         for path in paths:
@@ -747,10 +770,13 @@ def main() -> None:
             if stem is None:
                 completed += 1
                 continue
-            prompt = codex_prompt_text(instructions_path, path)
-            main_text, readme_text, output, elapsed, returncode = run_codex_solver(
-                prompt, args.timeout
+            prompt = codex_prompt_text(
+                instructions_path,
+                path,
+                problem_id,
+                answers.get(problem_id),
             )
+            output, elapsed, returncode = run_codex_solver(prompt, args.timeout, root)
             completed += 1
             if returncode != 0:
                 print(f"Codex failed for problem {problem_id} " f"(exit {returncode})")
@@ -759,13 +785,17 @@ def main() -> None:
                     f"{elapsed:.2f}s ({completed}/{total})"
                 )
                 continue
-            if not main_text or not readme_text:
-                print(f"Failed to parse Codex output for problem {problem_id}.")
+            main_path = root / "main.py"
+            readme_path = root / "README.md"
+            if not main_path.exists() or not readme_path.exists():
+                print(f"Failed to find Codex output for problem {problem_id}.")
                 print(
                     f"Request for problem {problem_id} completed in "
                     f"{elapsed:.2f}s ({completed}/{total})"
                 )
                 continue
+            main_text = main_path.read_text(encoding="utf-8")
+            readme_text = readme_path.read_text(encoding="utf-8")
             write_solver_files(solvers_dir, stem, main_text, readme_text)
             parsed_model, parsed_tokens = parse_codex_output(output)
             if model_override:
