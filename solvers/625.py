@@ -1,192 +1,170 @@
 #!/usr/bin/env python3
 """
-Project Euler 625 — Gcd Sum
+Project Euler 625 - Gcd sum
 
-Compute:
-  G(N) = sum_{j=1..N} sum_{i=1..j} gcd(i, j)
+We need:
+    G(N) = sum_{j=1..N} sum_{i=1..j} gcd(i, j)
+and the problem asks for G(10^11) mod 998244353.
 
-Need:
-  G(10^11) mod 998244353
-
-Optimized sublinear solution (pure Python, no third-party libs):
-
-1) Identity:
-     G(N) = sum_{k=1..N} phi(k) * T(floor(N/k)),
-   where T(x)=x(x+1)/2.
-
-2) Outer sum is evaluated in O(sqrt(N)) blocks by grouping constant quotients q=floor(N/k).
-
-3) The only hard part is Phi(n)=sum_{k<=n} phi(k). We use a Dujiao-style recursion
-   with quotient grouping + memoization.
-
-4) Practical Python performance tricks:
-   - Use a sieve cutoff L ≈ N^(2/3).
-   - Compute Phi(N) ONCE up-front to populate the memo, avoiding repeated expensive
-     independent Phi calls during the outer sum.
-   - Keep all modular values reduced with branch-only arithmetic inside hot loops
-     (avoid '%' in the inner loop except for cnt%MOD).
-
-No external libraries.
+No external libraries are used.
 """
 
 from __future__ import annotations
 
-import sys
 from array import array
+from math import isqrt
+
 
 MOD = 998244353
+INV2 = (MOD + 1) // 2
+
+TARGET_N = 10 ** 11
+
+# Precompute phi and its prefix sum up to this bound.
+# 10,000,000 is a good tradeoff for N=10^11: it keeps the memoized recursion small.
+PRECOMP_LIMIT = 10_000_000
 
 
-def tri_mod(n: int) -> int:
-    """T(n)=n(n+1)/2 mod MOD, without modular inverse."""
-    a = n
-    b = n + 1
-    if (a & 1) == 0:
-        a //= 2
-    else:
-        b //= 2
-    return (a % MOD) * (b % MOD) % MOD
+def tri(n: int) -> int:
+    """Triangular number n*(n+1)/2 modulo MOD."""
+    n %= MOD
+    return (n * (n + 1) % MOD) * INV2 % MOD
 
 
-def icbrt_floor(n: int) -> int:
-    """Integer floor cube-root."""
-    if n <= 0:
-        return 0
-    x = int(round(n ** (1.0 / 3.0)))
-    while (x + 1) * (x + 1) * (x + 1) <= n:
-        x += 1
-    while x * x * x > n:
-        x -= 1
-    return x
-
-
-def build_phi_prefix(limit: int) -> array:
-    """Linear sieve phi up to limit; return prefix sums modulo MOD in array('I')."""
-    if limit <= 0:
-        return array("I", [0])
-
+def precompute_phi_prefix(limit: int, need_phi_upto: int) -> tuple[array, array]:
+    """
+    Linear sieve for Euler's totient function phi(1..limit).
+    Returns:
+      - phi_small: phi(0..need_phi_upto) (needed later in G(N))
+      - phi_prefix: in-place prefix sums of phi modulo MOD, length limit+1
+    """
+    # phi will be overwritten into prefix sums after we copy out phi_small.
     phi = array("I", [0]) * (limit + 1)
+    phi[1] = 1
+
     is_comp = bytearray(limit + 1)
     primes: list[int] = []
 
-    phi[1] = 1
-
-    phi_local = phi
-    is_comp_local = is_comp
-    primes_append = primes.append
-
     for i in range(2, limit + 1):
-        if not is_comp_local[i]:
-            primes_append(i)
-            phi_local[i] = i - 1
+        if not is_comp[i]:
+            primes.append(i)
+            phi[i] = i - 1
         for p in primes:
-            v = i * p
-            if v > limit:
+            ip = i * p
+            if ip > limit:
                 break
-            is_comp_local[v] = 1
+            is_comp[ip] = 1
             if i % p == 0:
-                phi_local[v] = phi_local[i] * p
+                phi[ip] = phi[i] * p
                 break
             else:
-                phi_local[v] = phi_local[i] * (p - 1)
+                phi[ip] = phi[i] * (p - 1)
 
-    # prefix sums mod MOD; since limit << MOD, one subtraction is enough each step
+    phi_small = array("I", phi[: need_phi_upto + 1])
+
     s = 0
     for i in range(1, limit + 1):
-        s += phi_local[i]
-        if s >= MOD:
-            s -= MOD
-        phi_local[i] = s
+        s += phi[i]
+        s %= MOD
+        phi[i] = s
 
-    return phi_local
+    return phi_small, phi
 
 
-def gcd_sum(N: int) -> int:
-    if N <= 0:
-        return 0
+class PhiSummatory:
+    """
+    PhiSummatory(n) = sum_{k=1..n} phi(k) (mod MOD).
 
-    # Sieve cutoff: classic Dujiao sweet spot L ~ N^(2/3)
-    c = icbrt_floor(N)
-    L = c * c
-    if L < 1_000_000:
-        L = min(N, 1_000_000)
-    else:
-        L = min(L, N)
+    Uses:
+      - precomputed prefix sums for n <= PRECOMP_LIMIT
+      - memoized recursion for larger n:
+            Phi(n) = T(n) - sum_{i=2..n} Phi(floor(n/i))
+        split into:
+            i <= sqrt(n)   (large quotients, recurse)
+            i  > sqrt(n)   (small quotients, use prefix sums)
+    """
 
-    pref = build_phi_prefix(L)
+    __slots__ = ("prefix", "limit", "cache")
 
-    memo: dict[int, int] = {}
-    memo_get = memo.get
-    memo_set = memo.__setitem__
-    pref_ = pref
-    LIM = L
-    tri = tri_mod
-    MOD_ = MOD
+    def __init__(self, prefix: array, limit: int):
+        self.prefix = prefix
+        self.limit = limit
+        self.cache: dict[int, int] = {}
 
-    sys.setrecursionlimit(1_000_000)
+    def __call__(self, n: int) -> int:
+        if n <= self.limit:
+            return int(self.prefix[n])
+        hit = self.cache.get(n)
+        if hit is not None:
+            return hit
 
-    def Phi(n: int) -> int:
-        """Summatory totient Phi(n)=sum_{k<=n} phi(k) mod MOD."""
-        if n <= 0:
-            return 0
-        if n <= LIM:
-            return pref_[n]
-        v = memo_get(n)
-        if v is not None:
-            return v
+        s = isqrt(n)
+        ans = tri(n)
 
-        # Phi(n) = T(n) - sum_{l=2..n} (r-l+1)*Phi(n//l), grouped by quotient
-        res = tri(n)  # 0 <= res < MOD
-        l = 2
-        while l <= n:
-            q = n // l
-            r = n // q
-            cnt = r - l + 1
+        pref = self.prefix
 
-            sub = pref_[q] if q <= LIM else Phi(q)
-            t = (cnt % MOD_) * sub % MOD_
-            res -= t
-            if res < 0:
-                res += MOD_
-            l = r + 1
+        # Contribution of i > sqrt(n):
+        # For each m = floor(n/i) (which is <= n//sqrt(n)), count how many i give that m.
+        m_max = n // s  # slightly loose upper bound; extra terms have zero coefficient.
+        for m in range(1, m_max):
+            coef = n // m - n // (m + 1)
+            if coef:
+                ans -= coef * int(pref[m])
 
-        memo_set(n, res)
-        return res
+        # Contribution of i <= sqrt(n): sum Phi(n//i), grouped by equal quotients.
+        i = 2
+        while i <= s:
+            q = n // i
+            j = min(s, n // q)
+            ans -= (j - i + 1) * self(q)
+            i = j + 1
 
-    # Warm memo once (big speed win): this fills memo with all large Phi values the outer sum needs.
-    Phi(N)
+        ans %= MOD
+        self.cache[n] = ans
+        return ans
 
-    def Phi_fast(n: int) -> int:
-        if n <= 0:
-            return 0
-        if n <= LIM:
-            return pref_[n]
-        return memo[n]
 
-    # Outer sum in O(sqrt N) blocks:
+def gcd_sum_G(n: int, phi_small: array, Phi: PhiSummatory) -> int:
+    """
+    Computes G(n) modulo MOD using a hyperbola split:
+      G(n) = sum_{k<=s} k*Phi(n//k) + sum_{k<=s} phi(k)*T(n//k) - T(s)*Phi(s),
+      where s = floor(sqrt(n)), Phi(x) = sum_{i<=x} phi(i), T(x)=x(x+1)/2.
+    """
+    s = isqrt(n)
     ans = 0
-    l = 1
-    while l <= N:
-        q = N // l
-        r = N // q
-        sum_phi = (Phi_fast(r) - Phi_fast(l - 1)) % MOD_
-        ans = (ans + sum_phi * tri(q)) % MOD_
-        l = r + 1
 
-    return ans
+    # sum_{k<=s} k*Phi(n//k), grouped by equal quotients
+    k = 1
+    while k <= s:
+        q = n // k
+        j = min(s, n // q)
+        cnt = j - k + 1
+        sum_k = (k + j) * cnt // 2
+        ans += (sum_k % MOD) * Phi(q)
+        k = j + 1
+
+    # sum_{k<=s} phi(k)*T(n//k)
+    for k in range(1, s + 1):
+        ans += int(phi_small[k]) * tri(n // k)
+
+    # subtract T(s)*Phi(s)
+    ans -= tri(s) * Phi(s)
+
+    return ans % MOD
 
 
-def main() -> None:
-    N = 10**11
-    data = sys.stdin.read().strip()
-    if data:
-        N = int(data)
+def solve() -> None:
+    n = TARGET_N
+    s = isqrt(n)
 
-    # Test value from the problem statement:
-    assert gcd_sum(10) == 122 % MOD
+    phi_small, phi_prefix = precompute_phi_prefix(PRECOMP_LIMIT, s)
+    Phi = PhiSummatory(phi_prefix, PRECOMP_LIMIT)
 
-    print(gcd_sum(N))
+    # Test value given in the problem statement
+    assert gcd_sum_G(10, phi_small, Phi) == 122
+
+    print(gcd_sum_G(n, phi_small, Phi))
 
 
 if __name__ == "__main__":
-    main()
+    solve()

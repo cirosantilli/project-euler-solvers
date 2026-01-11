@@ -17,7 +17,7 @@ Status:
 // STATUS TABLE
 * **1-500**: done
 * **501-600**: 97/100
-* **601-700**: 86/100
+* **601-700**: 88/100
 * **701-800**: 2/100
 * **801-900**: 2/100
 * **901-978**: 22/78
@@ -989,10 +989,10 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/622.py[622.py] |  | 2.659 |  |  |
 | link:solvers/623.py[623.py] | link:solvers/623.md[623.md] | 8.766 | gpt-5.2-thinking |  |
 | link:solvers/624.py[624.py] | link:solvers/624.md[624.md] | 0.127 | gpt-5.2-thinking |  |
-| link:solvers/625.py[625.py] | link:solvers/625.md[625.md] |  | gpt-5.2-thinking |  | error: timed out after 600.000s
+| link:solvers/625.py[625.py] | link:solvers/625.md[625.md] | 1.877 | gpt-5.2-thinking |  |
 | link:solvers/626.py[626.py] | link:solvers/626.md[626.md] | 0.216 | gpt-5.2-thinking |  |
 | link:solvers/627.py[627.py] | link:solvers/627.md[627.md] | 0.122 | gpt-5.2-thinking |  |
-| 628.py |  |  |  |  | error: solver not found
+| link:solvers/628.py[628.py] | link:solvers/628.md[628.md] | 0.785 | gpt-5.2-thinking |  |
 | link:solvers/629.py[629.py] | link:solvers/629.md[629.md] | 0.164 | gpt-5.2-thinking |  |
 | link:solvers/630.py[630.py] | link:solvers/630.md[630.md] | 1.051 | gpt-5.2-thinking |  |
 | 631.py |  |  |  |  | error: solver not found
