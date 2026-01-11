@@ -342,23 +342,24 @@ def format_row(res: Result) -> str:
     model_cell = res.model or ""
     tokens_cell = str(res.output_tokens) if res.output_tokens is not None else ""
     error_cell = "" if res.correct else normalize_error_cell(res.message)
-    if res.message == "solver not found":
-        link = f"{res.puzzle_id}.py"
-    else:
-        link_path = (
-            res.source_path
-            if res.source_path is not None
-            else SOLVERS_DIR / f"{res.puzzle_id}.py"
-        )
-        try:
-            rel_path = link_path.resolve().relative_to(ROOT)
-        except ValueError:
-            rel_path = link_path
-        link = f"link:{rel_path.as_posix()}[{rel_path.name}]"
+    link = format_id_cell(res)
     explanation_cell = explanation_link(res.puzzle_id)
     return format_row_fields(
         link, explanation_cell, time_cell, model_cell, tokens_cell, error_cell
     )
+
+
+def format_id_cell(res: Result) -> str:
+    if res.message == "solver not found":
+        return f"{res.puzzle_id}.py"
+    link_path = (
+        res.source_path if res.source_path is not None else SOLVERS_DIR / f"{res.puzzle_id}.py"
+    )
+    try:
+        rel_path = link_path.resolve().relative_to(ROOT)
+    except ValueError:
+        rel_path = link_path
+    return f"link:{rel_path.as_posix()}[{rel_path.name}]"
 
 
 def result_key(res: Result) -> tuple[int, str]:
@@ -548,6 +549,54 @@ def update_readme(results: list[Result]) -> None:
     sorted_rows = [row_map[key] for key in sorted(row_map, key=lambda k: (k[0], k[1]))]
     new_block = [header_line, *sorted_rows]
     lines[start + 1 : end] = new_block
+
+    slow_marker = "// SLOWEST PYTHON SOLVERS TABLE"
+    try:
+        slow_idx = next(i for i, line in enumerate(lines) if line.strip() == slow_marker)
+    except StopIteration:
+        raise RuntimeError("Could not find SLOWEST PYTHON SOLVERS TABLE marker")
+
+    slow_start = None
+    slow_end = None
+    for i in range(slow_idx + 1, len(lines)):
+        if lines[i].strip() == "|===":
+            if slow_start is None:
+                slow_start = i
+            else:
+                slow_end = i
+                break
+        elif slow_start is not None and not lines[i].strip():
+            slow_end = i - 1
+            break
+    if slow_start is None or slow_end is None:
+        slow_start = slow_idx + 1
+        slow_end = slow_start - 1
+
+    slow_candidates: list[tuple[float, str, str]] = []
+    for (pid, language), row in row_map.items():
+        if language != "py":
+            continue
+        cells = [cell.strip() for cell in row.split("|")[1:]]
+        if cells and cells[-1] == "":
+            cells = cells[:-1]
+        normalized = normalize_row_fields(pid, cells)
+        if normalized is None:
+            continue
+        id_cell, _statement_cell, time_cell, _model_cell, _tokens_cell, error_cell = (
+            normalized
+        )
+        if error_cell or not time_cell:
+            continue
+        try:
+            runtime = float(time_cell)
+        except ValueError:
+            continue
+        slow_candidates.append((runtime, id_cell, time_cell))
+
+    slowest = sorted(slow_candidates, key=lambda item: item[0], reverse=True)[:20]
+    slow_rows = [f"| {id_cell} | {time_cell}" for _rt, id_cell, time_cell in slowest]
+    slow_table = ["|===", "| ID | Runtime (s)", *slow_rows, "|==="]
+    lines[slow_start : slow_end + 1] = slow_table
 
     readme_path.write_text("\n".join(lines) + "\n")
 
@@ -747,6 +796,41 @@ def update_readme_not_found() -> None:
         "| ID | Explanation | Runtime (s) | Model | Out Tokens | Error",
         *sorted_rows,
     ]
+
+    slow_marker = "// SLOWEST PYTHON SOLVERS TABLE"
+    try:
+        slow_idx = next(i for i, line in enumerate(lines) if line.strip() == slow_marker)
+    except StopIteration:
+        raise RuntimeError("Could not find SLOWEST PYTHON SOLVERS TABLE marker")
+
+    slow_start = None
+    slow_end = None
+    for i in range(slow_idx + 1, len(lines)):
+        if lines[i].strip() == "|===":
+            if slow_start is None:
+                slow_start = i
+            else:
+                slow_end = i
+                break
+        elif slow_start is not None and not lines[i].strip():
+            slow_end = i - 1
+            break
+    if slow_start is None or slow_end is None:
+        slow_start = slow_idx + 1
+        slow_end = slow_start - 1
+
+    slow_candidates = [
+        res
+        for res in results
+        if res.correct and res.language == "py" and res.elapsed is not None
+    ]
+    slowest = sorted(slow_candidates, key=lambda r: r.elapsed or 0.0, reverse=True)[:10]
+    slow_rows = [
+        f"| {format_id_cell(res)} | {res.elapsed:.3f}"
+        for res in slowest
+    ]
+    slow_table = ["|===", "| ID | Runtime (s)", *slow_rows, "|==="]
+    lines[slow_start : slow_end + 1] = slow_table
 
     readme_path.write_text("\n".join(lines) + "\n")
 

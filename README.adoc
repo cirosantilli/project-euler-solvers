@@ -16,7 +16,7 @@ Status:
 
 // STATUS TABLE
 * **1-500**: done
-* **501-600**: 98/100
+* **501-600**: 99/100
 * **601-700**: 88/100
 * **701-800**: 2/100
 * **801-900**: 2/100
@@ -62,6 +62,8 @@ We want to avoid any magic pre-computed constants used as intermediate results a
 We are initially striving strongly for a 10 minute maximum runtime of each solution. This number is semi arbitrary, but it feels like a ridiculously high ceiling above which a non-bruteforce algorithm with the key insight should never ever go above, and we are yet to see a compelling case of the contrary. A few seconds is much much more common and pleasant. One minute starts to feel bad. Five is already basically hopeless. So ten feels like beyond reasonable. The following problems may be exceptions ot this rule as people in the forums were suffering, optimizing this would be great:
 
 * 513
+
+The slowest known solvers are listed at: <<slowest-solvers>>.
 
 == Status
 
@@ -361,10 +363,10 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 // RESULTS TABLE
 |===
 | ID | Explanation | Runtime (s) | Model | Out Tokens | Error
-| link:solvers/1.c[1.c] |  | 0.010 |  |  |
-| link:solvers/1.cpp[1.cpp] |  | 0.006 |  |  |
-| link:solvers/1.lean[1.lean] |  | 0.029 |  |  |
-| link:solvers/1.py[1.py] |  | 0.097 |  |  |
+| link:solvers/1.c[1.c] |  | 0.002 |  |  |
+| link:solvers/1.cpp[1.cpp] |  | 0.003 |  |  |
+| link:solvers/1.lean[1.lean] |  | 0.007 |  |  |
+| link:solvers/1.py[1.py] |  | 0.105 |  |  |
 | link:solvers/2.lean[2.lean] | link:solvers/2.md[2.md] | 0.027 |  |  |
 | link:solvers/2.py[2.py] | link:solvers/2.md[2.md] | 0.061 | gpt-5.2-2025-12-11 | 432 |
 | link:solvers/3.py[3.py] | link:solvers/3.md[3.md] | 0.084 | gpt-5.2-2025-12-11 | 585 |
@@ -926,7 +928,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/559.py[559.py] | link:solvers/559.md[559.md] | 3.744 | gpt-5.2-thinking |  |
 | link:solvers/560.py[560.py] | link:solvers/560.md[560.md] | 0.397 | gpt-5.2-thinking |  |
 | link:solvers/561.py[561.py] |  | 0.065 |  |  |
-| link:solvers/562.py[562.py] | link:solvers/562.md[562.md] | 0.383 | gpt-5.2-codex |  | error: expected '51208732914368', got '15325285774764'
+| link:solvers/562.py[562.py] | link:solvers/562.md[562.md] | 556.721 | gpt-5.2-codex |  |
 | link:solvers/563.py[563.py] |  | 4.428 |  |  |
 | link:solvers/564.py[564.py] | link:solvers/564.md[564.md] | 2.307 | gpt-5.2-thinking |  |
 | link:solvers/565.py[565.py] |  | 16.009 |  |  |
@@ -1343,4 +1345,35 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/976.py[976.py] |  | 0.721 | gpt-5.2-codex | 131264 | error: missing reference answer
 | link:solvers/977.py[977.py] | link:solvers/977.md[977.md] | 1.768 |  |  | error: missing reference answer
 | link:solvers/978.py[978.py] | link:solvers/978.md[978.md] | 0.182 | gpt-5.2-thinking |  | error: missing reference answer
+|===
+
+=== Slowest solvers
+
+This section lists the slowest solvers we have. Anything incredibly slower than most problems is likely to have important missing optimizations which we should ideally find.
+
+10 slowest Python solvers which give the correct answer:
+
+// SLOWEST PYTHON SOLVERS TABLE
+|===
+| ID | Runtime (s)
+| link:solvers/302.py[302.py] | 591.483
+| link:solvers/562.py[562.py] | 556.721
+| link:solvers/958.py[958.py] | 276.748
+| link:solvers/536.py[536.py] | 235.521
+| link:solvers/885.py[885.py] | 234.998
+| link:solvers/655.py[655.py] | 227.438
+| link:solvers/353.py[353.py] | 193.097
+| link:solvers/507.py[507.py] | 177.141
+| link:solvers/452.py[452.py] | 163.850
+| link:solvers/251.py[251.py] | 161.694
+| link:solvers/501.py[501.py] | 126.958
+| link:solvers/681.py[681.py] | 122.323
+| link:solvers/259.py[259.py] | 115.037
+| link:solvers/505.py[505.py] | 106.445
+| link:solvers/680.py[680.py] | 105.370
+| link:solvers/754.py[754.py] | 105.190
+| link:solvers/558.py[558.py] | 102.015
+| link:solvers/415.py[415.py] | 100.317
+| link:solvers/712.py[712.py] | 95.006
+| link:solvers/953.py[953.py] | 86.836
 |===
