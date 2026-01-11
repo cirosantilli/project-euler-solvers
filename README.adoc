@@ -17,7 +17,7 @@ Status:
 // STATUS TABLE
 * **1-500**: done
 * **501-600**: 99/100
-* **601-700**: 88/100
+* **601-700**: 89/100
 * **701-800**: 2/100
 * **801-900**: 2/100
 * **901-978**: 22/78
@@ -1028,7 +1028,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/659.py[659.py] |  | 1.456 |  |  |
 | link:solvers/660.py[660.py] | link:solvers/660.md[660.md] |  | gpt-5.2-thinking |  | error: timed out after 600.000s
 | link:solvers/661.py[661.py] | link:solvers/661.md[661.md] | 0.063 | gpt-5.2-thinking |  |
-| link:solvers/662.py[662.py] | link:solvers/662.md[662.md] | 0.110 | gpt-5.2-thinking |  | error: failed (exit 1)
+| link:solvers/662.py[662.py] | link:solvers/662.md[662.md] | 94.847 | gpt-5.2-thinking |  |
 | link:solvers/663.py[663.py] | link:solvers/663.md[663.md] | 2.536 | gpt-5.2-thinking |  |
 | link:solvers/664.py[664.py] | link:solvers/664.md[664.md] | 0.115 | gpt-5.2-thinking |  |
 | link:solvers/665.py[665.py] | link:solvers/665.md[665.md] |  | gpt-5.2-thinking |  | error: timed out after 600.000s
@@ -1351,7 +1351,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 
 This section lists the slowest solvers we have. Anything incredibly slower than most problems is likely to have important missing optimizations which we should ideally find.
 
-10 slowest Python solvers which give the correct answer:
+20 slowest Python solvers which give the correct answer:
 
 // SLOWEST PYTHON SOLVERS TABLE
 |===
@@ -1375,5 +1375,5 @@ This section lists the slowest solvers we have. Anything incredibly slower than 
 | link:solvers/558.py[558.py] | 102.015
 | link:solvers/415.py[415.py] | 100.317
 | link:solvers/712.py[712.py] | 95.006
-| link:solvers/953.py[953.py] | 86.836
+| link:solvers/662.py[662.py] | 94.847
 |===

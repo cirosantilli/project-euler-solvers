@@ -2,254 +2,180 @@
 """
 Project Euler 665 - Proportionate Nim
 
-We compute f(M) = sum(n+m) over all losing positions (n,m) with n<=m and n+m<=M
-for the 2-pile game with moves:
- - remove n from one pile
- - remove n from both piles
- - remove n from one and 2n from the other
+Compute f(M) for M = 10^7.
 
-This game is (1,2)-GDWN. Losing positions are generated greedily by avoiding
-previously used invariants:
-  d = b-a
-  e = b-2a
-  f = 2b-a
-(and their symmetric counterparts).
+Rules (from the problem statement):
+Moves from (n,m) allow subtracting:
+- (k,0) or (0,k)  (remove k from one pile)
+- (k,k)          (remove k from both piles)
+- (k,2k) or (2k,k) (remove k from one pile and 2k from the other)
 
-Pure Python is fine for the small test cases, but for M=10^7 we compile
-and run an optimized C++ implementation.
+A losing (P) position set can be generated greedily with mex, enforcing that no two
+P-positions share any move-invariant:
+- coordinate values (due to single-pile moves)
+- difference (b-a) (due to diagonal moves)
+- linear forms (b-2a) and (a-2b) (due to (k,2k)/(2k,k) moves)
+
+We generate P-positions in increasing mex of the smaller coordinate a, and for each a
+choose the smallest b >= a+1 satisfying all constraints. Then we sum a+b over those
+P-positions with a+b <= M.
 """
 
-import os
-import sys
-import hashlib
-import subprocess
 from array import array
 
 
-# ---------------------------
-# Small pure-Python validator
-# ---------------------------
-def f_python(M: int) -> int:
-    """Pure Python version used for small M only (e.g. <= 1000)."""
-    limit_a = M // 2
-    maxN = 3 * limit_a + 10
+def f(M: int) -> int:
+    if M < 0:
+        return 0
 
-    parent = array("I", range(maxN + 2))
-    offD = maxN
-    D = bytearray(2 * maxN + 1)
+    # We must generate true P-positions of the infinite game, then count those with a+b <= M.
+    # It's enough to generate all pairs with a <= M//2 (since b >= a implies a+b > M when a > M//2).
+    half = M // 2
 
-    offE = 2 * maxN
-    E = bytearray(3 * maxN + 1)
+    # Empirically (and supported by the structure of this game), b stays below about 1.13*M
+    # for all needed a <= M//2. Use a conservative headroom factor.
+    L = (M * 12) // 10 + 100  # 1.2*M + 100
 
-    offF = maxN
-    F = bytearray(3 * maxN + 1)
+    # Disjoint-set "next free" structure:
+    # parent[x] = smallest y >= x that is not yet used (after path compression).
+    #
+    # We use DSU for:
+    # - used coordinate values (a and b)
+    # - used differences d = b-a
+    #
+    # This avoids repeated scanning in dense arrays.
+    par_num = array("I", range(L + 2))   # sentinel at L+1
+    par_diff = array("I", range(L + 2))  # sentinel at L+1
 
-    # mark invariant zero used
-    D[offD] = 1
-    E[offE] = 1
-    F[offF] = 1
+    def find(par: array, x: int) -> int:
+        while par[x] != x:
+            par[x] = par[par[x]]
+            x = par[x]
+        return x
 
-    par = parent
-    par[0] = 1  # mark 0 used
+    def occupy(par: array, x: int) -> None:
+        # Mark x as used: redirect to next free.
+        par[x] = find(par, x + 1)
 
-    def find(x: int) -> int:
-        while True:
-            px = par[x]
-            if px == x:
-                return x
-            par[x] = par[px]
-            x = px
+    # For linear constraints we keep a compact boolean table for t in [-2L, L]
+    # mapped by idx = t + shift.
+    shift = 2 * L
+    used_lin = bytearray(3 * L + 1)
 
-    def use(x: int) -> None:
-        par[x] = find(x + 1)
+    # To test the constraint "a-2b not used", it is convenient to use u = 2b-a = -(a-2b).
+    # For fixed a, u increases by 2 as b increases. We store used u's split by parity:
+    #   even u : used_u2_even[u//2] == 1
+    #   odd u  : used_u2_odd[u//2]  == 1
+    used_u2_even = bytearray(L + 1)  # u in [0, 2L] -> u//2 in [0, L]
+    used_u2_odd = bytearray(L + 1)
 
-    use(0)
+    twoL = 2 * L
+
+    # Initialize with (0,0) as a losing position.
+    occupy(par_num, 0)
+    occupy(par_diff, 0)
+    used_lin[shift] = 1  # t=0
+    used_u2_even[0] = 1  # u=0
 
     total = 0
-    a = find(1)
+    a = 0  # search cursor for mex; with DSU we can just call find(par_num, a)
 
-    while a <= limit_a:
-        b = find(a + 1)
-        two_a = a << 1
+    # Local bindings for speed
+    par_num_local = par_num
+    par_diff_local = par_diff
+    used_lin_local = used_lin
+    used_u2e = used_u2_even
+    used_u2o = used_u2_odd
+    find_num = find
+    find_diff = find
 
-        while True:
-            d = b - a
-            if D[d + offD]:
-                b = find(b + 1)
-                continue
-            e = b - two_a
-            if E[e + offE]:
-                b = find(b + 1)
-                continue
-            f = (b << 1) - a
-            if F[f + offF]:
-                b = find(b + 1)
-                continue
+    lin_find = used_lin_local.find
+    u2e_find = used_u2e.find
+    u2o_find = used_u2o.find
+    sh = shift
+    L_local = L
+    twoL_local = twoL
+
+    while True:
+        a = find_num(par_num_local, a)
+        if a > half:
             break
 
-        # accept (a,b)
-        use(a)
-        use(b)
+        # b=a is impossible because d=0 is already used. Start at a+1.
+        b = find_num(par_num_local, a + 1)
 
-        D[d + offD] = 1
-        D[-d + offD] = 1
+        while True:
+            # difference constraint
+            d = b - a
+            nd = find_diff(par_diff_local, d)
+            if nd != d:
+                b = a + nd
+                b = find_num(par_num_local, b)
+                continue
 
-        E[e + offE] = 1
-        E[(a - (b << 1)) + offE] = 1
+            # linear constraint 1: t1 = b-2a
+            idx1 = (b - 2 * a) + sh
+            if used_lin_local[idx1]:
+                idx = lin_find(0, idx1 + 1)
+                b = (idx - sh) + 2 * a
+                b = find_num(par_num_local, b)
+                continue
 
-        F[f + offF] = 1
-        F[(two_a - b) + offF] = 1
+            # linear constraint 2: t2 = a-2b <=> u = 2b-a must be unused (with parity step 2)
+            u = 2 * b - a
+            if u & 1:
+                ui = u >> 1
+                if used_u2o[ui]:
+                    ni = u2o_find(0, ui + 1)
+                    b = (a + (2 * ni + 1)) >> 1
+                    b = find_num(par_num_local, b)
+                    continue
+            else:
+                ui = u >> 1
+                if used_u2e[ui]:
+                    ni = u2e_find(0, ui + 1)
+                    b = (a + (2 * ni)) >> 1
+                    b = find_num(par_num_local, b)
+                    continue
+
+            # All constraints satisfied
+            break
+
+        # Mark a, b, and d as used
+        occupy(par_num_local, a)
+        occupy(par_num_local, b)
+        occupy(par_diff_local, d)
+
+        # Mark linear values and their negations in the u-table
+        t = b - 2 * a
+        used_lin_local[t + sh] = 1
+        u = -t
+        if 0 <= u <= twoL_local:
+            (used_u2o if (u & 1) else used_u2e)[u >> 1] = 1
+
+        t = a - 2 * b
+        used_lin_local[t + sh] = 1
+        u = -t
+        if 0 <= u <= twoL_local:
+            (used_u2o if (u & 1) else used_u2e)[u >> 1] = 1
 
         s = a + b
         if s <= M:
             total += s
 
-        a = find(a)
+        # Next mex search can start at a+1
+        a += 1
 
     return total
 
 
-# ---------------------------
-# C++ accelerator (embedded)
-# ---------------------------
-CPP_SOURCE = r"""
-#include <bits/stdc++.h>
-using namespace std;
-
-static inline uint32_t dsu_find(vector<uint32_t>& p, uint32_t x){
-    while(p[x] != x){
-        p[x] = p[p[x]];
-        x = p[x];
-    }
-    return x;
-}
-
-int main(int argc, char** argv){
-    uint32_t M = 10000000u;
-    if(argc >= 2) M = (uint32_t)strtoul(argv[1], nullptr, 10);
-
-    uint32_t limit_a = M / 2;
-    uint32_t maxN = 3 * limit_a + 10;
-
-    vector<uint32_t> parent(maxN + 2);
-    for(uint32_t i=0;i<=(uint32_t)maxN+1;i++) parent[i]=i;
-
-    const uint32_t offD = maxN;
-    vector<uint8_t> D(2*maxN + 1, 0);
-
-    const uint32_t offE = 2*maxN;
-    vector<uint8_t> E(3*maxN + 1, 0);
-
-    const uint32_t offF = maxN;
-    vector<uint8_t> F(3*maxN + 1, 0);
-
-    // invariant zero used
-    D[offD] = 1;
-    E[offE] = 1;
-    F[offF] = 1;
-
-    // mark 0 used in DSU
-    parent[0] = 1;
-    parent[0] = dsu_find(parent, 1);
-
-    auto dsu_use = [&](uint32_t x){
-        parent[x] = dsu_find(parent, x+1);
-    };
-
-    uint64_t total = 0;
-
-    uint32_t a = dsu_find(parent, 1);
-    while(a <= limit_a){
-        uint32_t b = dsu_find(parent, a+1);
-        uint32_t two_a = a << 1;
-
-        int32_t d,e;
-        int32_t f;
-
-        while(true){
-            d = (int32_t)b - (int32_t)a;
-            if(D[(int32_t)d + (int32_t)offD]){
-                b = dsu_find(parent, b+1);
-                continue;
-            }
-            e = (int32_t)b - (int32_t)two_a;
-            if(E[(int32_t)e + (int32_t)offE]){
-                b = dsu_find(parent, b+1);
-                continue;
-            }
-            f = (int32_t)(b<<1) - (int32_t)a;
-            if(F[(int32_t)f + (int32_t)offF]){
-                b = dsu_find(parent, b+1);
-                continue;
-            }
-            break;
-        }
-
-        // accept (a,b)
-        dsu_use(a);
-        dsu_use(b);
-
-        D[d + (int32_t)offD] = 1;
-        D[-d + (int32_t)offD] = 1;
-
-        E[e + (int32_t)offE] = 1;
-        E[(int32_t)a - (int32_t)(b<<1) + (int32_t)offE] = 1;
-
-        F[f + (int32_t)offF] = 1;
-        F[(int32_t)two_a - (int32_t)b + (int32_t)offF] = 1;
-
-        uint32_t s = a + b;
-        if(s <= M) total += s;
-
-        a = dsu_find(parent, a);
-    }
-
-    cout << total << "\n";
-    return 0;
-}
-"""
-
-
-def compile_cpp() -> str:
-    """Compile the embedded C++ code and return the executable path."""
-    src_hash = hashlib.sha256(CPP_SOURCE.encode("utf-8")).hexdigest()[:16]
-    exe_name = f"euler665_{src_hash}.bin"
-    exe_path = os.path.join(os.path.dirname(__file__), exe_name)
-
-    if os.path.exists(exe_path):
-        return exe_path
-
-    cpp_path = os.path.join(os.path.dirname(__file__), f"euler665_{src_hash}.cpp")
-    with open(cpp_path, "w", encoding="utf-8") as f:
-        f.write(CPP_SOURCE)
-
-    cmd = ["g++", "-O3", "-std=c++17", cpp_path, "-o", exe_path]
-    subprocess.check_call(cmd)
-    return exe_path
-
-
-def f_fast(M: int) -> int:
-    """Compute using the compiled C++ accelerator."""
-    exe = compile_cpp()
-    out = subprocess.check_output([exe, str(M)], text=True).strip()
-    return int(out)
-
-
-def main():
-    # Required asserts from problem statement
-    assert f_python(10) == 21
-    assert f_python(100) == 1164
-    assert f_python(1000) == 117002
-
-    M = 10**7
-    try:
-        ans = f_fast(M)
-    except Exception:
-        # Fallback (will be far too slow for 1e7, but keeps correctness)
-        ans = f_python(M)
-
-    print(ans)
+def _self_test() -> None:
+    # Test values given in the problem statement
+    assert f(10) == 21
+    assert f(100) == 1164
+    assert f(1000) == 117002
 
 
 if __name__ == "__main__":
-    main()
+    _self_test()
+    print(f(10**7))
