@@ -18,6 +18,8 @@ This repo aims to solve **ALL** https://projecteuler.net[Project Euler] problems
 
 Tested on Python 3.13.7, PyPy 7.3.20, Ubuntu 25.10.
 
+**Ridiculous stretch goal**: solve as many problems as possible in <<lean>> with mathematically proven correctness! Status: TBD.
+
 .https://commons.wikimedia.org/wiki/File:Leonhard_Euler_2.jpg[Portrait of Leonard Euler by Jakob Emanuel Handmann c.1756] with https://knowyourmeme.com/memes/deal-with-it[Deal With It meme sunglasses] added on it by ChatGPT with prompt "Extract bust and add meme sunglasses."
 image::logo.jpg[]
 
@@ -293,6 +295,8 @@ you can build example with commands such as:
 * `make c`: build all compiled C examples
 * `make 1_c.out`: build just example 1 in language C
 
+Some languages may not have `make` support and require more specialized builds, this is notable the case for <<lean>> currently.
+
 By default running:
 
 [source,shell]
@@ -339,7 +343,7 @@ To run first setup Lean with:
 ----
 curl https://elan.lean-lang.org/elan-init.sh -sSf | sh
 source $HOME/.elan/env
-lake build
+lake -R build
 ----
 
 and then you can run the generated executables with:
@@ -349,13 +353,6 @@ and then you can run the generated executables with:
 solvers/1_lean.out
 ----
 
-Rebuild just one executable:
-
-[source,shell]
-----
-lake env make -C solvers 1_lean.out
-----
-
 Run the proof of of a single solver e.g. link:solvers/1.lean[]:
 
 [source,shell]
@@ -363,10 +360,18 @@ Run the proof of of a single solver e.g. link:solvers/1.lean[]:
 lake env lean solvers/1.lean
 ----
 
-The way things work is that link:data/project-euler-statements[] will contain a Lean formalization of each problem statement, for example:
+The way things are organize is that link:data/project-euler-statements[] will contain a Lean formalization of each problem statement, for example:
 
-* link:data/project-euler-statements/data/lean/ProjectEulerStatements/P1.lean[]: problem statement
-* link:solvers/P1.lean[]: efficient algorithm and proof of equivalence with the problem statement
+* link:data/project-euler-statements/data/lean/ProjectEulerStatements/P1.lean[]: defines a `ProjectEulerStatements.P1.naive` function, possibly non-computable, which we believe matches the problem definition
+* link:solvers/1.lean[]:
+** defines a computable function `ProjectEulerSolvers.P1.sol` which is an efficient algorithm to solve the problem
+** proves that this efficient function is equivalent to `ProjectEulerStatements.P1.naive`
+
+We have tried to also build Lean more simply with make but we failed so far, related threads:
+
+* https://proofassistants.stackexchange.com/questions/6460/how-to-build-all-lean-files-inside-a-directory-into-executables
+* https://proofassistants.stackexchange.com/questions/4851/how-do-you-compile-and-link-a-lean-program-by-hand
+* https://proofassistants.stackexchange.com/questions/1388/how-to-run-the-main-function-in-lean-4
 
 == Folders
 
