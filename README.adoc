@@ -374,6 +374,26 @@ We have tried to also build Lean more simply with make but we failed so far, rel
 * https://proofassistants.stackexchange.com/questions/4851/how-do-you-compile-and-link-a-lean-program-by-hand
 * https://proofassistants.stackexchange.com/questions/1388/how-to-run-the-main-function-in-lean-4
 
+Lean perf notes from Codex:
+
+* link:solvers/25.lean[]
++
+....
+Result on my run:                                                                                                                                                                                                                           
+                                                                                                                                                                                                                                            
+- ./test.py 25 → Lean ~2.03s vs Python ~0.21s (still ~10× slower)                                                                                                                                                                           
+                                                         
+Why it’s still slower:                                                                                               
+                                                                                                                                                                                                                                            
+- Lean’s Nat big‑int multiplication is relatively heavy compared to Python’s highly optimized bignum, and fast‑doubling uses multiplications of 1000‑digit numbers.                                                                         
+                                                         
+If you want to go faster, the next step is to avoid big‑ints entirely and use a floating‑point closed‑form estimate for the index (Binet/log10), optionally with a tiny adjustment. I can implement that (it would be effectively           
+constant‑time and should be much faster), but it would move away from “pure integer” logic.                          
+                                                         
+Let me know if you want that change.   
+....
+* link:solvers/44.lean[]: TODO
+
 ===== Lean prompts
 
 Port Python to Lean:
