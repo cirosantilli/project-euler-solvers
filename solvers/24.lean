@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P24
 namespace ProjectEulerSolutions.P24
 
 partial def factorials (k : Nat) : Array Nat :=
@@ -31,12 +32,20 @@ partial def nthLexicographicPermutation (digits : List Nat) (n : Nat) : String :
       loop (i - 1) rank' rest (acc ++ [Char.ofNat (d + 48)])
   loop k (n - 1) digits []
 
+def digitsFromString (s : String) : List Nat :=
+  s.data.map (fun c => c.toNat - '0'.toNat)
 
-def sol : String :=
-  nthLexicographicPermutation (List.range 10) 1000000
+def digitsToString (ds : List Nat) : String :=
+  String.mk (ds.map (fun d => Char.ofNat (d + 48)))
 
+
+
+def sol (_n : Nat) :=
+  digitsFromString (nthLexicographicPermutation (List.range 10) 1000000)
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P24.naive ([] : List Nat) n = sol n := sorry
 end ProjectEulerSolutions.P24
 open ProjectEulerSolutions.P24
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (digitsToString (sol 0))

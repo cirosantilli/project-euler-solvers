@@ -191,8 +191,7 @@ def main() -> None:
             continue
         dfs(0, m, 1, 1, 2)
 
-    result = sum(solutions)
-    print(result)
+    print(sum(solutions))
 
 
 if __name__ == "__main__":

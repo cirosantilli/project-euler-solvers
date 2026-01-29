@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P96
 namespace ProjectEulerSolutions.P96
 
 abbrev sudokuText : String :=
@@ -704,11 +705,13 @@ partial def solveAll : Nat :=
   loop puzzles 0
 
 
-def sol : Nat :=
+
+def sol (_n : Nat) :=
   solveAll
 
+theorem equiv (n : Nat) : ProjectEulerStatements.P96.naive ([] : List (List (List Nat))) = sol n := sorry
 end ProjectEulerSolutions.P96
 open ProjectEulerSolutions.P96
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

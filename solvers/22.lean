@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P22
 namespace ProjectEulerSolutions.P22
 
 abbrev namesText : String :=
@@ -349,14 +350,16 @@ def colinPosScore (names : List String) : Nat × Nat :=
   let pos := find namesSorted 1
   (pos, pos * nameValue "COLIN")
 
-def sol : Nat :=
-  totalNameScores (parseNames namesText)
-
 example : colinPosScore (parseNames namesText) = (938, 49714) := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  totalNameScores (parseNames namesText)
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P22.naive ([] : List String) = sol n := sorry
 end ProjectEulerSolutions.P22
 open ProjectEulerSolutions.P22
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

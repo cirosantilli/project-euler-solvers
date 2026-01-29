@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P65
 namespace ProjectEulerSolutions.P65
 
 partial def eContinuedFractionCoeffs (n : Nat) : List Nat :=
@@ -28,9 +29,6 @@ partial def solve : Nat :=
   digitSum p100
 
 
-def sol : Nat :=
-  solve
-
 example :
     let coeffs10 := eContinuedFractionCoeffs 10
     let pq := convergentNumeratorDenominator coeffs10
@@ -40,8 +38,13 @@ example :
 example : digitSum 1457 = 17 := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  solve
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P65.naive n = sol n := sorry
 end ProjectEulerSolutions.P65
 open ProjectEulerSolutions.P65
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

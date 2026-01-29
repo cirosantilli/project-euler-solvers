@@ -10,17 +10,18 @@ partial def countSqrt2Convergents (limit : Nat) : Nat :=
   loop 1 3 2 0
 
 
-def sol : Nat :=
-  countSqrt2Convergents 1000
-
 example : countSqrt2Convergents 7 = 0 := by
   native_decide
 
 example : countSqrt2Convergents 8 = 1 := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  countSqrt2Convergents 1000
+
 end ProjectEulerSolutions.P57
 open ProjectEulerSolutions.P57
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

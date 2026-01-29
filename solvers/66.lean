@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P66
 namespace ProjectEulerSolutions.P66
 
 partial def sqrtFloor (n : Nat) : Nat :=
@@ -47,14 +48,16 @@ partial def solve (limit : Nat) : Nat :=
   loop 2 0 0
 
 
-def sol : Nat :=
-  solve 1000
-
 example : minimalPellX 13 = some 649 := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  solve 1000
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P66.naive n n = sol n := sorry
 end ProjectEulerSolutions.P66
 open ProjectEulerSolutions.P66
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

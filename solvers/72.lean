@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P72
 namespace ProjectEulerSolutions.P72
 
 partial def computePhiLinear (limit : Nat) : Array Nat :=
@@ -48,9 +49,6 @@ partial def countReducedProperFractions (maxD : Nat) : Nat :=
     loop 2 0
 
 
-def sol : Nat :=
-  countReducedProperFractions 1000000
-
 example : countReducedProperFractions 8 = 21 := by
   native_decide
 
@@ -60,8 +58,13 @@ example : countReducedProperFractions 1 = 0 := by
 example : countReducedProperFractions 2 = 1 := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  countReducedProperFractions 1000000
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P72.naive n = sol n := sorry
 end ProjectEulerSolutions.P72
 open ProjectEulerSolutions.P72
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

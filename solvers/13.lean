@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P13
 namespace ProjectEulerSolutions.P13
 
 abbrev numbers : List String := [
@@ -114,11 +115,13 @@ def firstTenDigits (nums : List String) : String :=
   String.mk (s.data.take 10)
 
 
-def sol : String :=
-  firstTenDigits numbers
 
+def sol (_n : Nat) :=
+  (firstTenDigits numbers).toNat!
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P13.naive = sol n := sorry
 end ProjectEulerSolutions.P13
 open ProjectEulerSolutions.P13
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

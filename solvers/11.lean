@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P11
 namespace ProjectEulerSolutions.P11
 
 abbrev grid : Array (Array Nat) := #[
@@ -101,6 +102,8 @@ def sol (k : Nat) : Nat :=
 example : 26 * 63 * 78 * 14 = 1788696 := by
   native_decide
 
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P11.naive = sol n := sorry
 end ProjectEulerSolutions.P11
 open ProjectEulerSolutions.P11
 

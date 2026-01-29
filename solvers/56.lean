@@ -22,17 +22,18 @@ partial def maxDigitalSum (limit : Nat) : Nat × Nat × Nat :=
   loopA 1 0 0 0
 
 
-def sol : Nat :=
-  (maxDigitalSum 100).1
-
 example : digitSum (Nat.pow 10 100) = 1 := by
   native_decide
 
 example : digitSum (Nat.pow 2 15) = 26 := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  (maxDigitalSum 100).1
+
 end ProjectEulerSolutions.P56
 open ProjectEulerSolutions.P56
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

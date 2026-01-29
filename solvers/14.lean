@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P14
 namespace ProjectEulerSolutions.P14
 
 partial def collatzNext (n : Nat) : Nat :=
@@ -50,6 +51,8 @@ example : collatzLength 1 = 1 := by
 example : collatzLength 13 = 10 := by
   native_decide
 
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P14.naive n n = sol n := sorry
 end ProjectEulerSolutions.P14
 open ProjectEulerSolutions.P14
 

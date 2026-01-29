@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P97
 namespace ProjectEulerSolutions.P97
 
 partial def powMod (a e mod : Nat) : Nat :=
@@ -14,11 +15,13 @@ partial def lastTenDigits : Nat :=
   (28433 * powMod 2 7830457 mod + 1) % mod
 
 
-def sol : Nat :=
+
+def sol (_n : Nat) :=
   lastTenDigits
 
+theorem equiv (n : Nat) : ProjectEulerStatements.P97.naive = sol n := sorry
 end ProjectEulerSolutions.P97
 open ProjectEulerSolutions.P97
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

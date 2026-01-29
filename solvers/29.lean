@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P29
 namespace ProjectEulerSolutions.P29
 
 partial def countDistinctPowers (maxA maxB : Nat) : Nat :=
@@ -16,14 +17,16 @@ partial def countDistinctPowers (maxA maxB : Nat) : Nat :=
   (loopA 2 []).length
 
 
-def sol (maxA maxB : Nat) : Nat :=
-  countDistinctPowers maxA maxB
-
-example : sol 5 5 = 15 := by
+example : countDistinctPowers 5 5 = 15 := by
   native_decide
 
+
+def sol (_n : Nat) : Nat :=
+  countDistinctPowers 100 100
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P29.naive n n = sol n := sorry
 end ProjectEulerSolutions.P29
 open ProjectEulerSolutions.P29
 
 def main : IO Unit := do
-  IO.println (sol 100 100)
+  IO.println (sol 0)

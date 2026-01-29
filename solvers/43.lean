@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P43
 namespace ProjectEulerSolutions.P43
 
 abbrev primes : List Nat := [2, 3, 5, 7, 11, 13, 17]
@@ -107,14 +108,16 @@ partial def solve : Nat :=
   sumStates states 0
 
 
-def sol : Nat :=
-  solve
-
 example : isPandigitalSubstringProperty 1406357289 = true := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  solve
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P43.naive = sol n := sorry
 end ProjectEulerSolutions.P43
 open ProjectEulerSolutions.P43
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

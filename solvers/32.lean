@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P32
 namespace ProjectEulerSolutions.P32
 
 abbrev fullMask : Nat := (1 <<< 9) - 1
@@ -105,11 +106,13 @@ partial def solve : Nat :=
   sum 0 0
 
 
-def sol : Nat :=
+
+def sol (_n : Nat) :=
   solve
 
+theorem equiv (n : Nat) : ProjectEulerStatements.P32.naive n n = sol n := sorry
 end ProjectEulerSolutions.P32
 open ProjectEulerSolutions.P32
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

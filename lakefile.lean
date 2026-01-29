@@ -39,6 +39,8 @@ package ProjectEulerSolutions where
     ⟨`relaxedAutoImplicit, false⟩,
     ⟨`weak.linter.mathlibStandardSet, true⟩,
     ⟨`weak.linter.style.nativeDecide, false⟩,
+    ⟨`weak.linter.style.commandStart, false⟩,
+    ⟨`weak.linter.style.longLine, false⟩,
     ⟨`maxSynthPendingDepth, (Lean.LeanOptionValue.ofNat 3)⟩
   ]
 

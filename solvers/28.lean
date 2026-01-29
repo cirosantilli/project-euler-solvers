@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P28
 namespace ProjectEulerSolutions.P28
 
 partial def spiralDiagonalsSum (n : Nat) : Nat :=
@@ -21,6 +22,8 @@ example : sol 1 = 1 := by
 example : sol 3 = 25 := by
   native_decide
 
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P28.naive n = sol n := sorry
 end ProjectEulerSolutions.P28
 open ProjectEulerSolutions.P28
 

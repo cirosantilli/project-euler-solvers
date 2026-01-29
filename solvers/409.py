@@ -66,8 +66,7 @@ def main() -> None:
     assert count_winning(5) == 19_764_360
     assert count_winning(100) == 384_777_056
 
-    result = count_winning(10_000_000)
-    print(result)
+    print(count_winning(10_000_000))
 
 
 if __name__ == "__main__":

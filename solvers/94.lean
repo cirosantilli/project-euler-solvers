@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P94
 namespace ProjectEulerSolutions.P94
 
 abbrev LIMIT : Nat := 1000000000
@@ -44,17 +45,19 @@ partial def sumPerimeters (limit : Nat) : Nat :=
   (generatePerimeters limit).foldl (fun acc p => acc + p) 0
 
 
-def sol : Nat :=
-  sumPerimeters LIMIT
-
 example : triangleAreaIsosceles 5 6 = 12 := by
   native_decide
 
 example : generatePerimeters 1000 = [16, 50, 196, 722] := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  sumPerimeters LIMIT
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P94.naive n = sol n := sorry
 end ProjectEulerSolutions.P94
 open ProjectEulerSolutions.P94
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

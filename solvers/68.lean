@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P68
 namespace ProjectEulerSolutions.P68
 
 partial def insertAsc (x : Nat) (xs : List Nat) : List Nat :=
@@ -131,11 +132,13 @@ partial def magic5GonMax16Digit : String :=
   loopInner innerCandidates ""
 
 
-def sol : String :=
-  magic5GonMax16Digit
 
+def sol (_n : Nat) :=
+  magic5GonMax16Digit.toNat!
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P68.naive = sol n := sorry
 end ProjectEulerSolutions.P68
 open ProjectEulerSolutions.P68
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

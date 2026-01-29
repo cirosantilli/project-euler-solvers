@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P64
 namespace ProjectEulerSolutions.P64
 
 partial def sqrtFloor (n : Nat) : Nat :=
@@ -42,14 +43,16 @@ partial def countOddPeriods (limit : Nat) : Nat :=
   loop 2 0
 
 
-def sol : Nat :=
-  countOddPeriods 10000
-
 example : countOddPeriods 13 = 4 := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  countOddPeriods 10000
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P64.naive n n = sol n := sorry
 end ProjectEulerSolutions.P64
 open ProjectEulerSolutions.P64
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

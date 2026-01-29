@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P19
 namespace ProjectEulerSolutions.P19
 
 partial def isLeapYear (year : Nat) : Bool :=
@@ -36,11 +37,13 @@ partial def countSundaysOnFirst (startYear endYear : Nat) : Nat :=
   loopYear 1900 0 0
 
 
-def sol (startYear endYear : Nat) : Nat :=
-  countSundaysOnFirst startYear endYear
 
+def sol (_n : Nat) : Nat :=
+  countSundaysOnFirst 1901 2000
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P19.naive = sol n := sorry
 end ProjectEulerSolutions.P19
 open ProjectEulerSolutions.P19
 
 def main : IO Unit := do
-  IO.println (sol 1901 2000)
+  IO.println (sol 0)

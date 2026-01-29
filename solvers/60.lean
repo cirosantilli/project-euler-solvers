@@ -174,9 +174,6 @@ partial def solve (limit : Nat) : Nat × List Nat :=
   loopP primes (Nat.pow 10 30) []
 
 
-def sol : Nat :=
-  (solve 10000).1
-
 example :
     let ex := [3, 7, 109, 673]
     let ok := (List.range ex.length).all (fun i =>
@@ -191,8 +188,12 @@ example :
     s = [13, 5197, 5701, 6733, 8389] := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  (solve 10000).1
+
 end ProjectEulerSolutions.P60
 open ProjectEulerSolutions.P60
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

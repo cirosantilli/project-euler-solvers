@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P74
 namespace ProjectEulerSolutions.P74
 
 abbrev FACT9 : Nat := 362880
@@ -92,9 +93,6 @@ partial def solve : Nat :=
   loopN 1 0 lens seenStamp seenPos 0
 
 
-def sol : Nat :=
-  solve
-
 partial def nextDigitFact (n : Nat) : Nat :=
   let fact := buildFact
   let rec loop (n : Nat) (acc : Nat) : Nat :=
@@ -121,8 +119,13 @@ example : chainLenSimple 540 = 2 := by
 example : chainLenSimple 169 = 3 := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  solve
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P74.naive n n n = sol n := sorry
 end ProjectEulerSolutions.P74
 open ProjectEulerSolutions.P74
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

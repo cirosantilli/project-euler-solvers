@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P30
 namespace ProjectEulerSolutions.P30
 
 abbrev fifth : Array Nat := #[0, 1, 32, 243, 1024, 3125, 7776, 16807, 32768, 59049]
@@ -22,14 +23,16 @@ partial def matchesList : List Nat :=
   loop 2 []
 
 
-def sol : Nat :=
-  matchesList.foldl (fun acc n => acc + n) 0
-
 example : matchesList = [4150, 4151, 54748, 92727, 93084, 194979] := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  matchesList.foldl (fun acc n => acc + n) 0
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P30.naive n n = sol n := sorry
 end ProjectEulerSolutions.P30
 open ProjectEulerSolutions.P30
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

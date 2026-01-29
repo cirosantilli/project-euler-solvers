@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P89
 namespace ProjectEulerSolutions.P89
 
 abbrev romanText : String :=
@@ -1055,10 +1056,6 @@ partial def totalCharactersSaved (lines : List String) : Nat :=
     acc + (s.length - minimal.length)
   ) 0
 
-def sol : Nat :=
-  let lines := romanText.splitOn "\n" |>.filter (fun ln => ln != "")
-  totalCharactersSaved lines
-
 example : romanToInt "XVI" = 16 := by
   native_decide
 
@@ -1089,8 +1086,14 @@ example : romanToInt "MMMMCMXCIX" = 4999 := by
 example : intToMinRoman 4999 = "MMMMCMXCIX" := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  let lines := romanText.splitOn "\n" |>.filter (fun ln => ln != "")
+  totalCharactersSaved lines
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P89.naive ([] : List String) = sol n := sorry
 end ProjectEulerSolutions.P89
 open ProjectEulerSolutions.P89
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

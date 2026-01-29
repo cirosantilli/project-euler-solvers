@@ -155,17 +155,18 @@ partial def findSmallestPrimeInFamily (target : Nat) : Nat :=
   loopDigits 2
 
 
-def sol : Nat :=
-  findSmallestPrimeInFamily 8
-
 example : countPrimeFamilyForPositions 13 [0] = 6 := by
   native_decide
 
 example : countPrimeFamilyForPositions 56003 [2, 3] = 7 := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  findSmallestPrimeInFamily 8
+
 end ProjectEulerSolutions.P51
 open ProjectEulerSolutions.P51
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

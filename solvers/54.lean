@@ -1147,9 +1147,6 @@ def parseLines (s : String) : List String :=
 def countWins (lines : List String) : Nat :=
   lines.foldl (fun acc ln => if player1Wins ln then acc + 1 else acc) 0
 
-def sol : Nat :=
-  countWins (parseLines pokerText)
-
 example : player1Wins "5H 5C 6S 7S KD 2C 3S 8S 8D TD" = false := by
   native_decide
 
@@ -1168,8 +1165,12 @@ example : player1Wins "2H 2D 4C 4D 4S 3C 3D 3S 9S 9D" = true := by
 example : lexGreater (handRank ["AS","2D","3H","4C","5S"]) (handRank ["KS","QD","9H","4C","3S"]) = true := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  countWins (parseLines pokerText)
+
 end ProjectEulerSolutions.P54
 open ProjectEulerSolutions.P54
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

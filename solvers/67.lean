@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P67
 namespace ProjectEulerSolutions.P67
 
 abbrev triangleText : String :=
@@ -136,16 +137,18 @@ partial def maxPathSum (triangle : List (List Nat)) : Nat :=
       let dp := loopRows rest row
       getAt dp 0
 
-def sol : Nat :=
-  maxPathSum (parseTriangle triangleText)
-
 example :
     let sample := "3\n7 4\n2 4 6\n8 5 9 3"
     maxPathSum (parseTriangle sample) = 23 := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  maxPathSum (parseTriangle triangleText)
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P67.naive ([] : List (List Nat)) = sol n := sorry
 end ProjectEulerSolutions.P67
 open ProjectEulerSolutions.P67
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

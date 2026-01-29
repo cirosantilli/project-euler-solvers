@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P69
 namespace ProjectEulerSolutions.P69
 
 partial def primesUpToNeeded : List Nat :=
@@ -33,14 +34,16 @@ partial def totientMaxN (limit : Nat) : Nat :=
   loop (primesUpToNeeded) 1
 
 
-def sol : Nat :=
-  totientMaxN 1000000
-
 example : totientMaxN 10 = 6 := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  totientMaxN 1000000
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P69.naive n = sol n := sorry
 end ProjectEulerSolutions.P69
 open ProjectEulerSolutions.P69
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

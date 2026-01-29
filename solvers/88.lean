@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P88
 namespace ProjectEulerSolutions.P88
 
 partial def dfs (start prod summ terms kMax limit : Nat) (best : Array Nat) : Array Nat :=
@@ -34,17 +35,19 @@ partial def minProductSumNumbersSum (kMax : Nat) : Nat :=
   loopK 2 seen 0
 
 
-def sol : Nat :=
-  minProductSumNumbersSum 12000
-
 example : minProductSumNumbersSum 6 = 30 := by
   native_decide
 
 example : minProductSumNumbersSum 12 = 61 := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  minProductSumNumbersSum 12000
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P88.naive ([] : List Nat) = sol n := sorry
 end ProjectEulerSolutions.P88
 open ProjectEulerSolutions.P88
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

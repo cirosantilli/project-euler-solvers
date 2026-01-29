@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P21
 namespace ProjectEulerSolutions.P21
 
 partial def properDivisorSumsSieve (nMax : Nat) : Array Nat :=
@@ -60,6 +61,8 @@ example : properDivisorSumFactorization 220 = 284 := by
 example : properDivisorSumFactorization 284 = 220 := by
   native_decide
 
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P21.naive n = sol n := sorry
 end ProjectEulerSolutions.P21
 open ProjectEulerSolutions.P21
 

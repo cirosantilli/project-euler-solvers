@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P82
 namespace ProjectEulerSolutions.P82
 
 abbrev matrixText : String :=
@@ -131,11 +132,13 @@ example :
   native_decide
 
 
-def sol : Nat :=
+
+def sol (_n : Nat) :=
   minimalPathSumThreeWays (parseMatrix matrixText)
 
+theorem equiv (n : Nat) : ProjectEulerStatements.P82.naive ([] : List (List Nat)) = sol n := sorry
 end ProjectEulerSolutions.P82
 open ProjectEulerSolutions.P82
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

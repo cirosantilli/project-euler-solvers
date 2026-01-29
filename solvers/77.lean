@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P77
 namespace ProjectEulerSolutions.P77
 
 partial def sievePrimes (limit : Nat) : List Nat :=
@@ -51,14 +52,16 @@ partial def firstValueOver (target : Nat) : Nat :=
   loop 2
 
 
-def sol : Nat :=
-  firstValueOver 5000
-
 example : countPrimeSummations 10 (sievePrimes 10) = 5 := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  firstValueOver 5000
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P77.naive n n = sol n := sorry
 end ProjectEulerSolutions.P77
 open ProjectEulerSolutions.P77
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

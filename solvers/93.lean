@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P93
 namespace ProjectEulerSolutions.P93
 
 partial def insertRat (x : Rat) (xs : List Rat) : List Rat :=
@@ -111,16 +112,18 @@ partial def solve : String × Nat :=
   loop (combinations 4 (List.range 10)) 0 []
 
 
-def sol : String :=
-  (solve).1
-
 example :
     let (len, ints) := consecutiveLength [1,2,3,4]
     (len = 28) && (listMax ints = 36) = true := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  (solve).1.toNat!
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P93.naive ([] : List Nat) = sol n := sorry
 end ProjectEulerSolutions.P93
 open ProjectEulerSolutions.P93
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

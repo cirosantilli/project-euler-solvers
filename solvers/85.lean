@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P85
 namespace ProjectEulerSolutions.P85
 
 abbrev TARGET : Nat := 2000000
@@ -29,14 +30,16 @@ partial def bestGridAreaNear (target : Nat) : Nat :=
   loopM 1 (Nat.pow 10 30) 0
 
 
-def sol : Nat :=
-  bestGridAreaNear TARGET
-
 example : rectangleCount 3 2 = 18 := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  bestGridAreaNear TARGET
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P85.naive n n = sol n := sorry
 end ProjectEulerSolutions.P85
 open ProjectEulerSolutions.P85
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

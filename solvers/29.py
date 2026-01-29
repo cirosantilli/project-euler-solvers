@@ -13,8 +13,7 @@ def main() -> None:
     # Test case from the problem statement: 2 <= a <= 5, 2 <= b <= 5 -> 15 distinct terms
     assert count_distinct_powers(5, 5) == 15
 
-    result = count_distinct_powers(100, 100)
-    print(result)
+    print(count_distinct_powers(100, 100))
 
 
 if __name__ == "__main__":

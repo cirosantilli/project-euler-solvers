@@ -94,5 +94,4 @@ def solve() -> int:
 
 
 if __name__ == "__main__":
-    result = solve()
-    print(result)
+    print(solve())

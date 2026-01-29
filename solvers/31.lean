@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P31
 namespace ProjectEulerSolutions.P31
 
 partial def countWays (target : Nat) (coins : List Nat) : Nat :=
@@ -17,10 +18,6 @@ partial def countWays (target : Nat) (coins : List Nat) : Nat :=
   dp[target]!
 
 
-def sol : Nat :=
-  let coins := [1, 2, 5, 10, 20, 50, 100, 200]
-  countWays 200 coins
-
 example : countWays 0 [1, 2, 5, 10, 20, 50, 100, 200] = 1 := by
   native_decide
 
@@ -36,8 +33,14 @@ example : countWays 5 [1, 2, 5, 10, 20, 50, 100, 200] = 4 := by
 example : countWays 10 [1, 2, 5, 10, 20, 50, 100, 200] = 11 := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  let coins := [1, 2, 5, 10, 20, 50, 100, 200]
+  countWays 200 coins
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P31.naive n n = sol n := sorry
 end ProjectEulerSolutions.P31
 open ProjectEulerSolutions.P31
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

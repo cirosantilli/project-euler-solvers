@@ -55,8 +55,7 @@ def main() -> None:
     path = find_words_file()
     text = path.read_text(encoding="utf-8")
     words = parse_words_file(text)
-    result = count_triangle_words(words)
-    print(result)
+    print(count_triangle_words(words))
 
 
 if __name__ == "__main__":

@@ -110,17 +110,18 @@ partial def bestKeyAndSum (cipher : List Nat) : Nat :=
       loopK0 (k0 + 1) bestScore bestSum
   loopK0 ('a'.toNat) (-1000000000000000000) 0
 
-def sol : Nat :=
-  bestKeyAndSum (parseCipher cipherText)
-
 example : Nat.xor 65 42 = 107 := by
   native_decide
 
 example : Nat.xor 107 42 = 65 := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  bestKeyAndSum (parseCipher cipherText)
+
 end ProjectEulerSolutions.P59
 open ProjectEulerSolutions.P59
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

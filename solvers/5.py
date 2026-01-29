@@ -19,8 +19,7 @@ def main() -> None:
     # Test from the statement
     assert lcm_range(10) == 2520
 
-    result = lcm_range(20)
-    print(result)
+    print(lcm_range(20))
 
 
 if __name__ == "__main__":

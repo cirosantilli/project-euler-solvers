@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P45
 namespace ProjectEulerSolutions.P45
 
 partial def triangle (n : Nat) : Nat :=
@@ -43,9 +44,6 @@ partial def solve : Nat :=
   loop 144
 
 
-def sol : Nat :=
-  solve
-
 example : triangle 285 = 40755 := by
   native_decide
 
@@ -55,8 +53,13 @@ example : pentagonal 165 = 40755 := by
 example : hexagonal 143 = 40755 := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  solve
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P45.naive n n = sol n := sorry
 end ProjectEulerSolutions.P45
 open ProjectEulerSolutions.P45
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

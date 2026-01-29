@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P73
 namespace ProjectEulerSolutions.P73
 
 partial def gcd (a b : Nat) : Nat :=
@@ -23,14 +24,16 @@ partial def countBetweenOneThirdAndOneHalf (limit : Nat) : Nat :=
   loopD 2 0
 
 
-def sol : Nat :=
-  countBetweenOneThirdAndOneHalf 12000
-
 example : countBetweenOneThirdAndOneHalf 8 = 3 := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  countBetweenOneThirdAndOneHalf 12000
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P73.naive n = sol n := sorry
 end ProjectEulerSolutions.P73
 open ProjectEulerSolutions.P73
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

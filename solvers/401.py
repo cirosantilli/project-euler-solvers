@@ -51,8 +51,7 @@ def main() -> None:
     for i, value in enumerate(expected, 1):
         assert sigma2_summatory(i, MOD) == value
 
-    result = sigma2_summatory(10**15, MOD)
-    print(result)
+    print(sigma2_summatory(10**15, MOD))
 
 
 if __name__ == "__main__":

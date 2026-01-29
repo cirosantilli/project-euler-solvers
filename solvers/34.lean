@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P34
 namespace ProjectEulerSolutions.P34
 
 partial def precomputeFactorials : Array Nat :=
@@ -37,11 +38,13 @@ partial def solve : Nat :=
   loop 3 0
 
 
-def sol : Nat :=
+
+def sol (_n : Nat) :=
   solve
 
+theorem equiv (n : Nat) : ProjectEulerStatements.P34.naive n = sol n := sorry
 end ProjectEulerSolutions.P34
 open ProjectEulerSolutions.P34
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

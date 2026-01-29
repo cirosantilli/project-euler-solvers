@@ -97,8 +97,7 @@ def main() -> None:
     # The maximum checkout is 170, so counting all totals < 171 should match.
     assert count_checkouts_under(171, all_throws, finishing_doubles) == 42336
 
-    result = count_checkouts_under(100, all_throws, finishing_doubles)
-    print(result)
+    print(count_checkouts_under(100, all_throws, finishing_doubles))
 
 
 if __name__ == "__main__":

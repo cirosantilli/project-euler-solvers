@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P39
 namespace ProjectEulerSolutions.P39
 
 partial def gcd (a b : Nat) : Nat :=
@@ -67,14 +68,16 @@ partial def countFor (limit pTarget : Nat) : Nat :=
   counts[pTarget]!
 
 
-def sol : Nat :=
-  maxSolutionsPerimeter 1000
-
 example : countFor 1000 120 = 3 := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  maxSolutionsPerimeter 1000
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P39.naive n = sol n := sorry
 end ProjectEulerSolutions.P39
 open ProjectEulerSolutions.P39
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

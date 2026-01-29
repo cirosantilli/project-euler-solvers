@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P98
 namespace ProjectEulerSolutions.P98
 
 abbrev wordsText : String :=
@@ -172,11 +173,13 @@ partial def solve : Nat :=
   loopGroups groups 0
 
 
-def sol : Nat :=
+
+def sol (_n : Nat) :=
   solve
 
+theorem equiv (n : Nat) : ProjectEulerStatements.P98.naive ([] : List String) = sol n := sorry
 end ProjectEulerSolutions.P98
 open ProjectEulerSolutions.P98
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

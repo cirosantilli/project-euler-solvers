@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P99
 namespace ProjectEulerSolutions.P99
 
 abbrev baseExpText : String :=
@@ -1027,12 +1028,14 @@ partial def bestLineNumber (pairs : List (Nat × Nat)) : Nat :=
           loop ps (idx + 1) bestIdx bestScore
   loop pairs 1 0 (-1.0)
 
-def sol : Nat :=
+
+def sol (_n : Nat) :=
   let pairs := parsePairs baseExpText
   bestLineNumber pairs
 
+theorem equiv (n : Nat) : ProjectEulerStatements.P99.naive ([] : List (Nat × Nat)) = sol n := sorry
 end ProjectEulerSolutions.P99
 open ProjectEulerSolutions.P99
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

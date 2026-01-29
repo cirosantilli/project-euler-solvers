@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P44
 namespace ProjectEulerSolutions.P44
 
 def pentagonal (n : Nat) : Nat :=
@@ -55,9 +56,6 @@ partial def findMinDifference (limit : Nat) : Nat :=
   loopK 2 (Nat.pow 10 30)
 
 
-def sol : Nat :=
-  findMinDifference 10000
-
 example :
     let first10 := [1,5,12,22,35,51,70,92,117,145]
     let ok := (List.range 10).all (fun i =>
@@ -72,9 +70,14 @@ example : pentagonal 4 + pentagonal 7 = pentagonal 8 := by
 example : isPentagonal (pentagonal 7 - pentagonal 4) = false := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  findMinDifference 10000
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P44.naive n = sol n := sorry
 end ProjectEulerSolutions.P44
 open ProjectEulerSolutions.P44
 
 def main : IO Unit := do
-  let ans := sol
+  let ans := sol 0
   IO.println ans

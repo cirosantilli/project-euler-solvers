@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P50
 namespace ProjectEulerSolutions.P50
 
 partial def sieveIsPrime (limit : Nat) : Array Bool :=
@@ -73,17 +74,19 @@ partial def longestConsecutivePrimeSum (limit : Nat) : Nat × Nat := by
     exact searchBest pref isPrime limit n maxLen
 
 
-def sol : Nat :=
-  (longestConsecutivePrimeSum 1000000).1
-
 example : longestConsecutivePrimeSum 100 = (41, 6) := by
   native_decide
 
 example : longestConsecutivePrimeSum 1000 = (953, 21) := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  (longestConsecutivePrimeSum 1000000).1
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P50.naive n = sol n := sorry
 end ProjectEulerSolutions.P50
 open ProjectEulerSolutions.P50
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

@@ -29,8 +29,7 @@ def _self_tests() -> None:
 
 def main() -> None:
     _self_tests()
-    result = count_sqrt2_convergents(1000)
-    print(result)
+    print(count_sqrt2_convergents(1000))
 
 
 if __name__ == "__main__":

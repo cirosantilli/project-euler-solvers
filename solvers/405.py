@@ -35,8 +35,7 @@ def main() -> None:
     assert f_mod(10**9) == 126897180
 
     k = 10**18
-    result = f_mod_power10(k)
-    print(result)
+    print(f_mod_power10(k))
 
 
 if __name__ == "__main__":

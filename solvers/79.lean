@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P79
 namespace ProjectEulerSolutions.P79
 
 abbrev keylogText : String :=
@@ -118,11 +119,13 @@ partial def derivePasscode : String :=
   let digits := topoSort adj indeg present
   digits.foldl (fun acc d => acc ++ toString d) ""
 
-def sol : String :=
-  derivePasscode
 
+def sol (_n : Nat) :=
+  derivePasscode.data
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P79.naive ([] : List String) = sol n := sorry
 end ProjectEulerSolutions.P79
 open ProjectEulerSolutions.P79
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (String.mk (sol 0))

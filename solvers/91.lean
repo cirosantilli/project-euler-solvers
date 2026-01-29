@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P91
 namespace ProjectEulerSolutions.P91
 
 partial def gcd (a b : Nat) : Nat :=
@@ -28,14 +29,16 @@ partial def countRightTriangles (n : Nat) : Nat :=
   loopX 0 total
 
 
-def sol : Nat :=
-  countRightTriangles 50
-
 example : countRightTriangles 2 = 14 := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  countRightTriangles 50
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P91.naive n = sol n := sorry
 end ProjectEulerSolutions.P91
 open ProjectEulerSolutions.P91
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

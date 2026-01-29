@@ -38,8 +38,7 @@ def main() -> None:
         [4, 62, 98, 27, 23, 9, 70, 98, 73, 93, 38, 53, 60, 4, 23],
     ]
 
-    result = max_path_sum(triangle)
-    print(result)
+    print(max_path_sum(triangle))
 
 
 if __name__ == "__main__":

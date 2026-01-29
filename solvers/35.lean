@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P35
 namespace ProjectEulerSolutions.P35
 
 partial def primeSieve (n : Nat) : Array Bool :=
@@ -104,17 +105,19 @@ partial def circularPrimeCount (limit : Nat) : Nat :=
     loop 2 0 processed
 
 
-def sol : Nat :=
-  circularPrimeCount 1000000
-
 example : circularPrimeCount 100 = 13 := by
   native_decide
 
 example : isCircularPrime 197 (primeSieve 1000) = true := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  circularPrimeCount 1000000
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P35.naive n = sol n := sorry
 end ProjectEulerSolutions.P35
 open ProjectEulerSolutions.P35
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

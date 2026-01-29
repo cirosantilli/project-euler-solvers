@@ -24,5 +24,4 @@ def solve(limit: int = 10_000) -> int:
 
 
 if __name__ == "__main__":
-    result = solve(10_000)
-    print(result)
+    print(solve(10_000))

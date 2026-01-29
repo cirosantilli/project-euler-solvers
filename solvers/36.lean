@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P36
 namespace ProjectEulerSolutions.P36
 
 partial def dropLastList (xs : List Char) : List Char :=
@@ -43,14 +44,16 @@ partial def solve (limit : Nat) : Nat :=
   loop pals 0
 
 
-def sol : Nat :=
-  solve 1000000
-
 example : isPalindromeBase2 585 = true := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  solve 1000000
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P36.naive n = sol n := sorry
 end ProjectEulerSolutions.P36
 open ProjectEulerSolutions.P36
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

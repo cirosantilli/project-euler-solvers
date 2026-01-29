@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P41
 namespace ProjectEulerSolutions.P41
 
 partial def isPrime (n : Nat) : Bool :=
@@ -74,9 +75,6 @@ partial def largestPandigitalPrime : Nat :=
   loopN 9
 
 
-def sol : Nat :=
-  largestPandigitalPrime
-
 example : isPrime 2 = true := by
   native_decide
 
@@ -89,8 +87,13 @@ example : isPrime 1 = false := by
 example : isPrime 9 = false := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  largestPandigitalPrime
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P41.naive n = sol n := sorry
 end ProjectEulerSolutions.P41
 open ProjectEulerSolutions.P41
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

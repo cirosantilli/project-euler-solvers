@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P10
 namespace ProjectEulerSolutions.P10
 
 partial def isPrimeWith (n : Nat) (primes : Array Nat) : Bool :=
@@ -37,6 +38,8 @@ def sol (limit : Nat) : Nat :=
 example : sol 10 = 17 := by
   native_decide
 
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P10.naive n = sol n := sorry
 end ProjectEulerSolutions.P10
 open ProjectEulerSolutions.P10
 

@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P48
 namespace ProjectEulerSolutions.P48
 
 partial def powMod (a b mod : Nat) : Nat :=
@@ -26,17 +27,19 @@ partial def exactSelfPowersSum (n : Nat) : Nat :=
   (List.range n).foldl (fun acc i => acc + Nat.pow (i + 1) (i + 1)) 0
 
 
-def sol : String :=
-  lastKDigitsSelfPowers 1000 10
-
 example : exactSelfPowersSum 10 = 10405071317 := by
   native_decide
 
 example : lastKDigitsSelfPowers 10 10 = "0405071317" := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  (lastKDigitsSelfPowers 1000 10).toNat!
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P48.naive n = sol n := sorry
 end ProjectEulerSolutions.P48
 open ProjectEulerSolutions.P48
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

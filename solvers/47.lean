@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P47
 namespace ProjectEulerSolutions.P47
 
 partial def distinctPrimeFactorCounts (limit : Nat) : Array Nat :=
@@ -35,17 +36,19 @@ partial def firstConsecutiveWithKFactors (k runLen startLimit : Nat) : Nat :=
   loopLimit startLimit
 
 
-def sol : Nat :=
-  firstConsecutiveWithKFactors 4 4 200000
-
 example : firstConsecutiveWithKFactors 2 2 100 = 14 := by
   native_decide
 
 example : firstConsecutiveWithKFactors 3 3 2000 = 644 := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  firstConsecutiveWithKFactors 4 4 200000
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P47.naive n n n = sol n := sorry
 end ProjectEulerSolutions.P47
 open ProjectEulerSolutions.P47
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

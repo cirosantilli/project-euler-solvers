@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P3
 namespace ProjectEulerStatements.P3
 
 partial def stripTwos (n : Nat) (largest : Nat) : Nat × Nat :=
@@ -24,6 +25,8 @@ def sol (n : Nat) : Nat :=
 
 example : sol 13195 = 29 := by
   native_decide
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P3.naive ⟨2, by decide⟩ = sol n := sorry
 
 end ProjectEulerStatements.P3
 open ProjectEulerStatements.P3

@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P6
 namespace ProjectEulerSolutions.P6
 
 def sumOfSquares (n : Nat) : Nat :=
@@ -13,6 +14,8 @@ def sol (n : Nat) : Nat :=
 example : sol 10 = 2640 := by
   native_decide
 
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P6.naive n = sol n := sorry
 end ProjectEulerSolutions.P6
 open ProjectEulerSolutions.P6
 

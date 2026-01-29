@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P15
 namespace ProjectEulerSolutions.P15
 
 partial def binom (n k : Nat) : Nat :=
@@ -17,14 +18,16 @@ partial def latticePaths (gridN gridM : Nat) : Nat :=
   binom (gridN + gridM) gridN
 
 
-def sol (gridN gridM : Nat) : Nat :=
-  latticePaths gridN gridM
-
-example : sol 2 2 = 6 := by
+example : latticePaths 2 2 = 6 := by
   native_decide
 
+
+def sol (_n : Nat) : Nat :=
+  latticePaths 20 20
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P15.naive n = sol n := sorry
 end ProjectEulerSolutions.P15
 open ProjectEulerSolutions.P15
 
 def main : IO Unit := do
-  IO.println (sol 20 20)
+  IO.println (sol 0)

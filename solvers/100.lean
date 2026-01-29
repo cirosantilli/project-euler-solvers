@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P100
 namespace ProjectEulerSolutions.P100
 
 partial def nextSolution (u v : Nat) : Nat × Nat :=
@@ -15,9 +16,6 @@ partial def blueRedForTotalLimit (limitN : Nat) : Nat × Nat × Nat :=
   loop 1 1
 
 
-def sol : Nat :=
-  (blueRedForTotalLimit (Nat.pow 10 12)).1
-
 example :
     let (u1, v1) := (1, 1)
     let (u2, v2) := nextSolution u1 v1
@@ -30,8 +28,13 @@ example :
     (b3, n3) = (15, 21) && (b4, n4) = (85, 120) = true := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  (blueRedForTotalLimit (Nat.pow 10 12)).1
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P100.naive n n = sol n := sorry
 end ProjectEulerSolutions.P100
 open ProjectEulerSolutions.P100
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

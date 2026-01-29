@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P23
 namespace ProjectEulerSolutions.P23
 
 partial def sumProperDivisorsSieve (limit : Nat) : Array Nat :=
@@ -52,9 +53,6 @@ partial def nonAbundantSums (limit : Nat) : Nat :=
   loopSum 1 0
 
 
-def sol : Nat :=
-  nonAbundantSums 28123
-
 example : (sumProperDivisorsSieve 28)[28]! = 28 := by
   native_decide
 
@@ -70,8 +68,13 @@ example :
     can[24]! = 1 := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  nonAbundantSums 28123
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P23.naive n = sol n := sorry
 end ProjectEulerSolutions.P23
 open ProjectEulerSolutions.P23
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

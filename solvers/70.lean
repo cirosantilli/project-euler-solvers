@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P70
 namespace ProjectEulerSolutions.P70
 
 abbrev MAX_N : Nat := 9999999
@@ -74,9 +75,6 @@ partial def solve (limit : Nat) : Nat :=
   loop 2 0 1 1 10
 
 
-def sol : Nat :=
-  solve MAX_N
-
 example :
     let phi := computePhiLinear 100000
     phi[1]! = 1 := by
@@ -95,8 +93,13 @@ example :
 example : digitSignature 87109 = digitSignature 79180 := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  solve MAX_N
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P70.naive n = sol n := sorry
 end ProjectEulerSolutions.P70
 open ProjectEulerSolutions.P70
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

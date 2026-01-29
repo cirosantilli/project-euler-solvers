@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P95
 namespace ProjectEulerSolutions.P95
 
 partial def computeSumProperDivisors (limit : Nat) : Array Nat :=
@@ -58,9 +59,6 @@ partial def amicableChainBest (limit : Nat) : Nat × Nat :=
   loopStart 2 0 0 processed seenStamp seenPos 0
 
 
-def sol : Nat :=
-  (amicableChainBest 1000000).2
-
 example :
     let s := computeSumProperDivisors 300
     (s[28]! = 28) && (s[220]! = 284) && (s[284]! = 220) = true := by
@@ -76,8 +74,13 @@ example :
     ok = true := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  (amicableChainBest 1000000).2
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P95.naive n n = sol n := sorry
 end ProjectEulerSolutions.P95
 open ProjectEulerSolutions.P95
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

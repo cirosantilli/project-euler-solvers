@@ -190,8 +190,7 @@ def compute_l(N: int) -> int:
 def main() -> None:
     assert compute_l(10) == 30
     assert compute_l(100) == 3442
-    result = compute_l(100000)
-    print(result)
+    print(compute_l(100000))
 
 
 if __name__ == "__main__":

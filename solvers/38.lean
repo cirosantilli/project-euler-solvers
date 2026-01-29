@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P38
 namespace ProjectEulerSolutions.P38
 
 abbrev targetMask : Nat := 1022
@@ -45,9 +46,6 @@ partial def concatFixed (x n : Nat) : String :=
   loop 1 ""
 
 
-def sol : Nat :=
-  solve
-
 example : concatFixed 192 3 = "192384576" := by
   native_decide
 
@@ -60,8 +58,13 @@ example : concatFixed 9 5 = "918273645" := by
 example : isPandigital "918273645" = true := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  solve
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P38.naive n = sol n := sorry
 end ProjectEulerSolutions.P38
 open ProjectEulerSolutions.P38
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

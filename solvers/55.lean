@@ -31,11 +31,12 @@ partial def solve (limit : Nat) : Nat :=
   loop 1 0
 
 
-def sol : Nat :=
+
+def sol (_n : Nat) :=
   solve 10000
 
 end ProjectEulerSolutions.P55
 open ProjectEulerSolutions.P55
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

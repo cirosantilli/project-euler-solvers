@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P76
 namespace ProjectEulerSolutions.P76
 
 partial def countSummations (n : Nat) : Nat :=
@@ -18,14 +19,16 @@ partial def countSummations (n : Nat) : Nat :=
   dp[n]!
 
 
-def sol : Nat :=
-  countSummations 100
-
 example : countSummations 5 = 6 := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  countSummations 100
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P76.naive n = sol n := sorry
 end ProjectEulerSolutions.P76
 open ProjectEulerSolutions.P76
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

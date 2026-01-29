@@ -86,8 +86,7 @@ def main() -> None:
     assert compute(100) == 26709528
 
     n = 10**12
-    result = compute(n) % MOD
-    print(result)
+    print(compute(n) % MOD)
 
 
 if __name__ == "__main__":

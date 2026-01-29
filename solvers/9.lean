@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P9
 namespace ProjectEulerSolutions.P9
 
 partial def specialPythagoreanProduct (total : Nat) : Nat :=
@@ -32,6 +33,8 @@ def sol (total : Nat) : Nat :=
 example : sol 12 = 60 := by
   native_decide
 
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P9.naive n = sol n := sorry
 end ProjectEulerSolutions.P9
 open ProjectEulerSolutions.P9
 

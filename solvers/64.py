@@ -44,8 +44,7 @@ def main() -> None:
     assert count_odd_periods(13) == 4
 
     LIMIT: Final[int] = 10_000
-    result = count_odd_periods(LIMIT)
-    print(result)
+    print(count_odd_periods(LIMIT))
 
 
 if __name__ == "__main__":

@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P62
 namespace ProjectEulerSolutions.P62
 
 partial def digitSignature (x : Nat) : Array Nat :=
@@ -51,14 +52,16 @@ partial def smallestCubeWithKPermutations (k : Nat) : Nat :=
   loop 1 1 []
 
 
-def sol : Nat :=
-  smallestCubeWithKPermutations 5
-
 example : smallestCubeWithKPermutations 3 = 41063625 := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  smallestCubeWithKPermutations 5
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P62.naive n n = sol n := sorry
 end ProjectEulerSolutions.P62
 open ProjectEulerSolutions.P62
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

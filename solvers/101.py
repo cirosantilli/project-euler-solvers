@@ -67,9 +67,7 @@ def main() -> None:
 
     # Now solve the stated problem (degree 10 polynomial).
     vals = [tenth_degree_u(n) for n in range(1, 12)]  # need up to u_11 for k=10 FIT
-    result = sum_fits_for_sequence(vals, max_k=10)
-
-    print(result)
+    print(sum_fits_for_sequence(vals, max_k=10))
 
 
 if __name__ == "__main__":

@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P86
 namespace ProjectEulerSolutions.P86
 
 partial def sqrtFloor (n : Nat) : Nat :=
@@ -63,17 +64,19 @@ partial def leastMExceeding (target : Nat) : Nat :=
   loop 0 0
 
 
-def sol : Nat :=
-  leastMExceeding 1000000
-
 example : countSolutionsUpTo 99 = 1975 := by
   native_decide
 
 example : countSolutionsUpTo 100 = 2060 := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  leastMExceeding 1000000
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P86.naive n = sol n := sorry
 end ProjectEulerSolutions.P86
 open ProjectEulerSolutions.P86
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

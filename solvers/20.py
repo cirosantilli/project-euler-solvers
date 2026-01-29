@@ -12,8 +12,7 @@ def main() -> None:
     # Test case from the problem statement
     assert factorial_digit_sum(10) == 27
 
-    result = factorial_digit_sum(100)
-    print(result)
+    print(factorial_digit_sum(100))
 
 
 if __name__ == "__main__":

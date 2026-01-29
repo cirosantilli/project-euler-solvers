@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P18
 namespace ProjectEulerSolutions.P18
 
 partial def combineRow (row dp : List Nat) : List Nat :=
@@ -35,14 +36,16 @@ abbrev triangle : List (List Nat) := [
 ]
 
 
-def sol : Nat :=
-  maxPathSum triangle
-
 example : maxPathSum [[3], [7, 4], [2, 4, 6], [8, 5, 9, 3]] = 23 := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  maxPathSum triangle
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P18.naive = sol n := sorry
 end ProjectEulerSolutions.P18
 open ProjectEulerSolutions.P18
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

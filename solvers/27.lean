@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P27
 namespace ProjectEulerSolutions.P27
 
 partial def sievePrimes (limit : Nat) : Array Nat :=
@@ -95,11 +96,13 @@ partial def solve : Int :=
   loopB bCandidates 0 0 0
 
 
-def sol : Int :=
+
+def sol (_n : Nat) :=
   solve
 
+theorem equiv (n : Nat) : ProjectEulerStatements.P27.naive n n n = sol n := sorry
 end ProjectEulerSolutions.P27
 open ProjectEulerSolutions.P27
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

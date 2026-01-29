@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P90
 namespace ProjectEulerSolutions.P90
 
 abbrev squarePairs : List (Nat × Nat) :=
@@ -54,11 +55,13 @@ partial def solve : Nat :=
   loopI 0 0
 
 
-def sol : Nat :=
+
+def sol (_n : Nat) :=
   solve
 
+theorem equiv (n : Nat) : ProjectEulerStatements.P90.naive = sol n := sorry
 end ProjectEulerSolutions.P90
 open ProjectEulerSolutions.P90
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

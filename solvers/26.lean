@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P26
 namespace ProjectEulerSolutions.P26
 
 partial def stripFactor (d p : Nat) : Nat :=
@@ -39,6 +40,8 @@ example : recurringCycleLength 8 = 0 := by native_decide
 example : recurringCycleLength 9 = 1 := by native_decide
 example : recurringCycleLength 10 = 0 := by native_decide
 
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P26.naive n = sol n := sorry
 end ProjectEulerSolutions.P26
 open ProjectEulerSolutions.P26
 

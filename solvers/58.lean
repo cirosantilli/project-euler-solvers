@@ -85,17 +85,18 @@ partial def primeRatioCountsForSide (side : Nat) : Nat × Nat :=
     loop 1 0 1
 
 
-def sol : Nat :=
-  sideLengthWhenRatioBelow
-
 example : primeRatioCountsForSide 7 = (8, 13) := by
   native_decide
 
 example : primeRatioCountsForSide 3 = (3, 5) := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  sideLengthWhenRatioBelow
+
 end ProjectEulerSolutions.P58
 open ProjectEulerSolutions.P58
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

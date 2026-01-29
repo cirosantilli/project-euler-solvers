@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P40
 namespace ProjectEulerSolutions.P40
 
 partial def digitAt (n : Nat) : Nat :=
@@ -18,9 +19,6 @@ partial def solve : Nat :=
   let positions := [1, 10, 100, 1000, 10000, 100000, 1000000]
   positions.foldl (fun acc p => acc * digitAt p) 1
 
-
-def sol : Nat :=
-  solve
 
 example : digitAt 12 = 1 := by
   native_decide
@@ -46,8 +44,13 @@ example : digitAt 100000 = 2 := by
 example : digitAt 1000000 = 1 := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  solve
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P40.naive n = sol n := sorry
 end ProjectEulerSolutions.P40
 open ProjectEulerSolutions.P40
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

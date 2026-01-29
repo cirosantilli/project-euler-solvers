@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P46
 namespace ProjectEulerSolutions.P46
 
 partial def isPrimeWithList (n : Nat) (primes : List Nat) : Bool :=
@@ -65,16 +66,18 @@ partial def smallestCounterexample : Nat :=
       loop (n + 2) primes
   loop 9 [2, 3]
 
-def sol : Nat :=
-  smallestCounterexample
-
 example :
     let primes := [2, 3]
     [9, 15, 21, 25, 27, 33].all (fun x => canBeWritten x primes) = true := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  smallestCounterexample
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P46.naive n = sol n := sorry
 end ProjectEulerSolutions.P46
 open ProjectEulerSolutions.P46
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

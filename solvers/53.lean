@@ -19,11 +19,12 @@ partial def countCombinatoricSelections (limitN threshold : Nat) : Nat :=
   loopN 1 0
 
 
-def sol : Nat :=
+
+def sol (_n : Nat) :=
   countCombinatoricSelections 100 1000000
 
 end ProjectEulerSolutions.P53
 open ProjectEulerSolutions.P53
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

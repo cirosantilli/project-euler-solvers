@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P80
 namespace ProjectEulerSolutions.P80
 
 partial def sqrtFloor (n : Nat) : Nat :=
@@ -38,14 +39,16 @@ partial def solve : Nat :=
   loop 1 0
 
 
-def sol : Nat :=
-  solve
-
 example : digitSumFirst100DigitsOfSqrt 2 = 475 := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  solve
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P80.naive n n = sol n := sorry
 end ProjectEulerSolutions.P80
 open ProjectEulerSolutions.P80
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

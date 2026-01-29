@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P25
 namespace ProjectEulerSolutions.P25
 
 partial def fibPair (n : Nat) : Nat × Nat :=
@@ -47,6 +48,8 @@ example : sol 2 = 7 := by
 example : sol 3 = 12 := by
   native_decide
 
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P25.naive n n = sol n := sorry
 end ProjectEulerSolutions.P25
 open ProjectEulerSolutions.P25
 

@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P12
 namespace ProjectEulerSolutions.P12
 
 partial def stripFactor (x p exp : Nat) : Nat × Nat :=
@@ -41,6 +42,8 @@ def sol (k : Nat) : Nat :=
 example : sol 5 = 28 := by
   native_decide
 
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P12.naive n n = sol n := sorry
 end ProjectEulerSolutions.P12
 open ProjectEulerSolutions.P12
 

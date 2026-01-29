@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P75
 namespace ProjectEulerSolutions.P75
 
 partial def gcd (a b : Nat) : Nat :=
@@ -55,14 +56,16 @@ partial def solve (limit : Nat) : Nat :=
   countOnes 0 0
 
 
-def sol : Nat :=
-  solve 1500000
-
 example : solve 50 = 6 := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  solve 1500000
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P75.naive n = sol n := sorry
 end ProjectEulerSolutions.P75
 open ProjectEulerSolutions.P75
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

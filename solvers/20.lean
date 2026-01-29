@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P20
 namespace ProjectEulerSolutions.P20
 
 partial def digitSum (n : Nat) : Nat :=
@@ -19,6 +20,8 @@ def sol (n : Nat) : Nat :=
 example : sol 10 = 27 := by
   native_decide
 
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P20.naive n = sol n := sorry
 end ProjectEulerSolutions.P20
 open ProjectEulerSolutions.P20
 

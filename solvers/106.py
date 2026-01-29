@@ -41,8 +41,7 @@ def main() -> None:
     assert pairs_needing_equality_test(7) == 70
 
     n: Final[int] = 12
-    result = pairs_needing_equality_test(n)
-    print(result)
+    print(pairs_needing_equality_test(n))
 
 
 if __name__ == "__main__":

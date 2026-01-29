@@ -156,8 +156,7 @@ def main() -> None:
     assert compute_F(2, 10, sum_even, sum_odd) == 52
     assert compute_F(10, 100, sum_even, sum_odd) == 3384
 
-    result = compute_F(r1, x1, sum_even, sum_odd) + compute_F(r2, x2, sum_even, sum_odd)
-    print(result)
+    print(compute_F(r1, x1, sum_even, sum_odd) + compute_F(r2, x2, sum_even, sum_odd))
 
 
 if __name__ == "__main__":

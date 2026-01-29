@@ -76,8 +76,7 @@ def count_ending_at_89(limit_exclusive: int = 10_000_000) -> int:
 
 
 def main() -> None:
-    result = count_ending_at_89(10_000_000)
-    print(result)
+    print(count_ending_at_89(10_000_000))
 
 
 if __name__ == "__main__":

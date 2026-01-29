@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P61
 namespace ProjectEulerSolutions.P61
 
 partial def polygonal (s n : Nat) : Nat :=
@@ -95,9 +96,6 @@ partial def findCycleSum : Nat :=
   loopStart starts
 
 
-def sol : Nat :=
-  findCycleSum
-
 example : polygonal 3 127 = 8128 := by
   native_decide
 
@@ -107,8 +105,13 @@ example : polygonal 4 91 = 8281 := by
 example : polygonal 5 44 = 2882 := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  findCycleSum
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P61.naive n = sol n := sorry
 end ProjectEulerSolutions.P61
 open ProjectEulerSolutions.P61
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

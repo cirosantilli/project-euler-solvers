@@ -45,8 +45,7 @@ def non_abundant_sums(limit: int = 28123) -> int:
 
 
 def main() -> None:
-    result = non_abundant_sums()
-    print(result)
+    print(non_abundant_sums())
 
 
 if __name__ == "__main__":

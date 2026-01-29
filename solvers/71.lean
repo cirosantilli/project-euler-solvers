@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P71
 namespace ProjectEulerSolutions.P71
 
 partial def gcd (a b : Nat) : Nat :=
@@ -20,14 +21,16 @@ partial def bestFractionLeftOf (targetN targetD maxD : Nat) : Nat × Nat :=
   loop 1 0 1
 
 
-def sol : Nat :=
-  (bestFractionLeftOf 3 7 1000000).1
-
 example : bestFractionLeftOf 3 7 8 = (2, 5) := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  (bestFractionLeftOf 3 7 1000000).1
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P71.naive n = sol n := sorry
 end ProjectEulerSolutions.P71
 open ProjectEulerSolutions.P71
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

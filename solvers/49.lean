@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P49
 namespace ProjectEulerSolutions.P49
 
 partial def sievePrimesUpto (n : Nat) : Array Bool :=
@@ -84,12 +85,17 @@ partial def findSequence : Nat × Nat × Nat :=
   loopGroups groups
 
 
-def sol : Nat :=
-  let (a, b, c) := findSequence
-  (toString a ++ toString b ++ toString c).toNat!
 
+def sol (_n : Nat) :=
+  [findSequence]
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P49.naive n = sol n := sorry
 end ProjectEulerSolutions.P49
 open ProjectEulerSolutions.P49
 
 def main : IO Unit := do
-  IO.println sol
+  let seqs := sol 0
+  match seqs with
+  | [] => IO.println ""
+  | (a, b, c) :: _ =>
+      IO.println (toString a ++ toString b ++ toString c)

@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P37
 namespace ProjectEulerSolutions.P37
 
 partial def sieve (limit : Nat) : Array Bool :=
@@ -64,9 +65,6 @@ partial def solve : Nat :=
   loop 11 0 0
 
 
-def sol : Nat :=
-  solve
-
 example :
     let isPrime := sieve 1000000
     isPrime[3797]! = true := by
@@ -97,8 +95,13 @@ example :
     isTruncatablePrime 7 isPrime = false := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  solve
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P37.naive n = sol n := sorry
 end ProjectEulerSolutions.P37
 open ProjectEulerSolutions.P37
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

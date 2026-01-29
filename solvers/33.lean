@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P33
 namespace ProjectEulerSolutions.P33
 
 partial def findCuriousFractions : List (Nat × Nat) :=
@@ -45,10 +46,6 @@ partial def listAll (xs : List (Nat × Nat)) (pred : (Nat × Nat) -> Bool) : Boo
   | x :: rest => if pred x then listAll rest pred else false
 
 
-def sol : Nat :=
-  let fracs := findCuriousFractions
-  reducedProductDenominator fracs
-
 example :
     let fracs := findCuriousFractions
     fracs.length == 4 := by
@@ -60,8 +57,14 @@ example :
     listAll expected (fun p => fracs.contains p) := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  let fracs := findCuriousFractions
+  reducedProductDenominator fracs
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P33.naive = sol n := sorry
 end ProjectEulerSolutions.P33
 open ProjectEulerSolutions.P33
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

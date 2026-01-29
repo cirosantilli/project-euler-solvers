@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P8
 namespace ProjectEulerSolutions.P8
 
 abbrev numberStr : String :=
@@ -76,6 +77,8 @@ def sol (k : Nat) : Nat :=
 example : sol 4 = 5832 := by
   native_decide
 
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P8.naive n = sol n := sorry
 end ProjectEulerSolutions.P8
 open ProjectEulerSolutions.P8
 

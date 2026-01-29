@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P84
 namespace ProjectEulerSolutions.P84
 
 abbrev CC_SQUARES : List Nat := [2, 17, 33]
@@ -200,14 +201,16 @@ partial def modalString (sides : Nat) : String :=
   top3.foldl (fun acc p => acc ++ pad2 p.1) ""
 
 
-def sol : String :=
-  modalString 4
-
 example : modalString 6 = "102400" := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  (modalString 4).toNat!
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P84.naive n = sol n := sorry
 end ProjectEulerSolutions.P84
 open ProjectEulerSolutions.P84
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

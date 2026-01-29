@@ -44,5 +44,4 @@ def _self_test() -> None:
 
 if __name__ == "__main__":
     _self_test()
-    result = solve(1_500_000)
-    print(result)
+    print(solve(1_500_000))

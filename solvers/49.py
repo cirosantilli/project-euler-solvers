@@ -56,8 +56,7 @@ def find_prime_perm_arith_sequence() -> Tuple[int, int, int]:
 
 def main() -> None:
     a, b, c = find_prime_perm_arith_sequence()
-    result = int(f"{a}{b}{c}")
-    print(result)
+    print(int(f"{a}{b}{c}"))
 
 
 if __name__ == "__main__":

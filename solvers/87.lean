@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P87
 namespace ProjectEulerSolutions.P87
 
 partial def sievePrimes (limit : Nat) : List Nat :=
@@ -83,14 +84,16 @@ partial def countPrimePowerTriples (limit : Nat) : Nat :=
     let seen := loopF fourths seen
     seen.foldl (fun acc b => if b then acc + 1 else acc) 0
 
-def sol : Nat :=
-  countPrimePowerTriples 50000000
-
 example : countPrimePowerTriples 50 = 4 := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  countPrimePowerTriples 50000000
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P87.naive n = sol n := sorry
 end ProjectEulerSolutions.P87
 open ProjectEulerSolutions.P87
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

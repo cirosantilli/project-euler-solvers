@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P42
 namespace ProjectEulerSolutions.P42
 
 abbrev wordsText : String :=
@@ -134,10 +135,6 @@ partial def parseWords (s : String) : List String :=
 partial def countTriangleWords (words : List String) : Nat :=
   words.foldl (fun acc w => if isTriangle (wordValue w) then acc + 1 else acc) 0
 
-def sol : Nat :=
-  let words := parseWords wordsText
-  countTriangleWords words
-
 example : triangleNumbers 10 = [1,3,6,10,15,21,28,36,45,55] := by
   native_decide
 
@@ -147,9 +144,14 @@ example : wordValue "SKY" = 55 := by
 example : isTriangle 55 = true := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  let words := parseWords wordsText
+  countTriangleWords words
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P42.naive ([] : List String) = sol n := sorry
 end ProjectEulerSolutions.P42
 open ProjectEulerSolutions.P42
 
 def main : IO Unit := do
-  IO.println sol
-
+  IO.println (sol 0)

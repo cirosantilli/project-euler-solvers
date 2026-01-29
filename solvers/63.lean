@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P63
 namespace ProjectEulerSolutions.P63
 
 partial def countNDigitNthPowers : Nat :=
@@ -20,17 +21,19 @@ partial def countNDigitNthPowers : Nat :=
   loopN 1 0
 
 
-def sol : Nat :=
-  countNDigitNthPowers
-
 example : (toString (Nat.pow 7 5)).length = 5 := by
   native_decide
 
 example : (toString (Nat.pow 8 9)).length = 9 := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  countNDigitNthPowers
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P63.naive n = sol n := sorry
 end ProjectEulerSolutions.P63
 open ProjectEulerSolutions.P63
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

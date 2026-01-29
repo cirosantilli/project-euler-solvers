@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P17
 namespace ProjectEulerSolutions.P17
 
 abbrev ones : Array Nat := #[0, 3, 3, 5, 4, 4, 3, 5, 5, 4]
@@ -26,9 +27,6 @@ partial def lettersInNumber (n : Nat) : Nat :=
     if r == 0 then base else base + 3 + letters1To99 r
 
 
-def sol : Nat :=
-  (List.range 1000).foldl (fun acc i => acc + lettersInNumber (i + 1)) 0
-
 example : (List.range 5).foldl (fun acc i => acc + lettersInNumber (i + 1)) 0 = 19 := by
   native_decide
 
@@ -38,8 +36,13 @@ example : lettersInNumber 342 = 23 := by
 example : lettersInNumber 115 = 20 := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  (List.range 1000).foldl (fun acc i => acc + lettersInNumber (i + 1)) 0
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P17.naive n = sol n := sorry
 end ProjectEulerSolutions.P17
 open ProjectEulerSolutions.P17
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

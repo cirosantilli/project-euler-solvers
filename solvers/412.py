@@ -60,8 +60,7 @@ def main() -> None:
     assert lc_mod(6, 3, MOD) == 406029023400 % MOD
     assert lc_mod(10, 5, MOD) == 61251715
 
-    result = lc_mod(10000, 5000, MOD)
-    print(result)
+    print(lc_mod(10000, 5000, MOD))
 
 
 if __name__ == "__main__":

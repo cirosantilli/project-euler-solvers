@@ -21,9 +21,7 @@ def main() -> None:
     # Given example: 5 can be written in 6 ways (excluding "5" itself)
     assert count_summations(5) == 6
 
-    result = count_summations(100)
-
-    print(result)
+    print(count_summations(100))
 
 
 if __name__ == "__main__":

@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P78
 namespace ProjectEulerSolutions.P78
 
 partial def partitionsUpto (n : Nat) : Array Int :=
@@ -39,16 +40,18 @@ partial def leastNPartitionDivisible (mod : Int) : Nat :=
   loop 1 #[1]
 
 
-def sol : Nat :=
-  leastNPartitionDivisible 1000000
-
 example :
     let small := partitionsUpto 10
     (small[0]! = 1) && (small[5]! = 7) && (small[10]! = 42) = true := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  leastNPartitionDivisible 1000000
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P78.naive n = sol n := sorry
 end ProjectEulerSolutions.P78
 open ProjectEulerSolutions.P78
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)

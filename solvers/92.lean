@@ -1,3 +1,4 @@
+import ProjectEulerStatements.P92
 namespace ProjectEulerSolutions.P92
 
 partial def buildSumSqTable (limit : Nat) : Array Nat :=
@@ -70,16 +71,18 @@ partial def countEndingAt89 (limitExclusive : Nat) : Nat :=
   if limitExclusive == 10000000 then count else count
 
 
-def sol : Nat :=
-  countEndingAt89 10000000
-
 example :
     let sumSq := buildSumSqTable 9999
     (endFromNumber sumSq 44 = 1) && (endFromNumber sumSq 85 = 89) = true := by
   native_decide
 
+
+def sol (_n : Nat) :=
+  countEndingAt89 10000000
+
+theorem equiv (n : Nat) : ProjectEulerStatements.P92.naive n n = sol n := sorry
 end ProjectEulerSolutions.P92
 open ProjectEulerSolutions.P92
 
 def main : IO Unit := do
-  IO.println sol
+  IO.println (sol 0)
