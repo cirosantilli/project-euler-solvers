@@ -1,62 +1,9 @@
+import Std
 import ProjectEulerStatements.P79
 namespace ProjectEulerSolutions.P79
 
-abbrev keylogText : String :=
-  String.intercalate "\n" [
-    "319",
-    "680",
-    "180",
-    "690",
-    "129",
-    "620",
-    "762",
-    "689",
-    "762",
-    "318",
-    "368",
-    "710",
-    "720",
-    "710",
-    "629",
-    "168",
-    "160",
-    "689",
-    "716",
-    "731",
-    "736",
-    "729",
-    "316",
-    "729",
-    "729",
-    "710",
-    "769",
-    "290",
-    "719",
-    "680",
-    "318",
-    "389",
-    "162",
-    "289",
-    "162",
-    "718",
-    "729",
-    "319",
-    "790",
-    "680",
-    "890",
-    "362",
-    "319",
-    "760",
-    "316",
-    "729",
-    "380",
-    "319",
-    "728",
-    "716"
-  ]
-
 partial def parseDigits (s : String) : List Nat :=
-  s.data.map (fun c => c.toNat - '0'.toNat)
+  s.data.filter (fun c => c >= '0' && c <= '9') |>.map (fun c => c.toNat - '0'.toNat)
 
 partial def getAt (xs : List Nat) (i : Nat) : Nat :=
   match xs, i with
@@ -113,19 +60,19 @@ partial def topoSort (adj : Array (List Nat)) (indeg : Array Nat) (present : Arr
         loop (k + 1) indeg used (v :: out)
   loop 0 indeg used []
 
-partial def derivePasscode : String :=
-  let attempts := keylogText.splitOn "\n" |>.filter (fun ln => ln != "")
+partial def derivePasscode (attempts : List String) : String :=
   let (adj, indeg, present) := buildGraph attempts
   let digits := topoSort adj indeg present
   digits.foldl (fun acc d => acc ++ toString d) ""
 
+def solve (attempts : List String) : List Char :=
+  (derivePasscode attempts).data
 
-def solve (_n : Nat) :=
-  derivePasscode.data
-
-theorem equiv (n : Nat) : ProjectEulerStatements.P79.naive ([] : List String) = solve n := sorry
+theorem equiv (attempts : List String) : ProjectEulerStatements.P79.naive attempts = solve attempts := sorry
 end ProjectEulerSolutions.P79
 open ProjectEulerSolutions.P79
 
 def main : IO Unit := do
-  IO.println (String.mk (solve 0))
+  let text ← IO.FS.readFile "0079_keylog.txt"
+  let attempts := text.splitOn "\n" |>.filter (fun ln => ln != "")
+  IO.println (String.mk (solve attempts))

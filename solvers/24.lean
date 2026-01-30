@@ -18,34 +18,29 @@ partial def popAt (idx : Nat) (xs : List Nat) : Nat × List Nat :=
       let (y, rest) := popAt n xs
       (y, x :: rest)
 
-partial def nthLexicographicPermutation (digits : List Nat) (n : Nat) : String :=
+partial def nthLexicographicPermutation (digits : List Nat) (n : Nat) : List Nat :=
   let k := digits.length
   let fact := factorials k
-  let rec loop (i : Nat) (rank : Nat) (available : List Nat) (acc : List Char) : String :=
+  let rec loop (i : Nat) (rank : Nat) (available : List Nat) (acc : List Nat) : List Nat :=
     if i == 0 then
-      String.mk acc
+      acc.reverse
     else
       let block := fact[i - 1]!
       let idx := rank / block
       let rank' := rank % block
       let (d, rest) := popAt idx available
-      loop (i - 1) rank' rest (acc ++ [Char.ofNat (d + 48)])
+      loop (i - 1) rank' rest (d :: acc)
   loop k (n - 1) digits []
 
-def digitsFromString (s : String) : List Nat :=
-  s.data.map (fun c => c.toNat - '0'.toNat)
+def solve (digits : List Nat) (n : Nat) : List Nat :=
+  nthLexicographicPermutation digits n
 
-def digitsToString (ds : List Nat) : String :=
+def serialize (ds : List Nat) : String :=
   String.mk (ds.map (fun d => Char.ofNat (d + 48)))
 
-
-
-def solve (_n : Nat) :=
-  digitsFromString (nthLexicographicPermutation (List.range 10) 1000000)
-
-theorem equiv (n : Nat) : ProjectEulerStatements.P24.naive ([] : List Nat) n = solve n := sorry
+theorem equiv (digits : List Nat) (n : Nat) : (ProjectEulerStatements.P24.naive digits n) = (solve digits n) := sorry
 end ProjectEulerSolutions.P24
 open ProjectEulerSolutions.P24
 
 def main : IO Unit := do
-  IO.println (digitsToString (solve 0))
+  IO.println (serialize (solve (List.range 10) 1000000))
