@@ -61,7 +61,7 @@ partial def consecutivePrimeLength (a b : Int) (trial : Array Nat) : Nat :=
       n
   loop 0
 
-partial def solveCore : Int :=
+partial def solve : Int :=
   let trial := sievePrimes 100000
   let bCandidates := (sievePrimes 1000).toList
   let rec loopB (bs : List Nat) (bestLen : Nat) (bestA bestB : Int) : Int :=
@@ -97,12 +97,9 @@ partial def solveCore : Int :=
 
 
 
-def solve (_n : Nat) :=
-  solveCore
-
-theorem equiv (n : Nat) : ProjectEulerStatements.P27.naive n n n = solve n := sorry
+theorem equiv (n : Nat) : ProjectEulerStatements.P27.naive n n n = solve := sorry
 end ProjectEulerSolutions.P27
 open ProjectEulerSolutions.P27
 
 def main : IO Unit := do
-  IO.println (solve 0)
+  IO.println solve

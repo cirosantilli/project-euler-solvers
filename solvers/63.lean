@@ -1,7 +1,7 @@
 import ProjectEulerStatements.P63
 namespace ProjectEulerSolutions.P63
 
-partial def countNDigitNthPowers : Nat :=
+partial def solve : Nat :=
   let rec loopN (n : Nat) (total : Nat) : Nat :=
     if n > 200 then
       total
@@ -28,12 +28,9 @@ example : (toString (Nat.pow 8 9)).length = 9 := by
   native_decide
 
 
-def solve (_n : Nat) :=
-  countNDigitNthPowers
-
-theorem equiv (n : Nat) : ProjectEulerStatements.P63.naive n = solve n := sorry
+theorem equiv (n : Nat) : ProjectEulerStatements.P63.naive n = solve := sorry
 end ProjectEulerSolutions.P63
 open ProjectEulerSolutions.P63
 
 def main : IO Unit := do
-  IO.println (solve 0)
+  IO.println solve

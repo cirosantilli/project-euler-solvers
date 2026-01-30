@@ -21,7 +21,7 @@ partial def divisorCount (n : Nat) : Nat :=
         loop x (i + 1) total
     loop n 2 1
 
-partial def firstTriangularWithOver (k : Nat) : Nat :=
+partial def solve (k : Nat) : Nat :=
   let rec loop (n : Nat) : Nat :=
     let (a, b) :=
       if n % 2 == 0 then
@@ -35,13 +35,8 @@ partial def firstTriangularWithOver (k : Nat) : Nat :=
       loop (n + 1)
   loop 1
 
-
-def solve (k : Nat) : Nat :=
-  firstTriangularWithOver k
-
 example : solve 5 = 28 := by
   native_decide
-
 
 theorem equiv (n : Nat) : ProjectEulerStatements.P12.naive n n = solve n := sorry
 end ProjectEulerSolutions.P12

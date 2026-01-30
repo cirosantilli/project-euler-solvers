@@ -16,12 +16,9 @@ partial def oddLoop (n f largest : Nat) : Nat :=
   else
     if n > 1 then n else largest
 
-def largestPrimeFactor (n : Nat) : Nat :=
+def solve (n : Nat) : Nat :=
   let (n', largest') := stripTwos n 1
   oddLoop n' 3 largest'
-
-def solve (n : Nat) : Nat :=
-  largestPrimeFactor n
 
 example : solve 13195 = 29 := by
   native_decide

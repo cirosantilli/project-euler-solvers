@@ -690,7 +690,7 @@ partial def parsePuzzles (text : String) : List (List String) :=
           loop ls acc
   loop lines []
 
-partial def solveAll : Nat :=
+partial def solve : Nat :=
   let puzzles := parsePuzzles sudokuText
   let peers := buildPeers
   let units := buildUnits
@@ -706,12 +706,9 @@ partial def solveAll : Nat :=
 
 
 
-def solve (_n : Nat) :=
-  solveAll
-
-theorem equiv (n : Nat) : ProjectEulerStatements.P96.naive ([] : List (List (List Nat))) = solve n := sorry
+theorem equiv (n : Nat) : ProjectEulerStatements.P96.naive ([] : List (List (List Nat))) = solve := sorry
 end ProjectEulerSolutions.P96
 open ProjectEulerSolutions.P96
 
 def main : IO Unit := do
-  IO.println (solve 0)
+  IO.println solve

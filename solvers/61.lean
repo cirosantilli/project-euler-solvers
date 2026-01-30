@@ -49,7 +49,7 @@ partial def lastOr (xs : List (Nat × Nat)) (default : Nat × Nat) : Nat × Nat 
   | [] => default
   | x :: _ => x
 
-partial def findCycleSum : Nat :=
+partial def solve : Nat :=
   let types : List Nat := [3,4,5,6,7,8]
   let numsByType :=
     types.foldl (fun arr t => arr.set! t (generate4DigitPolygonals t)) (Array.replicate 9 [])
@@ -106,12 +106,9 @@ example : polygonal 5 44 = 2882 := by
   native_decide
 
 
-def solve (_n : Nat) :=
-  findCycleSum
-
-theorem equiv (n : Nat) : ProjectEulerStatements.P61.naive n = solve n := sorry
+theorem equiv (n : Nat) : ProjectEulerStatements.P61.naive n = solve := sorry
 end ProjectEulerSolutions.P61
 open ProjectEulerSolutions.P61
 
 def main : IO Unit := do
-  IO.println (solve 0)
+  IO.println solve

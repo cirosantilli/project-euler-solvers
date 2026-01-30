@@ -15,7 +15,7 @@ partial def isPrimeWith (n : Nat) (primes : Array Nat) : Bool :=
         loop (i + 1)
   loop 0
 
-partial def sumPrimesBelow (limit : Nat) : Nat :=
+partial def solve (limit : Nat) : Nat :=
   if limit <= 2 then
     0
   else if limit <= 3 then
@@ -31,13 +31,8 @@ partial def sumPrimesBelow (limit : Nat) : Nat :=
           go (candidate + 2) sum primes
     go 3 2 #[2]
 
-
-def solve (limit : Nat) : Nat :=
-  sumPrimesBelow limit
-
 example : solve 10 = 17 := by
   native_decide
-
 
 theorem equiv (n : Nat) : ProjectEulerStatements.P10.naive n = solve n := sorry
 end ProjectEulerSolutions.P10

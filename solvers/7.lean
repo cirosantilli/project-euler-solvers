@@ -15,7 +15,7 @@ partial def isPrimeWith (n : Nat) (primes : Array Nat) : Bool :=
         loop (i + 1)
   loop 0
 
-partial def nthPrime (n : Nat) : Nat :=
+partial def solve (n : Nat) : Nat :=
   if n == 1 then
     2
   else
@@ -30,15 +30,11 @@ partial def nthPrime (n : Nat) : Nat :=
           go (candidate + 2) count primes
     go 3 1 #[2]
 
-def solve (n : Nat) : Nat :=
-  nthPrime n
-
 example : solve 1 = 2 := by
   native_decide
 
 example : solve 6 = 13 := by
   native_decide
-
 
 theorem equiv (n : Nat) : ProjectEulerStatements.P7.naive n = solve n := sorry
 end ProjectEulerSolutions.P7

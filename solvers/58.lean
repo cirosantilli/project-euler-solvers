@@ -53,7 +53,7 @@ partial def isPrime (n : Nat) : Bool :=
         | a :: bs => if millerCheck a n d s then loop bs else false
       loop bases
 
-partial def sideLengthWhenRatioBelow : Nat :=
+partial def solve : Nat :=
   let rec loop (k primeCount totalDiag : Nat) : Nat :=
     let side := 2 * k + 1
     let step := side - 1
@@ -67,7 +67,7 @@ partial def sideLengthWhenRatioBelow : Nat :=
       loop (k + 1) primeCount totalDiag
   loop 1 0 1
 
-partial def primeRatioCountsForSide (side : Nat) : Nat × Nat :=
+partial def countDiagPrimes (side : Nat) : Nat × Nat :=
   let rec loop (k : Nat) (primeCount totalDiag : Nat) : Nat × Nat :=
     if k > (side - 1) / 2 then
       (primeCount, totalDiag)
@@ -84,19 +84,14 @@ partial def primeRatioCountsForSide (side : Nat) : Nat × Nat :=
   else
     loop 1 0 1
 
-
-example : primeRatioCountsForSide 7 = (8, 13) := by
+example : countDiagPrimes 7 = (8, 13) := by
   native_decide
 
-example : primeRatioCountsForSide 3 = (3, 5) := by
+example : countDiagPrimes 5 = (5, 9) := by
   native_decide
-
-
-def solve (_n : Nat) :=
-  sideLengthWhenRatioBelow
 
 end ProjectEulerSolutions.P58
 open ProjectEulerSolutions.P58
 
 def main : IO Unit := do
-  IO.println (solve 0)
+  IO.println solve

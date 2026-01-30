@@ -27,7 +27,7 @@ partial def isPandigital (s : String) : Bool :=
           if (mask &&& bit) != 0 then false else loop cs (mask ||| bit)
     loop s.data 0
 
-partial def solveCore : Nat :=
+partial def solve : Nat :=
   let rec loop (x best : Nat) : Nat :=
     if x >= 10000 then
       best
@@ -40,31 +40,26 @@ partial def solveCore : Nat :=
         loop (x + 1) best
   loop 1 0
 
-partial def concatFixed (x n : Nat) : String :=
+partial def concatUpTo (x n : Nat) : String :=
   let rec loop (k : Nat) (acc : String) : String :=
     if k > n then acc else loop (k + 1) (acc ++ toString (x * k))
   loop 1 ""
 
-
-example : concatFixed 192 3 = "192384576" := by
+example : concatUpTo 192 3 = "192384576" := by
   native_decide
 
 example : isPandigital "192384576" = true := by
   native_decide
 
-example : concatFixed 9 5 = "918273645" := by
+example : concatUpTo 9 5 = "918273645" := by
   native_decide
 
 example : isPandigital "918273645" = true := by
   native_decide
 
-
-def solve (_n : Nat) :=
-  solveCore
-
-theorem equiv (n : Nat) : ProjectEulerStatements.P38.naive n = solve n := sorry
+theorem equiv (n : Nat) : ProjectEulerStatements.P38.naive n = solve := sorry
 end ProjectEulerSolutions.P38
 open ProjectEulerSolutions.P38
 
 def main : IO Unit := do
-  IO.println (solve 0)
+  IO.println solve

@@ -16,7 +16,7 @@ partial def fibPair (n : Nat) : Nat × Nat :=
 partial def fib (n : Nat) : Nat :=
   (fibPair n).1
 
-partial def firstFibIndexWithDigits (digits : Nat) : Nat :=
+partial def solve (digits : Nat) : Nat :=
   if digits <= 1 then
     1
   else
@@ -35,10 +35,6 @@ partial def firstFibIndexWithDigits (digits : Nat) : Nat :=
     let hi := findUpper 1
     binary 1 hi
 
-
-def solve (digits : Nat) : Nat :=
-  firstFibIndexWithDigits digits
-
 example : solve 1 = 1 := by
   native_decide
 
@@ -47,7 +43,6 @@ example : solve 2 = 7 := by
 
 example : solve 3 = 12 := by
   native_decide
-
 
 theorem equiv (n : Nat) : ProjectEulerStatements.P25.naive n n = solve n := sorry
 end ProjectEulerSolutions.P25

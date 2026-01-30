@@ -57,7 +57,7 @@ partial def canBeWritten (n : Nat) (primes : List Nat) : Bool :=
               loop ps
   loop primes
 
-partial def smallestCounterexample : Nat :=
+partial def solve : Nat :=
   let rec loop (n : Nat) (primes : List Nat) : Nat :=
     let primes := ensurePrimesUpTo n primes
     if !isPrimeWithList n primes && !canBeWritten n primes then
@@ -72,12 +72,9 @@ example :
   native_decide
 
 
-def solve (_n : Nat) :=
-  smallestCounterexample
-
-theorem equiv (n : Nat) : ProjectEulerStatements.P46.naive n = solve n := sorry
+theorem equiv (n : Nat) : ProjectEulerStatements.P46.naive n = solve := sorry
 end ProjectEulerSolutions.P46
 open ProjectEulerSolutions.P46
 
 def main : IO Unit := do
-  IO.println (solve 0)
+  IO.println solve

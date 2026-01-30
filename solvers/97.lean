@@ -10,18 +10,15 @@ partial def powMod (a e mod : Nat) : Nat :=
       loop ((base * base) % mod) (exp / 2) acc
   if mod == 1 then 0 else loop (a % mod) e 1
 
-partial def lastTenDigits : Nat :=
+partial def solve : Nat :=
   let mod := Nat.pow 10 10
   (28433 * powMod 2 7830457 mod + 1) % mod
 
 
 
-def solve (_n : Nat) :=
-  lastTenDigits
-
-theorem equiv (n : Nat) : ProjectEulerStatements.P97.naive = solve n := sorry
+theorem equiv (n : Nat) : ProjectEulerStatements.P97.naive = solve := sorry
 end ProjectEulerSolutions.P97
 open ProjectEulerSolutions.P97
 
 def main : IO Unit := do
-  IO.println (solve 0)
+  IO.println solve

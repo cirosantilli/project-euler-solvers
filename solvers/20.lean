@@ -5,7 +5,7 @@ partial def digitSum (n : Nat) : Nat :=
   let s := toString n
   s.data.foldl (fun acc c => acc + (c.toNat - '0'.toNat)) 0
 
-partial def factorialDigitSum (n : Nat) : Nat :=
+partial def solve (n : Nat) : Nat :=
   let rec loop (k acc : Nat) : Nat :=
     if k > n then
       digitSum acc
@@ -13,13 +13,8 @@ partial def factorialDigitSum (n : Nat) : Nat :=
       loop (k + 1) (acc * k)
   loop 2 1
 
-
-def solve (n : Nat) : Nat :=
-  factorialDigitSum n
-
 example : solve 10 = 27 := by
   native_decide
-
 
 theorem equiv (n : Nat) : ProjectEulerStatements.P20.naive n = solve n := sorry
 end ProjectEulerSolutions.P20

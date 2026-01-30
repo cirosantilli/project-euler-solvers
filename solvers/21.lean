@@ -39,7 +39,7 @@ partial def properDivisorSumFactorization (n : Nat) : Nat :=
       if exp2 == 0 then 1 else (List.range (exp2 + 1)).foldl (fun acc k => acc + 2 ^ k) 0
     loop x2 3 sigma2
 
-partial def amicableSumUnder (limit : Nat) : Nat :=
+partial def solve (limit : Nat) : Nat :=
   let divsum := properDivisorSumsSieve (limit - 1)
   let d := fun x => if x < divsum.size then divsum[x]! else properDivisorSumFactorization x
   let rec loop (a total : Nat) : Nat :=
@@ -51,16 +51,11 @@ partial def amicableSumUnder (limit : Nat) : Nat :=
       loop (a + 1) total'
   loop 2 0
 
-
-def solve (limit : Nat) : Nat :=
-  amicableSumUnder limit
-
 example : properDivisorSumFactorization 220 = 284 := by
   native_decide
 
 example : properDivisorSumFactorization 284 = 220 := by
   native_decide
-
 
 theorem equiv (n : Nat) : ProjectEulerStatements.P21.naive n = solve n := sorry
 end ProjectEulerSolutions.P21

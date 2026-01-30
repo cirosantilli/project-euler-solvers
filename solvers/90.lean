@@ -36,7 +36,7 @@ partial def canDisplayAllSquares (maskA maskB : Nat) : Bool :=
           false
   loop squarePairs
 
-partial def solveCore : Nat :=
+partial def solve : Nat :=
   let masks :=
     (combinations 6 (List.range 10)).map (fun comb =>
       comb.foldl (fun acc d => acc ||| Nat.pow 2 d) 0)
@@ -56,12 +56,9 @@ partial def solveCore : Nat :=
 
 
 
-def solve (_n : Nat) :=
-  solveCore
-
-theorem equiv (n : Nat) : ProjectEulerStatements.P90.naive = solve n := sorry
+theorem equiv (n : Nat) : ProjectEulerStatements.P90.naive = solve := sorry
 end ProjectEulerSolutions.P90
 open ProjectEulerSolutions.P90
 
 def main : IO Unit := do
-  IO.println (solve 0)
+  IO.println solve

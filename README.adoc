@@ -365,7 +365,7 @@ The way things are organize is that link:data/project-euler-statements[] will co
 * link:data/project-euler-statements/data/lean/ProjectEulerStatements/P1.lean[]: defines a `ProjectEulerStatements.P1.naive` function, possibly non-computable, which we believe matches the problem definition
 ** sometimes an alternative `ProjectEulerStatements.P1.naive2` is also defined as an alternative statement and it is also proven to be equivalent to `naive``
 * link:solvers/1.lean[]:
-** defines a computable function `ProjectEulerSolvers.P1.sol` which is an efficient algorithm to solve the problem
+** defines a computable function `ProjectEulerSolvers.P1.solve` which is an efficient algorithm to solve the problem
 ** proves that this efficient function is equivalent to `ProjectEulerStatements.P1.naive`
 
 We have tried to also build Lean more simply with make but we failed so far, related threads:
@@ -399,7 +399,7 @@ Let me know if you want that change.
 Port Python to Lean:
 
 ----
-Port solvers/4.py through to solvers/6.py to lean. Ignore all Python comments from the Lean file. Make sure "lake -R build" followed by "./test.py <N>.lean" passes. Convert any python asserts into lean "example" statements with native_decide. Put everything of that file except the main and imports under namespace ProjectEulerSolutions.P<N>, where <N> is the problem number. Name the final solver function as "sol". Don't worry about proofs for now, just make it as equivalent to the Python as possible and ensure it passes the test.
+Port solvers/4.py through to solvers/6.py to lean. Ignore all Python comments from the Lean file. Make sure "lake -R build" followed by "./test.py <N>.lean" passes. Convert any python asserts into lean "example" statements with native_decide. Put everything of that file except the main and imports under namespace ProjectEulerSolutions.P<N>, where <N> is the problem number. Name the final solver function as "solve". Don't worry about proofs for now, just make it as equivalent to the Python as possible and ensure it passes the test.
 ----
 
 == Folders

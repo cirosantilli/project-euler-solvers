@@ -23,7 +23,7 @@ partial def convergentNumeratorDenominator (coeffs : List Nat) : Nat × Nat :=
 partial def digitSum (x : Nat) : Nat :=
   (toString x).data.foldl (fun acc c => acc + (c.toNat - '0'.toNat)) 0
 
-partial def solveCore : Nat :=
+partial def solve : Nat :=
   let coeffs100 := eContinuedFractionCoeffs 100
   let p100 := (convergentNumeratorDenominator coeffs100).1
   digitSum p100
@@ -39,12 +39,9 @@ example : digitSum 1457 = 17 := by
   native_decide
 
 
-def solve (_n : Nat) :=
-  solveCore
-
-theorem equiv (n : Nat) : ProjectEulerStatements.P65.naive n = solve n := sorry
+theorem equiv (n : Nat) : ProjectEulerStatements.P65.naive n = solve := sorry
 end ProjectEulerSolutions.P65
 open ProjectEulerSolutions.P65
 
 def main : IO Unit := do
-  IO.println (solve 0)
+  IO.println solve

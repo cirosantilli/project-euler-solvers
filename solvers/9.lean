@@ -1,7 +1,7 @@
 import ProjectEulerStatements.P9
 namespace ProjectEulerSolutions.P9
 
-partial def specialPythagoreanProduct (total : Nat) : Nat :=
+partial def solve (total : Nat) : Nat :=
   let rec loopM (m : Nat) : Nat :=
     if 2 * m * (m + 1) > total then
       0
@@ -26,13 +26,8 @@ partial def specialPythagoreanProduct (total : Nat) : Nat :=
       if res != 0 then res else loopM (m + 1)
   loopM 2
 
-
-def solve (total : Nat) : Nat :=
-  specialPythagoreanProduct total
-
 example : solve 12 = 60 := by
   native_decide
-
 
 theorem equiv (n : Nat) : ProjectEulerStatements.P9.naive n = solve n := sorry
 end ProjectEulerSolutions.P9
