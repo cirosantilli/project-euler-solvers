@@ -333,7 +333,7 @@ partial def mergeSort (cmp : String -> String -> Bool) (xs : List String) : List
       let (a, b) := split xs
       merge cmp (mergeSort cmp a) (mergeSort cmp b)
 
-def totalNameScores (names : List String) : Nat :=
+def solve (names : List String) : Nat :=
   let namesSorted := mergeSort (fun a b => a < b) names
   let rec loop (lst : List String) (idx acc : Nat) : Nat :=
     match lst with
@@ -354,12 +354,9 @@ example : colinPosScore (parseNames namesText) = (938, 49714) := by
   native_decide
 
 
-def solve (_n : Nat) :=
-  totalNameScores (parseNames namesText)
-
-theorem equiv (n : Nat) : ProjectEulerStatements.P22.naive ([] : List String) = solve n := sorry
+theorem equiv (names : List String) : ProjectEulerStatements.P22.naive names = solve names := sorry
 end ProjectEulerSolutions.P22
 open ProjectEulerSolutions.P22
 
 def main : IO Unit := do
-  IO.println (solve 0)
+  IO.println (solve (parseNames namesText))
