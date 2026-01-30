@@ -31,7 +31,15 @@ def find_solver_files(pid: int) -> list[Path]:
         if path.suffix in {".md", ".json", ".out"}:
             continue
         candidates.append(path)
-    return sorted(candidates, key=lambda p: (p.suffix, p.name))
+    def sort_key(path: Path) -> tuple[int, str, str]:
+        suffix = path.suffix.lower()
+        if suffix == ".py":
+            return (0, "python", path.name.lower())
+        if suffix == ".lean":
+            return (1, "lean", path.name.lower())
+        return (2, suffix.lstrip("."), path.name.lower())
+
+    return sorted(candidates, key=sort_key)
 
 
 def build_header(pid: int, title: str, files: list[Path]) -> list[str]:
