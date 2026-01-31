@@ -14,7 +14,7 @@ This repo aims to solve **ALL** https://projecteuler.net[Project Euler] problems
 
 // STATUS TABLE
 * **1-900**: done
-* **901-981**: 78/81 (TODO: 979, 980, 981)
+* **901-982**: 78/82 (TODO: 979, 980, 981, 982)
 
 Tested on Python 3.13.7, PyPy 7.3.20, Ubuntu 25.10.
 
@@ -181,6 +181,12 @@ This is a decent prompt template:
 
 ----
 Solve project euler 245 in file main.py. Don't use any external libraries. Add asserts to any test values given in the problem statement. Also produce a markdown summary of the main techniques used as README.md. Provide the two files both inline here and with download links. Any known final answer must not appear anywhere in the generated files, don't assert that value only print it.
+----
+
+For new problems that come out:
+
+----
+Solve the following problem in file main.py. Don't use any external libraries. Add asserts to any test values given in the problem statement. Also produce a markdown summary of the main techniques used as README.md. Provide the two files both inline here and with download links. Any known final answer must not appear anywhere in the generated files, don't assert that value only print it.
 ----
 
 If you are running a few of those you can more easily
@@ -1445,6 +1451,7 @@ Benchmarked on Lenovo ThinkPad P14s by running `./main.py`:
 | link:solvers/979.py[979.py] | link:solvers/979.md[979.md] | 0.126 | gpt-5.2-thinking |  | 189306828278449 | error: missing reference answer
 | link:solvers/980.py[980.py] | link:solvers/980.md[980.md] | 0.508 | gpt-5.2-thinking |  | 124999683766 | error: missing reference answer
 | link:solvers/981.py[981.py] | link:solvers/981.md[981.md] | 0.242 | gpt-5.2-thinking |  | 794963735 | error: missing reference answer
+| link:solvers/982.py[982.py] | link:solvers/982.md[982.md] | 0.199 |  |  | 4.381944 | error: missing reference answer
 |===
 
 === Non-Python solvers
@@ -1455,11 +1462,11 @@ We have placed non-Python solvers in this separate table for the following reaso
 * non-Python solvers will mostly be vibe-translated, and as such auto-generation metadata such as number of tokens and model doesn't matter so much for them
 
 // RESULTS TABLE OTHER
-|===
 | ID | Runtime (s) | Output | Error
 | link:solvers/1.c[1.c] | 0.002 | 233168 |
 | link:solvers/1.cpp[1.cpp] | 0.002 | 233168 |
 | link:solvers/1.lean[1.lean] | 0.007 | 233168 |
+| link:solvers/2.lean[2.lean] | 0.021 | 4613732 |
 | link:solvers/2.lean[2.lean] | 0.021 | 4613732 |
 |===
 
